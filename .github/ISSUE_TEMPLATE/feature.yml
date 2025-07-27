@@ -1,0 +1,21 @@
+name: Feature
+description: Suggest a new feature.
+labels: ["triage"]
+type: Feature
+assignees:
+  - beauchama
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to suggest a new feature. Please fill in the information below to help us understand your new feature.
+        Please search to see if the rquested feature has already been suggested ([quack/issues](https://github.com/kappaduck/quack/issues))
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: >-
+        Is your feature request related to a missing binding from SDL or additional functionality? Please describe the feature you would like to see.
+      description: A clear and concise description of what the feature is.
+      placeholder: I would like to have Game controller input.
+    validations:
+      required: false

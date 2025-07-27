@@ -1,0 +1,12 @@
+name: Task
+description: A subset of a feature.
+type: Task
+assignees:
+  - beauchama
+body:
+  - type: textarea
+    id: task-description
+    attributes:
+      label: Description
+    validations:
+      required: false

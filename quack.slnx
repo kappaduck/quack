@@ -1,0 +1,32 @@
+<Solution>
+  <Folder Name="/configurations/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".github/codeowners" />
+    <File Path=".github/dependabot.yml" />
+    <File Path="directory.build.props" />
+    <File Path="directory.packages.props" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Folder Name="/configurations/rules/">
+    <File Path="rules/code.style.editorconfig" />
+    <File Path="rules/disabled.editorconfig" />
+    <File Path="rules/meziantou.editorconfig" />
+    <File Path="rules/roslynator.editorconfig" />
+    <File Path="rules/sonar.editorconfig" />
+    <File Path="rules/underscore.editorconfig" />
+    <File Path="rules/vsthrd.editorconfig" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="changelog.md" />
+    <File Path="license" />
+    <File Path="readme.md" />
+  </Folder>
+  <Folder Name="/docs/issues/">
+    <File Path=".github/ISSUE_TEMPLATE/bug.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/config.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/task.yml" />
+  </Folder>
+</Solution>

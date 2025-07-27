@@ -1,0 +1,16 @@
+is_global = true
+
+# RCS1036: Remove unnecessary blank line
+# This rule is obsolete
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1036/
+dotnet_diagnostic.RCS1036.severity = none
+
+# RCS1237: Use bit shift operator
+# This rule is obsolete
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1237/
+dotnet_diagnostic.RCS1237.severity = none
+
+# RCS1254: Normalize format of enum flag value
+# Should not normalize enum flag value for clarity
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1254/
+dotnet_diagnostic.RCS1254.severity = none

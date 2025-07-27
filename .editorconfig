@@ -1,0 +1,65 @@
+# Common rules
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C# project files
+
+[*.{csproj,slnx}]
+indent_size = 2
+
+# C# files
+
+[*.cs]
+dotnet_sort_system_directives_first = false
+dotnet_analyzer_diagnostic.severity = warning
+file_header_template = Copyright (c) KappaDuck. All rights reserved.\nThe source code is licensed under MIT License.
+
+# Configuration files
+
+[*.{config,nuspec,props,targets,xml}]
+indent_size = 2
+
+# JSON files
+
+[*.json]
+indent_size = 2
+
+# YAML files
+
+[*.{yaml,yml}]
+indent_size = 2
+
+# Markdown files
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Web files
+
+[*.{cshtml,htm,html,svg}]
+indent_size = 2
+
+# Web style files
+
+[*.{css,sass,scss}]
+indent_size = 2
+
+# Web script files
+
+[*.{js,ts}]
+indent_size = 2
+
+# Window script files
+
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+
+# Linux script files
+
+[*.sh]
+end_of_line = lf

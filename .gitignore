@@ -1,0 +1,37 @@
+# Visual studio
+
+## User-specific files
+
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## cache/options directory
+
+.vs/
+
+## build results
+
+[Aa]rtifacts/
+[Bb]uild/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio Code
+
+.vscode/*
+*.code-workspace
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# SDL
+
+SDL3/

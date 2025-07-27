@@ -1,0 +1,63 @@
+is_global = true
+
+# MA0001: Use an overload that has a StringComparison parameter
+# Doesn't need for every method that use a comparer
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0001.md
+dotnet_diagnostic.MA0001.severity = none
+
+# MA0002: Use an overload that has a IEqualityComparer or IComparer parameter
+# Doesn't need for every method that use a comparer
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0002.md
+dotnet_diagnostic.MA0002.severity = none
+
+# MA0005: Use 'Array.Empty<T>()'
+# Is a duplicate of CA1825: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1825
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0005.md
+dotnet_diagnostic.MA0005.severity = none
+
+# MA0007: The last statement in a multi-line C# initializer or list is missing a trailing comma.
+# Is a duplicate of SA1413: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1413.md
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0007.md
+dotnet_diagnostic.MA0007.severity = none
+
+# MA0011: IFormatProvider is missing
+# Some ToString does not need to be localized
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0011.md
+dotnet_diagnostic.MA0011.severity = none
+
+# MA0018: Do not declare static members on generic types.
+# deprecated; use CA1000 instead
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0018.md
+dotnet_diagnostic.MA0018.severity = none
+
+# MA0036: Make class static
+# Some Class does not need to be static (mostly for translations)
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0036.md
+dotnet_diagnostic.MA0036.severity = none
+
+# MA0038: Make method static
+# This rule is deprecated
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0038.md
+dotnet_diagnostic.MA0038.severity = none
+
+# MA0046: The first parameter must be of type object
+# Some events aren't used by multiple objects
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0046.md
+dotnet_diagnostic.MA0046.severity = none
+
+# MA0053: Make class sealed
+# Classes should be sealed when there is no inheritor.
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0053.md
+MA0053.public_class_should_be_sealed = true
+MA0053.exceptions_should_be_sealed = true
+dotnet_diagnostic.MA0053.severity = warning
+
+# MA0076: Does not use implicit culture-sensitive ToString in interpolated string
+# Some interpolated string does not need to be localized
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0076.md
+dotnet_diagnostic.MA0076.severity = none
+
+# MA0165: Make interpolated string
+# Is help developer to make string interpolated. It is not required in VS
+# https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0165.md
+dotnet_diagnostic.MA0165.severity = none

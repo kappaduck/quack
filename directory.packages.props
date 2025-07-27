@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup Label="Configure packages to be centralized">
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+
+  <!-- Theses packages will be used by every project in a repository. Theses packages are added to the PackageReference with the following metadata -->
+  <!-- IncludeAssets="analyzers,build,contentfiles,native,runtime" and PrivateAssets="all" -->
+  <ItemGroup Label="Global analyzers">
+    <GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.201" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.13.1" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.9.0.115408" />
+  </ItemGroup>
+
+  <ItemGroup Label="Common packages">
+    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
+  </ItemGroup>
+</Project>

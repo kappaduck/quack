@@ -1,0 +1,26 @@
+is_global = true
+
+# S101: Types should be named in PascalCase
+# Some types are named in all upper case like SDL
+# https://rules.sonarsource.com/csharp/RSPEC-101/
+dotnet_diagnostic.S101.severity = none
+
+# S1481: Unused local variables should be removed
+# Is a duplicate of IDE0059: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0059
+# https://rules.sonarsource.com/csharp/RSPEC-1481/
+dotnet_diagnostic.S1481.severity = none
+
+# S2094: Remove this empty record
+# Some record can be empty especially in fluxor and mediator
+# https://rules.sonarsource.com/csharp/RSPEC-2094/
+dotnet_diagnostic.S2094.severity = none
+
+# S2325: Methods and properties that don't access instance data should be static
+# Some properties should not be static (Sonar seem confused with the new keyword field)
+# https://rules.sonarsource.com/csharp/RSPEC-2325/
+dotnet_diagnostic.S2325.severity = none
+
+# S4200: Make this wrapper for native method less trivial
+# Some method are trivial and should be kept as is
+# https://rules.sonarsource.com/csharp/RSPEC-4200/
+dotnet_diagnostic.S4200.severity = none

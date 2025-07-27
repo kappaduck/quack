@@ -1,0 +1,84 @@
+is_global = true
+
+# IDE0007 IDE0008: Use explicit type
+# Always use explicit type
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0007-ide0008
+csharp_style_var_for_built_in_types = false:warning
+csharp_style_var_when_type_is_apparent = false:warning
+csharp_style_var_elsewhere = false:warning
+
+# IDE0011: Add braces
+# Add braces when multiline
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0011
+csharp_prefer_braces = when_multiline:warning
+
+# IDE0021: Use expression body for constructors
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0021
+csharp_style_expression_bodied_constructors = when_on_single_line:warning
+
+# IDE0022: Use expression body for methods
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0022
+csharp_style_expression_bodied_methods = when_on_single_line:warning
+
+# IDE0023 IDE0024: Use expression body for operators
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0023-ide0024
+csharp_style_expression_bodied_operators = when_on_single_line:warning
+
+# IDE0025: Use expression body for properties
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0025
+csharp_style_expression_bodied_properties = when_on_single_line:warning
+
+# IDE0026: Use expression body for indexers
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0026
+csharp_style_expression_bodied_indexers = when_on_single_line:warning
+
+# IDE0027: Use expression body for accessors
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0027
+csharp_style_expression_bodied_accessors = when_on_single_line:warning
+
+# IDE0045: Convert to conditional expression
+# Prefer conditional expression over assignment
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0045
+dotnet_diagnostic.IDE0045.severity = warning
+
+# IDE0046: 'if' statement can be simplified for return
+# Sometimes is better to seperate the if statement and return
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0046
+dotnet_diagnostic.IDE0046.severity = none
+
+# IDE0053: Use expression body for lambdas
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0053
+csharp_style_expression_bodied_lambdas = when_on_single_line:warning
+
+# IDE0058: Remove unnecessary expression value
+# Can ignore unused expression values
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0058
+dotnet_diagnostic.IDE0058.severity = none
+
+# IDE0061: Use expression body for local functions
+# Use expression body when on single line
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0061
+csharp_style_expression_bodied_local_functions = when_on_single_line:warning
+
+# IDE0072: Populate default switch
+# can ignore default switch when condition will never happen
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0072
+dotnet_diagnostic.IDE0072.severity = none
+dotnet_diagnostic.CS8524.severity = none
+
+# IDE0090: Use 'new(...)' instead of 'new ...'
+# Always use 'new(...)'
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0090
+csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
+
+# IDE0160: Convert to block scoped namespace
+# Always use file scoped namespace
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0160
+csharp_style_namespace_declarations = file_scoped

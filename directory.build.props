@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup Label="Configure .csproj">
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+
+    <!-- Configure packages which are only Development dependency -->
+    <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
+    <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
+  </PropertyGroup>
+
+    <ItemGroup Label="Configure analyzer rules">
+    <GlobalAnalyzerConfigFiles Include="..\..\rules\*.editorconfig" />
+  </ItemGroup>
+</Project>
