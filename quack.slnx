@@ -32,4 +32,5 @@
   <Folder Name="/src/">
     <File Path="src/install.sdl.cs" />
   </Folder>
+  <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
 </Solution>
