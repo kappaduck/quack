@@ -1,7 +1,7 @@
 is_global = true
 
 # CA1034: Do not nest type
-# Can nest type for group records/classes (flxuor)
+# Can nest type for group records/classes
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1034
 dotnet_diagnostic.CA1034.severity = none
 
@@ -34,13 +34,3 @@ dotnet_diagnostic.CA1812.severity = none
 # Some methods should not be static because they are using the new C#14 feature: extension
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
 dotnet_diagnostic.CA1822.severity = none
-
-# CA1852: Class can be sealed because it has no subtypes in its containing assembly and is not externally visible internal class sealed
-# Is a duplicate of MA0053: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0053.md
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1852
-dotnet_diagnostic.CA1852.severity = none
-
-# CA2007: Consider calling ConfigureAwait on the awaited task
-# Is a duplicate of MA0004: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0004.md
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
-dotnet_diagnostic.CA2007.severity = none

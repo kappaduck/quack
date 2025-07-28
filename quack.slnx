@@ -29,4 +29,7 @@
     <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
     <File Path=".github/ISSUE_TEMPLATE/task.yml" />
   </Folder>
+  <Folder Name="/src/">
+    <File Path="src/install.sdl.cs" />
+  </Folder>
 </Solution>
