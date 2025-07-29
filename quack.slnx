@@ -7,16 +7,15 @@
     <File Path=".github/dependabot.yml" />
     <File Path="directory.build.props" />
     <File Path="directory.packages.props" />
+    <File Path="dotnet.config" />
     <File Path="nuget.config" />
   </Folder>
   <Folder Name="/configurations/rules/">
     <File Path="rules/code.style.editorconfig" />
     <File Path="rules/disabled.editorconfig" />
-    <File Path="rules/meziantou.editorconfig" />
     <File Path="rules/roslynator.editorconfig" />
     <File Path="rules/sonar.editorconfig" />
     <File Path="rules/underscore.editorconfig" />
-    <File Path="rules/vsthrd.editorconfig" />
   </Folder>
   <Folder Name="/docs/">
     <File Path="changelog.md" />
@@ -32,6 +31,11 @@
   <Folder Name="/src/">
     <File Path="src/quack.sandbox.cs" />
     <File Path="src/install.sdl.cs" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Quack.Tests/Quack.Tests.csproj" />
+    <File Path="tests/directory.packages.props" />
+    <File Path="tests/.editorconfig" />
   </Folder>
   <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
 </Solution>
