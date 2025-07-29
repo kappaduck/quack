@@ -37,5 +37,8 @@
     <File Path="tests/directory.packages.props" />
     <File Path="tests/.editorconfig" />
   </Folder>
+  <Folder Name="/workflows/">
+    <File Path=".github/workflows/pull-request.yml" />
+  </Folder>
   <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
 </Solution>
