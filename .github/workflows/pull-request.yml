@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Build/Unit Test
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -36,7 +36,7 @@ jobs:
         run: dotnet test --configuration release --no-build --report-trx
 
       - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: (!cancelled())
         with:
           files: '**/*.trx'
