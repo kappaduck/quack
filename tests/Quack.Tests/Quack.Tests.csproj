@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Global usings">
+    <Using Include="TUnit" />
+  </ItemGroup>
+
+  <ItemGroup Label="Common test NuGets">
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+</Project>
