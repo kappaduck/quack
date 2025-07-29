@@ -39,6 +39,7 @@
   </Folder>
   <Folder Name="/workflows/">
     <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/codeql.yml" />
     <File Path=".github/workflows/pull-request.yml" />
   </Folder>
   <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
