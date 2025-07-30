@@ -11,6 +11,6 @@
 using KappaDuck.Quack;
 using KappaDuck.Quack.Core;
 
-using QuackEngine _ = QuackEngine.Init(SubSystem.Video);
+using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-Console.WriteLine($"Quack Engine using SDL: {QuackEngine.Version}");
+Console.WriteLine($"Quack Engine using SDL {QuackEngine.Version}");

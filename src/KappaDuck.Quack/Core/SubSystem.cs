@@ -7,7 +7,7 @@ namespace KappaDuck.Quack.Core;
 /// Represents a subsystem that can be initialized and shutdown by <see cref="QuackEngine"/>.
 /// </summary>
 [Flags]
-public enum SubSystem : uint
+public enum Subsystem : uint
 {
     /// <summary>
     /// No subsystem.
