@@ -14,6 +14,14 @@ namespace KappaDuck.Quack;
 /// </summary>
 public sealed partial class QuackEngine : IDisposable
 {
+    private const string IdentifierProperty = "SDL.app.metadata.identifier";
+    private const string NameProperty = "SDL.app.metadata.name";
+    private const string VersionProperty = "SDL.app.metadata.version";
+    private const string AuthorProperty = "SDL.app.metadata.creator";
+    private const string CopyrightProperty = "SDL.app.metadata.copyright";
+    private const string UrlProperty = "SDL.app.metadata.url";
+    private const string TypeProperty = "SDL.app.metadata.type";
+
     private static readonly Lock _lock = new();
 
     private static QuackEngine? _engine;
@@ -78,7 +86,7 @@ public sealed partial class QuackEngine : IDisposable
     public static bool Has(Subsystem subsystem) => (_subsystems & subsystem) == subsystem;
 
     /// <summary>
-    /// Initializes the engine with the specified <see cref="Subsystem"/>.
+    /// Initializes the engine with the specified <see cref="Subsystem"/> and optional <see cref="AppMetadata"/>.
     /// </summary>
     /// <remarks>
     /// Initialized subsystems are stored and will be automatically shut down when the engine is disposed
@@ -86,14 +94,16 @@ public sealed partial class QuackEngine : IDisposable
     /// It will only be initialized once.
     /// </remarks>
     /// <param name="subsystem">The subsystem to initialize.</param>
+    /// <param name="metadata">Optional metadata for the application.</param>
     /// <returns>An instance of <see cref="QuackEngine"/>.</returns>
     /// <exception cref="QuackNativeException">Failed to initialize the subsystem.</exception>
-    public static QuackEngine Init(Subsystem subsystem)
+    public static QuackEngine Init(Subsystem subsystem, AppMetadata? metadata = null)
     {
         lock (_lock)
         {
             _engine ??= new QuackEngine();
 
+            SetAppMetadata(metadata);
             InitializeEngine(subsystem);
 
             return _engine;
@@ -104,7 +114,7 @@ public sealed partial class QuackEngine : IDisposable
     /// Initialize specific subsystems.
     /// </summary>
     /// <remarks>
-    /// You should call <see cref="Init(Subsystem)"/> before using this method to initialize the engine.
+    /// You should call <see cref="Init(Subsystem, AppMetadata?)"/> before using this method to initialize the engine.
     /// </remarks>
     /// <param name="subsystem">The subsystem to initialize.</param>
     /// <exception cref="QuackException">The engine is not initialized.</exception>
@@ -127,7 +137,7 @@ public sealed partial class QuackEngine : IDisposable
     /// Quits the specified <see cref="Subsystem"/>.
     /// </summary>
     /// <remarks>
-    /// <para>You should call <see cref="Init(Subsystem)"/> before using this method to initialize the engine.</para>
+    /// <para>You should call <see cref="Init(Subsystem, AppMetadata?)"/> before using this method to initialize the engine.</para>
     /// <para>You can shut down the same subsystem multiple times. It will only be shut down once.</para>
     /// <para>You still need to call <see cref="Dispose"/> or <see langword="using"/> even if you shut down all subsystems.</para>
     /// </remarks>
@@ -169,6 +179,28 @@ public sealed partial class QuackEngine : IDisposable
         _subsystems |= subsystem;
     }
 
+    private static void SetAppMetadata(AppMetadata? metadata)
+    {
+        if (metadata is null)
+            return;
+
+        SetAppMetadataProperty(IdentifierProperty, metadata.Id);
+        SetAppMetadataProperty(NameProperty, metadata.Name);
+        SetAppMetadataProperty(VersionProperty, metadata.Version);
+        SetAppMetadataProperty(AuthorProperty, metadata.Author);
+        SetAppMetadataProperty(CopyrightProperty, metadata.Copyright);
+        SetAppMetadataProperty(UrlProperty, metadata.Url?.ToString());
+        SetAppMetadataProperty(TypeProperty, metadata.Type);
+
+        static void SetAppMetadataProperty(string name, string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return;
+
+            QuackNativeException.ThrowIfFailed(SDL_SetAppMetadataProperty(name, value));
+        }
+    }
+
     private static void ThrowIfInstanceNull()
         => QuackException.ThrowIfNull(_engine, "The engine is not initialized.");
 
@@ -187,4 +219,8 @@ public sealed partial class QuackEngine : IDisposable
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_Quit();
+
+    [LibraryImport(SDLNative.Library, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SetAppMetadataProperty(string name, string value);
 }
