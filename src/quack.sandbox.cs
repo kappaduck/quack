@@ -8,4 +8,9 @@
 #:property IncludeNativeLibraries=true
 #:project KappaDuck.Quack
 
-Console.WriteLine("Hello, Quack!");
+using KappaDuck.Quack;
+using KappaDuck.Quack.Core;
+
+using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
+
+Console.WriteLine($"Quack Engine using SDL {QuackEngine.Version}");
