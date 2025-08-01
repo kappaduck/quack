@@ -75,13 +75,6 @@ public readonly struct Angle :
     public static Angle operator +(Angle left, Angle right) => new(left.Radians + right.Radians);
 
     /// <summary>
-    /// Creates an angle from degrees.
-    /// </summary>
-    /// <param name="degrees">The angle in degrees.</param>
-    /// <returns>The angle.</returns>
-    public static Angle FromDegrees(float degrees) => new((float)(degrees * Math.PI / 180f));
-
-    /// <summary>
     /// Subtracts two angles.
     /// </summary>
     /// <param name="left">The left angle.</param>
@@ -174,6 +167,13 @@ public readonly struct Angle :
     public static bool operator >=(Angle left, Angle right) => left.Radians >= right.Radians;
 
     /// <summary>
+    /// Creates an angle from degrees.
+    /// </summary>
+    /// <param name="degrees">The angle in degrees.</param>
+    /// <returns>The angle.</returns>
+    public static Angle FromDegrees(float degrees) => new((float)(degrees * Math.PI / 180f));
+
+    /// <summary>
     /// Creates an angle from radians.
     /// </summary>
     /// <param name="radians">The angle in radians.</param>
@@ -222,6 +222,7 @@ public readonly struct Angle :
         => obj is Angle angle && Equals(angle);
 
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
     public override readonly int GetHashCode() => Radians.GetHashCode();
 
     /// <summary>
@@ -234,6 +235,7 @@ public readonly struct Angle :
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"{Degrees}°", out charsWritten);
 }
