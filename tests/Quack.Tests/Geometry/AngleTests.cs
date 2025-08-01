@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Geometry;
+using System.Globalization;
 using TUnit.Assertions.AssertConditions.Throws;
 
 namespace Quack.Tests.Geometry;
@@ -9,303 +10,373 @@ namespace Quack.Tests.Geometry;
 public sealed class AngleTests
 {
     [Test]
-    public async Task RadiansShouldReturnCorrectValue()
+    public async Task FromRadiansShouldCreateAngleWithGoodValues()
     {
-        const float radians = MathF.PI / 4;
-        Angle angle = Angle.FromRadians(radians);
+        Angle angle = Angle.FromRadians(MathF.PI);
 
-        await Assert.That(angle.Radians).IsEqualTo(radians);
+        await Assert.That(angle.Degrees).IsEqualTo(180f);
+        await Assert.That(angle.Radians).IsEqualTo(MathF.PI);
     }
 
     [Test]
-    public async Task RadiansShouldConvertDegreesToRadians()
+    public async Task FromDegreesShouldCreateAngleWithGoodValues()
     {
-        Angle angle = Angle.FromDegrees(90.0f);
+        Angle angle = Angle.FromDegrees(180f);
 
-        await Assert.That(angle.Radians).IsEqualTo(MathF.PI / 2);
+        await Assert.That(angle.Degrees).IsEqualTo(180f);
+        await Assert.That(angle.Radians).IsEqualTo(MathF.PI);
     }
 
     [Test]
-    public async Task DegreesShouldConvertRadiansToDegrees()
+    public async Task SinShouldCalculateSine()
     {
-        Angle angle = Angle.FromRadians(MathF.PI / 2);
+        Angle angle = Angle.FromDegrees(90f);
 
-        await Assert.That(angle.Degrees).IsEqualTo(90.0f);
+        await Assert.That(angle.Sin).IsEqualTo(1f);
     }
 
     [Test]
-    public async Task DegreesShouldReturnCorrectValue()
+    public async Task CosShouldCalculateCosine()
     {
-        const float degrees = 45.0f;
-        Angle angle = Angle.FromDegrees(degrees);
+        Angle angle = Angle.FromDegrees(0f);
 
-        await Assert.That(angle.Degrees).IsEqualTo(degrees);
+        await Assert.That(angle.Cos).IsEqualTo(1f);
     }
 
     [Test]
-    public async Task SinShouldReturnCorrectValue()
+    public async Task TanShouldCalculateTangent()
     {
-        const float degrees = 30.0f;
-        Angle angle = Angle.FromDegrees(degrees);
+        Angle angle = Angle.FromDegrees(45f);
 
-        await Assert.That(angle.Sin).IsEqualTo(0.5f);
+        await Assert.That(angle.Tan).IsEqualTo(1f);
     }
 
     [Test]
-    public async Task CosShouldReturnCorrectValue()
+    public async Task ZeroShouldBeZeroAngle()
     {
-        const float degrees = 60.0f;
-        Angle angle = Angle.FromDegrees(degrees);
+        Angle angle = Angle.Zero;
 
-        await Assert.That(angle.Cos).IsEqualTo(0.5f).Within(0.0001f);
+        await Assert.That(angle.Radians).IsEqualTo(0f);
+        await Assert.That(angle.Degrees).IsEqualTo(0f);
     }
 
     [Test]
-    public async Task TanShouldReturnCorrectValue()
+    public async Task AngleShouldBeImplicitlyConvertibleFromFloat()
     {
-        const float degrees = 45.0f;
-        Angle angle = Angle.FromDegrees(degrees);
+        Angle angle = 1.0f;
 
-        await Assert.That(angle.Tan).IsEqualTo(1.0f);
+        await Assert.That(angle.Radians).IsEqualTo(1.0f);
     }
 
     [Test]
-    public async Task ZeroAngleShouldHaveZeroInRadiansAndDegrees()
+    public async Task AngleShouldBeExplicitlyConvertibleToFloat()
     {
-        Angle zero = Angle.Zero;
+        Angle angle = Angle.FromRadians(1.0f);
+        float radians = (float)angle;
 
-        await Assert.That(zero.Radians).IsEqualTo(0f);
-        await Assert.That(zero.Degrees).IsEqualTo(0f);
+        await Assert.That(radians).IsEqualTo(1.0f);
     }
 
     [Test]
-    public async Task ImplicitConversionFromFloatToAngleShouldWork()
+    public async Task AngleShouldBeAddable()
     {
-        const float radians = MathF.PI / 4;
-        Angle angle = radians;
-
-        await Assert.That(angle.Radians).IsEqualTo(radians);
-    }
-
-    [Test]
-    public async Task ImplicitConversionFromAngleToFloatShouldWork()
-    {
-        Angle angle = Angle.FromDegrees(90.0f);
-
-        float result = (float)angle;
-
-        await Assert.That(result).IsEqualTo(angle.Radians);
-    }
-
-    [Test]
-    public async Task AdditionShouldReturnCorrectResult()
-    {
-        Angle left = Angle.FromDegrees(30.0f);
-        Angle right = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
 
         Angle result = left + right;
 
+        await Assert.That(result.Degrees).IsEqualTo(90f);
         await Assert.That(result.Radians).IsEqualTo(MathF.PI / 2);
-        await Assert.That(result.Degrees).IsEqualTo(90.0f);
     }
 
     [Test]
-    public async Task SubtractionShouldReturnCorrectResult()
+    public async Task AngleShouldBeSubtractable()
     {
-        Angle left = Angle.FromDegrees(60.0f);
-        Angle right = Angle.FromDegrees(30.0f);
+        Angle left = Angle.FromDegrees(90f);
+        Angle right = Angle.FromDegrees(30f);
 
         Angle result = left - right;
 
-        await Assert.That(result.Radians).IsEqualTo(MathF.PI / 6);
-        await Assert.That(result.Degrees).IsEqualTo(30.0f);
-    }
-
-    [Test]
-    public async Task MultiplicationShouldReturnCorrectResult()
-    {
-        Angle angle = Angle.FromDegrees(30.0f);
-        const float multiplier = 2.0f;
-
-        Angle result = angle * multiplier;
-
+        await Assert.That(result.Degrees).IsEqualTo(60f);
         await Assert.That(result.Radians).IsEqualTo(MathF.PI / 3);
-        await Assert.That(result.Degrees).IsEqualTo(60.0f);
     }
 
     [Test]
-    public async Task InvertedMultiplicationShouldReturnCorrectResult()
+    public async Task AngleShouldBeMultipliableByScalar()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
-        const float multiplier = 2.0f;
+        Angle angle = Angle.FromDegrees(30f);
+        const float scalar = 2f;
 
-        Angle result = multiplier * angle;
+        Angle result = angle * scalar;
 
+        await Assert.That(result.Degrees).IsEqualTo(60f);
         await Assert.That(result.Radians).IsEqualTo(MathF.PI / 3);
-        await Assert.That(result.Degrees).IsEqualTo(60.0f);
     }
 
     [Test]
-    public async Task DivisionShouldReturnCorrectResult()
+    public async Task AngleShouldBeInvertedMultipliableByScalar()
     {
-        Angle angle = Angle.FromDegrees(60.0f);
-        const float divisor = 2.0f;
+        Angle angle = Angle.FromDegrees(60f);
+        const float scalar = 0.5f;
 
-        Angle result = angle / divisor;
+        Angle result = scalar * angle;
 
+        await Assert.That(result.Degrees).IsEqualTo(30f);
         await Assert.That(result.Radians).IsEqualTo(MathF.PI / 6);
-        await Assert.That(result.Degrees).IsEqualTo(30.0f);
     }
 
     [Test]
-    public void DivisionByZeroShouldThrowException()
+    public async Task AngleShouldBeDivisibleByScalar()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
+        Angle angle = Angle.FromDegrees(90f);
+        const float scalar = 2f;
 
-        Assert.Throws<DivideByZeroException>(() => _ = angle / 0f);
+        Angle result = angle / scalar;
+
+        await Assert.That(result.Degrees).IsEqualTo(45f);
+        await Assert.That(result.Radians).IsEqualTo(MathF.PI / 4);
     }
 
     [Test]
-    public async Task UnaryMinusShouldReturnCorrectResult()
+    public async Task AngleShouldThrowOnDivisionByZero()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
+        Angle angle = Angle.FromDegrees(90f);
+        const float scalar = 0f;
 
+        await Assert.That(() => angle / scalar).ThrowsExactly<DivideByZeroException>();
+    }
+
+    [Test]
+    public async Task UnaryMinusShouldNegateAngle()
+    {
+        Angle angle = Angle.FromDegrees(30f);
         Angle result = -angle;
 
+        await Assert.That(result.Degrees).IsEqualTo(-30f);
         await Assert.That(result.Radians).IsEqualTo(-MathF.PI / 6);
-        await Assert.That(result.Degrees).IsEqualTo(-30.0f);
     }
 
     [Test]
-    public async Task TwoSameAnglesShouldBeEqual()
+    public async Task TwoSameAngleUsingEqualOperatorShouldReturnTrue()
     {
-        Angle angle1 = Angle.FromDegrees(45.0f);
-        Angle angle2 = Angle.FromDegrees(45.0f);
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
 
-        bool areEqual = angle1 == angle2;
+        bool areEqual = left == right;
 
         await Assert.That(areEqual).IsTrue();
     }
 
     [Test]
-    public async Task TwoDifferentAnglesShouldNotBeEqual()
+    public async Task TwoDifferentAnglesUsingEqualOperatorShouldReturnFalse()
     {
-        Angle angle1 = Angle.FromDegrees(30.0f);
-        Angle angle2 = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(90f);
 
-        bool areNotEqual = angle1 != angle2;
+        bool areEqual = left == right;
+
+        await Assert.That(areEqual).IsFalse();
+    }
+
+    [Test]
+    public async Task TwoSameAnglesUsingInequalityOperatorShouldReturnFalse()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
+
+        bool areNotEqual = left != right;
+
+        await Assert.That(areNotEqual).IsFalse();
+    }
+
+    [Test]
+    public async Task TwoDifferentAnglesUsingInequalityOperatorShouldReturnTrue()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(90f);
+
+        bool areNotEqual = left != right;
 
         await Assert.That(areNotEqual).IsTrue();
     }
 
     [Test]
-    public async Task AngleShouldBeLessThanAnotherAngle()
+    public async Task LessThanOperatorShouldReturnTrueForSmallerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(30.0f);
-        Angle angle2 = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
 
-        bool isLessThan = angle1 < angle2;
+        bool isLessThan = left < right;
 
         await Assert.That(isLessThan).IsTrue();
     }
 
     [Test]
-    public async Task AngleShouldBeGreaterThanAnotherAngle()
+    public async Task LessThanOperatorShouldReturnFalseForLargerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(60.0f);
-        Angle angle2 = Angle.FromDegrees(30.0f);
+        Angle left = Angle.FromDegrees(60f);
+        Angle right = Angle.FromDegrees(30f);
 
-        bool isGreaterThan = angle1 > angle2;
+        bool isLessThan = left < right;
+
+        await Assert.That(isLessThan).IsFalse();
+    }
+
+    [Test]
+    public async Task GreaterThanOperatorShouldReturnTrueForLargerAngle()
+    {
+        Angle left = Angle.FromDegrees(60f);
+        Angle right = Angle.FromDegrees(30f);
+
+        bool isGreaterThan = left > right;
 
         await Assert.That(isGreaterThan).IsTrue();
     }
 
     [Test]
-    public async Task AngleShouldBeLessThanOrEqualToAnotherAngle()
+    public async Task GreaterThanOperatorShouldReturnFalseForSmallerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(30.0f);
-        Angle angle2 = Angle.FromDegrees(30.0f);
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
 
-        bool isLessThanOrEqual = angle1 <= angle2;
+        bool isGreaterThan = left > right;
+
+        await Assert.That(isGreaterThan).IsFalse();
+    }
+
+    [Test]
+    public async Task LessThanOrEqualOperatorShouldReturnTrueForEqualAngles()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
+
+        bool isLessThanOrEqual = left <= right;
 
         await Assert.That(isLessThanOrEqual).IsTrue();
     }
 
     [Test]
-    public async Task AngleShouldBeGreaterThanOrEqualToAnotherAngle()
+    public async Task LessThanOrEqualOperatorShouldReturnTrueForSmallerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(60.0f);
-        Angle angle2 = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
 
-        bool isGreaterThanOrEqual = angle1 >= angle2;
+        bool isLessThanOrEqual = left <= right;
+
+        await Assert.That(isLessThanOrEqual).IsTrue();
+    }
+
+    [Test]
+    public async Task LessThanOrEqualOperatorShouldReturnFalseForLargerAngle()
+    {
+        Angle left = Angle.FromDegrees(60f);
+        Angle right = Angle.FromDegrees(30f);
+
+        bool isLessThanOrEqual = left <= right;
+
+        await Assert.That(isLessThanOrEqual).IsFalse();
+    }
+
+    [Test]
+    public async Task GreaterThanOrEqualOperatorShouldReturnTrueForEqualAngles()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
+
+        bool isGreaterThanOrEqual = left >= right;
 
         await Assert.That(isGreaterThanOrEqual).IsTrue();
     }
 
     [Test]
-    public async Task NormalizeShouldReturnCorrectAngle()
+    public async Task GreaterThanOrEqualOperatorShouldReturnTrueForLargerAngle()
     {
-        Angle angle = Angle.FromDegrees(370.0f);
+        Angle left = Angle.FromDegrees(60f);
+        Angle right = Angle.FromDegrees(30f);
+
+        bool isGreaterThanOrEqual = left >= right;
+
+        await Assert.That(isGreaterThanOrEqual).IsTrue();
+    }
+
+    [Test]
+    public async Task GreaterThanOrEqualOperatorShouldReturnFalseForSmallerAngle()
+    {
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
+
+        bool isGreaterThanOrEqual = left >= right;
+
+        await Assert.That(isGreaterThanOrEqual).IsFalse();
+    }
+
+    [Test]
+    public async Task NormalizeShouldReturnNormalizedAngle()
+    {
+        Angle angle = Angle.FromDegrees(450f);
+
         Angle normalized = angle.Normalize();
 
-        await Assert.That(normalized.Degrees).IsEqualTo(10.0f);
+        await Assert.That(normalized.Degrees).IsEqualTo(90f);
     }
 
     [Test]
-    public async Task NormalizeWithCustomRangeShouldReturnCorrectAngle()
+    public async Task NormalizeShouldReturnNormalizedAngleWithCustomRange()
     {
-        Angle angle = Angle.FromDegrees(370.0f);
-        Angle normalized = angle.Normalize(0f, 720f);
+        Angle angle = Angle.FromDegrees(450f);
 
-        await Assert.That(normalized.Degrees).IsEqualTo(370.0f);
+        Angle normalized = angle.Normalize(0f, 180f);
+
+        await Assert.That(normalized.Degrees).IsEqualTo(90f);
     }
 
     [Test]
-    public async Task NormalizeWithNegativeRangeShouldReturnCorrectAngle()
+    public async Task NormalizeShouldReturnNormalizedAngleWithNegativeRange()
     {
-        Angle angle = Angle.FromDegrees(-30.0f);
-        Angle normalized = angle.Normalize(-360f, 0f);
+        Angle angle = Angle.FromDegrees(-450f);
 
-        await Assert.That(normalized.Degrees).IsEqualTo(-30.0f);
+        Angle normalized = angle.Normalize(-180f, 0f);
+
+        await Assert.That(normalized.Degrees).IsEqualTo(-90f);
     }
 
     [Test]
     public async Task CompareToShouldReturnZeroForEqualAngles()
     {
-        Angle angle1 = Angle.FromDegrees(45.0f);
-        Angle angle2 = Angle.FromDegrees(45.0f);
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
 
-        int comparison = angle1.CompareTo(angle2);
+        int comparison = left.CompareTo(right);
 
         await Assert.That(comparison).IsEqualTo(0);
     }
 
     [Test]
-    public async Task CompareToShouldReturnNegativeForLessThanAngle()
+    public async Task CompareToShouldReturnNegativeForSmallerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(30.0f);
-        Angle angle2 = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(30f);
+        Angle right = Angle.FromDegrees(60f);
 
-        int comparison = angle1.CompareTo(angle2);
+        int comparison = left.CompareTo(right);
 
         await Assert.That(comparison).IsEqualTo(-1);
     }
 
     [Test]
-    public async Task CompareToShouldReturnPositiveForGreaterThanAngle()
+    public async Task CompareToShouldReturnPositiveForLargerAngle()
     {
-        Angle angle1 = Angle.FromDegrees(60.0f);
-        Angle angle2 = Angle.FromDegrees(30.0f);
+        Angle left = Angle.FromDegrees(60f);
+        Angle right = Angle.FromDegrees(30f);
 
-        int comparison = angle1.CompareTo(angle2);
+        int comparison = left.CompareTo(right);
 
         await Assert.That(comparison).IsEqualTo(1);
     }
 
     [Test]
-    public async Task CompareToNullShouldReturnPositive()
+    public async Task CompareToShouldReturnPositiveForNullObject()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
+        Angle angle = Angle.FromDegrees(45f);
 
         int comparison = angle.CompareTo(null);
 
@@ -313,54 +384,96 @@ public sealed class AngleTests
     }
 
     [Test]
-    public async Task CompareToNonAngleObjectShouldThrowException()
+    public async Task CompareToShouldThrowForNonAngleObject()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
+        Angle angle = Angle.FromDegrees(45f);
 
         await Assert.That(() => angle.CompareTo("not an angle"))
-            .Throws<ArgumentException>()
+            .ThrowsExactly<ArgumentException>()
             .WithMessage("Object must be of type Angle (Parameter 'obj')")
             .WithParameterName("obj");
     }
 
     [Test]
-    public async Task EqualsShouldReturnTrueForEqualAngles()
+    public async Task CompareToShouldCompareWhenObjectIsAngle()
     {
-        Angle angle1 = Angle.FromDegrees(45.0f);
-        Angle angle2 = Angle.FromDegrees(45.0f);
+        Angle left = Angle.FromDegrees(45f);
+        object right = Angle.FromDegrees(30f);
 
-        bool areEqual = angle1.Equals(angle2);
+        int comparison = left.CompareTo(right);
 
-        await Assert.That(areEqual).IsTrue();
+        await Assert.That(comparison).IsGreaterThan(0);
+    }
+
+    [Test]
+    public async Task EqualsShouldReturnTrueForSameAngle()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(45f);
+
+        bool isEqual = left.Equals(right);
+
+        await Assert.That(isEqual).IsTrue();
     }
 
     [Test]
     public async Task EqualsShouldReturnFalseForDifferentAngles()
     {
-        Angle angle1 = Angle.FromDegrees(30.0f);
-        Angle angle2 = Angle.FromDegrees(60.0f);
+        Angle left = Angle.FromDegrees(45f);
+        Angle right = Angle.FromDegrees(30f);
 
-        bool areNotEqual = angle1.Equals(angle2);
+        bool isEqual = left.Equals(right);
 
-        await Assert.That(areNotEqual).IsFalse();
+        await Assert.That(isEqual).IsFalse();
     }
 
     [Test]
     public async Task EqualsShouldReturnFalseForNull()
     {
-        Angle angle = Angle.FromDegrees(30.0f);
+        Angle angle = Angle.FromDegrees(45f);
 
-        bool isEqualToNull = angle.Equals(null);
+        bool isEqual = angle.Equals(null);
 
-        await Assert.That(isEqualToNull).IsFalse();
+        await Assert.That(isEqual).IsFalse();
     }
 
     [Test]
-    public async Task ToStringShouldDegrees()
+    public async Task EqualsShouldReturnFalseForNonAngleObject()
     {
-        Angle angle = Angle.FromDegrees(45.0f);
+        Angle angle = Angle.FromDegrees(45f);
+
+        bool isEqual = angle.Equals("not an angle");
+
+        await Assert.That(isEqual).IsFalse();
+    }
+
+    [Test]
+    public async Task EqualsShouldReturnTrueForSameAngleAsObject()
+    {
+        Angle left = Angle.FromDegrees(45f);
+        object right = Angle.FromDegrees(45f);
+
+        bool isEqual = left.Equals(right);
+
+        await Assert.That(isEqual).IsTrue();
+    }
+
+    [Test]
+    public async Task ToStringShouldReturnFormattedAngle()
+    {
+        Angle angle = Angle.FromDegrees(45f);
 
         string result = angle.ToString();
+
+        await Assert.That(result).IsEqualTo("45°");
+    }
+
+    [Test]
+    public async Task ToStringShouldReturnFormattedAngleWithCustomFormat()
+    {
+        Angle angle = Angle.FromDegrees(45f);
+
+        string result = angle.ToString("F2", CultureInfo.InvariantCulture);
 
         await Assert.That(result).IsEqualTo("45°");
     }

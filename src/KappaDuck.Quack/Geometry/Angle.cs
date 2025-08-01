@@ -75,13 +75,6 @@ public readonly struct Angle :
     public static Angle operator +(Angle left, Angle right) => new(left.Radians + right.Radians);
 
     /// <summary>
-    /// Creates an angle from degrees.
-    /// </summary>
-    /// <param name="degrees">The angle in degrees.</param>
-    /// <returns>The angle.</returns>
-    public static Angle FromDegrees(float degrees) => new((float)(degrees * Math.PI / 180f));
-
-    /// <summary>
     /// Subtracts two angles.
     /// </summary>
     /// <param name="left">The left angle.</param>
@@ -172,6 +165,13 @@ public readonly struct Angle :
     /// <param name="right">The right angle.</param>
     /// <returns><see langword="true"/> if the left angle is greater than or equal to the right angle; otherwise, <see langword="false"/>.</returns>
     public static bool operator >=(Angle left, Angle right) => left.Radians >= right.Radians;
+
+    /// <summary>
+    /// Creates an angle from degrees.
+    /// </summary>
+    /// <param name="degrees">The angle in degrees.</param>
+    /// <returns>The angle.</returns>
+    public static Angle FromDegrees(float degrees) => new((float)(degrees * Math.PI / 180f));
 
     /// <summary>
     /// Creates an angle from radians.
