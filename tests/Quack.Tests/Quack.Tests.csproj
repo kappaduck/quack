@@ -6,6 +6,10 @@
     <PublishAot>true</PublishAot>
   </PropertyGroup>
 
+  <ItemGroup Label="Exclude tests project from code coverage">
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\KappaDuck.Quack\KappaDuck.Quack.csproj" />
   </ItemGroup>

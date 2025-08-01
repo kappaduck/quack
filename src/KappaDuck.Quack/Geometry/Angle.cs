@@ -222,7 +222,6 @@ public readonly struct Angle :
         => obj is Angle angle && Equals(angle);
 
     /// <inheritdoc/>
-    [ExcludeFromCodeCoverage]
     public override readonly int GetHashCode() => Radians.GetHashCode();
 
     /// <summary>
@@ -235,7 +234,6 @@ public readonly struct Angle :
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <inheritdoc/>
-    [ExcludeFromCodeCoverage]
     public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"{Degrees}°", out charsWritten);
 }
