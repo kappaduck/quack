@@ -32,11 +32,6 @@
     <File Path="src/quack.sandbox.cs" />
     <File Path="src/install.sdl.cs" />
   </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/Quack.Tests/Quack.Tests.csproj" />
-    <File Path="tests/directory.packages.props" />
-    <File Path="tests/.editorconfig" />
-  </Folder>
   <Folder Name="/workflows/">
     <File Path=".github/dependabot.yml" />
     <File Path=".github/workflows/codeql.yml" />
