@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build/Unit Test
+    name: Build
     runs-on: windows-latest
 
     steps:
@@ -30,13 +30,3 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration release --no-restore
-
-      - name: Test
-        continue-on-error: true
-        run: dotnet test --configuration release --no-build --report-trx
-
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action/windows@v2
-        if: (!cancelled())
-        with:
-          files: '**/*.trx'

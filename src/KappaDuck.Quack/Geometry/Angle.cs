@@ -234,6 +234,6 @@ public readonly struct Angle :
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <inheritdoc/>
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"{Degrees}°", out charsWritten);
 }
