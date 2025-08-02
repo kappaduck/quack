@@ -12,7 +12,7 @@ dotnet ./examples/windows/minimalWindow.cs
 You can also open the example in your preferred IDE (e.g., Visual Studio, Rider, etc.).
 > Any IDE doesn't support single-file execution, so you will need to run as cli.
 
-> Visual Code have intellisense support for single-file but can't run it directly.
+> Visual Studio has intellisense support for single-file but can't run it directly.
 
 ## Examples
 
@@ -20,11 +20,11 @@ Here the examples are categorized by module. Each example is a C# file that demo
 
 ### Windows
 
-- [Minimal Window](./examples/windows/minimalWindow.cs) - A simple example of creating a window.
+- [Minimal Window](./windows/minimalWindow.cs) - A simple example of creating a window.
 
 ## Inputs
 
-- [Keyboard Input](./examples/inputs/keyboardInput.cs) - Demonstrates how to handle keyboard input.
-- [Mouse Input](./examples/inputs/mouseInput.cs) - Demonstrates how to handle mouse input.
+- [Keyboard Input](./inputs/keyboard.cs) - Demonstrates how to handle keyboard input.
+- [Mouse Input](./inputs/mouse.cs) - Demonstrates how to handle mouse input.
 
 [dotnet run app.cs]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/
