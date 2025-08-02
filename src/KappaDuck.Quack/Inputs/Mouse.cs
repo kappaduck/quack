@@ -130,6 +130,14 @@ public sealed partial class Mouse
     }
 
     /// <summary>
+    /// Checks if the mouse button is pressed in the current synchronous state.
+    /// </summary>
+    /// <remarks>It uses the <see cref="CachedState"/> to check the button state.</remarks>
+    /// <param name="button">The mouse button to check.</param>
+    /// <returns><see langword="true"/> if the button is pressed; otherwise, <see langword="false"/>.</returns>
+    public static bool IsPressed(Button button) => CachedState.IsButtonDown(button);
+
+    /// <summary>
     /// Move the mouse to the given position in global screen space.
     /// </summary>
     /// <remarks>

@@ -53,8 +53,6 @@ public partial class Window : IDisposable
     public Window(string title, int width, int height, WindowState state = WindowState.None)
     {
         _handle = CreateWindow(title, width, height, state);
-        IsOpen = true;
-
         Handle = new WindowHandle(_handle);
     }
 
@@ -360,11 +358,7 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets a value indicating whether the window is currently open.
     /// </summary>
-    public bool IsOpen
-    {
-        get => !_handle.IsInvalid && field;
-        private set;
-    }
+    public bool IsOpen => !_handle.IsInvalid;
 
     /// <summary>
     /// Gets a value indicating whether the screen keyboard is visible.
@@ -748,7 +742,8 @@ public partial class Window : IDisposable
     /// Closes the window.
     /// </summary>
     /// <remarks>
-    /// If the window is already closed or not created, It does nothing.
+    /// <para>Closing the window will release all resources associated with it and you need to create it again with <see cref="Create(string, int, int, WindowState)"/>.</para>
+    /// <para>If the window is already closed or not created, it does nothing.</para>
     /// </remarks>
     public void Close()
     {
@@ -756,7 +751,6 @@ public partial class Window : IDisposable
             return;
 
         Dispose(disposing: true);
-        IsOpen = false;
     }
 
     /// <summary>
@@ -784,8 +778,6 @@ public partial class Window : IDisposable
         QuackNativeException.ThrowIfFailed(SDL_SetWindowMinimumSize(_handle, MinimumSize.Width, MinimumSize.Height));
         QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseRect(_handle, MouseClip));
         QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_handle, Opacity));
-
-        IsOpen = true;
     }
 
     /// <inheritdoc/>
