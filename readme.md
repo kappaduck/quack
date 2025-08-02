@@ -123,5 +123,5 @@ Quack! leverages and draws inspiration from the following projects:
 [SDL_mixer]: https://www.libsdl.org/projects/SDL_mixer/
 [Renderer]: https://wiki.libsdl.org/CategoryRender
 [GPU]: https://wiki.libsdl.org/CategoryGPU
-[Examples]: https://github.com/KappaDuck/Quack/tree/main/examples
+[Examples]: ./examples/
 [dotnet run app.cs]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/
