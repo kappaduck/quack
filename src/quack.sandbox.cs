@@ -10,15 +10,21 @@
 
 using KappaDuck.Quack;
 using KappaDuck.Quack.Core;
+using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Windows;
 
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video, new AppMetadata
+using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
+
+using Window window = new("Quack! Sandbox", 800, 600, WindowState.Resizable);
+
+while (window.IsOpen)
 {
-    Id = "com.kappaduck.quack.sandbox",
-    Name = "Quack! Sandbox",
-    Version = "0.1.0",
-    Author = "KappaDuck",
-    Copyright = "Copyright (c) KappaDuck. All rights reserved.",
-    Type = AppMetadata.AppType.Application
-});
-
-Console.WriteLine($"Quack Engine using SDL {QuackEngine.Version}");
+    while (window.Poll(out Event e))
+    {
+        if (e.RequestQuit())
+        {
+            window.Close();
+            return;
+        }
+    }
+}

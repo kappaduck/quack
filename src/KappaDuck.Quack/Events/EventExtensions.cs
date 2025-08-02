@@ -74,5 +74,13 @@ public static class EventExtensions
         /// <returns><see langword="true"/> if is a <see cref="EventType.Quit"/> event or the escape key is pressed; otherwise, <see langword="false"/>.</returns>
         public bool RequestQuit(Keyboard.Scancode code = Keyboard.Scancode.Escape)
             => e.Type is EventType.Quit || IsKeyDown(e, code);
+
+        /// <summary>
+        /// A request has been made that a window is closing.
+        /// </summary>
+        /// <param name="windowId">The identifier of the window is closing.</param>
+        /// <returns><see langword="true"/> if is a <see cref="EventType.WindowCloseRequested"/> event for the specified window; otherwise, <see langword="false"/>.</returns>
+        public bool WindowRequestQuit(uint windowId)
+            => e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId;
     }
 }
