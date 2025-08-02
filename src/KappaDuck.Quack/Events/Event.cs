@@ -61,4 +61,10 @@ public struct Event
     /// </summary>
     [FieldOffset(0)]
     public readonly MouseWheelEvent Wheel;
+
+    /// <summary>
+    /// The window event data.
+    /// </summary>
+    [FieldOffset(0)]
+    public readonly WindowEvent Window;
 }
