@@ -10,9 +10,6 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace KappaDuck.Quack.Video.Displays;
 
-/// <summary>
-/// Native methods for <see cref="Display"/>.
-/// </summary>
 public sealed partial class Display
 {
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
