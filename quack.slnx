@@ -28,6 +28,17 @@
     <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
     <File Path=".github/ISSUE_TEMPLATE/task.yml" />
   </Folder>
+  <Folder Name="/examples/">
+    <File Path="examples/directory.build.props" />
+    <File Path="examples/readme.md" />
+  </Folder>
+  <Folder Name="/examples/inputs/">
+    <File Path="examples/inputs/keyboard.cs" />
+    <File Path="examples/inputs/mouse.cs" />
+  </Folder>
+  <Folder Name="/examples/windows/">
+    <File Path="examples/windows/minimalWindow.cs" />
+  </Folder>
   <Folder Name="/src/">
     <File Path="src/quack.sandbox.cs" />
     <File Path="src/install.sdl.cs" />

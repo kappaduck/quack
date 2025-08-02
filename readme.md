@@ -20,11 +20,48 @@ Quack! currently supports Windows, with Linux support pllaned for future release
 
 ## Installation
 
-*Work in progress...*
+Quack! is available as a NuGet package. You can install it using the following command:
+
+```bash
+dotnet add package KappaDuck.Quack -v 0.1.0
+```
+
+or by adding the following line to your `.csproj` file:
+
+```xml
+<PackageReference Include="KappaDuck.Quack" Version="0.1.0" />
+```
+
+or by using the Visual Studio NuGet Package Manager.
 
 ## Usage
 
-*Work in progress...*
+A simple example of how to use Quack! to create a window:
+
+```csharp
+using KappaDuck.Quack;
+using KappaDuck.Quack.Core;
+using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Windows;
+
+using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
+
+using Window window = new("Minimal window", 800, 600, WindowState.Resizable);
+
+while (window.IsOpen)
+{
+    while (window.Poll(out Event e))
+    {
+        if (e.RequestQuit())
+        {
+            window.Close();
+            return;
+        }
+    }
+}
+```
+
+You can find more examples in the [Examples] directory.
 
 ## Development
 
@@ -36,6 +73,36 @@ To build Quack! from source, you will need the following tools installed:
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 > The SDK includes everything you need to build and run .NET applications on your machine.
+
+### Setup
+
+After installing the prerequisites, you can set up the project by following these steps:
+
+1. Clone the repository:
+```bash
+git clone https://github.com/KappaDuck/quack.git
+```
+2. Navigate to the project directory:
+```bash
+cd quack
+```
+
+3. Install SDL and its extensions using the provided script:
+> Make sure you have .NET 10.0 SDK installed, to do [dotnet run app.cs].
+
+```bash
+# On Windows:
+dotnet ./src/install.sdl.cs
+
+# On Linux:
+chmod +x ./src/install.sdl.cs
+./src/install.sdl.cs
+```
+
+4. Open the solution file in your preferred IDE (e.g., Visual Studio, Rider, etc.):
+> Any IDE doesn't support single-file execution, so you will need to run as cli.
+
+> Visual Code have intellisense support for single-file but can't run it directly.
 
 ## Credits
 
@@ -56,3 +123,5 @@ Quack! leverages and draws inspiration from the following projects:
 [SDL_mixer]: https://www.libsdl.org/projects/SDL_mixer/
 [Renderer]: https://wiki.libsdl.org/CategoryRender
 [GPU]: https://wiki.libsdl.org/CategoryGPU
+[Examples]: https://github.com/KappaDuck/Quack/tree/main/examples
+[dotnet run app.cs]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/
