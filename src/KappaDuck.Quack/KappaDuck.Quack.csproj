@@ -9,6 +9,7 @@
 
   <PropertyGroup Label="Package info">
     <Authors>KappaDuck</Authors>
+    <VersionPrefix>0.1.0</VersionPrefix>
     <Company>@(Authors)</Company>
     <Copyright>Copyright © KappaDuck $([System.DateTime]::Now.Year)</Copyright>
     <PackageReadmeFile>readme.md</PackageReadmeFile>

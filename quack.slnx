@@ -40,13 +40,15 @@
     <File Path="examples/windows/minimalWindow.cs" />
   </Folder>
   <Folder Name="/src/">
-    <File Path="src/quack.sandbox.cs" />
+    <File Path="src/quack.playground.cs" />
     <File Path="src/install.sdl.cs" />
   </Folder>
   <Folder Name="/workflows/">
     <File Path=".github/dependabot.yml" />
     <File Path=".github/workflows/codeql.yml" />
+    <File Path=".github/workflows/production.yml" />
     <File Path=".github/workflows/pull-request.yml" />
+    <File Path=".github/workflows/staging.yml" />
   </Folder>
   <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
 </Solution>

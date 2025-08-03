@@ -104,6 +104,51 @@ chmod +x ./src/install.sdl.cs
 
 > Visual Code have intellisense support for single-file but can't run it directly.
 
+5. To test any features, you can run the examples provided in the [Examples] directory or create a file named `quack.playground.cs` in the `src` directory and run it directly.
+> The `quack.playground.cs` file is ignored by git, so you can use it to test your code without affecting the repository.
+
+You can use the following code snippet as a starting point for your `quack.playground.cs` file:
+
+```csharp
+#!/usr/bin/env dotnet
+
+// Ignore the warning about missing copyright header in this file
+#:property NoWarn=IDE0073
+#:property TargetFramework=net10.0
+#:property IncludeNativeLibraries=true
+#:project KappaDuck.Quack
+
+using KappaDuck.Quack;
+using KappaDuck.Quack.Core;
+using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Windows;
+
+using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
+
+using Window window = new("Quack! Playground", 800, 600, WindowState.Resizable);
+
+while (window.IsOpen)
+{
+    while (window.Poll(out Event e))
+    {
+        if (e.RequestQuit())
+        {
+            window.Close();
+            return;
+        }
+    }
+}
+```
+
+```bash
+# On Windows:
+dotnet ./src/quack.playground.cs
+
+# On Linux:
+chmod +x ./src/quack.playground.cs
+./src/quack.playground.cs
+```
+
 ## Credits
 
 Quack! leverages and draws inspiration from the following projects:
