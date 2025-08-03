@@ -1,0 +1,46 @@
+name: Staging
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  build:
+    name: Build/Deploy
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version
+        shell: pwsh
+        run: |
+          $date = Get-Date -Format "yyyyMMddHHmmss"
+          echo "date=$date" >> $env:GITHUB_ENV
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+          dotnet-quality: preview
+
+      - name: Install SDL dependencies
+        run: dotnet .\src\install.sdl.cs
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration release --no-restore
+
+      - name: Package
+        run: dotnet pack --no-build --no-restore --output ./artifacts --version-suffix alpha.${{ env.date }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./artifacts/KappaDuck.Quack.*.nupkg --source https://apiint.nugettest.org/v3/index.json --api-key ${{ secrets.NUGET_STAGING_API_KEY }}

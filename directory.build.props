@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UseArtifactsOutput>true</UseArtifactsOutput>
 
     <!-- Configure packages which are only Development dependency -->
