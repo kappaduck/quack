@@ -44,4 +44,4 @@ jobs:
         run: dotnet pack --no-build --no-restore --output ./artifacts -p:PackageVersion=${{ env.version }}
 
       - name: Publish to NuGet
-        run: dotnet nuget push ./artifacts/KappaDuck.Quack.*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
