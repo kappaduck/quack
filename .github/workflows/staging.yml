@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths: [ 'src/KappaDuck.Quack/**', '.github/workflows/staging.yml' ]
 
 permissions:
   contents: read
