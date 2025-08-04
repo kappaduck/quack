@@ -6,7 +6,12 @@ This document provides a overview of how to use the Quack! game engine by runnin
 To run a example, run the following command in the terminal:
 
 ```bash
+# On Windows
 dotnet ./examples/windows/minimalWindow.cs
+
+# On Linux
+chmod +x ./examples/windows/minimalWindow.cs
+./examples/windows/minimalWindow.cs
 ```
 
 You can also open the example in your preferred IDE (e.g., Visual Studio, Rider, etc.).
@@ -20,7 +25,7 @@ Here the examples are categorized by module. Each example is a C# file that demo
 
 ### Windows
 
-- [Minimal Window](./windows/minimalWindow.cs) - A simple example of creating a window.
+- [Minimal Window](./windows/minimalWindow.cs) - Demonstrates how to create a simple window.
 
 ## Inputs
 
