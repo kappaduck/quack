@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.Graphics.Rendering;
+namespace KappaDuck.Quack.Video.Displays;
 
 /// <summary>
 /// How the logical size is mapped to the output.
