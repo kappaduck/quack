@@ -1,7 +1,7 @@
 is_global = true
 
 # CA1034: Do not nest type
-# Can nest type for group records/classes
+# Can nest type to group records/classes
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1034
 dotnet_diagnostic.CA1034.severity = none
 

@@ -10,9 +10,6 @@ namespace KappaDuck.Quack.Events;
 /// </summary>
 public static class EventExtensions
 {
-    /// <summary>
-    /// Provides extension methods for the <see cref="Event"/>.
-    /// </summary>
     extension(Event e)
     {
         /// <summary>

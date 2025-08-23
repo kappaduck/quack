@@ -10,11 +10,6 @@ dotnet_diagnostic.S101.severity = none
 # https://rules.sonarsource.com/csharp/RSPEC-1481/
 dotnet_diagnostic.S1481.severity = none
 
-# S2094: Remove this empty record
-# Some record can be empty especially in fluxor and mediator
-# https://rules.sonarsource.com/csharp/RSPEC-2094/
-dotnet_diagnostic.S2094.severity = none
-
 # S2325: Methods and properties that don't access instance data should be static
 # Some properties should not be static (Sonar seem confused with the new keyword field)
 # https://rules.sonarsource.com/csharp/RSPEC-2325/
