@@ -7,7 +7,10 @@ using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Interop.SDL.Handles;
 
-internal sealed partial class WindowHandle : SafeHandleZeroInvalid
+/// <summary>
+/// Represents a safe handle to a window.
+/// </summary>
+public sealed partial class WindowHandle : SafeHandleZeroInvalid
 {
     /// <summary>
     /// Marshaller needs a public parameterless constructor.
@@ -16,9 +19,16 @@ internal sealed partial class WindowHandle : SafeHandleZeroInvalid
     {
     }
 
-    internal WindowHandle(WindowHandle window) : base(ownsHandle: false)
-         => SetHandle(window.handle);
+    private WindowHandle(nint handle, bool ownsHandle) : base(ownsHandle)
+         => SetHandle(handle);
 
+    /// <summary>
+    /// Converts this handle to a non-owning handle.
+    /// </summary>
+    /// <returns>The non-owning handle.</returns>
+    public WindowHandle ToNonOwningHandle() => new(handle, ownsHandle: false);
+
+    /// <inheritdoc/>
     protected override bool ReleaseHandle()
     {
         SDL_DestroyWindow(handle);
