@@ -5,6 +5,11 @@ is_global = true
 # https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1036/
 dotnet_diagnostic.RCS1036.severity = none
 
+# RCS1110: Declare class inside namespace
+# file-based app/top-level can have class without namespace
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1110/
+dotnet_diagnostic.RCS1110.severity = none
+
 # RCS1237: Use bit shift operator
 # This rule is obsolete
 # https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1237/

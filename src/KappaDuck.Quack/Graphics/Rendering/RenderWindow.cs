@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL.Handles;
@@ -617,6 +618,9 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
         _renderer.Dispose();
         _window.Dispose();
     }
+
+    /// <inheritdoc/>
+    public void Draw(IDrawable drawable) => drawable.Draw(this);
 
     /// <inheritdoc/>
     public void Draw(ReadOnlySpan<Vertex> vertices) => _renderer.Draw(vertices, []);

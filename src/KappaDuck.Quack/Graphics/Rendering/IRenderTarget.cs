@@ -3,6 +3,7 @@
 
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using System.Drawing;
 
@@ -23,6 +24,12 @@ public interface IRenderTarget
     /// </summary>
     /// <param name="color">The color to clear the render target with.</param>
     void Clear(Color color);
+
+    /// <summary>
+    /// Draws the specified drawable to the render target.
+    /// </summary>
+    /// <param name="drawable">The drawable to draw to the render target.</param>
+    void Draw(IDrawable drawable);
 
     /// <summary>
     /// Draws the specified vertices to the render target.
