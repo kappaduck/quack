@@ -15,6 +15,11 @@ dotnet_diagnostic.S1481.severity = none
 # https://rules.sonarsource.com/csharp/RSPEC-2325/
 dotnet_diagnostic.S2325.severity = none
 
+# S3903: Move class into a named namespace
+# file-based app/top-level can have class without namespace
+# https://rules.sonarsource.com/csharp/RSPEC-3903/
+dotnet_diagnostic.S3903.severity = none
+
 # S4200: Make this wrapper for native method less trivial
 # Some method are trivial and should be kept as is
 # https://rules.sonarsource.com/csharp/RSPEC-4200/
