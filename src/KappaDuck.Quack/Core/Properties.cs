@@ -12,20 +12,20 @@ namespace KappaDuck.Quack.Core;
 
 internal sealed partial class Properties : IDisposable
 {
-    private readonly uint _id;
-
     internal Properties()
     {
-        _id = SDL_CreateProperties();
+        Id = SDL_CreateProperties();
 
-        QuackNativeException.ThrowIfZero(_id);
+        QuackNativeException.ThrowIfZero(Id);
     }
 
-    public void Dispose() => SDL_DestroyProperties(_id);
+    public uint Id { get; }
 
-    internal T Get<T>(string name, T defaultValue) => Get(_id, name, defaultValue);
+    public void Dispose() => SDL_DestroyProperties(Id);
 
-    internal void Set<T>(string name, T value) => Set(_id, name, value);
+    internal T Get<T>(string name, T defaultValue) => Get(Id, name, defaultValue);
+
+    internal void Set<T>(string name, T value) => Set(Id, name, value);
 
     internal static T Get<T>(uint propertiesId, string name, T defaultValue)
     {
@@ -33,6 +33,7 @@ internal sealed partial class Properties : IDisposable
         {
             bool boolean => (T)(object)SDL_GetBooleanProperty(propertiesId, name, boolean),
             float floating => (T)(object)SDL_GetFloatProperty(propertiesId, name, floating),
+            int integer => (T)(object)SDL_GetNumberProperty(propertiesId, name, integer),
             long number => (T)(object)SDL_GetNumberProperty(propertiesId, name, number),
             string str => (T)(object)SDL_GetStringProperty(propertiesId, name, str),
             nint pointer => (T)(object)SDL_GetPointerProperty(propertiesId, name, pointer),
@@ -46,6 +47,7 @@ internal sealed partial class Properties : IDisposable
         {
             bool boolean => SDL_SetBooleanProperty(propertiesId, name, boolean),
             float floating => SDL_SetFloatProperty(propertiesId, name, floating),
+            int integer => SDL_SetNumberProperty(propertiesId, name, integer),
             long number => SDL_SetNumberProperty(propertiesId, name, number),
             string str => SDL_SetStringProperty(propertiesId, name, str),
             _ => throw new NotSupportedException($"The type {typeof(T)} is not supported.")

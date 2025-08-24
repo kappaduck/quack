@@ -32,6 +32,10 @@
     <File Path="examples/directory.build.props" />
     <File Path="examples/readme.md" />
   </Folder>
+  <Folder Name="/examples/graphics/">
+    <File Path="examples/graphics/triangle.cs" />
+    <File Path="examples/graphics/sinewave.cs" />
+  </Folder>
   <Folder Name="/examples/inputs/">
     <File Path="examples/inputs/keyboard.cs" />
     <File Path="examples/inputs/mouse.cs" />
