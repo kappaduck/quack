@@ -5,18 +5,21 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
+using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
 using KappaDuck.Quack.Windows;
+using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// Represents a window that can be used to render 2D graphics using SDL renderer api.
 /// </summary>
-public sealed class RenderWindow : IDisposable
+public sealed class RenderWindow : IRenderTarget, IDisposable
 {
     private readonly Window _window = new();
+    private Renderer _renderer = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RenderWindow"/>.
@@ -31,7 +34,8 @@ public sealed class RenderWindow : IDisposable
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
-    public RenderWindow(string title, int width, int height) => Create(title, width, height);
+    /// <param name="rendererName">The name of the rendering driver to initialize, or <see langword="null"/> to let the engine choose one.</param>
+    public RenderWindow(string title, int width, int height, string? rendererName = null) => Create(title, width, height, rendererName);
 
     /// <summary>
     /// Gets or sets a value indicating whether the window is always on top.
@@ -75,6 +79,17 @@ public sealed class RenderWindow : IDisposable
     /// </para>
     /// </remarks>
     public (int Top, int Left, int Bottom, int Right) BordersSize => _window.BordersSize;
+
+    /// <summary>
+    /// Gets the current output size in pixels of a rendering context.
+    /// </summary>
+    /// <remarks>
+    /// If a rendering target is active, this will return the size of the rendering target in pixels,
+    /// otherwise if a logical size is set, it will return the logical size,
+    /// otherwise it will return the value of <see cref="OutputSize"/>.
+    /// </remarks>
+    /// <exception cref="QuackNativeException">An error occurred while getting the current renderer output size.</exception>
+    public (int Width, int Height) CurrentOutputSize => _renderer.CurrentOutputSize;
 
     /// <summary>
     /// Gets the display associated with the window.
@@ -354,6 +369,15 @@ public sealed class RenderWindow : IDisposable
     }
 
     /// <summary>
+    /// Gets the output size in pixels of a rendering context.
+    /// </summary>
+    /// <remarks>
+    /// It return the true output size in pixels, ignoring any render targets or logical size and presentation.
+    /// </remarks>
+    /// <exception cref="QuackNativeException">An error occurred while getting the renderer output size.</exception>
+    public (int Width, int Height) OutputSize => _renderer.OutputSize;
+
+    /// <summary>
     /// Gets or sets the position of the window.
     /// </summary>
     /// <remarks>
@@ -402,6 +426,40 @@ public sealed class RenderWindow : IDisposable
     public PixelFormat PixelFormat => _window.PixelFormat;
 
     /// <summary>
+    /// Gets or sets a device independent resolution and presentation mode for rendering.
+    /// </summary>
+    /// <remarks>
+    /// It sets the width and height of the logical rendering output.
+    /// The renderer will act as if the window is always the requested dimensions, scaling to the actual window resolution as necessary.
+    /// This can be useful for games that expect a fixed size, but would like to scale the output to whatever is available,
+    /// regardless of how a user resizes a window, or if the display is high DPI.
+    /// You can disable logical coordinates by setting the mode to <see cref="LogicalPresentation.Disabled"/>,
+    /// and in that case you get the full pixel resolution of the output window;
+    /// it is safe to toggle logical presentation during the rendering of a frame: perhaps most of the rendering is done to specific dimensions
+    /// but to make fonts look sharp, the app turns off logical presentation while drawing text.
+    /// Letterboxing will only happen if logical presentation is enabled during <see cref="Render"/>; be sure to reenable it first if you were using it.
+    /// You can convert coordinates in an event into rendering coordinates using <see cref="MapEventToCoordinates(ref Event)"/> or <see cref="MapPixelsToCoordinates(Vector2)"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
+    /// <exception cref="QuackNativeException">An error occurred while setting the logical presentation.</exception>
+    public (int Width, int Height, LogicalPresentation Mode) Presentation
+    {
+        get => _renderer.Presentation;
+        set => _renderer.Presentation = value;
+    }
+
+    /// <summary>
+    /// Gets the final presentation rectangle for rendering.
+    /// </summary>
+    /// <remarks>
+    /// It returns the calculated rectangle used for logical presentation, based on the presentation
+    /// mode and output size. If logical presentation is <see cref="LogicalPresentation.Disabled"/>, it will fill
+    /// the rectangle with the output size, in pixels.
+    /// </remarks>
+    /// <exception cref="QuackNativeException">An error occurred while getting the renderer presentation rectangle.</exception>
+    public Rect PresentationRectangle => _renderer.PresentationRectangle;
+
+    /// <summary>
     /// Gets or sets a value indicating whether the window is resizable.
     /// </summary>
     /// <exception cref="QuackNativeException">An error occurred while setting the window resizable.</exception>
@@ -412,7 +470,7 @@ public sealed class RenderWindow : IDisposable
     }
 
     /// <summary>
-    /// Gets the safe area for the window.
+    /// Gets the safe area for rendering within the current viewport
     /// </summary>
     /// <remarks>
     /// <para>
@@ -422,12 +480,12 @@ public sealed class RenderWindow : IDisposable
     /// Some devices have portions of the screen which are partially obscured or not interactive,
     /// possibly due to on-screen controls, curved edges, camera notches, TV over scan, etc.
     /// This provides the area of the window which is safe to have interactable content.
-    /// You should continue rendering into the rest of the window,
+    /// You should continue rendering into the rest of the render target,
     /// but it should not contain visually important or interactable content.
     /// </para>
     /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while getting the window safe area.</exception>
-    public RectInt SafeArea => _window.SafeArea;
+    public RectInt SafeArea => _renderer.SafeArea;
 
     /// <summary>
     /// Gets or sets the title of the window.
@@ -455,6 +513,25 @@ public sealed class RenderWindow : IDisposable
     {
         get => _window.UseTransparentBuffer;
         set => _window.UseTransparentBuffer = value;
+    }
+
+    /// <summary>
+    /// Gets or sets the vertical synchronization (VSync) of the renderer.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// When a renderer is created, VSync defaults to <see cref="VSync.Disabled"/> which means that VSync is disabled.
+    /// </para>
+    /// <para>
+    /// The value can be 1 to synchronize present with every vertical refresh, 2 to synchronize present with every other vertical refresh, and so on.
+    /// <see cref="VSync.Adaptive"/> can be used for adaptive VSync or <see cref="VSync.Disabled"/> to disable. Not every value is supported by every driver.
+    /// </para>
+    /// </remarks>
+    /// <exception cref="QuackNativeException">An error occurred while setting the renderer VSync.</exception>
+    public int VSync
+    {
+        get => _renderer.VSync;
+        set => _renderer.VSync = value;
     }
 
     /// <summary>
@@ -488,14 +565,30 @@ public sealed class RenderWindow : IDisposable
     /// </summary>
     public int WidthInPixel => _window.WidthInPixel;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    /// The render target is cleared with a black color.
+    /// If you want to clear the render target with a different color, use <see cref="Clear(Color)"/> instead.
+    /// </remarks>
+    public void Clear() => _renderer.Clear(Color.Black);
+
+    /// <inheritdoc/>
+    public void Clear(Color color) => _renderer.Clear(color);
+
     /// <summary>
     /// Closes the window.
     /// </summary>
     /// <remarks>
-    /// <para>Closing the window will release all resources associated with it and you need to create it again with <see cref="Create(string, int, int)"/>.</para>
+    /// <para>Closing the window will release all resources associated with it and you need to create it again with <see cref="Create(string, int, int, string?)"/>.</para>
     /// <para>If the window is already closed or not created, it does nothing.</para>
     /// </remarks>
-    public void Close() => _window.Close();
+    public void Close()
+    {
+        if (!IsOpen)
+            return;
+
+        Dispose();
+    }
 
     /// <summary>
     /// Creates the window.
@@ -506,12 +599,30 @@ public sealed class RenderWindow : IDisposable
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
-    public void Create(string title, int width, int height) => _window.Create(title, width, height);
+    /// <param name="rendererName">The name of the rendering driver to initialize, or <see langword="null"/> to let the engine choose one.</param>
+    public void Create(string title, int width, int height, string? rendererName = null)
+    {
+        if (IsOpen)
+            return;
+
+        _window.Create(title, width, height);
+        _renderer = new Renderer(_window.Handle, rendererName);
+    }
 
     /// <summary>
     /// Disposes the resources used by the <see cref="Window"/>.
     /// </summary>
-    public void Dispose() => _window.Dispose();
+    public void Dispose()
+    {
+        _renderer.Dispose();
+        _window.Dispose();
+    }
+
+    /// <inheritdoc/>
+    public void Draw(ReadOnlySpan<Vertex> vertices) => _renderer.Draw(vertices, []);
+
+    /// <inheritdoc/>
+    public void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices) => _renderer.Draw(vertices, indices);
 
     /// <summary>
     /// Request the window to demand attention from the user.
@@ -525,6 +636,15 @@ public sealed class RenderWindow : IDisposable
     /// </summary>
     /// <exception cref="QuackNativeException">An error occurred while hiding the window.</exception>
     public void Hide() => _window.Hide();
+
+    /// <inheritdoc/>
+    public Vector2 MapCoordinatesToPixels(Vector2 point) => _renderer.MapCoordinatesToPixels(point);
+
+    /// <inheritdoc/>
+    public void MapEventToCoordinates(ref Event e) => _renderer.MapEventToCoordinates(ref e);
+
+    /// <inheritdoc/>
+    public Vector2 MapPixelsToCoordinates(Vector2 point) => _renderer.MapPixelsToCoordinates(point);
 
     /// <summary>
     /// Request that the window be made as large as possible.
@@ -592,6 +712,11 @@ public sealed class RenderWindow : IDisposable
     /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while raising the window.</exception>
     public void Raise() => _window.Raise();
+
+    /// <summary>
+    /// Renders all the graphics to the window since the last call.
+    /// </summary>
+    public void Render() => _renderer.Render();
 
     /// <summary>
     /// Request that the size and position of a minimized or maximized window be restored.
@@ -663,5 +788,5 @@ public sealed class RenderWindow : IDisposable
     /// <para>It will not move the mouse when used over Microsoft Remote Desktop.</para>
     /// </remarks>
     /// <param name="position">The position within the window.</param>
-    public void WarpMouse(Vector2 position) => WarpMouse(position.X, position.Y);
+    public void WarpMouse(Vector2 position) => _window.WarpMouse(position);
 }
