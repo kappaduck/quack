@@ -1,78 +1,62 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
-using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace KappaDuck.Quack.Windows;
 
 /// <summary>
-/// Represents a simple window with no graphics context.
+/// Represents a native OS window with no graphics context.
 /// </summary>
 /// <remarks>
-/// You can inherits this class to implement a graphic window using graphics APIs like OpenGL or Vulkan.
+/// <para>
+/// This class is primarily used internally by the engine as the foundation for
+/// higher-level rendering windows such as <see cref="RenderWindow"/>.
+/// </para>
+/// <para>
+/// By itself, a <see cref="Window"/> does not render anything (it will
+/// appear as a blank window). It is public only to allow advanced users to
+/// implement their own graphics backends (e.g. Vulkan, OpenGL, DirectX, Metal,
+/// or software rendering). Use this class as a composition root for your
+/// graphics backend implementation.
+/// </para>
+/// <para>
+/// For most use cases, prefer <see cref="RenderWindow"/> instead.
+/// </para>
 /// </remarks>
-public partial class Window : IDisposable
+[EditorBrowsable(EditorBrowsableState.Advanced)]
+public sealed partial class Window : IDisposable, ISpanFormattable
 {
-    private bool _disposed;
-
-    private WindowHandle _handle;
+    private WindowHandle _handle = new();
     private WindowState _state;
-
-    private string _title = string.Empty;
-    private Vector2Int _position;
-    private int _height;
+    private Vector2Int? _position;
     private int _width;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Window"/>.
-    /// </summary>
-    /// <remarks>
-    /// Use <see cref="Create(string, int, int, WindowState)"/> to create at a later time.
-    /// </remarks>
-    public Window()
-    {
-        _handle = new WindowHandle();
-
-        Handle = new WindowHandle(_handle);
-        Opacity = 1.0f;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="Window"/> with the specified title, width, height, and state.
-    /// </summary>
-    /// <param name="title">The title of the window.</param>
-    /// <param name="width">The width of the window.</param>
-    /// <param name="height">The height of the window.</param>
-    /// <param name="state">The initial state of the window.</param>
-    public Window(string title, int width, int height, WindowState state = WindowState.None)
-    {
-        _handle = CreateWindow(title, width, height, state);
-        Handle = new WindowHandle(_handle);
-    }
+    private int _height;
+    private string _title = string.Empty;
+    private float? _opacity;
 
     /// <summary>
     /// Gets or sets a value indicating whether the window is always on top.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while setting the window always on top.</exception>
     public bool AlwaysOnTop
     {
         get => (_state & WindowState.AlwaysOnTop) == WindowState.AlwaysOnTop;
         set
         {
+            _state = value ? _state | WindowState.AlwaysOnTop : _state & ~WindowState.AlwaysOnTop;
+
             if (!IsOpen)
                 return;
 
-            _state = value ? _state | WindowState.AlwaysOnTop : _state & ~WindowState.AlwaysOnTop;
             QuackNativeException.ThrowIfFailed(SDL_SetWindowAlwaysOnTop(_handle, value));
         }
     }
@@ -102,20 +86,17 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the window is borderless.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while setting the window borderless.</exception>
     public bool Borderless
     {
         get => (_state & WindowState.Borderless) == WindowState.Borderless;
         set
         {
+            _state = value ? _state | WindowState.Borderless : _state & ~WindowState.Borderless;
+
             if (!IsOpen)
                 return;
 
-            _state = value ? _state | WindowState.Borderless : _state & ~WindowState.Borderless;
             QuackNativeException.ThrowIfFailed(SDL_SetWindowBordered(_handle, !value));
         }
     }
@@ -146,14 +127,14 @@ public partial class Window : IDisposable
     /// Gets the display associated with the window.
     /// </summary>
     /// <remarks>
-    /// If the window is not open, it will return the primary display.
+    /// If the window is not open, it will return null as the display cannot be determined.
     /// </remarks>
-    public Display Display
+    public Display? Display
     {
         get
         {
             if (!IsOpen)
-                return Display.GetPrimaryDisplay();
+                return null;
 
             return Display.GetDisplay(SDL_GetDisplayForWindow(_handle));
         }
@@ -187,20 +168,17 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the window is focusable.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="WindowState"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while setting the window focusable.</exception>
     public bool Focusable
     {
-        get => (_state & WindowState.NotFocusable) == WindowState.NotFocusable;
+        get => (_state & WindowState.NotFocusable) != WindowState.NotFocusable;
         set
         {
+            _state = value ? _state & ~WindowState.NotFocusable : _state | WindowState.NotFocusable;
+
             if (!IsOpen)
                 return;
 
-            _state = value ? _state & ~WindowState.NotFocusable : _state | WindowState.NotFocusable;
             QuackNativeException.ThrowIfFailed(SDL_SetWindowFocusable(_handle, value));
         }
     }
@@ -208,20 +186,16 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the window is fullscreen.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while settings the window fullscreen.</exception>
     public bool Fullscreen
     {
         get => (_state & WindowState.Fullscreen) == WindowState.Fullscreen;
         set
         {
+            _state = value ? _state | WindowState.Fullscreen : _state & ~WindowState.Fullscreen;
+
             if (!IsOpen)
                 return;
-
-            _state = value ? _state | WindowState.Fullscreen : _state & ~WindowState.Fullscreen;
 
             QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreen(_handle, value));
         }
@@ -229,7 +203,7 @@ public partial class Window : IDisposable
 
     /// <summary>
     /// Gets or sets the fullscreen display mode to use when
-    /// the window is in <see cref="WindowState.Fullscreen"/>.
+    /// the window is in Fullscreen state.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -262,28 +236,6 @@ public partial class Window : IDisposable
     }
 
     /// <summary>
-    /// Gets the window's handle.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// This handle is a wrapper around the native window handle and can be used to interact with platform-specific APIs.
-    /// </para>
-    /// <para>
-    /// You do not need to dispose of this handle manually; it is managed by the <see cref="Window"/>.
-    /// </para>
-    /// </remarks>
-    /// <exception cref="ObjectDisposedException">The window has been disposed.</exception>
-    public SafeHandle Handle
-    {
-        get
-        {
-            ObjectDisposedException.ThrowIf(_disposed, nameof(Window));
-            return field;
-        }
-        private set;
-    }
-
-    /// <summary>
     /// Gets a value indicating whether the window has keyboard focus.
     /// </summary>
     public bool HasKeyboardFocus => (_state & WindowState.InputFocus) == WindowState.InputFocus;
@@ -294,10 +246,27 @@ public partial class Window : IDisposable
     public bool HasMouseFocus => (_state & WindowState.MouseFocus) == WindowState.MouseFocus;
 
     /// <summary>
+    /// Gets a safe, non-owning handle to the native window.
+    /// </summary>
+    /// <remarks>
+    /// This handle is valid only while the <see cref="Window"/> is alive.
+    /// Disposing this handle will not close the window; use the <see cref="Dispose"/> instead.
+    /// </remarks>
+    /// <exception cref="ObjectDisposedException">The window has been disposed or not open.</exception>
+    public WindowHandle Handle
+    {
+        get
+        {
+            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(Window));
+            return _handle.ToNonOwningHandle();
+        }
+    }
+
+    /// <summary>
     /// Gets or sets the height of the window.
     /// </summary>
     /// <remarks>
-    /// <para>Setting the height if the window is in <see cref="WindowState.Fullscreen"/> or <see cref="WindowState.Maximized"/> state will be ignored.</para>
+    /// <para>Setting the height if the window is in Fullscreen or Maximized state will be ignored.</para>
     /// <para>To change the exclusive fullscreen mode dimensions, use <see cref="FullscreenMode"/>.</para>
     /// <para>It will be restricted by <see cref="MinimumSize"/> and <see cref="MaximumSize"/>.</para>
     /// <para>
@@ -328,7 +297,7 @@ public partial class Window : IDisposable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, _width, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, _width, _height));
         }
     }
 
@@ -340,12 +309,11 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets a value indicating whether the window is hidden.
     /// </summary>
-    public bool Hidden => (_state & WindowState.Hidden) == WindowState.Hidden;
-
-    /// <summary>
-    /// Gets a value indicating whether the window uses high pixel density.
-    /// </summary>
-    public bool HighPixelDensity => (_state & WindowState.HighPixelDensity) == WindowState.HighPixelDensity;
+    public bool Hidden
+    {
+        get => (_state & WindowState.Hidden) == WindowState.Hidden;
+        init => _state = value ? _state | WindowState.Hidden : _state & ~WindowState.Hidden;
+    }
 
     /// <summary>
     /// Gets the window's identifier.
@@ -379,10 +347,6 @@ public partial class Window : IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </para>
-    /// <para>
     /// Keyboard grab enables capture of system keyboard shortcuts like Alt+Tab or the Meta/Super key.
     /// Important to note that not all system keyboard shortcuts can be captured by applications (one example is Ctrl+Alt+Del on Windows).
     /// </para>
@@ -401,10 +365,10 @@ public partial class Window : IDisposable
         get => (_state & WindowState.KeyboardGrabbed) == WindowState.KeyboardGrabbed;
         set
         {
+            _state = value ? _state | WindowState.KeyboardGrabbed : _state & ~WindowState.KeyboardGrabbed;
+
             if (!IsOpen)
                 return;
-
-            _state = value ? _state | WindowState.KeyboardGrabbed : _state & ~WindowState.KeyboardGrabbed;
 
             QuackNativeException.ThrowIfFailed(SDL_SetWindowKeyboardGrab(_handle, value));
         }
@@ -413,7 +377,15 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets a value indicating whether the window is maximized.
     /// </summary>
-    public bool Maximized => (_state & WindowState.Maximized) == WindowState.Maximized;
+    public bool Maximized
+    {
+        get => (_state & WindowState.Maximized) == WindowState.Maximized;
+        init
+        {
+            _state = value ? _state | WindowState.Maximized : _state & ~WindowState.Maximized;
+            _state &= ~WindowState.Minimized;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the maximum size of the window's client area.
@@ -444,7 +416,15 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets a value indicating whether the window is minimized.
     /// </summary>
-    public bool Minimized => (_state & WindowState.Minimized) == WindowState.Minimized;
+    public bool Minimized
+    {
+        get => (_state & WindowState.Minimized) == WindowState.Minimized;
+        init
+        {
+            _state = value ? _state | WindowState.Minimized : _state & ~WindowState.Minimized;
+            _state &= ~WindowState.Maximized;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the minimum size of the window's client area.
@@ -476,7 +456,7 @@ public partial class Window : IDisposable
     /// Gets a value indicating whether the window has captured mouse input.
     /// </summary>
     /// <remarks>
-    /// It is not related to <see cref="MouseGrabbed"/> (<see cref="WindowState.MouseGrabbed"/>).
+    /// It is not related to <see cref="MouseGrabbed"/>.
     /// </remarks>
     public bool MouseCaptured => (_state & WindowState.MouseCapture) == WindowState.MouseCapture;
 
@@ -505,20 +485,16 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the window has mouse input grabbed.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while setting the window mouse grab.</exception>
     public bool MouseGrabbed
     {
         get => (_state & WindowState.MouseGrabbed) == WindowState.MouseGrabbed;
         set
         {
+            _state = value ? _state | WindowState.MouseGrabbed : _state & ~WindowState.MouseGrabbed;
+
             if (!IsOpen)
                 return;
-
-            _state = value ? _state | WindowState.MouseGrabbed : _state & ~WindowState.MouseGrabbed;
 
             QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseGrab(_handle, value));
         }
@@ -545,18 +521,66 @@ public partial class Window : IDisposable
     /// <exception cref="QuackNativeException">An error occurred while setting the window opacity.</exception>
     public float Opacity
     {
-        get;
+        get => _opacity ?? 1.0f;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
             ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 1.0f);
 
-            field = value;
+            _opacity = value;
 
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_handle, _opacity.Value));
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the position of the window.
+    /// </summary>
+    /// <remarks>
+    /// <para>Setting the position if the window is in Fullscreen or Maximized state will be ignored.</para>
+    /// <para>
+    /// This can be used to reposition fullscreen desktop windows onto a different display,
+    /// however, as exclusive fullscreen windows are locked to a specific display, they can only be repositioned via <see cref="FullscreenMode"/>.
+    /// </para>
+    /// <para>
+    /// On some windowing systems this request is asynchronous and the new window state may not have been applied immediately.
+    /// If an immediate change is required, call <see cref="Sync"/> to block until the changes have taken effect.
+    /// </para>
+    /// <para>
+    /// When the window position changes, an <see cref="EventType.WindowMoved"/> event will be emitted with the new coordinates.
+    /// Note that the new coordinates may not be the same as those requested, as the windowing system may impose its own constraints.
+    /// (e.g constraining the size of the content area to remain within the usable desktop bounds). Additionally,
+    /// as this is just a request, the windowing system can deny the state change.
+    /// </para>
+    /// <para>This is the current position of the window as last reported by the windowing system.</para>
+    /// </remarks>
+    /// <exception cref="QuackNativeException">An error occurred while setting the window position.</exception>
+    public Vector2Int Position
+    {
+        get
+        {
+            if (!_position.HasValue)
+            {
+                QuackNativeException.ThrowIfFailed(SDL_GetWindowPosition(_handle, out int x, out int y));
+                _position = new Vector2Int(x, y);
+            }
+
+            return _position.Value;
+        }
+        set
+        {
+            if (Fullscreen || Maximized)
+                return;
+
+            _position = value;
+
+            if (!IsOpen)
+                return;
+
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowPosition(_handle, value.X, value.Y));
         }
     }
 
@@ -584,6 +608,9 @@ public partial class Window : IDisposable
     /// <summary>
     /// Gets the pixel format associated with the window.
     /// </summary>
+    /// <remarks>
+    /// If the window is not open, it will return <see cref="PixelFormat.Unknown"/>.
+    /// </remarks>
     public PixelFormat PixelFormat
     {
         get
@@ -596,61 +623,18 @@ public partial class Window : IDisposable
     }
 
     /// <summary>
-    /// Gets or sets the position of the window.
-    /// </summary>
-    /// <remarks>
-    /// <para>Setting the position if the window is in <see cref="WindowState.Fullscreen"/> or <see cref="WindowState.Maximized"/> state will be ignored.</para>
-    /// <para>
-    /// This can be used to reposition fullscreen desktop windows onto a different display,
-    /// however, as exclusive fullscreen windows are locked to a specific display, they can only be repositioned via <see cref="FullscreenMode"/>.
-    /// </para>
-    /// <para>
-    /// On some windowing systems this request is asynchronous and the new window state may not have been applied immediately.
-    /// If an immediate change is required, call <see cref="Sync"/> to block until the changes have taken effect.
-    /// </para>
-    /// <para>
-    /// When the window position changes, an <see cref="EventType.WindowMoved"/> event will be emitted with the new coordinates.
-    /// Note that the new coordinates may not be the same as those requested, as the windowing system may impose its own constraints.
-    /// (e.g constraining the size of the content area to remain within the usable desktop bounds). Additionally,
-    /// as this is just a request, the windowing system can deny the state change.
-    /// </para>
-    /// <para>This is the current position of the window as last reported by the windowing system.</para>
-    /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while setting the window position.</exception>
-    public Vector2Int Position
-    {
-        get => _position;
-        set
-        {
-            if (Fullscreen || Maximized)
-                return;
-
-            _position = value;
-
-            if (!IsOpen)
-                return;
-
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowPosition(_handle, value.X, value.Y));
-        }
-    }
-
-    /// <summary>
     /// Gets or sets a value indicating whether the window is resizable.
     /// </summary>
-    /// <remarks>
-    /// If you set this property during the creation of an empty <see cref="Window"/> then using <see cref="Create(string, int, int, WindowState)"/>, it will be ignored.
-    /// Use <see cref="WindowState"/> parameter instead.
-    /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while setting the window resizable.</exception>
     public bool Resizable
     {
         get => (_state & WindowState.Resizable) == WindowState.Resizable;
         set
         {
+            _state = value ? _state | WindowState.Resizable : _state & ~WindowState.Resizable;
+
             if (!IsOpen)
                 return;
-
-            _state = value ? _state | WindowState.Resizable : _state & ~WindowState.Resizable;
 
             QuackNativeException.ThrowIfFailed(SDL_SetWindowResizable(_handle, value));
         }
@@ -660,11 +644,16 @@ public partial class Window : IDisposable
     /// Gets the safe area for the window.
     /// </summary>
     /// <remarks>
+    /// <para>
+    /// If the window is not open, it will return an empty <see cref="RectInt"/>.
+    /// </para>
+    /// <para>
     /// Some devices have portions of the screen which are partially obscured or not interactive,
     /// possibly due to on-screen controls, curved edges, camera notches, TV over scan, etc.
     /// This provides the area of the window which is safe to have interactable content.
     /// You should continue rendering into the rest of the window,
     /// but it should not contain visually important or interactable content.
+    /// </para>
     /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while getting the window safe area.</exception>
     public RectInt SafeArea
@@ -698,10 +687,28 @@ public partial class Window : IDisposable
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the window uses high pixel density.
+    /// </summary>
+    public bool UseHighPixelDensity
+    {
+        get => (_state & WindowState.HighPixelDensity) == WindowState.HighPixelDensity;
+        set => _state = value ? _state | WindowState.HighPixelDensity : _state & ~WindowState.HighPixelDensity;
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the window uses a transparent buffer.
+    /// </summary>
+    public bool UseTransparentBuffer
+    {
+        get => (_state & WindowState.TransparentBuffer) == WindowState.TransparentBuffer;
+        set => _state = value ? _state | WindowState.TransparentBuffer : _state & ~WindowState.TransparentBuffer;
+    }
+
+    /// <summary>
     /// Gets or sets the width of the window.
     /// </summary>
     /// <remarks>
-    /// <para>Setting the width if the window is in <see cref="WindowState.Fullscreen"/> or <see cref="WindowState.Maximized"/> state will be ignored.</para>
+    /// <para>Setting the width if the window is in Fullscreen or Maximized state will be ignored.</para>
     /// <para>To change the exclusive fullscreen mode dimensions, use <see cref="FullscreenMode"/>.</para>
     /// <para>It will be restricted by <see cref="MinimumSize"/> and <see cref="MaximumSize"/>.</para>
     /// <para>
@@ -722,6 +729,9 @@ public partial class Window : IDisposable
         get => _width;
         set
         {
+            if (Fullscreen || Maximized)
+                return;
+
             ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(value, 0);
 
             _width = value;
@@ -729,7 +739,7 @@ public partial class Window : IDisposable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, value, _height));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, _width, _height));
         }
     }
 
@@ -742,7 +752,7 @@ public partial class Window : IDisposable
     /// Closes the window.
     /// </summary>
     /// <remarks>
-    /// <para>Closing the window will release all resources associated with it and you need to create it again with <see cref="Create(string, int, int, WindowState)"/>.</para>
+    /// <para>Closing the window will release all resources associated with it and you need to create it again with <see cref="Create(string, int, int)"/>.</para>
     /// <para>If the window is already closed or not created, it does nothing.</para>
     /// </remarks>
     public void Close()
@@ -750,42 +760,30 @@ public partial class Window : IDisposable
         if (!IsOpen)
             return;
 
-        Dispose(disposing: true);
+        Dispose();
     }
 
     /// <summary>
     /// Creates the window.
     /// </summary>
     /// <remarks>
-    /// If the window is already open, it does nothing.
+    /// If the window is already open, this method does nothing.
     /// </remarks>
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
-    /// <param name="state">The initial state of the window.</param>
-    /// <exception cref="QuackNativeException">An error occurred while creating the window.</exception>
-    public void Create(string title, int width, int height, WindowState state = WindowState.None)
+    public void Create(string title, int width, int height)
     {
         if (IsOpen)
             return;
 
-        _handle = CreateWindow(title, width, height, state);
-        Handle = new WindowHandle(_handle);
-
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowAspectRatio(_handle, AspectRatio.Minimum, AspectRatio.Maximum));
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreenMode(_handle, FullscreenMode));
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowMaximumSize(_handle, MaximumSize.Width, MaximumSize.Height));
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowMinimumSize(_handle, MinimumSize.Width, MinimumSize.Height));
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseRect(_handle, MouseClip));
-        QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_handle, Opacity));
+        _handle = CreateWindow(title, width, height);
     }
 
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
+    /// <summary>
+    /// Disposes the resources used by the <see cref="Window"/>.
+    /// </summary>
+    public void Dispose() => _handle.Dispose();
 
     /// <summary>
     /// Request the window to demand attention from the user.
@@ -819,7 +817,7 @@ public partial class Window : IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Non-resizable windows can't be maximized. The window must have the <see cref="WindowState.Resizable"/> state set.
+    /// Non-resizable windows can't be maximized. The window must have the Resizable state set.
     /// </para>
     /// <para>
     /// On some windowing systems this request is asynchronous and the new window state may not have been applied immediately.
@@ -851,7 +849,7 @@ public partial class Window : IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// If the window is in <see cref="WindowState.Fullscreen"/> state, it will has no direct effect.
+    /// If the window is in Fullscreen state, it will has no direct effect.
     /// It may alter the state the window is restored to when leaving fullscreen.
     /// </para>
     /// <para>
@@ -916,10 +914,7 @@ public partial class Window : IDisposable
         }
 
         if (e.Type == EventType.WindowMoved)
-        {
-            _position.X = e.Window.Data1;
-            _position.Y = e.Window.Data2;
-        }
+            _position = new Vector2Int(e.Window.Data1, e.Window.Data2);
 
         if (e.Type == EventType.MouseEnter)
             _state |= WindowState.MouseFocus;
@@ -947,7 +942,7 @@ public partial class Window : IDisposable
     /// the requested window would result in stealing focus from another application.
     /// If the window is successfully raised and gains input focus,
     /// an <see cref="EventType.FocusGained"/> event will be emitted,
-    /// and the window will have <see cref="WindowState.InputFocus"/> state set.
+    /// and the window will have InputFocus state set.
     /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while raising the window.</exception>
     public void Raise()
@@ -965,7 +960,7 @@ public partial class Window : IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// If the window is in <see cref="WindowState.Fullscreen"/> state, it will has no direct effect.
+    /// If the window is in Fullscreen state, it will has no direct effect.
     /// It may alter the state the window is restored to when leaving fullscreen.
     /// </para>
     /// <para>
@@ -991,7 +986,7 @@ public partial class Window : IDisposable
     /// </summary>
     /// <remarks>
     /// It's only the way to show a window that has been hidden
-    /// with <see cref="Hide"/> or using <see cref="WindowState.Hidden"/> state.
+    /// with <see cref="Hide"/> or using Hidden state.
     /// </remarks>
     /// <exception cref="QuackNativeException">An error occurred while showing the window.</exception>
     public void Show()
@@ -1026,6 +1021,19 @@ public partial class Window : IDisposable
     }
 
     /// <summary>
+    /// Returns a string representation of the window in the format "W[Id] "Title" (WidthxHeight)".
+    /// </summary>
+    /// <returns>A string representation of the window.</returns>
+    public override string ToString() => $"{this}";
+
+    /// <inheritdoc/>
+    public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
+
+    /// <inheritdoc/>
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+        => destination.TryWrite($"Window[{Id}] \"{Title}\" ({Width}x{Height})", out charsWritten);
+
+    /// <summary>
     /// Move the mouse cursor to the given position withing the window.
     /// </summary>
     /// <remarks>
@@ -1046,41 +1054,148 @@ public partial class Window : IDisposable
     /// <param name="position">The position within the window.</param>
     public void WarpMouse(Vector2 position) => WarpMouse(position.X, position.Y);
 
-    /// <summary>
-    /// Releases the unmanaged resources used by the <see cref="Window"/> and optionally releases the managed resources.
-    /// </summary>
-    /// <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources; <see langword="false"/> to release only unmanaged resources.</param>
-    protected virtual void Dispose(bool disposing)
+    private WindowHandle CreateWindow(string title, int width, int height)
     {
-        if (_disposed)
-            return;
-
-        if (disposing)
-            _handle.Dispose();
-
-        _disposed = true;
-    }
-
-    private WindowHandle CreateWindow(string title, int width, int height, WindowState state)
-    {
-        WindowHandle handle = SDL_CreateWindow(title, width, height, state);
-        QuackNativeException.ThrowIf(handle.IsInvalid);
-
-        Id = SDL_GetWindowID(handle);
-        QuackNativeException.ThrowIfZero(Id);
-
-        _state = state;
-
+        WindowHandle handle;
         _title = title;
         _width = width;
         _height = height;
 
-        if (_position.IsZero)
-            QuackNativeException.ThrowIfFailed(SDL_GetWindowPosition(handle, out _position.X, out _position.Y));
-        else
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowPosition(handle, _position.X, _position.Y));
+        using (Properties properties = new())
+        {
+            properties.Set("SDL.window.create.always_on_top", AlwaysOnTop);
+            properties.Set("SDL.window.create.borderless", Borderless);
+            properties.Set("SDL.window.create.focusable", Focusable);
+            properties.Set("SDL.window.create.fullscreen", Fullscreen);
+            properties.Set("SDL.window.create.hidden", Hidden);
+            properties.Set("SDL.window.create.maximized", Maximized);
+            properties.Set("SDL.window.create.minimized", Minimized);
+            properties.Set("SDL.window.create.mouse_grabbed", MouseGrabbed);
+            properties.Set("SDL.window.create.resizable", Resizable);
+            properties.Set("SDL.window.create.high_pixel_density", UseHighPixelDensity);
+            properties.Set("SDL.window.create.transparent", UseTransparentBuffer);
 
+            properties.Set("SDL.window.create.title", _title);
+            properties.Set("SDL.window.create.width", _width);
+            properties.Set("SDL.window.create.height", _height);
+
+            if (_position.HasValue)
+            {
+                properties.Set("SDL.window.create.x", _position.Value.X);
+                properties.Set("SDL.window.create.y", _position.Value.Y);
+            }
+
+            handle = SDL_CreateWindowWithProperties(properties.Id);
+            QuackNativeException.ThrowIf(handle.IsInvalid);
+        }
+
+        Id = SDL_GetWindowID(handle);
+        QuackNativeException.ThrowIfZero(Id);
+
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowAspectRatio(handle, AspectRatio.Minimum, AspectRatio.Maximum));
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreenMode(handle, FullscreenMode));
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowMaximumSize(handle, MaximumSize.Width, MaximumSize.Height));
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowMinimumSize(handle, MinimumSize.Width, MinimumSize.Height));
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseRect(handle, MouseClip));
+        QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(handle, Opacity));
 
         return handle;
+    }
+
+    [Flags]
+    private enum WindowState : ulong
+    {
+        /// <summary>
+        /// No state to apply to the window.
+        /// </summary>
+        None = 0x0000000000000000,
+
+        /// <summary>
+        /// The window is in fullscreen mode.
+        /// </summary>
+        Fullscreen = 0x0000000000000001,
+
+        /// <summary>
+        /// The window is occluded.
+        /// </summary>
+        Occluded = 0x0000000000000004,
+
+        /// <summary>
+        /// The window is hidden.
+        /// </summary>
+        Hidden = 0x0000000000000008,
+
+        /// <summary>
+        /// The window has no decorations, such as title bar or borders.
+        /// </summary>
+        Borderless = 0x0000000000000010,
+
+        /// <summary>
+        /// The window can be resized by the user.
+        /// </summary>
+        Resizable = 0x0000000000000020,
+
+        /// <summary>
+        /// The window is minimized and not visible to the user.
+        /// </summary>
+        Minimized = 0x0000000000000040,
+
+        /// <summary>
+        /// The window is maximized and occupies the entire screen area.
+        /// </summary>
+        Maximized = 0x0000000000000080,
+
+        /// <summary>
+        /// The has grabbed the mouse input.
+        /// </summary>
+        MouseGrabbed = 0x0000000000000100,
+
+        /// <summary>
+        /// The window has input focus.
+        /// </summary>
+        InputFocus = 0x0000000000000200,
+
+        /// <summary>
+        /// The window has mouse focus.
+        /// </summary>
+        MouseFocus = 0x0000000000000400,
+
+        /// <summary>
+        /// The window uses high pixel density back buffering if available.
+        /// </summary>
+        HighPixelDensity = 0x0000000000002000,
+
+        /// <summary>
+        /// The window has captured the mouse input.
+        /// </summary>
+        /// <remark>
+        /// Unrelated to <see cref="MouseGrabbed"/>.
+        /// </remark>
+        MouseCapture = 0x0000000000004000,
+
+        /// <summary>
+        /// The window is in relative mouse mode
+        /// </summary>
+        MouseRelativeMode = 0x0000000000008000,
+
+        /// <summary>
+        /// The window is always on top of other windows.
+        /// </summary>
+        AlwaysOnTop = 0x0000000000010000,
+
+        /// <summary>
+        /// The window has grabbed the keyboard input.
+        /// </summary>
+        KeyboardGrabbed = 0x0000000000100000,
+
+        /// <summary>
+        /// The window has transparent buffer.
+        /// </summary>
+        TransparentBuffer = 0x0000000040000000,
+
+        /// <summary>
+        /// The window is not focusable.
+        /// </summary>
+        NotFocusable = 0x0000000080000000
     }
 }
