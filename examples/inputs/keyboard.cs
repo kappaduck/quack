@@ -9,12 +9,12 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Inputs;
 using KappaDuck.Quack.Windows;
 
-// Demonstrates how to handle mouse input
+// Demonstrates how to handle keyboard input
 // Initialize the engine with the Video subsystem
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create the window
-using Window window = new("Mouse example", 800, 600, WindowState.Resizable);
+using Window window = new("Keyboard example", 1080, 720);
 
 // Run the main loop
 while (window.IsOpen)

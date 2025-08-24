@@ -14,7 +14,7 @@ using KappaDuck.Quack.Windows;
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create the window
-using Window window = new("Mouse example", 800, 600, WindowState.Resizable);
+using Window window = new("Mouse example", 1080, 720);
 
 // Run the main loop
 while (window.IsOpen)

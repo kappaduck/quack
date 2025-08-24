@@ -12,8 +12,11 @@ using KappaDuck.Quack.Windows;
 // Initialize the engine with the Video subsystem
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-// Create a resizable window with the title "Minimal window" and dimensions 800x600
-using Window window = new("Minimal window", 800, 600, WindowState.Resizable);
+// Create a resizable window with the title "Minimal window" and dimensions 1080x720
+using Window window = new("Minimal window", 1080, 720)
+{
+    Resizable = true
+};
 
 // Run the main loop while the window is open
 while (window.IsOpen)

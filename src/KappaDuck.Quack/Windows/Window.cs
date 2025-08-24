@@ -44,6 +44,21 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     private float? _opacity;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Window"/>.
+    /// </summary>
+    public Window()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Window"/>.
+    /// </summary>
+    /// <param name="title">The title of the window.</param>
+    /// <param name="width">The width of the window.</param>
+    /// <param name="height">The height of the window.</param>
+    public Window(string title, int width, int height) => Create(title, width, height);
+
+    /// <summary>
     /// Gets or sets a value indicating whether the window is always on top.
     /// </summary>
     /// <exception cref="QuackNativeException">An error occurred while setting the window always on top.</exception>
