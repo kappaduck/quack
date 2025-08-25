@@ -7,6 +7,7 @@ using System.IO.Compression;
 
 await new Installer("SDL3", "3.2.20").InstallAsync("SDL").ConfigureAwait(false);
 await new Installer("SDL3_image", "3.2.4").InstallAsync("SDL_image").ConfigureAwait(false);
+await new Installer("SDL3_ttf", "3.2.2").InstallAsync("SDL_ttf").ConfigureAwait(false);
 
 file sealed class Installer
 {
