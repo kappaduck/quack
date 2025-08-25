@@ -14,14 +14,6 @@ namespace KappaDuck.Quack;
 /// </summary>
 public sealed partial class QuackEngine : IDisposable
 {
-    private const string IdentifierProperty = "SDL.app.metadata.identifier";
-    private const string NameProperty = "SDL.app.metadata.name";
-    private const string VersionProperty = "SDL.app.metadata.version";
-    private const string AuthorProperty = "SDL.app.metadata.creator";
-    private const string CopyrightProperty = "SDL.app.metadata.copyright";
-    private const string UrlProperty = "SDL.app.metadata.url";
-    private const string TypeProperty = "SDL.app.metadata.type";
-
     private static readonly Lock _lock = new();
 
     private static QuackEngine? _engine;
@@ -30,6 +22,23 @@ public sealed partial class QuackEngine : IDisposable
 
     private QuackEngine()
     {
+    }
+
+    /// <summary>
+    /// Gets the current SDL_image version that the engine is using.
+    /// </summary>
+    public static string ImageVersion
+    {
+        get
+        {
+            int version = IMG_Version();
+
+            int major = version / 1000000;
+            int minor = version / 1000 % 1000;
+            int patch = version % 1000;
+
+            return $"{major}.{minor}.{patch}";
+        }
     }
 
     /// <summary>
@@ -184,13 +193,13 @@ public sealed partial class QuackEngine : IDisposable
         if (metadata is null)
             return;
 
-        SetAppMetadataProperty(IdentifierProperty, metadata.Id);
-        SetAppMetadataProperty(NameProperty, metadata.Name);
-        SetAppMetadataProperty(VersionProperty, metadata.Version);
-        SetAppMetadataProperty(AuthorProperty, metadata.Author);
-        SetAppMetadataProperty(CopyrightProperty, metadata.Copyright);
-        SetAppMetadataProperty(UrlProperty, metadata.Url?.ToString());
-        SetAppMetadataProperty(TypeProperty, metadata.Type);
+        SetAppMetadataProperty("SDL.app.metadata.identifier", metadata.Id);
+        SetAppMetadataProperty("SDL.app.metadata.name", metadata.Name);
+        SetAppMetadataProperty("SDL.app.metadata.version", metadata.Version);
+        SetAppMetadataProperty("SDL.app.metadata.author", metadata.Author);
+        SetAppMetadataProperty("SDL.app.metadata.copyright", metadata.Copyright);
+        SetAppMetadataProperty("SDL.app.metadata.url", metadata.Url?.ToString());
+        SetAppMetadataProperty("SDL.app.metadata.type", metadata.Type);
 
         static void SetAppMetadataProperty(string name, string? value)
         {
@@ -203,6 +212,9 @@ public sealed partial class QuackEngine : IDisposable
 
     private static void ThrowIfInstanceNull()
         => QuackException.ThrowIfNull(_engine, "The engine is not initialized.");
+
+    [LibraryImport(SDLNative.ImageLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial int IMG_Version();
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial ulong SDL_GetTicks();
