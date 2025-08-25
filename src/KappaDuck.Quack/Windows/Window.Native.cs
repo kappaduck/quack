@@ -43,6 +43,9 @@ public partial class Window
     private static partial bool SDL_GetWindowPosition(WindowHandle window, out int x, out int y);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial uint SDL_GetWindowProperties(WindowHandle window);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_GetWindowSafeArea(WindowHandle window, out RectInt area);
 

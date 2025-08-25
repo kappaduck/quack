@@ -10,6 +10,7 @@ using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KappaDuck.Quack.Windows;
 
@@ -35,7 +36,7 @@ namespace KappaDuck.Quack.Windows;
 [EditorBrowsable(EditorBrowsableState.Advanced)]
 public sealed partial class Window : IDisposable, ISpanFormattable
 {
-    private WindowHandle _handle = new();
+    private WindowHandle _windowHandle = new();
     private WindowState _state;
     private Vector2Int? _position;
     private int _width;
@@ -72,7 +73,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowAlwaysOnTop(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowAlwaysOnTop(_windowHandle, value));
         }
     }
 
@@ -94,7 +95,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowAspectRatio(_handle, value.Minimum, value.Maximum));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowAspectRatio(_windowHandle, value.Minimum, value.Maximum));
         }
     }
 
@@ -112,7 +113,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowBordered(_handle, !value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowBordered(_windowHandle, !value));
         }
     }
 
@@ -133,7 +134,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen || Borderless)
                 return default;
 
-            SDL_GetWindowBordersSize(_handle, out int top, out int left, out int bottom, out int right);
+            SDL_GetWindowBordersSize(_windowHandle, out int top, out int left, out int bottom, out int right);
             return (top, left, bottom, right);
         }
     }
@@ -151,7 +152,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return null;
 
-            return Display.GetDisplay(SDL_GetDisplayForWindow(_handle));
+            return Display.GetDisplay(SDL_GetDisplayForWindow(_windowHandle));
         }
     }
 
@@ -176,7 +177,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return 0.0f;
 
-            return SDL_GetWindowDisplayScale(_handle);
+            return SDL_GetWindowDisplayScale(_windowHandle);
         }
     }
 
@@ -194,7 +195,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowFocusable(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowFocusable(_windowHandle, value));
         }
     }
 
@@ -212,7 +213,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreen(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreen(_windowHandle, value));
         }
     }
 
@@ -246,7 +247,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreenMode(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreenMode(_windowHandle, value));
         }
     }
 
@@ -268,13 +269,15 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// Disposing this handle will not close the window; use the <see cref="Dispose"/> instead.
     /// </remarks>
     /// <exception cref="ObjectDisposedException">The window has been disposed or not open.</exception>
+    [field: AllowNull]
     public WindowHandle Handle
     {
         get
         {
-            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(Window));
-            return _handle.ToNonOwningHandle();
+            ObjectDisposedException.ThrowIf(_windowHandle.IsInvalid, typeof(Window));
+            return field;
         }
+        private set;
     }
 
     /// <summary>
@@ -312,7 +315,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, _width, _height));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_windowHandle, _width, _height));
         }
     }
 
@@ -341,7 +344,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// <summary>
     /// Gets a value indicating whether the window is currently open.
     /// </summary>
-    public bool IsOpen => !_handle.IsInvalid;
+    public bool IsOpen => !_windowHandle.IsInvalid;
 
     /// <summary>
     /// Gets a value indicating whether the screen keyboard is visible.
@@ -353,7 +356,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return false;
 
-            return SDL_ScreenKeyboardShown(_handle);
+            return SDL_ScreenKeyboardShown(_windowHandle);
         }
     }
 
@@ -385,7 +388,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowKeyboardGrab(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowKeyboardGrab(_windowHandle, value));
         }
     }
 
@@ -424,7 +427,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowMaximumSize(_handle, value.Width, value.Height));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowMaximumSize(_windowHandle, value.Width, value.Height));
         }
     }
 
@@ -463,7 +466,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowMinimumSize(_handle, value.Width, value.Height));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowMinimumSize(_windowHandle, value.Width, value.Height));
         }
     }
 
@@ -493,7 +496,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseRect(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseRect(_windowHandle, value));
         }
     }
 
@@ -511,7 +514,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseGrab(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowMouseGrab(_windowHandle, value));
         }
     }
 
@@ -547,7 +550,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_handle, _opacity.Value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowOpacity(_windowHandle, _opacity.Value));
         }
     }
 
@@ -579,7 +582,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         {
             if (!_position.HasValue)
             {
-                QuackNativeException.ThrowIfFailed(SDL_GetWindowPosition(_handle, out int x, out int y));
+                QuackNativeException.ThrowIfFailed(SDL_GetWindowPosition(_windowHandle, out int x, out int y));
                 _position = new Vector2Int(x, y);
             }
 
@@ -595,7 +598,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowPosition(_handle, value.X, value.Y));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowPosition(_windowHandle, value.X, value.Y));
         }
     }
 
@@ -616,7 +619,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return 0.0f;
 
-            return SDL_GetWindowPixelDensity(_handle);
+            return SDL_GetWindowPixelDensity(_windowHandle);
         }
     }
 
@@ -633,7 +636,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return PixelFormat.Unknown;
 
-            return SDL_GetWindowPixelFormat(_handle);
+            return SDL_GetWindowPixelFormat(_windowHandle);
         }
     }
 
@@ -651,7 +654,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowResizable(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowResizable(_windowHandle, value));
         }
     }
 
@@ -678,7 +681,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return default;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetWindowSafeArea(_handle, out RectInt area));
+            QuackNativeException.ThrowIfFailed(SDL_GetWindowSafeArea(_windowHandle, out RectInt area));
             return area;
         }
     }
@@ -697,7 +700,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowTitle(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowTitle(_windowHandle, value));
         }
     }
 
@@ -754,7 +757,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_handle, _width, _height));
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowSize(_windowHandle, _width, _height));
         }
     }
 
@@ -792,13 +795,13 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (IsOpen)
             return;
 
-        _handle = CreateWindow(title, width, height);
+        _windowHandle = CreateWindow(title, width, height);
     }
 
     /// <summary>
     /// Disposes the resources used by the <see cref="Window"/>.
     /// </summary>
-    public void Dispose() => _handle.Dispose();
+    public void Dispose() => _windowHandle.Dispose();
 
     /// <summary>
     /// Request the window to demand attention from the user.
@@ -810,7 +813,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_FlashWindow(_handle, operation));
+        QuackNativeException.ThrowIfFailed(SDL_FlashWindow(_windowHandle, operation));
     }
 
     /// <summary>
@@ -822,7 +825,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_HideWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_HideWindow(_windowHandle));
 
         _state |= WindowState.Hidden;
     }
@@ -853,7 +856,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen || Maximized || !Resizable)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_MaximizeWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_MaximizeWindow(_windowHandle));
 
         _state &= ~WindowState.Minimized;
         _state |= WindowState.Maximized;
@@ -882,7 +885,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen || Minimized)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_MinimizeWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_MinimizeWindow(_windowHandle));
 
         _state &= ~WindowState.Maximized;
         _state |= WindowState.Minimized;
@@ -965,7 +968,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_RaiseWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_RaiseWindow(_windowHandle));
 
         _state |= WindowState.InputFocus;
     }
@@ -993,7 +996,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_RestoreWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_RestoreWindow(_windowHandle));
     }
 
     /// <summary>
@@ -1009,7 +1012,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_ShowWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_ShowWindow(_windowHandle));
 
         _state &= ~WindowState.Hidden;
     }
@@ -1032,7 +1035,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
         if (!IsOpen)
             return;
 
-        QuackNativeException.ThrowIfFailed(SDL_SyncWindow(_handle));
+        QuackNativeException.ThrowIfFailed(SDL_SyncWindow(_windowHandle));
     }
 
     /// <summary>
@@ -1057,7 +1060,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// </remarks>
     /// <param name="x">The x-coordinate within the window.</param>
     /// <param name="y">The y-coordinate within the window.</param>
-    public void WarpMouse(float x, float y) => SDL_WarpMouseInWindow(_handle, x, y);
+    public void WarpMouse(float x, float y) => SDL_WarpMouseInWindow(_windowHandle, x, y);
 
     /// <summary>
     /// Move the mouse cursor to the given position withing the window.
@@ -1106,6 +1109,11 @@ public sealed partial class Window : IDisposable, ISpanFormattable
 
         Id = SDL_GetWindowID(handle);
         QuackNativeException.ThrowIfZero(Id);
+
+        uint propertiesId = SDL_GetWindowProperties(handle);
+        nint nativeHandle = Properties.Get(propertiesId, "SDL.window.win32.hwnd", nint.Zero);
+
+        Handle = new WindowHandle(nativeHandle, ownsHandle: false);
 
         QuackNativeException.ThrowIfFailed(SDL_SetWindowAspectRatio(handle, AspectRatio.Minimum, AspectRatio.Maximum));
         QuackNativeException.ThrowIfFailed(SDL_SetWindowFullscreenMode(handle, FullscreenMode));

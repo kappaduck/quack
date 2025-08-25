@@ -19,7 +19,7 @@ public sealed partial class WindowHandle : SafeHandleZeroInvalid
     {
     }
 
-    private WindowHandle(nint handle, bool ownsHandle) : base(ownsHandle)
+    internal WindowHandle(nint handle, bool ownsHandle) : base(ownsHandle)
          => SetHandle(handle);
 
     /// <summary>
