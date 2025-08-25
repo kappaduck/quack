@@ -10,6 +10,7 @@ internal static partial class SDLNative
 {
     internal const string Library = "SDL3";
     internal const string ImageLibrary = "SDL3_image";
+    internal const string TTFLibrary = "SDL3_ttf";
 
     internal static unsafe void Free<T>(T* pointer) where T : unmanaged => Free((nint)pointer);
 

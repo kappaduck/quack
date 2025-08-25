@@ -27,19 +27,7 @@ public sealed partial class QuackEngine : IDisposable
     /// <summary>
     /// Gets the current SDL_image version that the engine is using.
     /// </summary>
-    public static string ImageVersion
-    {
-        get
-        {
-            int version = IMG_Version();
-
-            int major = version / 1000000;
-            int minor = version / 1000 % 1000;
-            int patch = version % 1000;
-
-            return $"{major}.{minor}.{patch}";
-        }
-    }
+    public static string ImageVersion { get; } = GetVersion(IMG_Version());
 
     /// <summary>
     /// Gets the number of milliseconds since the engine initialization.
@@ -54,21 +42,14 @@ public sealed partial class QuackEngine : IDisposable
     }
 
     /// <summary>
+    /// Gets the current SDL_ttf version that the engine is using.
+    /// </summary>
+    public static string TTFVersion { get; } = GetVersion(TTF_Version());
+
+    /// <summary>
     /// Gets the current SDL version that the engine is using.
     /// </summary>
-    public static string Version
-    {
-        get
-        {
-            int version = SDL_GetVersion();
-
-            int major = version / 1000000;
-            int minor = version / 1000 % 1000;
-            int patch = version % 1000;
-
-            return $"{major}.{minor}.{patch}";
-        }
-    }
+    public static string Version { get; } = GetVersion(SDL_GetVersion());
 
     /// <summary>
     /// Shutdown the engine and all subsystems.
@@ -80,7 +61,10 @@ public sealed partial class QuackEngine : IDisposable
             if (Interlocked.Decrement(ref _refCount) > 0)
                 return;
 
-            SDL_QuitSubSystem(_subsystems);
+            if (Has(Subsystem.TTF))
+                TTF_Quit();
+
+            SDL_QuitSubSystem(_subsystems & ~Subsystem.TTF);
             SDL_Quit();
 
             Cleanup();
@@ -137,8 +121,11 @@ public sealed partial class QuackEngine : IDisposable
             if (Has(subsystem))
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_InitSubSystem(subsystem));
+            QuackNativeException.ThrowIfFailed(SDL_InitSubSystem(subsystem & ~Subsystem.TTF));
             _subsystems |= subsystem;
+
+            if (Has(Subsystem.TTF))
+                QuackNativeException.ThrowIfFailed(TTF_Init());
         }
     }
 
@@ -161,6 +148,12 @@ public sealed partial class QuackEngine : IDisposable
             if (!Has(subsystem))
                 return;
 
+            if (Has(Subsystem.TTF))
+            {
+                TTF_Quit();
+                _subsystems &= ~Subsystem.TTF;
+            }
+
             SDL_QuitSubSystem(subsystem);
 
             _subsystems &= ~subsystem;
@@ -181,11 +174,13 @@ public sealed partial class QuackEngine : IDisposable
             return;
         }
 
-        QuackNativeException.ThrowIfFailed(SDL_InitSubSystem(subsystem));
+        QuackNativeException.ThrowIfFailed(SDL_InitSubSystem(subsystem & ~Subsystem.TTF));
+        _subsystems |= subsystem;
+
+        if (Has(Subsystem.TTF))
+            QuackNativeException.ThrowIfFailed(TTF_Init());
 
         Interlocked.Increment(ref _refCount);
-
-        _subsystems |= subsystem;
     }
 
     private static void SetAppMetadata(AppMetadata? metadata)
@@ -213,6 +208,15 @@ public sealed partial class QuackEngine : IDisposable
     private static void ThrowIfInstanceNull()
         => QuackException.ThrowIfNull(_engine, "The engine is not initialized.");
 
+    private static string GetVersion(int version)
+    {
+        int major = version / 1000000;
+        int minor = version / 1000 % 1000;
+        int patch = version % 1000;
+
+        return $"{major}.{minor}.{patch}";
+    }
+
     [LibraryImport(SDLNative.ImageLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int IMG_Version();
 
@@ -235,4 +239,15 @@ public sealed partial class QuackEngine : IDisposable
     [LibraryImport(SDLNative.Library, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_SetAppMetadataProperty(string name, string value);
+
+    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool TTF_Init();
+
+    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool TTF_Quit();
+
+    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial int TTF_Version();
 }
