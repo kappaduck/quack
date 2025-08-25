@@ -767,6 +767,18 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     public int WidthInPixel { get; private set; }
 
     /// <summary>
+    /// Gets the SDL window handle.
+    /// </summary>
+    internal WindowHandle WindowHandle
+    {
+        get
+        {
+            ObjectDisposedException.ThrowIf(_windowHandle.IsInvalid, typeof(Window));
+            return _windowHandle.ToNonOwningHandle();
+        }
+    }
+
+    /// <summary>
     /// Closes the window.
     /// </summary>
     /// <remarks>

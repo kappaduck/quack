@@ -62,4 +62,9 @@ public enum Subsystem : uint
     /// Initialize the camera subsystem. Implicitly initializes the <see cref="Events" /> subsystem.
     /// </summary>
     Camera = 0x00010000u,
+
+    /// <summary>
+    /// Initialize the TrueType Font extension.
+    /// </summary>
+    TTF = 0x00020000u
 }

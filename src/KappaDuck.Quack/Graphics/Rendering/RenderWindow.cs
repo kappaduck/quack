@@ -607,7 +607,7 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
             return;
 
         _window.Create(title, width, height);
-        _renderer = new Renderer(_window.Handle, rendererName);
+        _renderer = new Renderer(_window.WindowHandle, rendererName);
     }
 
     /// <summary>
