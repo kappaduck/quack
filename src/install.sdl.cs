@@ -12,7 +12,7 @@ await InstallSDLAsync().ConfigureAwait(false);
 
 async Task InstallSDLAsync()
 {
-    const string version = "3.2.18";
+    const string version = "3.2.20";
     Uri download = new($"https://github.com/libsdl-org/SDL/releases/download/release-{version}/SDL3-{version}-win32-x64.zip");
 
     string zipFilePath = $"{Path.Combine(rootPath, $"SDL3-{version}")}.zip";
