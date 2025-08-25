@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <NativeLibs Include="$(MSBuildThisFileDirectory)*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Visible="false" />
+    <NativeLibs Include="$(MSBuildThisFileDirectory)win32\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Visible="false" />
     <Content Include="@(NativeLibs)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 </Project>

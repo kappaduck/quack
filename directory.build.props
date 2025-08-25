@@ -20,7 +20,7 @@
 
   <ItemGroup Label="Link native libraries" Condition="$(IncludeNativeLibraries) == 'true'">
     <!-- Special case for single file-->
-    <None Include="..\SDL3\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
-    <None Include="..\..\SDL3\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
+    <None Include="..\SDL3\win32\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
+    <None Include="..\..\SDL3\win32\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
   </ItemGroup>
 </Project>
