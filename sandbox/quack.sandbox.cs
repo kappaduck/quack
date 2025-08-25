@@ -9,11 +9,11 @@
 using KappaDuck.Quack;
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Graphics.Rendering;
 
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-using Window window = new("Quack! Sandbox", 800, 600);
+using RenderWindow window = new("Quack! Sandbox", 1080, 720);
 
 while (window.IsOpen)
 {
