@@ -8,7 +8,8 @@ Below is a list of Quack! versions and their corresponding SDL versions:
 
 | Quack! version | SDL version | SDL_image version | SDL_mixer version | SDL_ttf version |
 | :------------: | :---------: | :---------------: | :---------------: | :-------------: |
-|    `0.1.0`     |  `3.2.18`   |   `unsupported`   |   `unsupported`   |  `unsupported`  |
+|    `0.2.0`     | `>= 3.2.20` |       `N/A`       |       `N/A`       |      `N/A`      |
+|    `0.1.0`     |  `3.2.18`   |       `N/A`       |       `N/A`       |      `N/A`      |
 
 > Support for SDL_image, SDL_mixer and SDL_ttf is planned for future releases. Stay tuned!
 
