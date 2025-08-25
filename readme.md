@@ -6,9 +6,9 @@ Quack! is a fast, lightweight and user-friendly game engine built on [SDL] and i
 
 Below is a list of Quack! versions and their corresponding SDL versions:
 
-| Quack! version | SDL version  | SDL_image version | SDL_mixer version | SDL_ttf version |
-| :------------: | :----------: | :---------------: | :-------------: | :---------------: |
-|   `>= 0.1.0`   |   `3.2.18`   |   `unsupported`   |  `unsupported`    |   `unsupported` |
+| Quack! version | SDL version | SDL_image version | SDL_mixer version | SDL_ttf version |
+| :------------: | :---------: | :---------------: | :---------------: | :-------------: |
+|    `0.1.0`     |  `3.2.18`   |   `unsupported`   |   `unsupported`   |  `unsupported`  |
 
 > Support for SDL_image, SDL_mixer and SDL_ttf is planned for future releases. Stay tuned!
 
@@ -46,7 +46,10 @@ using KappaDuck.Quack.Windows;
 
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-using Window window = new("Minimal window", 800, 600, WindowState.Resizable);
+using Window window = new("Minimal window", 800, 600)
+{
+    Resizable = true
+};
 
 while (window.IsOpen)
 {
@@ -125,7 +128,10 @@ using KappaDuck.Quack.Windows;
 
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-using Window window = new("Quack! Playground", 800, 600, WindowState.Resizable);
+using Window window = new("Quack! Playground", 800, 600)
+{
+    Resizable = true
+};
 
 while (window.IsOpen)
 {
