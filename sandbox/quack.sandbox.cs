@@ -13,7 +13,7 @@ using KappaDuck.Quack.Windows;
 
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
-using Window window = new("Quack! Sandbox", 800, 600, WindowState.Resizable);
+using Window window = new("Quack! Sandbox", 800, 600);
 
 while (window.IsOpen)
 {
