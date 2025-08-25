@@ -4,6 +4,8 @@
     <IsAotCompatible>true</IsAotCompatible>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateSBOM>true</GenerateSBOM>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
   <PropertyGroup Label="Package info">
@@ -31,5 +33,6 @@
 
   <ItemGroup Label="Enabling reproducible builds">
     <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="all" IncludeAssets="$(IncludeAssets)" />
+    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" />
   </ItemGroup>
 </Project>

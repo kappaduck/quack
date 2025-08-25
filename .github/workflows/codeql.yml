@@ -3,8 +3,11 @@ name: CodeQL
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/*.yml', '**/*.cs', '**/*.csproj']
   schedule:
-    - cron: '0 2 * * 2'
+    - cron: '0 2 * * 2' # Every Tuesday at 2 AM UTC
 
 jobs:
   analyze:
