@@ -5,79 +5,95 @@
 
 using System.IO.Compression;
 
-string rootPath = GetRootPath();
-string installPath = Path.Combine(rootPath, "SDL3");
+await new Installer("SDL3", "3.2.20").InstallAsync("SDL").ConfigureAwait(false);
+await new Installer("SDL3_image", "3.2.4").InstallAsync("SDL_image").ConfigureAwait(false);
 
-await InstallSDLAsync().ConfigureAwait(false);
-
-async Task InstallSDLAsync()
+file sealed class Installer
 {
-    const string version = "3.2.20";
-    Uri download = new($"https://github.com/libsdl-org/SDL/releases/download/release-{version}/SDL3-{version}-win32-x64.zip");
+    private readonly string _libraryPath;
+    private readonly string _library;
+    private readonly string _version;
+    private readonly string _rootPath;
+    private readonly string _installPath;
 
-    string zipFilePath = $"{Path.Combine(rootPath, $"SDL3-{version}")}.zip";
-
-    Console.WriteLine($"Installing SDL3-{version}...");
-    await DownloadAsync(download, zipFilePath).ConfigureAwait(false);
-
-    Console.WriteLine("Extracting SDL3...");
-    await ExtractFilesAsync(zipFilePath).ConfigureAwait(false);
-
-    Console.WriteLine("Moving DLL files to installation...");
-    MoveDllFiles(zipFilePath);
-}
-
-async static Task DownloadAsync(Uri uri, string filePath)
-{
-    using HttpClient client = new();
-
-    Console.WriteLine($"Downloading {uri}...");
-    Stream stream = await client.GetStreamAsync(uri).ConfigureAwait(false);
-
-    FileStream fileStream = File.Create(filePath);
-
-    await using (fileStream.ConfigureAwait(false))
+    public Installer(string library, string version)
     {
-        await stream.CopyToAsync(fileStream).ConfigureAwait(false);
-    }
-}
+        _rootPath = GetRootPath();
+        _installPath = Path.Combine(_rootPath, "SDL3", OperatingSystem.IsWindows() ? "win32" : "linux");
 
-async Task ExtractFilesAsync(string filePath)
-{
-    string directory = Path.Combine(rootPath, filePath[..filePath.LastIndexOf('.')]);
+        _library = $"{library}-{version}";
+        _version = version;
 
-    await ZipFile.ExtractToDirectoryAsync(filePath, directory, overwriteFiles: true).ConfigureAwait(false);
-    File.Delete(filePath);
-}
-
-void MoveDllFiles(string filePath)
-{
-    Directory.CreateDirectory(installPath);
-    DirectoryInfo source = new(filePath[..filePath.LastIndexOf('.')]);
-
-    foreach (FileInfo sourceFile in source.EnumerateFiles("*.dll", SearchOption.AllDirectories))
-    {
-        string destination = Path.Combine(installPath, sourceFile.Name);
-        sourceFile.MoveTo(destination, overwrite: true);
+        _libraryPath = $"{Path.Combine(_rootPath, $"{library}-{version}")}.zip";
     }
 
-    source.Delete(recursive: true);
-}
-
-static string GetRootPath()
-{
-    const string rootFile = ".git";
-    DirectoryInfo? directory = new(Directory.GetCurrentDirectory());
-
-    while (directory is not null)
+    internal async Task InstallAsync(string repository)
     {
-        string path = Path.Combine(directory.FullName, rootFile);
+        await DownloadAsync(repository).ConfigureAwait(false);
+        await ExtractFilesAsync().ConfigureAwait(false);
+        MoveLibs();
 
-        if (Directory.Exists(path))
-            return directory.FullName;
-
-        directory = directory.Parent;
+        Console.WriteLine($"{_library} installation complete.\n");
     }
 
-    throw new DirectoryNotFoundException("Root directory not found.");
+    private async Task DownloadAsync(string repository)
+    {
+        Uri download = new($"https://github.com/libsdl-org/{repository}/releases/download/release-{_version}/{_library}-win32-x64.zip");
+
+        Console.WriteLine($"Downloading {_library}...");
+
+        using HttpClient client = new();
+        Stream stream = await client.GetStreamAsync(download).ConfigureAwait(false);
+
+        FileStream fileStream = File.Create(_libraryPath);
+
+        await using (fileStream.ConfigureAwait(false))
+        {
+            await stream.CopyToAsync(fileStream).ConfigureAwait(false);
+        }
+    }
+
+    private async Task ExtractFilesAsync()
+    {
+        Console.WriteLine($"Extracting {_library}...");
+        string directory = Path.Combine(_rootPath, _libraryPath[.._libraryPath.LastIndexOf('.')]);
+
+        await ZipFile.ExtractToDirectoryAsync(_libraryPath, directory, overwriteFiles: true).ConfigureAwait(false);
+        File.Delete(_libraryPath);
+    }
+
+    private void MoveLibs()
+    {
+        Console.WriteLine($"Copying {_library} to installation folder...");
+
+        Directory.CreateDirectory(_installPath);
+        DirectoryInfo source = new(_libraryPath[.._libraryPath.LastIndexOf('.')]);
+
+        foreach (FileInfo sourceFile in source.EnumerateFiles("*.dll", SearchOption.AllDirectories))
+        {
+            string destination = Path.Combine(_installPath, sourceFile.Name);
+            sourceFile.MoveTo(destination, overwrite: true);
+        }
+
+        source.Delete(recursive: true);
+    }
+
+    private static string GetRootPath()
+    {
+        const string rootFile = ".git";
+        DirectoryInfo? directory = new(Directory.GetCurrentDirectory());
+
+        while (directory is not null)
+        {
+            string path = Path.Combine(directory.FullName, rootFile);
+
+            if (Directory.Exists(path))
+                return directory.FullName;
+
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Root directory not found.");
+    }
+
 }

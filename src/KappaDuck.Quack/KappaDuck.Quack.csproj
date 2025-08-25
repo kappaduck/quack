@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup Label="build files to include">
-    <None Include="..\..\SDL3\*.dll" Pack="true" PackagePath="build\" IncludeInPackage="false" Visible="false" />
+    <None Include="..\..\SDL3\**\*" Pack="true" PackagePath="build\" IncludeInPackage="false" Visible="false" />
     <None Include="..\..\$(MSBuildProjectName).targets" Pack="true" PackagePath="build\" IncludeInPackage="false" Link="targets" />
   </ItemGroup>
 
