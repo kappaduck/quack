@@ -40,7 +40,7 @@ internal sealed partial class Renderer : IDisposable
         }
     }
 
-    public (int Width, int Height) OutputSize
+    internal (int Width, int Height) OutputSize
     {
         get
         {
@@ -74,7 +74,7 @@ internal sealed partial class Renderer : IDisposable
         }
     }
 
-    public Rect PresentationRectangle
+    internal Rect PresentationRectangle
     {
         get
         {
@@ -86,7 +86,7 @@ internal sealed partial class Renderer : IDisposable
         }
     }
 
-    public RectInt SafeArea
+    internal RectInt SafeArea
     {
         get
         {
@@ -126,16 +126,16 @@ internal sealed partial class Renderer : IDisposable
     internal void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
         => SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length, indices, indices.Length);
 
-    public Vector2 MapCoordinatesToPixels(Vector2 point)
+    internal Vector2 MapCoordinatesToPixels(Vector2 point)
     {
         SDL_RenderCoordinatesToWindow(_renderer, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);
     }
 
-    public void MapEventToCoordinates(ref Event e)
+    internal void MapEventToCoordinates(ref Event e)
         => SDL_ConvertEventToRenderCoordinates(_renderer, ref e);
 
-    public Vector2 MapPixelsToCoordinates(Vector2 point)
+    internal Vector2 MapPixelsToCoordinates(Vector2 point)
     {
         SDL_RenderCoordinatesFromWindow(_renderer, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);

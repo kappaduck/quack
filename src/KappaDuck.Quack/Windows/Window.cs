@@ -1030,6 +1030,42 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     }
 
     /// <summary>
+    /// Display the system-level window menu.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This default window menu is provided by the system and on some platforms provides functionality for setting or changing privileged state on the window,
+    /// such as moving it between workspaces or displays, or toggling the always-on-top property.
+    /// </para>
+    /// <para>
+    /// On platforms or desktops where this is unsupported, this function does nothing.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">The coordinates to show the menu at, relative to the origin (top-left) of the window.</param>
+    public void ShowSystemMenu(Vector2Int position) => ShowSystemMenu(position.ToVector2());
+
+    /// <summary>
+    /// Display the system-level window menu.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This default window menu is provided by the system and on some platforms provides functionality for setting or changing privileged state on the window,
+    /// such as moving it between workspaces or displays, or toggling the always-on-top property.
+    /// </para>
+    /// <para>
+    /// On platforms or desktops where this is unsupported, this function does nothing.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">The coordinates to show the menu at, relative to the origin (top-left) of the window.</param>
+    public void ShowSystemMenu(Vector2 position)
+    {
+        if (!IsOpen)
+            return;
+
+        QuackNativeException.ThrowIfFailed(SDL_ShowWindowSystemMenu(_windowHandle, (int)position.X, (int)position.Y));
+    }
+
+    /// <summary>
     /// Block until any pending window state is finalized.
     /// </summary>
     /// <remarks>
