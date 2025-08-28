@@ -158,12 +158,16 @@ public partial class Window
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_ShowWindow(WindowHandle handle);
+    private static partial bool SDL_ShowWindow(WindowHandle window);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_SyncWindow(WindowHandle handle);
+    private static partial bool SDL_ShowWindowSystemMenu(WindowHandle window, int x, int y);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SDL_WarpMouseInWindow(WindowHandle handle, float x, float y);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SyncWindow(WindowHandle window);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial void SDL_WarpMouseInWindow(WindowHandle window, float x, float y);
 }

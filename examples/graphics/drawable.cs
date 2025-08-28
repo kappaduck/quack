@@ -12,7 +12,7 @@ using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using System.Drawing;
 
-// Demonstrates how to draw a triangle using IDrawable
+// Demonstrates how to draw a rectangle using IDrawable
 // Initialize the engine with the Video subsystem
 using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 

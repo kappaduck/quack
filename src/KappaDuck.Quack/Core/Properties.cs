@@ -19,7 +19,7 @@ internal sealed partial class Properties : IDisposable
         QuackNativeException.ThrowIfZero(Id);
     }
 
-    public uint Id { get; }
+    internal uint Id { get; }
 
     public void Dispose() => SDL_DestroyProperties(Id);
 

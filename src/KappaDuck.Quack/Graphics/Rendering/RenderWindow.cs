@@ -753,6 +753,36 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
     public void Show() => _window.Show();
 
     /// <summary>
+    /// Display the system-level window menu.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This default window menu is provided by the system and on some platforms provides functionality for setting or changing privileged state on the window,
+    /// such as moving it between workspaces or displays, or toggling the always-on-top property.
+    /// </para>
+    /// <para>
+    /// On platforms or desktops where this is unsupported, this function does nothing.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">The coordinates to show the menu at, relative to the origin (top-left) of the window.</param>
+    public void ShowSystemMenu(Vector2Int position) => _window.ShowSystemMenu(position);
+
+    /// <summary>
+    /// Display the system-level window menu.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This default window menu is provided by the system and on some platforms provides functionality for setting or changing privileged state on the window,
+    /// such as moving it between workspaces or displays, or toggling the always-on-top property.
+    /// </para>
+    /// <para>
+    /// On platforms or desktops where this is unsupported, this function does nothing.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">The coordinates to show the menu at, relative to the origin (top-left) of the window.</param>
+    public void ShowSystemMenu(Vector2 position) => _window.ShowSystemMenu(position);
+
+    /// <summary>
     /// Block until any pending window state is finalized.
     /// </summary>
     /// <remarks>
