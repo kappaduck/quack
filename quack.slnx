@@ -33,6 +33,7 @@
     <File Path="examples/readme.md" />
   </Folder>
   <Folder Name="/examples/graphics/">
+    <File Path="examples/graphics/debug.cs" />
     <File Path="examples/graphics/drawable.cs" />
     <File Path="examples/graphics/triangle.cs" />
     <File Path="examples/graphics/sinewave.cs" />
