@@ -29,6 +29,7 @@ Here the examples are categorized by module. Each example is a C# file that demo
 
 ### Graphics
 
+- [Debug](./graphics/debug.cs) - Demonstrates how to draw text for debugging purposes.
 - [Drawable](./graphics/drawable.cs) - Demonstrates how to use the IDrawable interface.
 - [Sine Wave](./graphics/sinewave.cs) - Demonstrates how to render a sine wave.
 - [Triangle](./graphics/triangle.cs) - Demonstrates how to draw a triangle using vertices.

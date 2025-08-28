@@ -10,6 +10,7 @@ using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
 using KappaDuck.Quack.Windows;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
@@ -609,6 +610,37 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
         _window.Create(title, width, height);
         _renderer = new Renderer(_window.WindowHandle, rendererName);
     }
+
+    /// <summary>
+    /// Draw debug text to the window.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// It will render a string of text to the window. Note that this is a convenience function for debugging,
+    /// with severe limitations, and not intended to be used for production apps and games.
+    /// </para>
+    /// <para>
+    /// Among these limitations:
+    /// <list type="bullet">
+    /// <item>It accepts UTF-8 strings, but will only renders ASCII characters.</item>
+    /// <item>It has a single, tiny size (8x8 pixels). One can use logical presentation or scaling to adjust it, but it will be blurry.</item>
+    /// <item>It uses a simple, hardcoded bitmap font. It does not allow different font selections and it does not support truetype, for proper scaling.</item>
+    /// <item>It does no word-wrapping and does not treat newline characters as a line break. If the text goes out of the window, it's gone.</item>
+    /// </list>
+    /// </para>
+    /// <para>For serious text rendering, there are several good options, such as Font/Text.</para>
+    /// <para>
+    /// On first use, this will create an internal texture for rendering glyphs. This texture will live until the renderer is destroyed.
+    /// </para>
+    /// <para>
+    /// Be sure to call <see cref="Clear(Color)"/> before drawing the text otherwise it may be overwritten.
+    /// </para>
+    /// </remarks>
+    /// <param name="position">The position to draw the text at.</param>
+    /// <param name="text">The text to render.</param>
+    /// <param name="color">The color of the text. If <see langword="null"/>, it will use white.</param>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public void DrawDebugText(Vector2 position, string text, Color? color = null) => _renderer.DrawDebugText(position, text, color);
 
     /// <summary>
     /// Disposes the resources used by the <see cref="Window"/>.

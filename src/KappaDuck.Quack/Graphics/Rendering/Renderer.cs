@@ -115,6 +115,17 @@ internal sealed partial class Renderer : IDisposable
         }
     }
 
+    internal void DrawDebugText(Vector2 position, string text, Color? color = null)
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Color textColor = color ?? Color.White;
+
+        SDL_SetRenderDrawColor(_renderer, textColor.R, textColor.G, textColor.B, textColor.A);
+        QuackNativeException.ThrowIfFailed(SDL_RenderDebugText(_renderer, position.X, position.Y, text));
+    }
+
     public void Dispose() => _renderer.Dispose();
 
     internal void Clear(Color color)

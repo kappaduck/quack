@@ -24,6 +24,10 @@ internal sealed partial class Renderer
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_GetCurrentRenderOutputSize(RendererHandle renderer, out int w, out int h);
 
+    [LibraryImport(SDLNative.Library, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_RenderDebugText(RendererHandle renderer, float x, float y, string text);
+
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_GetRenderLogicalPresentation(RendererHandle renderer, out int width, out int height, out LogicalPresentation mode);
