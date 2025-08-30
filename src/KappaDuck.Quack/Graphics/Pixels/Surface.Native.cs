@@ -11,7 +11,11 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 public sealed unsafe partial class Surface
 {
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial void SDL_ClearSurface(SurfaceHandle* surface, float r, float g, float b, float a);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_ClearSurface(SurfaceHandle* surface, float r, float g, float b, float a);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial SurfaceHandle* SDL_ConvertSurface(SurfaceHandle* surface, PixelFormat format);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial SurfaceHandle* SDL_CreateSurface(int width, int height, PixelFormat format);
@@ -20,10 +24,30 @@ public sealed unsafe partial class Surface
     private static partial void SDL_DestroySurface(SurfaceHandle* surface);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial void SDL_FillSurfaceRect(SurfaceHandle* surface, RectInt* rect, uint color);
+    private static partial SurfaceHandle* SDL_DuplicateSurface(SurfaceHandle* surface);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial void SDL_FillSurfaceRects(SurfaceHandle* surface, ReadOnlySpan<RectInt> rects, int count, uint color);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_FillSurfaceRect(SurfaceHandle* surface, RectInt* rect, uint color);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_FillSurfaceRects(SurfaceHandle* surface, ReadOnlySpan<RectInt> rects, int count, uint color);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_FlipSurface(SurfaceHandle* surface, FlipMode mode);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial SurfaceHandle* SDL_ScaleSurface(SurfaceHandle* surface, int width, int height, ScaleMode mode);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SurfaceHasColorKey(SurfaceHandle* surface);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SurfaceHasRLE(SurfaceHandle* surface);
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SurfaceHandle

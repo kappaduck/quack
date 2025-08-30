@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using System.Drawing;
 
@@ -30,45 +31,146 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <remarks>
 /// Initializes a new instance of the <see cref="Surface"/>.
 /// </remarks>
-/// <param name="width">The width of the surface.</param>
-/// <param name="height">The height of the surface.</param>
-/// <param name="format">The pixel format of the surface.</param>
-public sealed unsafe partial class Surface(int width, int height, PixelFormat format) : IDisposable
+public sealed unsafe partial class Surface : IDisposable
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Surface"/>.
+    /// </summary>
+    /// <param name="width">The width of the surface.</param>
+    /// <param name="height">The height of the surface.</param>
+    /// <param name="format">The pixel format of the surface.</param>
+    public Surface(int width, int height, PixelFormat format)
+    {
+        FormatDetails = format.Details;
+        Handle = SDL_CreateSurface(width, height, format);
+
+        QuackNativeException.ThrowIfNull(Handle);
+    }
+
+    internal Surface(SurfaceHandle* handle)
+    {
+        QuackNativeException.ThrowIfNull(handle);
+
+        FormatDetails = handle->Format.Details;
+        Handle = handle;
+    }
+
     /// <summary>
     /// Gets the pixel format of the surface.
     /// </summary>
-    public PixelFormat Format => Handle->Format;
+    public PixelFormat Format
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Handle->Format;
+        }
+    }
 
     /// <summary>
     /// Gets the pixel format details of the surface.
     /// </summary>
-    public PixelFormatDetails FormatDetails { get; private set; } = format.Details;
+    public PixelFormatDetails FormatDetails { get; private set; }
 
     /// <summary>
     /// Gets the native surface handle.
     /// </summary>
-    internal SurfaceHandle* Handle { get; } = SDL_CreateSurface(width, height, format);
+    internal SurfaceHandle* Handle { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether the surface has a color key.
+    /// </summary>
+    public bool HasColorKey => SDL_SurfaceHasColorKey(Handle);
+
+    /// <summary>
+    /// Gets a value indicating whether the surface has RLE (Run-Length Encoding) enabled.
+    /// </summary>
+    public bool HasRLE => SDL_SurfaceHasRLE(Handle);
 
     /// <summary>
     /// Gets the height of the surface.
     /// </summary>
-    public int Height => Handle->Height;
+    public int Height
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Handle->Height;
+        }
+    }
 
     /// <summary>
     /// Gets the pitch (row stride) of the surface.
     /// </summary>
-    public int Pitch => Handle->Pitch;
+    public int Pitch
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Handle->Pitch;
+        }
+    }
 
     /// <summary>
     /// Gets the width of the surface.
     /// </summary>
-    public int Width => Handle->Width;
+    public int Width
+    {
+        get
+        {
+            ThrowIfDisposed();
+            return Handle->Width;
+        }
+    }
+
+    /// <summary>
+    /// Creates a new surface identical to the current surface.
+    /// </summary>
+    /// <remarks>
+    /// If the original surface has alternate images, the new surface will have a reference to them as well.
+    /// </remarks>
+    /// <returns>A new surface that is a duplicate of the current surface.</returns>
+    public Surface Clone()
+    {
+        ThrowIfDisposed();
+
+        SurfaceHandle* newHandle = SDL_DuplicateSurface(Handle);
+        return new Surface(newHandle);
+    }
+
+    /// <summary>
+    /// Copies the surface to a new surface with the specified pixel format.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// It is used to optimize images for faster repeat blitting. This is accomplished by converting the original and storing
+    /// the result as a new surface. The new, optimized surface can then be used as the source for future blits, making them faster.
+    /// </para>
+    /// <para>
+    /// If the original surface has alternate images, the new surface will have a reference to them as well.
+    /// </para>
+    /// </remarks>
+    /// <param name="format">The pixel format to convert the surface to.</param>
+    /// <returns>A new surface that is a copy of the original surface with the specified pixel format.</returns>
+    public Surface Convert(PixelFormat format)
+    {
+        ThrowIfDisposed();
+
+        SurfaceHandle* newHandle = SDL_ConvertSurface(Handle, format);
+        return new Surface(newHandle);
+    }
 
     /// <summary>
     /// Disposes the surface and releases any unmanaged resources.
     /// </summary>
-    public void Dispose() => SDL_DestroySurface(Handle);
+    public void Dispose()
+    {
+        if (Handle is not null)
+        {
+            SDL_DestroySurface(Handle);
+            Handle = null;
+        }
+    }
 
     /// <summary>
     /// Fills the entire surface with the specified color.
@@ -83,7 +185,11 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
-    public void Fill(byte r, byte g, byte b, byte a) => SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f);
+    public void Fill(byte r, byte g, byte b, byte a)
+    {
+        ThrowIfDisposed();
+        QuackNativeException.ThrowIfFailed(SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f));
+    }
 
     /// <summary>
     /// Fills the entire surface with the specified color.
@@ -99,7 +205,11 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
-    public void Fill(float r, float g, float b, float a) => SDL_ClearSurface(Handle, r, g, b, a);
+    public void Fill(float r, float g, float b, float a)
+    {
+        ThrowIfDisposed();
+        QuackNativeException.ThrowIfFailed(SDL_ClearSurface(Handle, r, g, b, a));
+    }
 
     /// <summary>
     /// Fills the entire surface with the specified color.
@@ -140,8 +250,10 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="rect">The rectangle to fill.</param>
     public void Fill(byte r, byte g, byte b, byte a, RectInt rect)
     {
+        ThrowIfDisposed();
+
         uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        SDL_FillSurfaceRect(Handle, &rect, rgba);
+        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRect(Handle, &rect, rgba));
     }
 
     /// <summary>
@@ -156,8 +268,10 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="rect">The rectangle to fill.</param>
     public void Fill(byte r, byte g, byte b, RectInt rect)
     {
+        ThrowIfDisposed();
+
         uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        SDL_FillSurfaceRect(Handle, &rect, rgb);
+        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRect(Handle, &rect, rgb));
     }
 
     /// <summary>
@@ -183,8 +297,10 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="rects">The rectangles to fill.</param>
     public void Fill(byte r, byte g, byte b, byte a, params ReadOnlySpan<RectInt> rects)
     {
+        ThrowIfDisposed();
+
         uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba);
+        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba));
     }
 
     /// <summary>
@@ -199,8 +315,10 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="rects">The rectangles to fill.</param>
     public void Fill(byte r, byte g, byte b, params ReadOnlySpan<RectInt> rects)
     {
+        ThrowIfDisposed();
+
         uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb);
+        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb));
     }
 
     /// <summary>
@@ -212,4 +330,33 @@ public sealed unsafe partial class Surface(int width, int height, PixelFormat fo
     /// <param name="color">The color to fill the rectangle with.</param>
     /// <param name="rects">The rectangles to fill.</param>
     public void Fill(Color color, params ReadOnlySpan<RectInt> rects) => Fill(color.R, color.G, color.B, color.A, rects);
+
+    /// <summary>
+    /// Flip a surface vertically or horizontally.
+    /// </summary>
+    /// <param name="mode">The flip mode to apply.</param>
+    public void Flip(FlipMode mode)
+    {
+        ThrowIfDisposed();
+        QuackNativeException.ThrowIfFailed(SDL_FlipSurface(Handle, mode));
+    }
+
+    /// <summary>
+    /// Scales the surface to the specified dimensions using the given scaling mode.
+    /// </summary>
+    /// <param name="width">The target width of the scaled surface.</param>
+    /// <param name="height">The target height of the scaled surface.</param>
+    /// <param name="mode">The scaling mode to use.</param>
+    /// <returns>A new surface representing the scaled version of the original surface.</returns>
+    public Surface Scale(int width, int height, ScaleMode mode)
+    {
+        ThrowIfDisposed();
+
+        SurfaceHandle* scaledSurface = SDL_ScaleSurface(Handle, width, height, mode);
+        QuackNativeException.ThrowIfNull(scaledSurface);
+
+        return new Surface(scaledSurface);
+    }
+
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Surface));
 }
