@@ -1012,6 +1012,21 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     }
 
     /// <summary>
+    /// Set an icon for the window.
+    /// </summary>
+    /// <param name="icon">A surface containing the icon image.</param>
+    public void SetIcon(Surface icon)
+    {
+        if (!IsOpen)
+            return;
+
+        unsafe
+        {
+            QuackNativeException.ThrowIfFailed(SDL_SetWindowIcon(_windowHandle, icon.Handle));
+        }
+    }
+
+    /// <summary>
     /// Show the window.
     /// </summary>
     /// <remarks>

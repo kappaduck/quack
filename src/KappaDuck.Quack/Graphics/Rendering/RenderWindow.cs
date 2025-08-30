@@ -775,6 +775,12 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
     public void Restore() => _window.Restore();
 
     /// <summary>
+    /// Set an icon for the window.
+    /// </summary>
+    /// <param name="icon">A surface containing the icon image.</param>
+    public void SetIcon(Surface icon) => _window.SetIcon(icon);
+
+    /// <summary>
     /// Show the window.
     /// </summary>
     /// <remarks>
