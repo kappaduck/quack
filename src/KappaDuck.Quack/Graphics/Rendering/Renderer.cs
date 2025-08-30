@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
@@ -13,7 +14,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 
 internal sealed partial class Renderer : IDisposable
 {
-    private readonly RendererHandle _renderer = new();
+    private readonly RendererHandle _handle = new();
 
     internal Renderer()
     {
@@ -21,21 +22,21 @@ internal sealed partial class Renderer : IDisposable
 
     internal Renderer(WindowHandle window, string? name)
     {
-        _renderer = SDL_CreateRenderer(window, name);
-        QuackNativeException.ThrowIf(_renderer.IsInvalid);
+        _handle = SDL_CreateRenderer(window, name);
+        QuackNativeException.ThrowIf(_handle.IsInvalid);
 
-        QuackNativeException.ThrowIfFailed(SDL_SetRenderVSync(_renderer, VSync));
-        QuackNativeException.ThrowIfFailed(SDL_SetRenderLogicalPresentation(_renderer, Presentation.Width, Presentation.Height, Presentation.Mode));
+        QuackNativeException.ThrowIfFailed(SDL_SetRenderVSync(_handle, VSync));
+        QuackNativeException.ThrowIfFailed(SDL_SetRenderLogicalPresentation(_handle, Presentation.Width, Presentation.Height, Presentation.Mode));
     }
 
     internal (int Width, int Height) CurrentOutputSize
     {
         get
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return (0, 0);
 
-            QuackNativeException.ThrowIfFailed(SDL_GetCurrentRenderOutputSize(_renderer, out int w, out int h));
+            QuackNativeException.ThrowIfFailed(SDL_GetCurrentRenderOutputSize(_handle, out int w, out int h));
             return (w, h);
         }
     }
@@ -44,10 +45,10 @@ internal sealed partial class Renderer : IDisposable
     {
         get
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return (0, 0);
 
-            QuackNativeException.ThrowIfFailed(SDL_GetRenderOutputSize(_renderer, out int w, out int h));
+            QuackNativeException.ThrowIfFailed(SDL_GetRenderOutputSize(_handle, out int w, out int h));
             return (w, h);
         }
     }
@@ -56,21 +57,21 @@ internal sealed partial class Renderer : IDisposable
     {
         get
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return (0, 0, LogicalPresentation.Disabled);
 
-            QuackNativeException.ThrowIfFailed(SDL_GetRenderLogicalPresentation(_renderer, out int width, out int height, out LogicalPresentation mode));
+            QuackNativeException.ThrowIfFailed(SDL_GetRenderLogicalPresentation(_handle, out int width, out int height, out LogicalPresentation mode));
             return (width, height, mode);
         }
         set
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return;
 
             ArgumentOutOfRangeException.ThrowIfNegative(value.Width);
             ArgumentOutOfRangeException.ThrowIfNegative(value.Height);
 
-            QuackNativeException.ThrowIfFailed(SDL_SetRenderLogicalPresentation(_renderer, value.Width, value.Height, value.Mode));
+            QuackNativeException.ThrowIfFailed(SDL_SetRenderLogicalPresentation(_handle, value.Width, value.Height, value.Mode));
         }
     }
 
@@ -78,10 +79,10 @@ internal sealed partial class Renderer : IDisposable
     {
         get
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return default;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetRenderLogicalPresentationRect(_renderer, out Rect rectangle));
+            QuackNativeException.ThrowIfFailed(SDL_GetRenderLogicalPresentationRect(_handle, out Rect rectangle));
             return rectangle;
         }
     }
@@ -90,10 +91,10 @@ internal sealed partial class Renderer : IDisposable
     {
         get
         {
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return default;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetRenderSafeArea(_renderer, out RectInt rectangle));
+            QuackNativeException.ThrowIfFailed(SDL_GetRenderSafeArea(_handle, out RectInt rectangle));
             return rectangle;
         }
     }
@@ -108,49 +109,55 @@ internal sealed partial class Renderer : IDisposable
 
             field = value;
 
-            if (_renderer.IsInvalid)
+            if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetRenderVSync(_renderer, field));
+            QuackNativeException.ThrowIfFailed(SDL_SetRenderVSync(_handle, field));
         }
     }
 
+    public void Dispose() => _handle.Dispose();
+
+    internal void Clear(Color color)
+    {
+        SDL_SetRenderDrawColor(_handle, color.R, color.G, color.B, color.A);
+        SDL_RenderClear(_handle);
+    }
+
+    internal TextureHandle CreateTexture(PixelFormat format, TextureAccess access, int width, int height)
+        => SDL_CreateTexture(_handle, format, access, width, height);
+
+    internal unsafe TextureHandle CreateTextureFromSurface(Surface surface)
+        => SDL_CreateTextureFromSurface(_handle, surface.Handle);
+
+    internal void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
+        => SDL_RenderGeometry(_handle, nint.Zero, vertices, vertices.Length, indices, indices.Length);
+
     internal void DrawDebugText(Vector2 position, string text, Color? color = null)
     {
-        if (_renderer.IsInvalid)
+        if (_handle.IsInvalid)
             return;
 
         Color textColor = color ?? Color.White;
 
-        SDL_SetRenderDrawColor(_renderer, textColor.R, textColor.G, textColor.B, textColor.A);
-        QuackNativeException.ThrowIfFailed(SDL_RenderDebugText(_renderer, position.X, position.Y, text));
+        SDL_SetRenderDrawColor(_handle, textColor.R, textColor.G, textColor.B, textColor.A);
+        QuackNativeException.ThrowIfFailed(SDL_RenderDebugText(_handle, position.X, position.Y, text));
     }
-
-    public void Dispose() => _renderer.Dispose();
-
-    internal void Clear(Color color)
-    {
-        SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
-        SDL_RenderClear(_renderer);
-    }
-
-    internal void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
-        => SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length, indices, indices.Length);
 
     internal Vector2 MapCoordinatesToPixels(Vector2 point)
     {
-        SDL_RenderCoordinatesToWindow(_renderer, point.X, point.Y, out float x, out float y);
+        SDL_RenderCoordinatesToWindow(_handle, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);
     }
 
     internal void MapEventToCoordinates(ref Event e)
-        => SDL_ConvertEventToRenderCoordinates(_renderer, ref e);
+        => SDL_ConvertEventToRenderCoordinates(_handle, ref e);
 
     internal Vector2 MapPixelsToCoordinates(Vector2 point)
     {
-        SDL_RenderCoordinatesFromWindow(_renderer, point.X, point.Y, out float x, out float y);
+        SDL_RenderCoordinatesFromWindow(_handle, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);
     }
 
-    internal void Render() => SDL_RenderPresent(_renderer);
+    internal void Render() => SDL_RenderPresent(_handle);
 }
