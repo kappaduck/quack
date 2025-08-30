@@ -23,11 +23,11 @@ You can also open the example in your preferred IDE (e.g., Visual Studio, Rider,
 
 Here the examples are categorized by module. Each example is a C# file that demonstrates a specific feature or capability of the Quack! engine.
 
-### Windows
+## Windows
 
 - [Minimal Window](./windows/minimalWindow.cs) - Demonstrates how to create a simple window.
 
-### Graphics
+## Graphics
 
 - [Debug](./graphics/debug.cs) - Demonstrates how to draw text for debugging purposes.
 - [Drawable](./graphics/drawable.cs) - Demonstrates how to use the IDrawable interface.
