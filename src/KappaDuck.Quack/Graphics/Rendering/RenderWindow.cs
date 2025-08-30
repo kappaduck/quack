@@ -612,6 +612,46 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
     }
 
     /// <summary>
+    /// Create a texture for a rendering context.
+    /// </summary>
+    /// <remarks>
+    /// <para>The contents of a texture when first created are not defined.</para>
+    /// <para>
+    /// The texture is bound to the render window who's creating it. It can't be used with other windows.
+    /// You must create a new texture for each render window.
+    /// </para>
+    /// </remarks>
+    /// <param name="format">The pixel format of the texture.</param>
+    /// <param name="access">The access level of the texture.</param>
+    /// <param name="width">The width of the texture.</param>
+    /// <param name="height">The height of the texture.</param>
+    /// <returns>A new texture instance.</returns>
+    public Texture CreateTexture(PixelFormat format, TextureAccess access, int width, int height)
+        => new(_renderer, format, access, width, height);
+
+    /// <summary>
+    /// Creates a texture from a surface.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The surface is not modified or freed by this method.
+    /// </para>
+    /// <para>
+    /// The texture access level is set to <see cref="TextureAccess.Static"/>.
+    /// </para>
+    /// <para>
+    /// The pixel format of the created texture may be different from the surface's pixel format.
+    /// </para>
+    /// <para>
+    /// The texture is bound to the render window who's creating it. It can't be used with other windows.
+    /// You must create a new texture for each render window.
+    /// </para>
+    /// </remarks>
+    /// <param name="surface">The surface to create the texture from.</param>
+    /// <returns>A new texture instance.</returns>
+    public Texture CreateTexture(Surface surface) => new(_renderer, surface);
+
+    /// <summary>
     /// Draw debug text to the window.
     /// </summary>
     /// <remarks>

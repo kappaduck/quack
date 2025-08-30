@@ -3,6 +3,7 @@
 
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Interop.SDL.Handles;
@@ -19,6 +20,12 @@ internal sealed partial class Renderer
 
     [LibraryImport(SDLNative.Library, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial RendererHandle SDL_CreateRenderer(WindowHandle window, string? name = null);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial TextureHandle SDL_CreateTexture(RendererHandle renderer, PixelFormat format, TextureAccess access, int width, int height);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static unsafe partial TextureHandle SDL_CreateTextureFromSurface(RendererHandle renderer, Surface.SurfaceHandle* surface);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
