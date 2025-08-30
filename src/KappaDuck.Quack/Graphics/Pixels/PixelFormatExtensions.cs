@@ -99,7 +99,7 @@ public static partial class PixelFormatExtensions
                 byte g;
                 byte b;
 
-                SDL_GetRGB(pixel, &details, IntPtr.Zero, &r, &g, &b);
+                SDL_GetRGB(pixel, &details, nint.Zero, &r, &g, &b);
                 return (r, g, b);
             }
         }
@@ -124,7 +124,7 @@ public static partial class PixelFormatExtensions
                 byte b;
                 byte a;
 
-                SDL_GetRGBA(pixel, &details, IntPtr.Zero, &r, &g, &b, &a);
+                SDL_GetRGBA(pixel, &details, nint.Zero, &r, &g, &b, &a);
                 return (r, g, b, a);
             }
         }
@@ -141,7 +141,7 @@ public static partial class PixelFormatExtensions
         {
             unsafe
             {
-                return SDL_MapRGB(&details, IntPtr.Zero, r, g, b);
+                return SDL_MapRGB(&details, nint.Zero, r, g, b);
             }
         }
 
@@ -158,7 +158,7 @@ public static partial class PixelFormatExtensions
         {
             unsafe
             {
-                return SDL_MapRGBA(&details, IntPtr.Zero, r, g, b, a);
+                return SDL_MapRGBA(&details, nint.Zero, r, g, b, a);
             }
         }
 
@@ -186,14 +186,14 @@ public static partial class PixelFormatExtensions
     private static partial PixelFormat SDL_GetPixelFormatForMasks(int bitsPerPixel, uint redMask, uint greenMask, uint blueMask, uint alphaMask);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, IntPtr palette, byte* r, byte* g, byte* b);
+    private static unsafe partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, nint palette, byte* r, byte* g, byte* b);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, IntPtr palette, byte* r, byte* g, byte* b, byte* a);
+    private static unsafe partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, nint palette, byte* r, byte* g, byte* b, byte* a);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGB(PixelFormatDetails* details, IntPtr palette, byte r, byte g, byte b);
+    private static unsafe partial uint SDL_MapRGB(PixelFormatDetails* details, nint palette, byte r, byte g, byte b);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGBA(PixelFormatDetails* details, IntPtr palette, byte r, byte g, byte b, byte a);
+    private static unsafe partial uint SDL_MapRGBA(PixelFormatDetails* details, nint palette, byte r, byte g, byte b, byte a);
 }

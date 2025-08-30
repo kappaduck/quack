@@ -41,6 +41,14 @@ internal sealed partial class Properties : IDisposable
         };
     }
 
+    internal static T GetAsEnum<T>(uint propertiesId, string name, T defaultValue) where T : Enum
+    {
+        object obj = Convert.ChangeType(defaultValue, defaultValue.GetTypeCode())!;
+
+        long number = SDL_GetNumberProperty(propertiesId, name, Convert.ToInt64(obj));
+        return (T)Enum.Parse(typeof(T), number.ToString())!;
+    }
+
     internal static void Set<T>(uint propertiesId, string name, T value)
     {
         bool isSet = value switch
