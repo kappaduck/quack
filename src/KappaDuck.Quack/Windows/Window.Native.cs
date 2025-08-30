@@ -108,6 +108,10 @@ public partial class Window
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
+    private static unsafe partial bool SDL_SetWindowIcon(WindowHandle window, Surface.SurfaceHandle* icon);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_SetWindowKeyboardGrab(WindowHandle handle, [MarshalAs(UnmanagedType.U1)] bool grabbed);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
