@@ -1,0 +1,7 @@
+{
+    "explorer.fileNesting.patterns": {
+        "*.cs": "${basename}.Native.cs"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false
+}
