@@ -713,6 +713,23 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
     /// <exception cref="QuackNativeException">An error occurred while hiding the window.</exception>
     public void Hide() => _window.Hide();
 
+    /// <summary>
+    /// Load an image from a filesystem path into a texture.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This can be significantly more efficient than using a CPU-bound <see cref="Surface"/> if you don't need to manipulate the image directly after loading it.
+    /// If the loaded image has transparency or a colorkey, a texture with an alpha channel will be created.
+    /// Otherwise, the engine will attempt to create a texture in the most format that most reasonably represents the image data (but in many cases, this will just end up being 32-bit RGB or 32-bit RGBA).
+    /// </para>
+    /// <para>
+    /// If you would rather decode an image to a <see cref="Surface"/>, call <see cref="Image.Load(string)"/> instead.
+    /// </para>
+    /// </remarks>
+    /// <param name="file">The path to the image file.</param>
+    /// <returns>A texture representing the loaded image.</returns>
+    public Texture LoadTexture(string file) => new(_renderer, file);
+
     /// <inheritdoc/>
     public Vector2 MapCoordinatesToPixels(Vector2 point) => _renderer.MapCoordinatesToPixels(point);
 

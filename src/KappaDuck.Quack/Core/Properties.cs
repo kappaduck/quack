@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Interop.SDL.Marshallers;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -33,13 +34,15 @@ internal sealed partial class Properties : IDisposable
         {
             bool boolean => (T)(object)SDL_GetBooleanProperty(propertiesId, name, boolean),
             float floating => (T)(object)SDL_GetFloatProperty(propertiesId, name, floating),
-            int integer => (T)(object)SDL_GetNumberProperty(propertiesId, name, integer),
             long number => (T)(object)SDL_GetNumberProperty(propertiesId, name, number),
             string str => (T)(object)SDL_GetStringProperty(propertiesId, name, str),
             nint pointer => (T)(object)SDL_GetPointerProperty(propertiesId, name, pointer),
             _ => throw new NotSupportedException($"The type {typeof(T)} is not supported.")
         };
     }
+
+    internal static T GetAsNumber<T>(uint propertiesId, string name, T defaultValue) where T : struct, INumber<T>
+        => T.CreateChecked(SDL_GetNumberProperty(propertiesId, name, long.CreateChecked(defaultValue)));
 
     internal static T GetAsEnum<T>(uint propertiesId, string name, T defaultValue) where T : Enum
     {

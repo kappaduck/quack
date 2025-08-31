@@ -130,6 +130,8 @@ internal sealed partial class Renderer : IDisposable
     internal unsafe TextureHandle CreateTextureFromSurface(Surface surface)
         => SDL_CreateTextureFromSurface(_handle, surface.Handle);
 
+    internal TextureHandle LoadTexture(string file) => IMG_LoadTexture(_handle, file);
+
     internal void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
         => SDL_RenderGeometry(_handle, nint.Zero, vertices, vertices.Length, indices, indices.Length);
 
