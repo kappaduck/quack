@@ -15,6 +15,9 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 
 internal sealed partial class Renderer
 {
+    [LibraryImport(SDLNative.ImageLibrary, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial TextureHandle IMG_LoadTexture(RendererHandle renderer, string file);
+
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_ConvertEventToRenderCoordinates(RendererHandle renderer, ref Event e);
 

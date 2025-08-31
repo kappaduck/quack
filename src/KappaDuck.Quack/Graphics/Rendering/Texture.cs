@@ -45,6 +45,20 @@ public sealed partial class Texture : IDisposable
         Width = surface.Width;
     }
 
+    internal Texture(Renderer renderer, string file)
+    {
+        _renderer = renderer;
+
+        _handle = _renderer.LoadTexture(file);
+        QuackNativeException.ThrowIf(_handle.IsInvalid);
+
+        uint properties = SDL_GetTextureProperties(_handle);
+        Format = Properties.GetAsEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
+
+        Height = Properties.GetAsNumber(properties, "SDL.texture.height", 0);
+        Width = Properties.GetAsNumber(properties, "SDL.texture.width", 0);
+    }
+
     /// <summary>
     /// Gets or sets the additional alpha value multiplied into render copy operations.
     /// </summary>
