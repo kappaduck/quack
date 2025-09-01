@@ -20,11 +20,11 @@ public record struct Transform
 
     private Transform(Matrix3x2 matrix) => _matrix = matrix;
 
-    internal Vector2 CachedTranslation { get; init; }
+    internal Vector2 Translation { get; init; }
 
-    internal float CachedRotationInDegrees { get; init; }
+    internal float RotationInDegrees { get; init; }
 
-    internal Vector2 CachedScale { get; init; }
+    internal Vector2 ScaledBy { get; init; }
 
     internal Vector2 Origin { get; init; }
 
@@ -56,9 +56,9 @@ public record struct Transform
 
         return new Transform(combined) with
         {
-            CachedTranslation = translation,
-            CachedRotationInDegrees = rotation,
-            CachedScale = new Vector2(scaleX, scaleY),
+            Translation = translation,
+            RotationInDegrees = rotation,
+            ScaledBy = new Vector2(scaleX, scaleY),
             Origin = Origin
         };
     }
@@ -80,7 +80,7 @@ public record struct Transform
         Matrix3x2 rotation = Matrix3x2.CreateRotation(angle.Radians, Origin.ToNumerics());
         return WithMatrix(_matrix * rotation) with
         {
-            CachedRotationInDegrees = CachedRotationInDegrees + angle.Degrees
+            RotationInDegrees = RotationInDegrees + angle.Degrees
         };
     }
 
@@ -94,7 +94,7 @@ public record struct Transform
         Matrix3x2 scaling = Matrix3x2.CreateScale(factors.ToNumerics(), Origin.ToNumerics());
         return WithMatrix(_matrix * scaling) with
         {
-            CachedScale = new Vector2(CachedScale.X * factors.X, CachedScale.Y * factors.Y)
+            ScaledBy = new Vector2(ScaledBy.X * factors.X, ScaledBy.Y * factors.Y)
         };
     }
 
@@ -115,7 +115,7 @@ public record struct Transform
         Matrix3x2 translationMatrix = Matrix3x2.CreateTranslation(offset.ToNumerics());
         return WithMatrix(_matrix * translationMatrix) with
         {
-            CachedTranslation = CachedTranslation + offset
+            Translation = Translation + offset
         };
     }
 
