@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using NumericVector2 = System.Numerics.Vector2;
 
 namespace KappaDuck.Quack.Geometry;
 
@@ -97,9 +98,9 @@ public struct Vector2(float x, float y) :
     }
 
     /// <summary>
-    /// Gets the shorthand for writing (0, -1).
+    /// Gets the shorthand for writing (0, 1).
     /// </summary>
-    public static Vector2 Down { get; } = new(0f, -1f);
+    public static Vector2 Down { get; } = new(0f, 1f);
 
     /// <summary>
     /// Gets the shorthand for writing (-1, 0).
@@ -122,9 +123,9 @@ public struct Vector2(float x, float y) :
     public static Vector2 Right { get; } = new(1f, 0f);
 
     /// <summary>
-    /// Gets the shorthand for writing (0, 1).
+    /// Gets the shorthand for writing (0, -1).
     /// </summary>
-    public static Vector2 Up { get; } = new(0f, 1f);
+    public static Vector2 Up { get; } = new(0f, -1f);
 
     /// <summary>
     /// Gets an origin vector.
@@ -437,6 +438,12 @@ public struct Vector2(float x, float y) :
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
+
+    /// <summary>
+    /// Converts the current vector to a <see cref="NumericVector2"/>.
+    /// </summary>
+    /// <returns>A new <see cref="NumericVector2"/> representing the current vector.</returns>
+    internal readonly NumericVector2 ToNumerics() => new(X, Y);
 
     /// <inheritdoc/>
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
