@@ -589,7 +589,7 @@ public sealed class RenderWindow : IRenderTarget, IDisposable
         if (!IsOpen)
             return;
 
-        Dispose();
+        _window.Dispose();
     }
 
     /// <summary>
