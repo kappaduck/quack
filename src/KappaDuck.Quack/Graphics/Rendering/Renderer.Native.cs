@@ -70,6 +70,9 @@ internal sealed partial class Renderer
     private static partial void SDL_RenderPresent(RendererHandle renderer);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static unsafe partial void SDL_RenderTextureRotated(RendererHandle renderer, TextureHandle texture, Rect* source, Rect* destination, double angle, Vector2* center, FlipMode flip);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_SetRenderDrawColor(RendererHandle renderer, byte r, byte g, byte b, byte a);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

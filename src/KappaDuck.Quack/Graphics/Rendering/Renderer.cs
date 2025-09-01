@@ -162,4 +162,7 @@ internal sealed partial class Renderer : IDisposable
     }
 
     internal void Render() => SDL_RenderPresent(_handle);
+
+    internal unsafe void RenderTexture(TextureHandle texture, Rect source, Rect destination, double angle, Vector2 center, FlipMode flip)
+        => SDL_RenderTextureRotated(_handle, texture, &source, &destination, angle, &center, flip);
 }

@@ -17,6 +17,7 @@ namespace KappaDuck.Quack.Geometry;
 public struct Vector2(float x, float y) :
     IAdditionOperators<Vector2, Vector2, Vector2>,
     ISubtractionOperators<Vector2, Vector2, Vector2>,
+    IMultiplyOperators<Vector2, Vector2, Vector2>,
     IMultiplyOperators<Vector2, float, Vector2>,
     IDivisionOperators<Vector2, float, Vector2>,
     IUnaryNegationOperators<Vector2, Vector2>,
@@ -147,6 +148,14 @@ public struct Vector2(float x, float y) :
     /// <param name="right">Right vector.</param>
     /// <returns>The difference of the vectors.</returns>
     public static Vector2 operator -(Vector2 left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
+
+    /// <summary>
+    /// Multiplies two vectors.
+    /// </summary>
+    /// <param name="left">Left vector.</param>
+    /// <param name="right">Right vector.</param>
+    /// <returns>The product of the vectors.</returns>
+    public static Vector2 operator *(Vector2 left, Vector2 right) => new(left.X * right.X, left.Y * right.Y);
 
     /// <summary>
     /// Multiplies a vector by a scalar.

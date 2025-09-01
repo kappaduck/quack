@@ -205,54 +205,11 @@ public sealed partial class Texture : IDisposable
     /// <summary>
     /// Copy a portion of the texture to the current rendering target at subpixel precision.
     /// </summary>
-    /// <param name="source">The portion of the texture to copy, or empty to copy the entire texture.</param>
-    /// <param name="destination">The portion of the rendering target to copy the texture to, or empty to copy to the entire target.</param>
+    /// <param name="source">The portion of the texture to copy.</param>
+    /// <param name="destination">The portion of the rendering target to copy the texture to.</param>
     /// <param name="angle">An angle in degrees that indicates the rotation that will be applied to <paramref name="destination"/>, rotating it in a clockwise direction.</param>
-    /// <param name="center">A point indicating the point around which <paramref name="destination"/> will be rotated. If <see langword="null"/>, rotation will be done around the center of the destination.</param>
+    /// <param name="center">A point indicating the point around which <paramref name="destination"/> will be rotated.</param>
     /// <param name="flip">The flip mode to apply to the texture.</param>
-    /// <exception cref="NotImplementedException">Waiting for Sprite.</exception>
-    internal void Render(Rect? source = null, Rect? destination = null, double angle = 0.0, Vector2? center = null, FlipMode flip = FlipMode.None) => throw new NotImplementedException();
-
-    /// <summary>
-    /// Copy a portion of the source texture to the current rendering target, with affine transform, at subpixel precision.
-    /// </summary>
-    /// <param name="source">The portion of the texture to copy, or empty to copy the entire texture.</param>
-    /// <param name="origin">A point indicating where the top-left corner of <paramref name="source"/> should be mapped to, or <see langword="null"/> for the rendering target's origin.</param>
-    /// <param name="right">A point indicating where the top-right corner of <paramref name="source"/> should be mapped to, or <see langword="null"/> for the rendering target's top-right corner.</param>
-    /// <param name="down">A point indicating where the bottom-left corner of <paramref name="source"/> should be mapped to, or <see langword="null"/> for the rendering target's bottom-left corner.</param>
-    /// <exception cref="NotImplementedException"></exception>
-    internal void RenderAffine(Rect? source = null, Vector2? origin = null, Vector2? right = null, Vector2? down = null) => throw new NotImplementedException();
-
-    /// <summary>
-    /// Perform a scaled copy using the 9-grid algorithm to the current rendering target at subpixel precision.
-    /// </summary>
-    /// <remarks>
-    /// The pixels in the texture are split into a 3x3 grid, using the different corner sizes for each corner, and the sides and center making up the remaining pixels.
-    /// The corners are then scaled using scale and fit into the corners of the destination rectangle.
-    /// The sides and center are then stretched into place to cover the remaining destination rectangle.
-    /// </remarks>
-    /// <param name="source">The portion of the texture to copy, or <see langword="null"/> to copy the entire texture.</param>
-    /// <param name="left">The width of the left corners.</param>
-    /// <param name="right">The width of the right corners.</param>
-    /// <param name="top">The height of the top corners.</param>
-    /// <param name="bottom">The height of the bottom corners.</param>
-    /// <param name="scale">The scale used to transform the corner of <paramref name="source"/> into the corner of <paramref name="destination"/>, or 0.0f for an unscaled copy.</param>
-    /// <param name="destination">The portion of the rendering target to copy the texture to, or <see langword="null"/> to copy to the entire target.</param>
-    /// <param name="tileScale">the scale used to transform the borders and center of srcrect into the borders and middle of dstrect, or 1.0f for an unscaled copy.</param>
-    /// <exception cref="NotImplementedException">Waiting for Sprite.</exception>
-    internal void Render9Grid(Rect? source, float left, float right, float top, float bottom, float scale, Rect? destination, float tileScale = 1.0f)
-        => throw new NotImplementedException();
-
-    /// <summary>
-    /// Tile a portion of the texture to the current rendering target at subpixel precision.
-    /// </summary>
-    /// <remarks>
-    /// The portion of the texture defined by <paramref name="source"/> is repeatedly drawn to fill the area defined by <paramref name="destination"/>.
-    /// </remarks>
-    /// <param name="source">The portion of the texture to copy, or <see langword="null"/> to copy the entire texture.</param>
-    /// <param name="destination">The portion of the rendering target to copy the texture to, or <see langword="null"/> to copy to the entire target.</param>
-    /// <param name="scale">The scale used to transform the texture, or 1.0f for an unscaled copy.</param>
-    /// <exception cref="NotImplementedException">Waiting for Sprite.</exception>
-    internal void RenderTiled(Rect? source, Rect? destination, float scale)
-        => throw new NotImplementedException();
+    internal unsafe void Draw(Rect source, Rect destination, double angle, Vector2 center, FlipMode flip)
+        => _renderer.RenderTexture(_handle, source, destination, angle, center, flip);
 }
