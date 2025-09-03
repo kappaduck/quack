@@ -74,10 +74,11 @@ public static partial class PixelFormatExtensions
         /// </summary>
         /// <param name="pixel">The pixel value.</param>
         /// <param name="details">The description of the pixel format.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The color represented by the pixel value.</returns>
-        public static Color GetColor(uint pixel, PixelFormatDetails details)
+        public static Color GetColor(uint pixel, PixelFormatDetails details, Palette? palette = null)
         {
-            (byte r, byte g, byte b, byte a) = GetRGBA(pixel, details);
+            (byte r, byte g, byte b, byte a) = GetRGBA(pixel, details, palette);
             return Color.FromArgb(a, r, g, b);
         }
 
@@ -90,8 +91,9 @@ public static partial class PixelFormatExtensions
         /// </remarks>
         /// <param name="pixel">The pixel value.</param>
         /// <param name="details">The description of the pixel format.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The RGB components of the pixel.</returns>
-        public static (byte Red, byte Green, byte Blue) GetRGB(uint pixel, PixelFormatDetails details)
+        public static (byte Red, byte Green, byte Blue) GetRGB(uint pixel, PixelFormatDetails details, Palette? palette = null)
         {
             unsafe
             {
@@ -99,7 +101,7 @@ public static partial class PixelFormatExtensions
                 byte g;
                 byte b;
 
-                SDL_GetRGB(pixel, &details, nint.Zero, &r, &g, &b);
+                SDL_GetRGB(pixel, &details, GetPaletteHandle(palette), &r, &g, &b);
                 return (r, g, b);
             }
         }
@@ -114,8 +116,9 @@ public static partial class PixelFormatExtensions
         /// </remarks>
         /// <param name="pixel">The pixel value.</param>
         /// <param name="details">The description of the pixel format.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The RGBA components of the pixel.</returns>
-        public static (byte Red, byte Green, byte Blue, byte Alpha) GetRGBA(uint pixel, PixelFormatDetails details)
+        public static (byte Red, byte Green, byte Blue, byte Alpha) GetRGBA(uint pixel, PixelFormatDetails details, Palette? palette = null)
         {
             unsafe
             {
@@ -124,7 +127,7 @@ public static partial class PixelFormatExtensions
                 byte b;
                 byte a;
 
-                SDL_GetRGBA(pixel, &details, nint.Zero, &r, &g, &b, &a);
+                SDL_GetRGBA(pixel, &details, GetPaletteHandle(palette), &r, &g, &b, &a);
                 return (r, g, b, a);
             }
         }
@@ -136,12 +139,13 @@ public static partial class PixelFormatExtensions
         /// <param name="r">The red component.</param>
         /// <param name="g">The green component.</param>
         /// <param name="b">The blue component.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
-        public static uint MapRGB(PixelFormatDetails details, byte r, byte g, byte b)
+        public static uint MapRGB(PixelFormatDetails details, byte r, byte g, byte b, Palette? palette = null)
         {
             unsafe
             {
-                return SDL_MapRGB(&details, nint.Zero, r, g, b);
+                return SDL_MapRGB(&details, GetPaletteHandle(palette), r, g, b);
             }
         }
 
@@ -153,12 +157,13 @@ public static partial class PixelFormatExtensions
         /// <param name="g">The green component.</param>
         /// <param name="b">The blue component.</param>
         /// <param name="a">The alpha component.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
-        public static uint MapRGBA(PixelFormatDetails details, byte r, byte g, byte b, byte a)
+        public static uint MapRGBA(PixelFormatDetails details, byte r, byte g, byte b, byte a, Palette? palette = null)
         {
             unsafe
             {
-                return SDL_MapRGBA(&details, nint.Zero, r, g, b, a);
+                return SDL_MapRGBA(&details, GetPaletteHandle(palette), r, g, b, a);
             }
         }
 
@@ -167,9 +172,13 @@ public static partial class PixelFormatExtensions
         /// </summary>
         /// <param name="details">The description of the pixel format.</param>
         /// <param name="color">The color components.</param>
+        /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
-        public static uint MapColor(PixelFormatDetails details, Color color) => MapRGBA(details, color.R, color.G, color.B, color.A);
+        public static uint MapColor(PixelFormatDetails details, Color color, Palette? palette = null) => MapRGBA(details, color.R, color.G, color.B, color.A, palette);
     }
+
+    private static unsafe Palette.PaletteHandle* GetPaletteHandle(Palette? palette)
+        => palette is not null ? palette.Handle : null;
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -186,14 +195,14 @@ public static partial class PixelFormatExtensions
     private static partial PixelFormat SDL_GetPixelFormatForMasks(int bitsPerPixel, uint redMask, uint greenMask, uint blueMask, uint alphaMask);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, nint palette, byte* r, byte* g, byte* b);
+    private static unsafe partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, Palette.PaletteHandle* palette, byte* r, byte* g, byte* b);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, nint palette, byte* r, byte* g, byte* b, byte* a);
+    private static unsafe partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, Palette.PaletteHandle* palette, byte* r, byte* g, byte* b, byte* a);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGB(PixelFormatDetails* details, nint palette, byte r, byte g, byte b);
+    private static unsafe partial uint SDL_MapRGB(PixelFormatDetails* details, Palette.PaletteHandle* palette, byte r, byte g, byte b);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGBA(PixelFormatDetails* details, nint palette, byte r, byte g, byte b, byte a);
+    private static unsafe partial uint SDL_MapRGBA(PixelFormatDetails* details, Palette.PaletteHandle* palette, byte r, byte g, byte b, byte a);
 }

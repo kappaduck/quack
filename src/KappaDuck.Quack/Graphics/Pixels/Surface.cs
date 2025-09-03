@@ -100,6 +100,27 @@ public sealed unsafe partial class Surface : IDisposable
     }
 
     /// <summary>
+    /// Gets or sets the palette associated with the surface.
+    /// </summary>
+    public Palette? Palette
+    {
+        get
+        {
+            ThrowIfDisposed();
+
+            Palette.PaletteHandle* palette = SDL_GetSurfacePalette(Handle);
+            return palette is not null ? new Palette(palette) : null;
+        }
+        set
+        {
+            ThrowIfDisposed();
+
+            Palette.PaletteHandle* palette = value is not null ? value.Handle : null;
+            QuackNativeException.ThrowIfFailed(SDL_SetSurfacePalette(Handle, palette));
+        }
+    }
+
+    /// <summary>
     /// Gets the pitch (row stride) of the surface.
     /// </summary>
     public int Pitch
@@ -158,6 +179,41 @@ public sealed unsafe partial class Surface : IDisposable
 
         SurfaceHandle* newHandle = SDL_ConvertSurface(Handle, format);
         return new Surface(newHandle);
+    }
+
+    /// <summary>
+    /// Creates a palette and associates it with the surface.
+    /// </summary>
+    /// <remarks>
+    /// <para>The surface must be in an indexed pixel format (1, 4, or 8 bits per pixel) to have a palette.</para>
+    /// <para>
+    /// You do not need to dispose of the palette separately; it will be automatically disposed when the surface is disposed.
+    /// </para>
+    /// <para>
+    /// Bitmap surfaces (with format <see cref="PixelFormat.Index1LSB"/> or <see cref="PixelFormat.Index1MSB"/>)
+    /// will have the palette initialized with 0 as white and 1 as black.
+    /// Other surfaces will get a palette initialized with white in every entry.
+    /// </para>
+    /// <para>
+    /// If this function is called for a surface that already has a palette, a new palette will be created to replace it.
+    /// </para>
+    /// </remarks>
+    /// <returns>A new palette associated with the surface.</returns>
+    public Palette CreatePalette()
+    {
+        ThrowIfDisposed();
+        QuackException.ThrowIf(!IsIndexedFormat(Format), $"The format {Format} is not an indexed format.");
+
+        return new Palette(Handle);
+
+        static bool IsIndexedFormat(PixelFormat format)
+        {
+            return format is PixelFormat.Index1LSB
+                   or PixelFormat.Index1MSB
+                   or PixelFormat.Index4LSB
+                   or PixelFormat.Index4MSB
+                   or PixelFormat.Index8;
+        }
     }
 
     /// <summary>

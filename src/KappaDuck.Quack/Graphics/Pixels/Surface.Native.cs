@@ -39,7 +39,14 @@ public sealed unsafe partial class Surface
     private static partial bool SDL_FlipSurface(SurfaceHandle* surface, FlipMode mode);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial Palette.PaletteHandle* SDL_GetSurfacePalette(SurfaceHandle* surface);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial SurfaceHandle* SDL_ScaleSurface(SurfaceHandle* surface, int width, int height, ScaleMode mode);
+
+    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SetSurfacePalette(SurfaceHandle* surface, Palette.PaletteHandle* palette);
 
     [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
