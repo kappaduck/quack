@@ -1,8 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Interop.Marshalling;
 using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Marshallers;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -42,10 +42,10 @@ public sealed partial class QuackNativeException : QuackException
         throw new QuackNativeException(message);
     }
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_ClearError();
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
     private static partial string SDL_GetError();
 }

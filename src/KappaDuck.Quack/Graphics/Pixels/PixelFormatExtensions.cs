@@ -3,18 +3,16 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Marshallers;
+using KappaDuck.Quack.Interop.SDL.Native;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
 
 /// <summary>
 /// Provides extension methods for <see cref="PixelFormat"/> and <see cref="PixelFormatDetails"/>.
 /// </summary>
-public static partial class PixelFormatExtensions
+public static class PixelFormatExtensions
 {
     extension(PixelFormat format)
     {
@@ -28,7 +26,7 @@ public static partial class PixelFormatExtensions
             {
                 unsafe
                 {
-                    PixelFormatDetails* details = SDL_GetPixelFormatDetails(format);
+                    PixelFormatDetails* details = SDL.Surface.SDL_GetPixelFormatDetails(format);
                     QuackNativeException.ThrowIfNull(details);
 
                     return *details;
@@ -40,9 +38,9 @@ public static partial class PixelFormatExtensions
         /// Gets the name of the pixel format.
         /// </summary>
         /// <remarks>
-        /// It will return "SDL_PIXELFORMAT_UNKNOWN" if the format isn't recognized.
+        /// It will return <see cref="PixelFormat.Unknown"/> if the format isn't recognized.
         /// </remarks>
-        public string Name => SDL_GetPixelFormatName(format);
+        public string Name => SDL.Surface.SDL_GetPixelFormatName(format);
 
         /// <summary>
         /// Gets the bits per pixel and masks for the pixel format.
@@ -52,7 +50,7 @@ public static partial class PixelFormatExtensions
         {
             get
             {
-                QuackNativeException.ThrowIfFailed(SDL_GetMasksForPixelFormat(format, out int bitsPerPixel, out uint redMask, out uint greenMask, out uint blueMask, out uint alphaMask));
+                QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_GetMasksForPixelFormat(format, out int bitsPerPixel, out uint redMask, out uint greenMask, out uint blueMask, out uint alphaMask));
                 return (bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
             }
         }
@@ -67,7 +65,7 @@ public static partial class PixelFormatExtensions
         /// <param name="alphaMask">Alpha mask.</param>
         /// <returns>The corresponding pixel format or <see cref="PixelFormat.Unknown"/>.</returns>
         public static PixelFormat FromMasks(int bitsPerPixel, uint redMask, uint greenMask, uint blueMask, uint alphaMask)
-            => SDL_GetPixelFormatForMasks(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
+            => SDL.Surface.SDL_GetPixelFormatForMasks(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
 
         /// <summary>
         /// Gets the color from a pixel value.
@@ -101,7 +99,7 @@ public static partial class PixelFormatExtensions
                 byte g;
                 byte b;
 
-                SDL_GetRGB(pixel, &details, GetPaletteHandle(palette), &r, &g, &b);
+                SDL.Surface.SDL_GetRGB(pixel, &details, GetPaletteHandle(palette), &r, &g, &b);
                 return (r, g, b);
             }
         }
@@ -127,7 +125,7 @@ public static partial class PixelFormatExtensions
                 byte b;
                 byte a;
 
-                SDL_GetRGBA(pixel, &details, GetPaletteHandle(palette), &r, &g, &b, &a);
+                SDL.Surface.SDL_GetRGBA(pixel, &details, GetPaletteHandle(palette), &r, &g, &b, &a);
                 return (r, g, b, a);
             }
         }
@@ -145,7 +143,7 @@ public static partial class PixelFormatExtensions
         {
             unsafe
             {
-                return SDL_MapRGB(&details, GetPaletteHandle(palette), r, g, b);
+                return SDL.Surface.SDL_MapRGB(&details, GetPaletteHandle(palette), r, g, b);
             }
         }
 
@@ -163,7 +161,7 @@ public static partial class PixelFormatExtensions
         {
             unsafe
             {
-                return SDL_MapRGBA(&details, GetPaletteHandle(palette), r, g, b, a);
+                return SDL.Surface.SDL_MapRGBA(&details, GetPaletteHandle(palette), r, g, b, a);
             }
         }
 
@@ -177,32 +175,6 @@ public static partial class PixelFormatExtensions
         public static uint MapColor(PixelFormatDetails details, Color color, Palette? palette = null) => MapRGBA(details, color.R, color.G, color.B, color.A, palette);
     }
 
-    private static unsafe Palette.PaletteHandle* GetPaletteHandle(Palette? palette)
-        => palette is not null ? palette.Handle : null;
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_GetMasksForPixelFormat(PixelFormat format, out int bitsPerPixel, out uint redMask, out uint greenMask, out uint blueMask, out uint alphaMask);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial PixelFormatDetails* SDL_GetPixelFormatDetails(PixelFormat format);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    private static partial string SDL_GetPixelFormatName(PixelFormat format);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial PixelFormat SDL_GetPixelFormatForMasks(int bitsPerPixel, uint redMask, uint greenMask, uint blueMask, uint alphaMask);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, Palette.PaletteHandle* palette, byte* r, byte* g, byte* b);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, Palette.PaletteHandle* palette, byte* r, byte* g, byte* b, byte* a);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGB(PixelFormatDetails* details, Palette.PaletteHandle* palette, byte r, byte g, byte b);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial uint SDL_MapRGBA(PixelFormatDetails* details, Palette.PaletteHandle* palette, byte r, byte g, byte b, byte a);
+    [SuppressMessage("Minor Code Smell", "S3398:\"private\" methods called only by inner classes should be moved to those classes", Justification = "Sonar seems to be confused by the 'extension' syntax.")]
+    private static unsafe SDL_Palette* GetPaletteHandle(Palette? palette) => palette is not null ? palette.Handle : null;
 }

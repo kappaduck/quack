@@ -2,7 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
+using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -65,7 +65,7 @@ public struct Vertex
     /// </summary>
     public Vector2 Position;
 
-    private NativeFloatingColor _color;
+    private SDL_FColor _color;
     private Vector2 _texCoord;
 
     /// <summary>
@@ -74,6 +74,6 @@ public struct Vertex
     public Color Color
     {
         readonly get => _color.Color;
-        set => _color = new NativeFloatingColor(value.R, value.G, value.B, value.A);
+        set => _color = new SDL_FColor(value.R, value.G, value.B, value.A);
     }
 }

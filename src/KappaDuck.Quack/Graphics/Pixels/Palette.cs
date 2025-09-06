@@ -2,7 +2,8 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Graphics.Drawing;
+using KappaDuck.Quack.Interop.SDL;
+using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
@@ -10,7 +11,7 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// Represents a color palette for indexed color graphics.
 /// </summary>
-public sealed unsafe partial class Palette : IDisposable
+public sealed unsafe class Palette : IDisposable
 {
     /// <summary>
     /// Create a palette with the specified number of colors.
@@ -21,17 +22,17 @@ public sealed unsafe partial class Palette : IDisposable
     /// <param name="length">The number of colors in the palette.</param>
     public Palette(int length)
     {
-        Handle = SDL_CreatePalette(length);
+        Handle = SDL.Surface.SDL_CreatePalette(length);
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Palette(Surface.SurfaceHandle* surface)
+    internal Palette(SDL_Surface* surface)
     {
-        Handle = SDL_CreateSurfacePalette(surface);
+        Handle = SDL.Surface.SDL_CreateSurfacePalette(surface);
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Palette(PaletteHandle* handle)
+    internal Palette(SDL_Palette* handle)
     {
         QuackNativeException.ThrowIfNull(handle);
         Handle = handle;
@@ -40,7 +41,7 @@ public sealed unsafe partial class Palette : IDisposable
     /// <summary>
     /// Gets the native surface handle.
     /// </summary>
-    internal PaletteHandle* Handle { get; private set; }
+    internal SDL_Palette* Handle { get; private set; }
 
     /// <summary>
     /// Releases the unmanaged resources used by the palette.
@@ -49,7 +50,7 @@ public sealed unsafe partial class Palette : IDisposable
     {
         if (Handle is not null)
         {
-            SDL_DestroyPalette(Handle);
+            SDL.Surface.SDL_DestroyPalette(Handle);
             Handle = null;
         }
     }
@@ -62,11 +63,11 @@ public sealed unsafe partial class Palette : IDisposable
     /// <exception cref="QuackNativeException">An error occurred while setting the palette colors.</exception>
     public void SetColors(int startIndex, ReadOnlySpan<Color> colors)
     {
-        Span<NativeColor> nativeColors = stackalloc NativeColor[colors.Length];
+        Span<SDL_Color> nativeColors = stackalloc SDL_Color[colors.Length];
 
         for (int i = 0; i < colors.Length; i++)
-            nativeColors[i] = new NativeColor(colors[i].R, colors[i].G, colors[i].B, colors[i].A);
+            nativeColors[i] = new SDL_Color(colors[i].R, colors[i].G, colors[i].B, colors[i].A);
 
-        QuackNativeException.ThrowIfFailed(SDL_SetPaletteColors(Handle, nativeColors, startIndex, colors.Length));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_SetPaletteColors(Handle, nativeColors, startIndex, colors.Length));
     }
 }

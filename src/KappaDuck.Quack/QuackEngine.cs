@@ -217,37 +217,37 @@ public sealed partial class QuackEngine : IDisposable
         return $"{major}.{minor}.{patch}";
     }
 
-    [LibraryImport(SDLNative.ImageLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Image), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int IMG_Version();
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial ulong SDL_GetTicks();
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int SDL_GetVersion();
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_InitSubSystem(Subsystem subsystems);
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_QuitSubSystem(Subsystem subsystems);
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial void SDL_Quit();
 
-    [LibraryImport(SDLNative.Library, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.Core, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_SetAppMetadataProperty(string name, string value);
 
-    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.TTF), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool TTF_Init();
 
-    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.TTF), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool TTF_Quit();
 
-    [LibraryImport(SDLNative.TTFLibrary), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [LibraryImport(SDL.TTF), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int TTF_Version();
 }

@@ -4,7 +4,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
-namespace KappaDuck.Quack.Interop.SDL.Marshallers;
+namespace KappaDuck.Quack.Interop.Marshalling;
 
 /// <summary>
 /// Custom marshaller for string that is owned by the caller and it is freed automatically by the marshaller.
@@ -16,5 +16,5 @@ internal static class CallerOwnedStringMarshaller
         => Marshal.PtrToStringUTF8(unmanaged) ?? string.Empty;
 
     internal static void Free(nint unmanaged)
-        => SDLNative.Free(unmanaged);
+        => SDL.SDL.Memory.Free(unmanaged);
 }

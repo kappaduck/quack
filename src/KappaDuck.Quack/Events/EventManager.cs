@@ -2,25 +2,26 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
+using KappaDuck.Quack.Interop.SDL;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
 /// Global event functions.
 /// </summary>
-public static partial class EventManager
+public static class EventManager
 {
     /// <summary>
     /// Disable a specific event type.
     /// </summary>
     /// <param name="type">The event type to disable.</param>
-    public static void Disable(EventType type) => SDL_SetEventEnabled(type, enabled: false);
+    public static void Disable(EventType type) => SDL.Events.SDL_SetEventEnabled(type, enabled: false);
 
     /// <summary>
     /// Enable a specific event type.
     /// </summary>
     /// <param name="type">The event type to enable.</param>
-    public static void Enable(EventType type) => SDL_SetEventEnabled(type, enabled: true);
+    public static void Enable(EventType type) => SDL.Events.SDL_SetEventEnabled(type, enabled: true);
 
     /// <summary>
     /// Clear a range of events from the event queue.
@@ -40,7 +41,7 @@ public static partial class EventManager
     {
         ThrowIfTypeGreaterThanMaxType(type, maxType);
 
-        SDL_FlushEvents(type, maxType ?? type);
+        SDL.Events.SDL_FlushEvents(type, maxType ?? type);
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ public static partial class EventManager
     /// </summary>
     /// <param name="type">The event type to check if exists.</param>
     /// <returns><see langword="true"/> if the event type exists in the queue; otherwise, <see langword="false"/>.</returns>
-    public static bool Has(EventType type) => SDL_HasEvent(type);
+    public static bool Has(EventType type) => SDL.Events.SDL_HasEvent(type);
 
     /// <summary>
     /// Check for the existence of a range of event types in the event queue.
@@ -61,7 +62,7 @@ public static partial class EventManager
     {
         ThrowIfTypeGreaterThanMaxType(type, maxType);
 
-        return SDL_HasEvents(type, maxType ?? type);
+        return SDL.Events.SDL_HasEvents(type, maxType ?? type);
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ public static partial class EventManager
     /// </summary>
     /// <param name="type">The event type to check.</param>
     /// <returns><see langword="true"/> if the event is being processed, <see langword="false"/> if not.</returns>
-    public static bool IsEnabled(EventType type) => SDL_EventEnabled(type);
+    public static bool IsEnabled(EventType type) => SDL.Events.SDL_EventEnabled(type);
 
     /// <summary>
     /// Retrieve events from the event queue without removing them.
@@ -87,7 +88,7 @@ public static partial class EventManager
     {
         ThrowIfTypeGreaterThanMaxType(minType, maxType);
 
-        int peekedEvents = SDL_PeepEvents(events, events.Length, EventAction.Peek, minType, maxType ?? minType);
+        int peekedEvents = SDL.Events.SDL_PeepEvents(events, events.Length, SDL.Events.EventAction.Peek, minType, maxType ?? minType);
         QuackNativeException.ThrowIfNegative(peekedEvents);
 
         return peekedEvents;
@@ -98,7 +99,7 @@ public static partial class EventManager
     /// </summary>
     /// <param name="e">The next filled event from the event queue.</param>
     /// <returns><see langword="true"/> if an event was polled; otherwise, <see langword="false"/>.</returns>
-    public static bool Poll(out Event e) => SDL_PollEvent(out e);
+    public static bool Poll(out Event e) => SDL.Events.SDL_PollEvent(out e);
 
     /// <summary>
     /// Pump the event loop, gathering events from the input devices.
@@ -111,7 +112,7 @@ public static partial class EventManager
     /// implicitly call <see cref="Pump"/>. However, if you are not polling or waiting for events(e.g.you are filtering them),
     /// then you must call <see cref="Pump"/> to force an event queue update.
     /// </remarks>
-    public static void Pump() => SDL_PumpEvents();
+    public static void Pump() => SDL.Events.SDL_PumpEvents();
 
     /// <summary>
     /// Add an event to the event queue.
@@ -121,7 +122,7 @@ public static partial class EventManager
     /// <see langword="true"/> on success, <see langword="false"/> if the event was filtered or on failure.
     /// A common reason for error is the event queue being full.
     /// </returns>
-    public static bool Push(ref Event e) => SDL_PushEvent(ref e);
+    public static bool Push(ref Event e) => SDL.Events.SDL_PushEvent(ref e);
 
     /// <summary>
     /// Add events to the back of the event queue.
@@ -131,7 +132,7 @@ public static partial class EventManager
     /// <exception cref="QuackNativeException">Failed while added events.</exception>"
     public static int Push(Span<Event> events)
     {
-        int added = SDL_PeepEvents(events, events.Length, EventAction.Add, EventType.None, EventType.LastEvent);
+        int added = SDL.Events.SDL_PeepEvents(events, events.Length, SDL.Events.EventAction.Add, EventType.None, EventType.LastEvent);
         QuackNativeException.ThrowIfNegative(added);
 
         return added;
@@ -153,7 +154,7 @@ public static partial class EventManager
     {
         ThrowIfTypeGreaterThanMaxType(minType, maxType);
 
-        int retrievedEvents = SDL_PeepEvents(events, events.Length, EventAction.Get, minType, maxType ?? minType);
+        int retrievedEvents = SDL.Events.SDL_PeepEvents(events, events.Length, SDL.Events.EventAction.Get, minType, maxType ?? minType);
         QuackNativeException.ThrowIfNegative(retrievedEvents);
 
         return retrievedEvents;
@@ -171,9 +172,9 @@ public static partial class EventManager
     public static bool Wait(out Event e, TimeSpan? timeSpan = null)
     {
         if (timeSpan is null || timeSpan == Timeout.InfiniteTimeSpan)
-            return SDL_WaitEvent(out e);
+            return SDL.Events.SDL_WaitEvent(out e);
 
-        return SDL_WaitEventTimeout(out e, (int)timeSpan.Value.TotalMilliseconds);
+        return SDL.Events.SDL_WaitEventTimeout(out e, (int)timeSpan.Value.TotalMilliseconds);
     }
 
     private static void ThrowIfTypeGreaterThanMaxType(EventType type, EventType? maxType)

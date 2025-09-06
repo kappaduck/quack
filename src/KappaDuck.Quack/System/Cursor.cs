@@ -5,17 +5,15 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Interop.SDL.Handles;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.System;
 
 /// <summary>
 /// Represents a cursor.
 /// </summary>
-public sealed partial class Cursor : IDisposable
+public sealed class Cursor : IDisposable
 {
-    private readonly CursorHandle _handle;
+    private readonly SDL_CursorHandle _handle;
     private static Cursor? _cursor;
 
     /// <summary>
@@ -28,7 +26,7 @@ public sealed partial class Cursor : IDisposable
     /// <param name="hotSpotX">the x-axis offset from the left of the cursor image to the mouse x position, in the range of 0 to <paramref name="width"/> - 1.</param>
     /// <param name="hotSpotY">The y-axis offset from the top of the cursor image to the mouse y position, in the range of 0 to <paramref name="height"/> - 1.</param>
     public Cursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, int hotSpotX, int hotSpotY)
-        => _handle = SDL_CreateCursor(pixels, mask, width, height, hotSpotX, hotSpotY);
+        => _handle = SDL.System.SDL_CreateCursor(pixels, mask, width, height, hotSpotX, hotSpotY);
 
     /// <summary>
     /// Creates a custom cursor.
@@ -39,13 +37,13 @@ public sealed partial class Cursor : IDisposable
     /// <param name="height">The height of the cursor.</param>
     /// <param name="hotSpot">The hot spot of the cursor.</param>
     public Cursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, Vector2Int hotSpot)
-        => _handle = SDL_CreateCursor(pixels, mask, width, height, hotSpot.X, hotSpot.Y);
+        => _handle = SDL.System.SDL_CreateCursor(pixels, mask, width, height, hotSpot.X, hotSpot.Y);
 
     /// <summary>
     /// Initializes a system cursor.
     /// </summary>
     /// <param name="type">The type of the cursor.</param>
-    public Cursor(Type type) => _handle = SDL_CreateSystemCursor(type);
+    public Cursor(Type type) => _handle = SDL.System.SDL_CreateSystemCursor(type);
 
     /// <summary>
     /// Creates a custom cursor.
@@ -54,7 +52,7 @@ public sealed partial class Cursor : IDisposable
     /// <param name="hotSpotX">The x-coordinate of the cursor's hot spot.</param>
     /// <param name="hotSpotY">The y-coordinate of the cursor's hot spot.</param>
     public unsafe Cursor(Surface surface, int hotSpotX, int hotSpotY)
-        => _handle = SDL_CreateColorCursor(surface.Handle, hotSpotX, hotSpotY);
+        => _handle = SDL.System.SDL_CreateColorCursor(surface.Handle, hotSpotX, hotSpotY);
 
     /// <summary>
     /// Creates a custom cursor.
@@ -65,12 +63,12 @@ public sealed partial class Cursor : IDisposable
     {
     }
 
-    private Cursor(CursorHandle handle) => _handle = handle;
+    private Cursor(SDL_CursorHandle handle) => _handle = handle;
 
     /// <summary>
     /// Gets the current cursor.
     /// </summary>
-    public static Cursor Current => _cursor ?? new Cursor(SDL_GetDefaultCursor());
+    public static Cursor Current => _cursor ?? new Cursor(SDL.System.SDL_GetDefaultCursor());
 
     /// <summary>
     /// Gets a value indicating whether the cursor is visible.
@@ -86,11 +84,11 @@ public sealed partial class Cursor : IDisposable
             field = value;
             if (field)
             {
-                SDL_ShowCursor();
+                SDL.System.SDL_ShowCursor();
                 return;
             }
 
-            SDL_HideCursor();
+            SDL.System.SDL_HideCursor();
         }
     }
 
@@ -106,7 +104,7 @@ public sealed partial class Cursor : IDisposable
     public static void Set(Cursor cursor)
     {
         _cursor = cursor;
-        SDL_SetCursor(_cursor._handle);
+        SDL.System.SDL_SetCursor(_cursor._handle);
     }
 
     /// <summary>
@@ -213,28 +211,4 @@ public sealed partial class Cursor : IDisposable
         /// </summary>
         ResizeWest = 19
     }
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial CursorHandle SDL_CreateCursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, int hotSpotX, int hotSpotY);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe partial CursorHandle SDL_CreateColorCursor(Surface.SurfaceHandle* surface, int x, int y);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial CursorHandle SDL_CreateSystemCursor(Type type);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial CursorHandle SDL_GetDefaultCursor();
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_HideCursor();
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_SetCursor(CursorHandle cursor);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_ShowCursor();
 }

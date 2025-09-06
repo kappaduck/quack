@@ -2,34 +2,30 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Marshallers;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace KappaDuck.Quack.Video;
 
 /// <summary>
 /// Provides methods for video drivers.
 /// </summary>
-public static partial class VideoDriver
+public static class VideoDriver
 {
     /// <summary>
     /// Gets the number of video drivers compiled into SDL.
     /// </summary>
-    public static int Count { get; } = SDL_GetNumVideoDrivers();
+    public static int Count { get; } = SDL.Video.SDL_GetNumVideoDrivers();
 
     /// <summary>
     /// Gets the name of the currently initialized video driver.
     /// </summary>
-    public static string Current { get; } = SDL_GetCurrentVideoDriver();
+    public static string Current { get; } = SDL.Video.SDL_GetCurrentVideoDriver();
 
     /// <summary>
     /// Gets the name of a built in video driver.
     /// </summary>
     /// <param name="index">The index of a video driver.</param>
     /// <returns>Name of the video driver with the given index.</returns>
-    public static string Get(int index) => SDL_GetVideoDriver(index);
+    public static string Get(int index) => SDL.Video.SDL_GetVideoDriver(index);
 
     /// <summary>
     /// Get all available video drivers.
@@ -44,15 +40,4 @@ public static partial class VideoDriver
 
         return drivers;
     }
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    private static partial string SDL_GetCurrentVideoDriver();
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial int SDL_GetNumVideoDrivers();
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    private static partial string SDL_GetVideoDriver(int index);
 }

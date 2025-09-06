@@ -11,7 +11,7 @@ namespace KappaDuck.Quack.Video.Displays;
 /// <summary>
 /// Represents a display such as monitor.
 /// </summary>
-public sealed partial class Display
+public sealed class Display
 {
     private const string HdrEnabledProperty = "SDL.display.HDR_enabled";
 
@@ -25,7 +25,7 @@ public sealed partial class Display
     /// <summary>
     /// Gets the name of the display.
     /// </summary>
-    public string Name => SDL_GetDisplayName(Id);
+    public string Name => SDL.Video.SDL_GetDisplayName(Id);
 
     /// <summary>
     /// Gets the bounds of the display.
@@ -35,7 +35,7 @@ public sealed partial class Display
     {
         get
         {
-            QuackNativeException.ThrowIfFailed(SDL_GetDisplayBounds(Id, out RectInt bounds));
+            QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetDisplayBounds(Id, out RectInt bounds));
             return bounds;
         }
     }
@@ -51,7 +51,7 @@ public sealed partial class Display
     {
         get
         {
-            QuackNativeException.ThrowIfFailed(SDL_GetDisplayUsableBounds(Id, out RectInt bounds));
+            QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetDisplayUsableBounds(Id, out RectInt bounds));
             return bounds;
         }
     }
@@ -71,7 +71,7 @@ public sealed partial class Display
     /// from the base value of the display it is on, particularly on high-DPI and/or multi-monitor desktop configurations.
     /// </para>
     /// </remarks>
-    public float ContentScale => SDL_GetDisplayContentScale(Id);
+    public float ContentScale => SDL.Video.SDL_GetDisplayContentScale(Id);
 
     /// <summary>
     /// Gets information about the current display mode.
@@ -88,7 +88,7 @@ public sealed partial class Display
         {
             unsafe
             {
-                DisplayMode* mode = SDL_GetCurrentDisplayMode(Id);
+                DisplayMode* mode = SDL.Video.SDL_GetCurrentDisplayMode(Id);
 
                 QuackNativeException.ThrowIfNull(mode);
 
@@ -112,7 +112,7 @@ public sealed partial class Display
         {
             unsafe
             {
-                DisplayMode* mode = SDL_GetDesktopDisplayMode(Id);
+                DisplayMode* mode = SDL.Video.SDL_GetDesktopDisplayMode(Id);
 
                 QuackNativeException.ThrowIfNull(mode);
 
@@ -128,7 +128,7 @@ public sealed partial class Display
     {
         get
         {
-            uint properties = SDL_GetDisplayProperties(Id);
+            uint properties = SDL.Video.SDL_GetDisplayProperties(Id);
             return Properties.Get(properties, HdrEnabledProperty, defaultValue: false);
         }
     }
@@ -136,12 +136,12 @@ public sealed partial class Display
     /// <summary>
     /// Gets the orientation of a display.
     /// </summary>
-    public DisplayOrientation Orientation => SDL_GetCurrentDisplayOrientation(Id);
+    public DisplayOrientation Orientation => SDL.Video.SDL_GetCurrentDisplayOrientation(Id);
 
     /// <summary>
     /// Gets the orientation of a display when it is unrotated.
     /// </summary>
-    public DisplayOrientation NaturalOrientation => SDL_GetNaturalDisplayOrientation(Id);
+    public DisplayOrientation NaturalOrientation => SDL.Video.SDL_GetNaturalDisplayOrientation(Id);
 
     /// <summary>
     /// Get a list of fullscreen display modes available for the display.
@@ -154,7 +154,7 @@ public sealed partial class Display
 
         unsafe
         {
-            DisplayMode** modes = SDL_GetFullscreenDisplayModes(Id, out int length);
+            DisplayMode** modes = SDL.Video.SDL_GetFullscreenDisplayModes(Id, out int length);
 
             QuackNativeException.ThrowIf(modes is null);
 
@@ -163,7 +163,7 @@ public sealed partial class Display
             for (int i = 0; i < length; i++)
                 displayModes[i] = *modes[i];
 
-            SDLNative.Free(modes);
+            SDL.Memory.Free(modes);
         }
 
         return displayModes;
@@ -194,7 +194,7 @@ public sealed partial class Display
 
         unsafe
         {
-            display = SDL_GetDisplayForPoint(&point);
+            display = SDL.Video.SDL_GetDisplayForPoint(&point);
         }
 
         QuackNativeException.ThrowIfZero(display);
@@ -214,7 +214,7 @@ public sealed partial class Display
 
         unsafe
         {
-            display = SDL_GetDisplayForRect(&rectangle);
+            display = SDL.Video.SDL_GetDisplayForRect(&rectangle);
         }
 
         QuackNativeException.ThrowIfZero(display);
@@ -228,7 +228,7 @@ public sealed partial class Display
     /// <returns>A list of currently connected displays.</returns>
     public static Display[] GetDisplays()
     {
-        ReadOnlySpan<uint> ids = SDL_GetDisplays(out _);
+        ReadOnlySpan<uint> ids = SDL.Video.SDL_GetDisplays(out _);
 
         if (ids.IsEmpty)
             return [];
@@ -252,7 +252,7 @@ public sealed partial class Display
     /// <exception cref="QuackNativeException">Failed to search the display mode.</exception>
     public DisplayMode SearchDisplayMode(int width, int height, float refreshRate, bool includeHighDensityMode)
     {
-        QuackNativeException.ThrowIfFailed(SDL_GetClosestFullscreenDisplayMode(Id, width, height, refreshRate, includeHighDensityMode, out DisplayMode displayMode));
+        QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetClosestFullscreenDisplayMode(Id, width, height, refreshRate, includeHighDensityMode, out DisplayMode displayMode));
         return displayMode;
     }
 
@@ -260,5 +260,5 @@ public sealed partial class Display
     /// Get the primary display.
     /// </summary>
     /// <returns>The primary display.</returns>
-    public static Display GetPrimaryDisplay() => new(SDL_GetPrimaryDisplay());
+    public static Display GetPrimaryDisplay() => new(SDL.Video.SDL_GetPrimaryDisplay());
 }
