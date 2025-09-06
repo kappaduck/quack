@@ -3,20 +3,20 @@
 
 using System.Runtime.InteropServices.Marshalling;
 
-namespace KappaDuck.Quack.Interop.SDL.Marshallers;
+namespace KappaDuck.Quack.Interop.Marshalling;
 
 /// <summary>
-/// Custom marshaller for a pointer to an array that is owned by SDL and it is freed automatically by SDL.
+/// Custom marshaller for a pointer to an array that is owned by SDL and it is freed automatically by the marshaller.
 /// It helps to marshal a pointer to an array into a managed span which is safe to use.
 /// </summary>
-/// <typeparam name="T">The type of the lements in the array.</typeparam>
+/// <typeparam name="T">The type of the elements in the array.</typeparam>
 /// <typeparam name="TUnmanaged">The type of the elements in the unmanaged array.</typeparam>
 [ContiguousCollectionMarshaller]
-[CustomMarshaller(typeof(Span<>), MarshalMode.Default, typeof(SDLOwnedArrayMarshaller<,>))]
-internal static unsafe class SDLOwnedArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged
+[CustomMarshaller(typeof(Span<>), MarshalMode.Default, typeof(CallerOwnedArrayMarshaller<,>))]
+internal static unsafe class CallerOwnedArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged
 {
     internal static TUnmanaged* AllocateContainerForUnmanagedElements(Span<T> managed, out int length)
-        => throw new NotSupportedException("We do not support allocating unmanaged arrays for SDL.");
+        => throw new NotSupportedException();
 
     internal static Span<T> AllocateContainerForManagedElements(TUnmanaged* unmanaged, int length)
     {
@@ -35,4 +35,7 @@ internal static unsafe class SDLOwnedArrayMarshaller<T, TUnmanaged> where TUnman
         => new(unmanaged, length);
 
     internal static Span<T> GetManagedValuesDestination(Span<T> managed) => managed;
+
+    internal static void Free(TUnmanaged* unmanaged)
+        => SDL.SDL.Memory.Free(unmanaged);
 }

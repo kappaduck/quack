@@ -3,6 +3,8 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Interop.SDL;
+using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
@@ -31,7 +33,7 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <remarks>
 /// Initializes a new instance of the <see cref="Surface"/>.
 /// </remarks>
-public sealed unsafe partial class Surface : IDisposable
+public sealed unsafe class Surface : IDisposable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Surface"/>.
@@ -42,12 +44,12 @@ public sealed unsafe partial class Surface : IDisposable
     public Surface(int width, int height, PixelFormat format)
     {
         FormatDetails = format.Details;
-        Handle = SDL_CreateSurface(width, height, format);
+        Handle = SDL.Surface.SDL_CreateSurface(width, height, format);
 
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Surface(SurfaceHandle* handle)
+    internal Surface(SDL_Surface* handle)
     {
         QuackNativeException.ThrowIfNull(handle);
 
@@ -75,17 +77,17 @@ public sealed unsafe partial class Surface : IDisposable
     /// <summary>
     /// Gets the native surface handle.
     /// </summary>
-    internal SurfaceHandle* Handle { get; private set; }
+    internal SDL_Surface* Handle { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the surface has a color key.
     /// </summary>
-    public bool HasColorKey => SDL_SurfaceHasColorKey(Handle);
+    public bool HasColorKey => SDL.Surface.SDL_SurfaceHasColorKey(Handle);
 
     /// <summary>
     /// Gets a value indicating whether the surface has RLE (Run-Length Encoding) enabled.
     /// </summary>
-    public bool HasRLE => SDL_SurfaceHasRLE(Handle);
+    public bool HasRLE => SDL.Surface.SDL_SurfaceHasRLE(Handle);
 
     /// <summary>
     /// Gets the height of the surface.
@@ -108,15 +110,15 @@ public sealed unsafe partial class Surface : IDisposable
         {
             ThrowIfDisposed();
 
-            Palette.PaletteHandle* palette = SDL_GetSurfacePalette(Handle);
+            SDL_Palette* palette = SDL.Surface.SDL_GetSurfacePalette(Handle);
             return palette is not null ? new Palette(palette) : null;
         }
         set
         {
             ThrowIfDisposed();
 
-            Palette.PaletteHandle* palette = value is not null ? value.Handle : null;
-            QuackNativeException.ThrowIfFailed(SDL_SetSurfacePalette(Handle, palette));
+            SDL_Palette* palette = value is not null ? value.Handle : null;
+            QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_SetSurfacePalette(Handle, palette));
         }
     }
 
@@ -155,7 +157,7 @@ public sealed unsafe partial class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SurfaceHandle* newHandle = SDL_DuplicateSurface(Handle);
+        SDL_Surface* newHandle = SDL.Surface.SDL_DuplicateSurface(Handle);
         return new Surface(newHandle);
     }
 
@@ -177,7 +179,7 @@ public sealed unsafe partial class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SurfaceHandle* newHandle = SDL_ConvertSurface(Handle, format);
+        SDL_Surface* newHandle = SDL.Surface.SDL_ConvertSurface(Handle, format);
         return new Surface(newHandle);
     }
 
@@ -223,7 +225,7 @@ public sealed unsafe partial class Surface : IDisposable
     {
         if (Handle is not null)
         {
-            SDL_DestroySurface(Handle);
+            SDL.Surface.SDL_DestroySurface(Handle);
             Handle = null;
         }
     }
@@ -244,7 +246,7 @@ public sealed unsafe partial class Surface : IDisposable
     public void Fill(byte r, byte g, byte b, byte a)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f));
     }
 
     /// <summary>
@@ -264,7 +266,7 @@ public sealed unsafe partial class Surface : IDisposable
     public void Fill(float r, float g, float b, float a)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL_ClearSurface(Handle, r, g, b, a));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_ClearSurface(Handle, r, g, b, a));
     }
 
     /// <summary>
@@ -309,7 +311,7 @@ public sealed unsafe partial class Surface : IDisposable
         ThrowIfDisposed();
 
         uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRect(Handle, &rect, rgba));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRect(Handle, &rect, rgba));
     }
 
     /// <summary>
@@ -327,7 +329,7 @@ public sealed unsafe partial class Surface : IDisposable
         ThrowIfDisposed();
 
         uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRect(Handle, &rect, rgb));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRect(Handle, &rect, rgb));
     }
 
     /// <summary>
@@ -356,7 +358,7 @@ public sealed unsafe partial class Surface : IDisposable
         ThrowIfDisposed();
 
         uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba));
     }
 
     /// <summary>
@@ -374,7 +376,7 @@ public sealed unsafe partial class Surface : IDisposable
         ThrowIfDisposed();
 
         uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        QuackNativeException.ThrowIfFailed(SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb));
     }
 
     /// <summary>
@@ -394,7 +396,7 @@ public sealed unsafe partial class Surface : IDisposable
     public void Flip(FlipMode mode)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL_FlipSurface(Handle, mode));
+        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FlipSurface(Handle, mode));
     }
 
     /// <summary>
@@ -408,7 +410,7 @@ public sealed unsafe partial class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SurfaceHandle* scaledSurface = SDL_ScaleSurface(Handle, width, height, mode);
+        SDL_Surface* scaledSurface = SDL.Surface.SDL_ScaleSurface(Handle, width, height, mode);
         QuackNativeException.ThrowIfNull(scaledSurface);
 
         return new Surface(scaledSurface);

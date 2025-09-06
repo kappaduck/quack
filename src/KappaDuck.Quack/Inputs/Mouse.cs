@@ -5,22 +5,19 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Marshallers;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace KappaDuck.Quack.Inputs;
 
 /// <summary>
 /// A mouse input.
 /// </summary>
-public sealed partial class Mouse
+public sealed class Mouse
 {
     internal Mouse(uint id)
     {
         Id = id;
-        Name = SDL_GetMouseNameForID(id);
+        Name = SDL.Inputs.SDL_GetMouseNameForID(id);
     }
 
     /// <summary>
@@ -40,7 +37,7 @@ public sealed partial class Mouse
     {
         get
         {
-            ButtonState buttons = SDL_GetMouseState(out float x, out float y);
+            ButtonState buttons = SDL.Inputs.SDL_GetMouseState(out float x, out float y);
             return new State(buttons, new Vector2(x, y));
         }
     }
@@ -62,7 +59,7 @@ public sealed partial class Mouse
     {
         get
         {
-            ButtonState buttons = SDL_GetGlobalMouseState(out float x, out float y);
+            ButtonState buttons = SDL.Inputs.SDL_GetGlobalMouseState(out float x, out float y);
             return new State(buttons, new Vector2(x, y));
         }
     }
@@ -70,7 +67,7 @@ public sealed partial class Mouse
     /// <summary>
     /// Gets a value indicating whether a mouse is currently connected.
     /// </summary>
-    public static bool HasMouse => SDL_HasMouse();
+    public static bool HasMouse => SDL.Inputs.SDL_HasMouse();
 
     /// <summary>
     /// Gets the instance id of the mouse.
@@ -100,7 +97,7 @@ public sealed partial class Mouse
     {
         get
         {
-            ButtonState buttons = SDL_GetRelativeMouseState(out float x, out float y);
+            ButtonState buttons = SDL.Inputs.SDL_GetRelativeMouseState(out float x, out float y);
             return new State(buttons, new Vector2(x, y));
         }
     }
@@ -116,7 +113,7 @@ public sealed partial class Mouse
     /// <returns>The list of connected mice.</returns>
     public static Mouse[] GetMice()
     {
-        ReadOnlySpan<uint> ids = SDL_GetMice(out _);
+        ReadOnlySpan<uint> ids = SDL.Inputs.SDL_GetMice(out _);
 
         if (ids.IsEmpty)
             return [];
@@ -148,7 +145,7 @@ public sealed partial class Mouse
     /// <param name="y">The y-coordinate in global screen space.</param>
     /// <exception cref="QuackNativeException">An error occurred while moving the mouse.</exception>
     public static void Warp(float x, float y)
-        => QuackNativeException.ThrowIfFailed(SDL_WarpMouseGlobal(x, y));
+        => QuackNativeException.ThrowIfFailed(SDL.Inputs.SDL_WarpMouseGlobal(x, y));
 
     /// <summary>
     /// Move the mouse to the given position in global screen space.
@@ -294,29 +291,4 @@ public sealed partial class Mouse
         /// </summary>
         Flipped = 1
     }
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial ButtonState SDL_GetGlobalMouseState(out float x, out float y);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CallerOwnedArrayMarshaller<,>), CountElementName = "length")]
-    private static partial Span<uint> SDL_GetMice(out int length);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial ButtonState SDL_GetMouseState(out float x, out float y);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial ButtonState SDL_GetRelativeMouseState(out float x, out float y);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    private static partial string SDL_GetMouseNameForID(uint mouse);
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_HasMouse();
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
-    private static partial bool SDL_WarpMouseGlobal(float x, float y);
 }

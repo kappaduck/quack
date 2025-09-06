@@ -6,6 +6,7 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
+using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Interop.SDL.Handles;
 using System.Drawing;
 
@@ -14,9 +15,9 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// <summary>
 /// An efficient driver-specific representation of pixels.
 /// </summary>
-public sealed partial class Texture : IDisposable
+public sealed class Texture : IDisposable
 {
-    private readonly TextureHandle _handle;
+    private readonly SDL_TextureHandle _handle;
     private readonly Renderer _renderer;
 
     internal Texture(Renderer renderer, PixelFormat pixelFormat, TextureAccess access, int width, int height)
@@ -38,8 +39,8 @@ public sealed partial class Texture : IDisposable
         _handle = _renderer.CreateTextureFromSurface(surface);
         QuackNativeException.ThrowIf(_handle.IsInvalid);
 
-        uint properties = SDL_GetTextureProperties(_handle);
-        Format = Properties.GetAsEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
+        uint properties = SDL.Texture.SDL_GetTextureProperties(_handle);
+        Format = Properties.GetEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
 
         Height = surface.Height;
         Width = surface.Width;
@@ -52,11 +53,11 @@ public sealed partial class Texture : IDisposable
         _handle = _renderer.LoadTexture(file);
         QuackNativeException.ThrowIf(_handle.IsInvalid);
 
-        uint properties = SDL_GetTextureProperties(_handle);
-        Format = Properties.GetAsEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
+        uint properties = SDL.Texture.SDL_GetTextureProperties(_handle);
+        Format = Properties.GetEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
 
-        Height = Properties.GetAsNumber(properties, "SDL.texture.height", 0);
-        Width = Properties.GetAsNumber(properties, "SDL.texture.width", 0);
+        Height = Properties.Get(properties, "SDL.texture.height", 0);
+        Width = Properties.Get(properties, "SDL.texture.width", 0);
     }
 
     /// <summary>
@@ -81,7 +82,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return 255;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetTextureAlphaMod(_handle, out byte alpha));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureAlphaMod(_handle, out byte alpha));
             return alpha;
         }
         set
@@ -89,7 +90,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetTextureAlphaMod(_handle, value));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureAlphaMod(_handle, value));
         }
     }
 
@@ -100,7 +101,7 @@ public sealed partial class Texture : IDisposable
     /// <para>If the texture is not valid, the default value of BlendMode.None is returned.</para>
     /// <para>If the blend mode is not supported, the closest supported mode is chosen.</para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while getting the blend mode.</exception>
+    /// <exception cref="QuackNativeException">An error occurred while getting or setting the blend mode.</exception>
     public BlendMode BlendMode
     {
         get
@@ -108,7 +109,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return BlendMode.None;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetTextureBlendMode(_handle, out BlendMode mode));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureBlendMode(_handle, out BlendMode mode));
             return mode;
         }
         set
@@ -116,7 +117,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            SDL_SetTextureBlendMode(_handle, value);
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureBlendMode(_handle, value));
         }
     }
 
@@ -142,7 +143,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return Color.White;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetTextureColorMod(_handle, out byte r, out byte g, out byte b));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureColorMod(_handle, out byte r, out byte g, out byte b));
             return Color.FromArgb(r, g, b);
         }
         set
@@ -150,7 +151,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL_SetTextureColorMod(_handle, value.R, value.G, value.B));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureColorMod(_handle, value.R, value.G, value.B));
         }
     }
 
@@ -162,7 +163,7 @@ public sealed partial class Texture : IDisposable
     /// <para>If the texture is not valid, <see cref="ScaleMode.Invalid"/> is returned.</para>
     /// <para>If the scale mode is not supported, the closest supported mode is chosen.</para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while getting the scale mode.</exception>
+    /// <exception cref="QuackNativeException">An error occurred while getting or setting the scale mode.</exception>
     public ScaleMode Scale
     {
         get
@@ -170,7 +171,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return ScaleMode.Invalid;
 
-            QuackNativeException.ThrowIfFailed(SDL_GetTextureScaleMode(_handle, out ScaleMode scale));
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureScaleMode(_handle, out ScaleMode scale));
             return scale;
         }
         set
@@ -178,7 +179,7 @@ public sealed partial class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            SDL_SetTextureScaleMode(_handle, value);
+            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureScaleMode(_handle, value));
         }
     }
 

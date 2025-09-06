@@ -3,15 +3,14 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using KappaDuck.Quack.Interop.SDL.Native;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
 
 /// <summary>
 /// Provides loading and saving functionality for images.
 /// </summary>
-public static unsafe partial class Image
+public static unsafe class Image
 {
     /// <summary>
     /// Loads an image from a file.
@@ -25,12 +24,9 @@ public static unsafe partial class Image
         if (!File.Exists(filePath))
             throw new FileNotFoundException("The file does not exist.", filePath);
 
-        Surface.SurfaceHandle* handle = IMG_Load(filePath);
+        SDL_Surface* handle = SDL.Surface.IMG_Load(filePath);
         QuackNativeException.ThrowIfNull(handle);
 
         return new Surface(handle);
     }
-
-    [LibraryImport(SDLNative.ImageLibrary, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial Surface.SurfaceHandle* IMG_Load(string filePath);
 }

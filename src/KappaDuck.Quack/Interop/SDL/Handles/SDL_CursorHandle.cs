@@ -7,14 +7,11 @@ using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Interop.SDL.Handles;
 
-/// <summary>
-/// Marshaller needs a public parameterless constructor.
-/// </summary>
-internal sealed partial class TextureHandle() : SafeHandleZeroInvalid(ownsHandle: true)
+internal sealed partial class SDL_CursorHandle() : SafeHandleZeroInvalid(ownsHandle: true)
 {
     protected override bool ReleaseHandle()
     {
-        SDL_DestroyTexture(handle);
+        SDL_FreeCursor(handle);
 
         SetHandle(nint.Zero);
         SetHandleAsInvalid();
@@ -22,6 +19,6 @@ internal sealed partial class TextureHandle() : SafeHandleZeroInvalid(ownsHandle
         return true;
     }
 
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial void SDL_DestroyTexture(nint texture);
+    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static partial void SDL_FreeCursor(nint cursor);
 }

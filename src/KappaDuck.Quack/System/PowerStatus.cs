@@ -2,15 +2,13 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.System;
 
 /// <summary>
 /// Provides information about the system's power status, e.g. laptop battery status.
 /// </summary>
-public sealed partial class PowerStatus
+public sealed class PowerStatus
 {
     private PowerStatus(int? remaining, int? percentage, PowerState state)
     {
@@ -51,7 +49,7 @@ public sealed partial class PowerStatus
 
     private static PowerStatus GetCurrentPowerStatus()
     {
-        PowerState state = SDL_GetPowerInfo(out int seconds, out int percent);
+        PowerState state = SDL.System.SDL_GetPowerInfo(out int seconds, out int percent);
 
         return new PowerStatus(seconds == -1 ? null : seconds, percent == -1 ? null : percent, state);
     }
@@ -91,7 +89,4 @@ public sealed partial class PowerStatus
         /// </summary>
         Charged = 4
     }
-
-    [LibraryImport(SDLNative.Library), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial PowerState SDL_GetPowerInfo(out int seconds, out int percent);
 }

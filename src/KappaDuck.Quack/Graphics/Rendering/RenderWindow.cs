@@ -7,7 +7,7 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Primitives;
-using KappaDuck.Quack.Interop.SDL.Handles;
+using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.Video.Displays;
 using KappaDuck.Quack.Windows;
 using System.ComponentModel;

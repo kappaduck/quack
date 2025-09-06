@@ -4,15 +4,12 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace KappaDuck.Quack.Graphics.Drawing;
+namespace KappaDuck.Quack.Interop.SDL.Native;
 
-/// <summary>
-/// This struct represents a color with floating-point components in a format suitable for interoperability with native code.
-/// </summary>
 [StructLayout(LayoutKind.Sequential)]
-internal readonly struct NativeFloatingColor
+internal readonly struct SDL_FColor
 {
-    internal NativeFloatingColor(byte r, byte g, byte b, byte a)
+    internal SDL_FColor(byte r, byte g, byte b, byte a)
     {
         _r = r / 255f;
         _g = g / 255f;

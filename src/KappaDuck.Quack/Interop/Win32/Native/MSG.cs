@@ -1,11 +1,10 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Geometry;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace KappaDuck.Quack.Interop.Win32;
+namespace KappaDuck.Quack.Interop.Win32.Native;
 
 /// <summary>
 /// The MSG structure contains message information from a thread's message queue.
@@ -24,5 +23,5 @@ internal readonly struct MSG
 
     private readonly nuint _time;
 
-    public readonly Vector2Int Point;
+    public readonly POINT Point;
 }
