@@ -42,8 +42,8 @@ codeowners  text
 *.json      text
 *.toml      text
 *.xml       text
-*.yaml      text
-*.yml       text eol=crlf
+*.yaml      text eol=lf
+*.yml       text eol=lf
 
 # Web files
 
