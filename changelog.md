@@ -4,7 +4,52 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.2.0 &#8212; 2025-xx-xx
+## 0.2.0 &#8212; 2025-12-03
+
+### Added
+
+- SDL_Image support ([#8], [#53])
+- SDL_TTF support ([#10], [#49])
+- Added Image to load and manipulate images ([#138])
+- Added Texture to handle GPU textures ([#111])
+- Added Sprite to draw textures on the screen ([#121])
+- System menu support ([#237])
+- Added Surface to handle pixel data in CPU memory ([#131])
+- Palette support for surfaces ([#140])
+- Cursor support ([#64])
+- Render can now render debug text ([#241], [#225])
+- Window can now have an icon ([#238])
+- Added Transform ([#78])
+
+### Changed
+
+- Updated SDL to version 3.2.28
+- Replace custom vector2 implementation with System.Numerics.Vector2 ([#257])
+
+### Fixed
+
+- Window now use the native handle correctly depending on the platform ([#207])
+- Fixed issue with RenderWindow will fail to render after closing the window ([#250])
+
+<!-- 0.2.0 -->
+[#8]: https://github.com/kappaduck/quack/issues/8
+[#10]: https://github.com/kappaduck/quack/issues/10
+[#49]: https://github.com/kappaduck/quack/issues/49
+[#53]: https://github.com/kappaduck/quack/issues/53
+[#64]: https://github.com/kappaduck/quack/issues/64
+[#78]: https://github.com/kappaduck/quack/issues/78
+[#111]: https://github.com/kappaduck/quack/issues/111
+[#121]: https://github.com/kappaduck/quack/issues/121
+[#131]: https://github.com/kappaduck/quack/issues/131
+[#138]: https://github.com/kappaduck/quack/issues/138
+[#140]: https://github.com/kappaduck/quack/issues/140
+[#207]: https://github.com/kappaduck/quack/issues/207
+[#225]: https://github.com/kappaduck/quack/issues/225
+[#237]: https://github.com/kappaduck/quack/issues/237
+[#238]: https://github.com/kappaduck/quack/issues/238
+[#241]: https://github.com/kappaduck/quack/issues/241
+[#250]: https://github.com/kappaduck/quack/issues/250
+[#257]: https://github.com/kappaduck/quack/issues/257
 
 ## 0.1.0 &#8212; 2025-08-24
 
