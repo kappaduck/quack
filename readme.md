@@ -80,6 +80,10 @@ To build Quack! from source, you will need the following tools installed:
 
 > The SDK includes everything you need to build and run .NET applications on your machine.
 
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+> Docker is used to create SDL binaries for different platforms in a consistent environment.
+
 ### Setup
 
 After installing the prerequisites, you can set up the project by following these steps:
@@ -94,15 +98,15 @@ cd quack
 ```
 
 Install SDL and its extensions using the provided script
-> Make sure you have .NET 10.0 SDK installed, to do [dotnet run app.cs].
+> Make sure you have .NET 10.0 SDK and Docker installed, to do [dotnet run app.cs].
 
 ```bash
 # On Windows:
-dotnet ./src/install.sdl.cs
+dotnet ./SDL3/build.cs
 
 # On Linux:
-chmod +x ./src/install.sdl.cs # Make the script executable. No need to do this every time.
-./src/install.sdl.cs
+chmod +x ./SDL3/build.cs # Make the script executable. No need to do this every time.
+./SDL3/build.cs
 ```
 
 Open the solution file in your preferred IDE (e.g., Visual Studio, Rider, etc.):

@@ -1,7 +1,7 @@
 # Quack files
 
 src/quack.playground.cs
-SDL3/
+SDL3/runtimes/
 
 # build outputs
 
