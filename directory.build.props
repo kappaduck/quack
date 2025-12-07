@@ -1,26 +1,24 @@
 <Project>
-  <PropertyGroup Label="Configure .csproj">
+  <PropertyGroup Label="Configure all .csproj files">
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <AnalysisLevel>latest-All</AnalysisLevel>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UseArtifactsOutput>true</UseArtifactsOutput>
 
     <!-- Configure packages which are only Development dependency -->
     <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
     <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
+    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
   </PropertyGroup>
 
   <ItemGroup Label="Configure analyzer rules">
-    <!-- Special case for single file-->
-    <GlobalAnalyzerConfigFiles Include="..\rules\*.editorconfig" />
-    <GlobalAnalyzerConfigFiles Include="..\..\rules\*.editorconfig" />
+    <GlobalAnalyzerConfigFiles Include="$(QuackRoot)\rules\*.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup Label="Link native libraries" Condition="$(IncludeNativeLibraries) == 'true'">
-    <!-- Special case for single file-->
-    <None Include="..\SDL3\win32\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
-    <None Include="..\..\SDL3\win32\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
+  <ItemGroup Label="Link native librarires" Condition="$(IncludeNativeLibs) == 'true'">
+    <None Include="$(QuackRoot)\SDL3\runtimes\win-x64\native\*.dll" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsWindows())" />
+    <None Include="$(QuackRoot)\SDL3\runtimes\linux-x64\native\*.so" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="$([System.OperatingSystem]::IsLinux())" />
   </ItemGroup>
 </Project>
