@@ -15,9 +15,9 @@ indent_size = 2
 # C# files
 
 [*.cs]
+file_header_template = Copyright (c) KappaDuck. All rights reserved.\nThe source code is licensed under MIT License.
 dotnet_sort_system_directives_first = false
 dotnet_analyzer_diagnostic.severity = warning
-file_header_template = Copyright (c) KappaDuck. All rights reserved.\nThe source code is licensed under MIT License.
 
 # Configuration files
 
