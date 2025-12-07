@@ -12,7 +12,7 @@ permissions:
 jobs:
   build:
     name: Build/Deploy
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -30,8 +30,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+
       - name: Install SDL dependencies
-        run: dotnet .\src\install.sdl.cs
+        run: dotnet .\SDL3\build.cs
 
       - name: Restore dependencies
         run: dotnet restore
