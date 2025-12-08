@@ -1,12 +1,27 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
+
+using JetBrains.Annotations;
 
 namespace KappaDuck.Quack.Core;
 
 /// <summary>
-/// The metadata of the application.
+/// Represents metadata about the application.
 /// </summary>
-public sealed record AppMetadata
+/// <remarks>
+/// <para>
+/// This is not required, but strongly recommended for better identification of the application.
+/// </para>
+/// <para>
+/// There are several locations where this metadata can be useful,
+/// such as "About" in the menu, the name of the application can be shown on some audi mixers, etc.
+/// </para>
+/// <para>
+/// It is managed by the <see cref="QuackEngine"/> and can be set during initialization. The engine will keep a reference to it.
+/// </para>
+/// </remarks>
+[PublicAPI]
+public sealed record ApplicationMetadata
 {
     /// <summary>
     /// Gets the reverse domain identifier of the application, e.g. com.kappaduck.quack.demo.
@@ -18,7 +33,7 @@ public sealed record AppMetadata
     public string? Id { get; init; }
 
     /// <summary>
-    /// Gets the human-readable name of the application, e.g. Quack! Demo.
+    /// Gets the human-readable name of the application, e.g. Quack! Playground.
     /// </summary>
     /// <remarks>
     /// This will show up anywhere the OS shows the name of the application
@@ -54,28 +69,7 @@ public sealed record AppMetadata
     public Uri? Url { get; init; }
 
     /// <summary>
-    /// Gets the type of the application. Default is <see cref="AppType.Application"/>.
+    /// Gets the type of the application. Default is <see cref="ApplicationType.Application"/>.
     /// </summary>
-    public string Type { get; init; } = AppType.Application;
-
-    /// <summary>
-    /// The type of the application.
-    /// </summary>
-    public static class AppType
-    {
-        /// <summary>
-        /// The application is a video game.
-        /// </summary>
-        public const string Game = "game";
-
-        /// <summary>
-        /// The application is a media player.
-        /// </summary>
-        public const string MediaPlayer = "mediaplayer";
-
-        /// <summary>
-        /// Other types of applications.
-        /// </summary>
-        public const string Application = "application";
-    }
+    public ApplicationType Type { get; init; } = ApplicationType.Application;
 }
