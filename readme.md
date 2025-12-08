@@ -114,7 +114,7 @@ Open the solution file in your preferred IDE (e.g., Visual Studio, Rider, etc.):
 >
 > Visual Code have intellisense support for single-file but can't run it directly.
 
-To test any features, you can run the examples provided in the [Examples] directory or create a file named `quack.playground.cs` in the `src` directory and run it directly.
+To test any features, you can run the examples provided in the [Examples] directory or create a file named `quack.playground.cs` at the root and run it directly.
 > The `quack.playground.cs` file is ignored by git, so you can use it to test your code without affecting the repository.
 
 You can use the following code snippet as a starting point for your `quack.playground.cs` file:
@@ -151,11 +151,11 @@ while (window.IsOpen)
 
 ```bash
 # On Windows:
-dotnet ./src/quack.playground.cs
+dotnet ./quack.playground.cs
 
 # On Linux:
-chmod +x ./src/quack.playground.cs # Make the script executable. No need to do this every time.
-./src/quack.playground.cs
+chmod +x ./quack.playground.cs # Make the script executable. No need to do this every time.
+./quack.playground.cs
 ```
 
 ## Credits
