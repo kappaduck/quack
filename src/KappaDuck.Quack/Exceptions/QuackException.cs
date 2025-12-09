@@ -1,7 +1,8 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace KappaDuck.Quack.Exceptions;
 
@@ -22,11 +23,9 @@ public class QuackException : Exception
     {
     }
 
-    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string? message)
+    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string message, [CallerMemberName] string memberName = "")
     {
         if (condition)
-            throw new QuackException(message);
+            throw new QuackException($"{memberName} failed: {message}");
     }
-
-    internal static void ThrowIfNull<T>([NotNull] T? value, string? message) => ThrowIf(value is null, message);
 }
