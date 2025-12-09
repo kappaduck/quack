@@ -1,35 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Label="Configure library">
+  <PropertyGroup Label="Configuration">
     <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
     <IsAotCompatible>true</IsAotCompatible>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Label="Package info">
+  <PropertyGroup Label="Quack! package metadata">
     <Authors>KappaDuck</Authors>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>0.3.0</VersionPrefix>
     <Company>@(Authors)</Company>
     <Copyright>Copyright © KappaDuck $([System.DateTime]::Now.Year)</Copyright>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseFile>license</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
-    <Description>Quack! is a fast, lightweight and user-friendly game engine built on SDL and its extensions (SDL_image, SDL_mixer, SDL_ttf). Designed for modern .NET 9+ applications, it provides a clean, flexible and intuitive API that simplifies game development by hiding low-level complexities. It uses SDL for 2D (Renderer) and 3D (GPU) rendering, window management, input handling and audio.</Description>
-    <PackageTags>SDL;SDL3;GameEngine;engine;CSharp;Game;Multimedia</PackageTags>
+    <Description>Quack! is a fast, lightweight, and user-friendly 2D/3D game engine built on SDL and its extensions (SDL_image, SDL_mixer, SDL_ttf). It is designed for modern .NET 9+ games and applications. It provides a clean, flexible and intuitive API that simplifies game development by hiding low-level complexities. It offers a range of features such as rendering (SDL_renderer and SDL_gpu), input handling, audio playback, resource management, window management, and more.</Description>
+    <PackageTags>NET;SDL;SDL3;GameEngine;Engine;CSharp;Game;Multimedia</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup Label="Global usings">
+    <Using Include="JetBrains.Annotations" />
+  </ItemGroup>
+
   <ItemGroup Label="Common files to include">
-    <None Include="..\..\$(PackageReadmeFile)" Pack="true" PackagePath="" Visible="false" />
-    <None Include="..\..\$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
-    <None Include="..\..\$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(QuackRoot)$(PackageReadmeFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(QuackRoot)$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(QuackRoot)$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <ItemGroup Label="build files to include">
-    <None Include="..\..\SDL3\**\*" Pack="true" PackagePath="build\" IncludeInPackage="false" Visible="false" />
-    <None Include="..\..\$(MSBuildProjectName).targets" Pack="true" PackagePath="build\" IncludeInPackage="false" Link="targets" />
+    <None Include="$(QuackRoot)SDL3\runtimes\**\*" Pack="true" PackagePath="runtimes\" IncludeInPackage="false" Visible="false" />
+    <None Include="$(QuackRoot)$(MSBuildProjectName).targets" Pack="true" PackagePath="build\" IncludeInPackage="false" Link="targets" />
   </ItemGroup>
 
   <ItemGroup Label="Enabling reproducible builds">
     <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="all" IncludeAssets="$(IncludeAssets)" />
+    <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" IncludeAssets="$(IncludeAssets)" />
   </ItemGroup>
 </Project>

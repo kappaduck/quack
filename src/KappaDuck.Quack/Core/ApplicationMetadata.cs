@@ -1,8 +1,6 @@
 ﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using JetBrains.Annotations;
-
 namespace KappaDuck.Quack.Core;
 
 /// <summary>

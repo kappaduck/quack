@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿// Copyright (c) KappaDuck. All rights reserved.
+// The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Core.Extensions;
 
