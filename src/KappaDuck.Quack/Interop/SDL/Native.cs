@@ -26,10 +26,6 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial ulong SDL_GetTicks();
-
-    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_InitSubSystem(Subsystem subsystems);
 

@@ -51,6 +51,8 @@ public sealed class QuackEngine
     /// After calling this method, the metadata cannot be changed.
     /// Setting the metadata is not required, but strongly recommended for better identification of the application.
     /// </remarks>
+    /// <exception cref="QuackException">Cannot set metadata after engine initialization.</exception>
+    /// <exception cref="QuackNativeException">Fails to set metadata properties.</exception>
     public static void SetMetadata(ApplicationMetadata metadata)
     {
         QuackException.ThrowIf(_engine is not null, "Cannot set metadata after engine initialization.");
