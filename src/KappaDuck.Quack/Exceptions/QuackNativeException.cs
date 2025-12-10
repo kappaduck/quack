@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Exceptions;
 /// <summary>
 /// An exception that is thrown when a native error occurs in the Quack engine.
 /// </summary>
+[PublicAPI]
 public sealed class QuackNativeException : QuackException
 {
     internal QuackNativeException()

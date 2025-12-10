@@ -1,9 +1,6 @@
 ﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
-
 namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 
 /// <summary>

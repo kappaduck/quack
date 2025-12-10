@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Core.Extensions;
@@ -16,17 +16,13 @@ namespace KappaDuck.Quack.Core;
 /// Use <see cref="QuackEngine"/> only when you need to manually initialize or shut down a subsystem.
 /// </remarks>
 [PublicAPI]
-public sealed class QuackEngine
+public static class QuackEngine
 {
     private static readonly Lock _lock = new();
 
-    private static QuackEngine? _engine;
     private static Subsystem _subsystem;
     private static int _refCount;
-
-    private QuackEngine()
-    {
-    }
+    private static bool _initialized;
 
     /// <summary>
     /// Gets the application metadata.
@@ -55,7 +51,7 @@ public sealed class QuackEngine
     /// <exception cref="QuackNativeException">Fails to set metadata properties.</exception>
     public static void SetMetadata(ApplicationMetadata metadata)
     {
-        QuackException.ThrowIf(_engine is not null, "Cannot set metadata after engine initialization.");
+        QuackException.ThrowIf(_initialized, "Cannot set metadata after engine initialization.");
         Metadata = metadata;
 
         SetMetadataProperty("SDL.app.metadata.identifier", metadata.Id);
@@ -75,19 +71,28 @@ public sealed class QuackEngine
         }
     }
 
-    internal static QuackEngine Init(Subsystem subsystem)
+    internal static void Init(Subsystem subsystem)
     {
         lock (_lock)
         {
-            _engine ??= new QuackEngine();
+            if (Has(subsystem))
+            {
+                Interlocked.Increment(ref _refCount);
+                return;
+            }
 
-            InitializeEngine(subsystem);
+            QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem & ~Subsystem.TTF));
+            _subsystem |= subsystem;
 
-            return _engine;
+            if (Has(Subsystem.TTF))
+                QuackNativeException.ThrowIfFailed(Native.TTF_Init());
+
+            Interlocked.Increment(ref _refCount);
+            _initialized = true;
         }
     }
 
-    internal void Release()
+    internal static void Release()
     {
         lock (_lock)
         {
@@ -100,47 +105,10 @@ public sealed class QuackEngine
             Native.SDL_QuitSubSystem(_subsystem & ~Subsystem.TTF);
             Native.SDL_Quit();
 
-            Cleanup();
+            _subsystem &= ~_subsystem;
+            _initialized = false;
         }
-    }
-
-    private static void Cleanup()
-    {
-        _engine = null;
-        _subsystem &= ~_subsystem;
     }
 
     private static bool Has(Subsystem subsystem) => (_subsystem & subsystem) == subsystem;
-
-    private static void InitializeEngine(Subsystem subsystem)
-    {
-        if (Has(subsystem))
-        {
-            Interlocked.Increment(ref _refCount);
-            return;
-        }
-
-        QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem & ~Subsystem.TTF));
-        _subsystem |= subsystem;
-
-        if (Has(Subsystem.TTF))
-            QuackNativeException.ThrowIfFailed(Native.TTF_Init());
-
-        Interlocked.Increment(ref _refCount);
-    }
-
-    internal struct Handle(Subsystem subsystem) : IDisposable
-    {
-        private readonly QuackEngine _quackEngine = Init(subsystem);
-        private bool _disposed;
-
-        public void Dispose()
-        {
-            if (_disposed)
-                return;
-
-            _disposed = true;
-            _quackEngine.Release();
-        }
-    }
 }

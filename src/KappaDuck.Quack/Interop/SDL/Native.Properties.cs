@@ -1,9 +1,6 @@
 ﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 namespace KappaDuck.Quack.Interop.SDL;
 
 internal static partial class Native

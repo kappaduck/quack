@@ -2,13 +2,13 @@
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 namespace KappaDuck.Quack.Exceptions;
 
 /// <summary>
 /// An exception that is thrown when an error occurs in the Quack engine.
 /// </summary>
+[PublicAPI]
 public class QuackException : Exception
 {
     internal QuackException()

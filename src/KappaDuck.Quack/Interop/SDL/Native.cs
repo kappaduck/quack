@@ -3,9 +3,6 @@
 
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace KappaDuck.Quack.Interop.SDL;
 

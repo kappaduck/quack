@@ -21,6 +21,9 @@
 
   <ItemGroup Label="Global usings">
     <Using Include="JetBrains.Annotations" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Runtime.InteropServices" />
+    <Using Include="System.Runtime.InteropServices.Marshalling" />
   </ItemGroup>
 
   <ItemGroup Label="Common files to include">
