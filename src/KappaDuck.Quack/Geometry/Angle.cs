@@ -132,7 +132,7 @@ public readonly struct Angle :
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns>><see langword="true"/> if the angles are not equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the angles are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Angle left, Angle right) => !(left == right);
 
     /// <summary>
@@ -164,7 +164,7 @@ public readonly struct Angle :
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns>><see langword="true"/> if the left angle is greater than or equal to the right angle; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the left angle is greater than or equal to the right angle; otherwise, <see langword="false"/>.</returns>
     public static bool operator >=(Angle left, Angle right) => left.Radians >= right.Radians;
 
     /// <summary>
@@ -214,23 +214,23 @@ public readonly struct Angle :
     /// Determines whether the angle is equal to another angle.
     /// </summary>
     /// <param name="other">The other angle.</param>
-    /// <returns>><see langword="true"/> if the angles are equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the angles are equal; otherwise, <see langword="false"/>.</returns>
     public bool Equals(Angle other) => MathF.IsNearlyZero(Radians - other.Radians);
 
     /// <summary>
     /// Determines whether the angle is equal to another object.
     /// </summary>
     /// <param name="obj">The other object.</param>
-    /// <returns>><see langword="true"/> if the object is an angle and is equal to this angle; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the object is an angle and is equal to this angle; otherwise, <see langword="false"/>.</returns>
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is Angle angle && Equals(angle);
 
     /// <inheritdoc/>
     public override int GetHashCode() => Radians.GetHashCode();
 
     /// <summary>
-    /// Gets the string representation of the angle in degrees.
+    /// The string representation of the angle in degrees.
     /// </summary>
-    /// <returns>>The string representation of the angle.</returns>
+    /// <returns>The string representation of the angle.</returns>
     public override string ToString() => $"{this}";
 
     /// <inheritdoc/>

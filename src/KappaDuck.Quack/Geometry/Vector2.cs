@@ -1,9 +1,8 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using NumericVector2 = System.Numerics.Vector2;
 
 namespace KappaDuck.Quack.Geometry;
@@ -13,6 +12,7 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="x">The x-coordinate of the vector.</param>
 /// <param name="y">The y-coordinate of the vector.</param>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector2(float x, float y) :
     IAdditionOperators<Vector2, Vector2, Vector2>,
@@ -25,14 +25,14 @@ public struct Vector2(float x, float y) :
     ISpanFormattable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vector2"/>.
+    /// Initializes a new instance of the <see cref="Vector2"/> with both coordinates set to zero.
     /// </summary>
     public Vector2() : this(0f, 0f)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vector2"/> with polar coordinates.
+    /// Initializes a new instance of the <see cref="Vector2"/> from polar coordinates.
     /// </summary>
     /// <param name="radius">The radius (magnitude) of the vector.</param>
     /// <param name="angle">The angle of the vector.</param>
@@ -80,7 +80,7 @@ public struct Vector2(float x, float y) :
     public readonly float MagnitudeSquared => (X * X) + (Y * Y);
 
     /// <summary>
-    /// Gets the normalized vector.
+    /// Gets the normalized (unit length) version of the vector.
     /// </summary>
     public readonly Vector2 Normalized
     {
@@ -134,67 +134,67 @@ public struct Vector2(float x, float y) :
     public static Vector2 Zero { get; } = new(0f, 0f);
 
     /// <summary>
-    /// Adds two vectors.
+    /// Adds two vectors together.
     /// </summary>
-    /// <param name="left">Left vector.</param>
-    /// <param name="right">Right vector.</param>
-    /// <returns>The sum of the vectors.</returns>
+    /// <param name="left">The left vector.</param>
+    /// <param name="right">The right vector.</param>
+    /// <returns>The resulting vector.</returns>
     public static Vector2 operator +(Vector2 left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
-    /// Subtracts two vectors.
+    /// Subtracts one vector from another.
     /// </summary>
-    /// <param name="left">Left vector.</param>
-    /// <param name="right">Right vector.</param>
-    /// <returns>The difference of the vectors.</returns>
+    /// <param name="left">The left vector.</param>
+    /// <param name="right">The right vector.</param>
+    /// <returns>The resulting vector.</returns>
     public static Vector2 operator -(Vector2 left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
-    /// Multiplies two vectors.
+    /// Multiplies two vectors component-wise.
     /// </summary>
-    /// <param name="left">Left vector.</param>
-    /// <param name="right">Right vector.</param>
-    /// <returns>The product of the vectors.</returns>
+    /// <param name="left">The left vector.</param>
+    /// <param name="right">The right vector.</param>
+    /// <returns>The resulting vector.</returns>
     public static Vector2 operator *(Vector2 left, Vector2 right) => new(left.X * right.X, left.Y * right.Y);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
     /// </summary>
     /// <param name="left">The vector.</param>
-    /// <param name="right">Scalar to multiply by.</param>
-    /// <returns>The product of the vector and the scalar.</returns>
+    /// <param name="right">The scalar to multiply by.</param>
+    /// <returns>The resulting vector.</returns>
     public static Vector2 operator *(Vector2 left, float right) => new(left.X * right, left.Y * right);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
     /// </summary>
-    /// <param name="left">Scalar to multiply.</param>
+    /// <param name="left">The scalar to multiply by.</param>
     /// <param name="right">The vector.</param>
-    /// <returns>The product of the scalar and the vector.</returns>
+    /// <returns>The resulting vector.</returns>
     public static Vector2 operator *(float left, Vector2 right) => right * left;
 
     /// <summary>
     /// Divides a vector by a scalar.
     /// </summary>
     /// <param name="left">The vector.</param>
-    /// <param name="right">Scalar to divide by.</param>
-    /// <returns>The division of the vector and the scalar.</returns>
+    /// <param name="right">>The scalar to divide by.</param>
+    /// <returns>The resulting vector.</returns>
+    /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
     public static Vector2 operator /(Vector2 left, float right)
     {
         Math.ThrowIfDividedByZero(right);
-
-        return new(left.X / right, left.Y / right);
+        return new Vector2(left.X / right, left.Y / right);
     }
 
     /// <summary>
-    /// Negates a vector.
+    /// Negates the vector.
     /// </summary>
     /// <param name="value">The vector to negate.</param>
-    /// <returns>The negated vector2.</returns>
+    /// <returns>The negated vector.</returns>
     public static Vector2 operator -(Vector2 value) => new(-value.X, -value.Y);
 
     /// <summary>
-    /// Compares two vectors are equal.
+    /// Determines whether two vectors are equal.
     /// </summary>
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
@@ -202,7 +202,7 @@ public struct Vector2(float x, float y) :
     public static bool operator ==(Vector2 left, Vector2 right) => left.Equals(right);
 
     /// <summary>
-    /// Compares two vectors are not equal.
+    /// Determines whether two vectors are not equal.
     /// </summary>
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
@@ -225,7 +225,7 @@ public struct Vector2(float x, float y) :
     }
 
     /// <summary>
-    /// Clamps a vector to a specified length.
+    /// Clamps the vector to a maximum length.
     /// </summary>
     /// <param name="vector">The vector to clamp.</param>
     /// <param name="maxLength">The maximum length to clamp the vector to.</param>
@@ -238,193 +238,202 @@ public struct Vector2(float x, float y) :
     }
 
     /// <summary>
-    /// Gets the distance between two vectors.
+    /// Computes the distance between two vectors.
     /// </summary>
-    /// <param name="left">The left vector to calculate the distance to.</param>
-    /// <param name="right">The right vector to calculate the distance to.</param>
+    /// <param name="from">The first vector to measure from.</param>
+    /// <param name="to">The second vector to measure to.</param>
     /// <returns>The distance between the two vectors.</returns>
-    public static float Distance(Vector2 left, Vector2 right) => (left - right).Magnitude;
+    public static float Distance(Vector2 from, Vector2 to) => (to - from).Magnitude;
 
     /// <summary>
-    /// Produces a dot product of two vectors.
+    /// Computes the dot product of two vectors.
     /// </summary>
-    /// <param name="left">Left vector to multiply.</param>
-    /// <param name="right">Right vector to multiply.</param>
-    /// <returns>A scalar that is the dot product of the two vectors.</returns>
+    /// <param name="left">The left vector.</param>
+    /// <param name="right">The right vector.</param>
+    /// <returns>The dot product of the two vectors.</returns>
     public static float Dot(Vector2 left, Vector2 right) => (left.X * right.X) + (left.Y * right.Y);
 
     /// <summary>
-    /// Linearly interpolates between two vectors with a clamped interpolation factor.
+    /// Computes the linear interpolation between two vectors with a clamped interpolation factor.
     /// </summary>
-    /// <param name="start">The start vector.</param>
-    /// <param name="end">The end vector.</param>
-    /// <param name="interpolationFactor">The interpolation factor. The value is clamped between 0 and 1.</param>
-    /// <returns>A new vector interpolated between the start and end vectors.</returns>
+    /// <param name="start">The starting vector.</param>
+    /// <param name="end">The ending vector.</param>
+    /// <param name="interpolationFactor">The interpolation factor between 0 and 1.</param>
+    /// <returns>The interpolated vector.</returns>
     public static Vector2 Lerp(Vector2 start, Vector2 end, float interpolationFactor)
     {
         interpolationFactor = Math.Clamp(interpolationFactor, 0f, 1f);
-
         return start + ((end - start) * interpolationFactor);
     }
 
     /// <summary>
-    /// Linearly interpolates between two vectors with an unclamped interpolation factor.
+    /// Computes the linear interpolation between two vectors with an unclamped interpolation factor.
     /// </summary>
-    /// <param name="start">The start vector.</param>
-    /// <param name="end">The end vector.</param>
+    /// <param name="start">The starting vector.</param>
+    /// <param name="end">The ending vector.</param>
     /// <param name="interpolationFactor">The interpolation factor.</param>
-    /// <returns>A new vector interpolated between the start and end vectors.</returns>
+    /// <returns>The interpolated vector.</returns>
     public static Vector2 LerpUnclamped(Vector2 start, Vector2 end, float interpolationFactor)
         => start + ((end - start) * interpolationFactor);
 
     /// <summary>
-    /// Gets the maximum of two vectors.
+    /// Computes the component-wise maximum of two vectors.
     /// </summary>
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
-    /// <returns>The maximum vector.</returns>
+    /// <returns>The component-wise maximum vector.</returns>
     public static Vector2 Max(Vector2 left, Vector2 right)
         => new(MathF.Max(left.X, right.X), MathF.Max(left.Y, right.Y));
 
     /// <summary>
-    /// Gets the minimum of two vectors.
+    /// Computes the component-wise minimum of two vectors.
     /// </summary>
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
-    /// <returns>The minimum vector.</returns>
+    /// <returns>The component-wise minimum vector.</returns>
     public static Vector2 Min(Vector2 left, Vector2 right)
         => new(MathF.Min(left.X, right.X), MathF.Min(left.Y, right.Y));
 
     /// <summary>
-    /// Moves a vector towards a target vector.
+    /// Moves a vector towards a target vector by a maximum distance.
     /// </summary>
     /// <param name="current">The current vector.</param>
     /// <param name="target">The target vector.</param>
-    /// <param name="maxDistanceDelta">The maximum distance to move the vector.</param>
-    /// <returns>The new vector moved towards the target vector.</returns>
+    /// <param name="maxDistanceDelta">The maximum distance to move.</param>
+    /// <returns>The moved vector towards the target.</returns>
     public static Vector2 MoveTowards(Vector2 current, Vector2 target, float maxDistanceDelta)
     {
-        Vector2 vector = target - current;
-        float magnitude = vector.Magnitude;
+        Vector2 toVector = target - current;
+        float distance = toVector.Magnitude;
 
-        if (magnitude <= maxDistanceDelta || MathF.IsNearlyZero(magnitude))
+        if (distance <= maxDistanceDelta || MathF.IsNearlyZero(distance))
             return target;
 
-        return current + (vector / magnitude * maxDistanceDelta);
+        return current + (toVector / distance * maxDistanceDelta);
     }
 
     /// <summary>
-    /// Scales a vector by multiplying each component by the corresponding component of another vector.
+    /// Scales a vector by another vector component-wise.
     /// </summary>
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector2 Scale(Vector2 left, Vector2 right) => new(left.X * right.X, left.Y * right.Y);
+    public static Vector2 Scale(Vector2 left, Vector2 right) => left * right;
 
     /// <summary>
-    /// Reflects the current vector across the given normal vector.
+    /// Reflects a vector off a surface with the given normal.
     /// </summary>
     /// <remarks>
-    /// If the normal vector is not normalized, it will be normalized for the calculation.
+    /// The normal vector is expected to be normalized.
+    /// If it is not, the method will normalize it internally.
     /// </remarks>
     /// <param name="vector">The vector to reflect.</param>
-    /// <param name="normal">The normal vector to reflect across. Must be normalized.</param>
+    /// <param name="normal">The normal of the surface to reflect off.</param>
     /// <returns>The reflected vector.</returns>
     public static Vector2 Reflect(Vector2 vector, Vector2 normal)
     {
         Vector2 normalized = normal.Normalized;
-        return vector - (2 * Dot(vector, normalized) * normalized);
+        return vector - (2f * Dot(vector, normalized) * normalized);
     }
 
     /// <summary>
-    /// Rotates the vector by the given angle.
+    /// Rotates a vector by the specified angle.
     /// </summary>
     /// <param name="vector">The vector to rotate.</param>
-    /// <param name="angle">The angle to rotate by.</param>
+    /// <param name="angle">The angle to rotate the vector by.</param>
     /// <returns>The rotated vector.</returns>
     public static Vector2 Rotate(Vector2 vector, Angle angle)
-        => new((vector.X * angle.Cos) - (vector.Y * angle.Sin), (vector.X * angle.Sin) + (vector.Y * angle.Cos));
+    {
+        float cos = angle.Cos;
+        float sin = angle.Sin;
+
+        float x = (vector.X * cos) - (vector.Y * sin);
+        float y = (vector.X * sin) + (vector.Y * cos);
+
+        return new Vector2(x, y);
+    }
 
     /// <summary>
-    /// Gets the angle between two vectors.
+    /// Computes the angle between this vector and another vector.
     /// </summary>
-    /// <param name="to">The second vector.</param>
+    /// <param name="to">The other vector.</param>
     /// <returns>The angle between the two vectors.</returns>
     public readonly Angle Angle(Vector2 to) => Angle(this, to);
 
     /// <summary>
-    /// Clamps the vector to a maximum length.
+    /// Clamps this vector to a maximum length.
     /// </summary>
-    /// <param name="maxLength">The maximum length to clamp to.</param>
-    /// <returns>A clamped vector.</returns>
+    /// <param name="maxLength">The maximum length to clamp the vector to.</param>
+    /// <returns>The clamped vector.</returns>
     public readonly Vector2 Clamp(float maxLength) => Clamp(this, maxLength);
 
     /// <summary>
-    /// Gets the distance between two vectors.
+    /// Computes the distance between this vector and another vector.
     /// </summary>
-    /// <param name="other">The other vector to calculate the distance to.</param>
+    /// <param name="to">The other vector.</param>
     /// <returns>The distance between the two vectors.</returns>
-    public readonly float Distance(Vector2 other) => Distance(this, other);
+    public readonly float Distance(Vector2 to) => Distance(this, to);
 
     /// <summary>
-    /// Produces a dot product of two vectors.
+    /// Computes the dot product of this vector and another vector.
     /// </summary>
-    /// <param name="right">Right vector to multiply.</param>
-    /// <returns>A scalar that is the dot product of the two vectors.</returns>
+    /// <param name="right">The other vector.</param>
+    /// <returns>The dot product of the two vectors.</returns>
     public readonly float Dot(Vector2 right) => Dot(this, right);
 
     /// <summary>
-    /// Linearly interpolates between the current vector and the target vector by the given interpolation factor.
+    /// Computes the linear interpolation between this vector and another vector with a clamped interpolation factor.
     /// </summary>
-    /// <param name="target">The target vector to interpolate towards.</param>
-    /// <param name="interpolationFactor">The interpolation factor. The value is clamped between 0 and 1.</param>
-    /// <returns>A new vector interpolated between the current vector and the target vector.</returns>
-    public readonly Vector2 Lerp(Vector2 target, float interpolationFactor) => Lerp(this, target, interpolationFactor);
+    /// <param name="end">The ending vector.</param>
+    /// <param name="interpolationFactor">The interpolation factor between 0 and 1.</param>
+    /// <returns>The interpolated vector.</returns>
+    public readonly Vector2 Lerp(Vector2 end, float interpolationFactor) => Lerp(this, end, interpolationFactor);
 
     /// <summary>
-    /// Linearly interpolates between two vectors with an unclamped interpolation factor.
+    /// Computes the linear interpolation between this vector and another vector with an unclamped interpolation factor.
+    /// </summary>
+    /// <param name="end">The ending vector.</param>
+    /// <param name="interpolationFactor">The interpolation factor.</param>
+    /// <returns>The interpolated vector.</returns>
+    public readonly Vector2 LerpUnclamped(Vector2 end, float interpolationFactor) => LerpUnclamped(this, end, interpolationFactor);
+
+    /// <summary>
+    /// Moves this vector towards a target vector by a maximum distance.
     /// </summary>
     /// <param name="target">The target vector.</param>
-    /// <param name="interpolationFactor">The interpolation factor.</param>
-    /// <returns>A new vector interpolated between the start and end vectors.</returns>
-    public readonly Vector2 LerpUnclamped(Vector2 target, float interpolationFactor) => LerpUnclamped(this, target, interpolationFactor);
-
-    /// <summary>
-    /// Moves the current vector towards a target vector.
-    /// </summary>
-    /// <param name="target">The target vector to move towards.</param>
-    /// <param name="maxDistanceDelta">The maximum distance to move the vector.</param>
-    /// <returns>The new vector moved towards the target vector.</returns>
+    /// <param name="maxDistanceDelta">The maximum distance to move.</param>
+    /// <returns>The moved vector towards the target.</returns>
     public readonly Vector2 MoveTowards(Vector2 target, float maxDistanceDelta) => MoveTowards(this, target, maxDistanceDelta);
 
     /// <summary>
-    /// Scales the vector by multiplying each component by the corresponding component of another vector.
+    /// Scales this vector by another vector component-wise.
     /// </summary>
-    /// <param name="vector">The vector to scale by.</param>
+    /// <param name="right">The other vector.</param>
     /// <returns>The scaled vector.</returns>
-    public readonly Vector2 Scale(Vector2 vector) => Scale(this, vector);
+    public readonly Vector2 Scale(Vector2 right) => Scale(this, right);
 
     /// <summary>
-    /// Reflects the current vector across the given normal vector.
+    /// Reflects this vector off a surface with the given normal.
     /// </summary>
     /// <remarks>
-    /// If the normal vector is not normalized, it will be normalized for the calculation.
+    /// The normal vector is expected to be normalized.
+    /// If it is not, the method will normalize it internally.
     /// </remarks>
-    /// <param name="vector">The normal vector to reflect across. Must be normalized.</param>
+    /// <param name="normal">The normal of the surface to reflect off.</param>
     /// <returns>The reflected vector.</returns>
-    public readonly Vector2 Reflect(Vector2 vector) => Reflect(this, vector);
+    public readonly Vector2 Reflect(Vector2 normal) => Reflect(this, normal);
 
     /// <summary>
-    /// Rotates the vector by the given angle.
+    /// Rotates this vector by the specified angle.
     /// </summary>
-    /// <param name="angle">The angle to rotate by.</param>
+    /// <param name="angle">The angle to rotate the vector by.</param>
     /// <returns>The rotated vector.</returns>
     public readonly Vector2 Rotate(Angle angle) => Rotate(this, angle);
 
     /// <summary>
-    /// Compares two vectors are equal.
+    /// Determines whether this vector is equal to another vector.
     /// </summary>
-    /// <param name="other">The vector to compare.</param>
+    /// <param name="other">The other vector.</param>
     /// <returns><see langword="true"/> if the vectors are equal; otherwise, <see langword="false"/>.</returns>
     public readonly bool Equals(Vector2 other)
     {
@@ -433,28 +442,23 @@ public struct Vector2(float x, float y) :
     }
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj)
-        => obj is Vector2 vector && Equals(vector);
+    public readonly override bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2 vector && Equals(vector);
 
     /// <inheritdoc/>
-    public override readonly int GetHashCode() => HashCode.Combine(X, Y);
+    public readonly override int GetHashCode() => HashCode.Combine(X, Y);
 
     /// <summary>
-    /// Returns a string representation of the vector in the format "(X, Y)".
+    /// The string representation of the vector in the format (X, Y).
     /// </summary>
-    /// <returns>>A string representation of the vector.</returns>
-    public override readonly string ToString() => $"{this}";
+    /// <returns>The string representation of the vector.</returns>
+    public readonly override string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
-    /// <summary>
-    /// Converts the current vector to a <see cref="NumericVector2"/>.
-    /// </summary>
-    /// <returns>A new <see cref="NumericVector2"/> representing the current vector.</returns>
-    internal readonly NumericVector2 ToNumerics() => new(X, Y);
-
     /// <inheritdoc/>
-    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"({X}, {Y})", out charsWritten);
+
+    internal readonly NumericVector2 ToNumerics() => new(X, Y);
 }

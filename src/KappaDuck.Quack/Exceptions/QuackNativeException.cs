@@ -3,7 +3,6 @@
 
 using KappaDuck.Quack.Interop.SDL;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 namespace KappaDuck.Quack.Exceptions;
 

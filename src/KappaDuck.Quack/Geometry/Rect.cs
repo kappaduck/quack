@@ -1,8 +1,7 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Geometry;
 
@@ -13,11 +12,12 @@ namespace KappaDuck.Quack.Geometry;
 /// <param name="y">The y-coordinate of the top-left corner of the rectangle.</param>
 /// <param name="width">The width of the rectangle.</param>
 /// <param name="height">The height of the rectangle.</param>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct Rect(float x, float y, float width, float height) : IEquatable<Rect>, ISpanFormattable
 {
     /// <summary>
-    /// Initializes an empty instance of the <see cref="Rect"/>.
+    /// Initializes a new instance of the <see cref="Rect"/> with all values set to zero.
     /// </summary>
     public Rect() : this(0f, 0f, 0f, 0f)
     {
@@ -153,46 +153,52 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     }
 
     /// <summary>
-    /// Gets a empty rectangle.
+    /// Gets an empty rectangle.
     /// </summary>
     public static Rect Zero { get; } = new(0f, 0f, 0f, 0f);
 
     /// <summary>
-    /// Compares two rectangles are equal.
+    /// Determines whether the left rectangle is equal to the right rectangle.
     /// </summary>
-    /// <param name="left">Left rectangle to compare.</param>
-    /// <param name="right">Right rectangle to compare.</param>
+    /// <param name="left">The left rectangle.</param>
+    /// <param name="right">The right rectangle.</param>
     /// <returns><see langword="true"/> if the rectangles are equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator ==(Rect left, Rect right) => left.Equals(right);
 
     /// <summary>
-    /// Compares two rectangles are not equal.
+    /// Determines whether the left rectangle is not equal to the right rectangle.
     /// </summary>
-    /// <param name="left">Left rectangle to compare.</param>
-    /// <param name="right">Right rectangle to compare.</param>
+    /// <param name="left">The left rectangle.</param>
+    /// <param name="right">The right rectangle.</param>
     /// <returns><see langword="true"/> if the rectangles are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Rect left, Rect right) => !(left == right);
 
     /// <summary>
-    /// Determines whether the rectangle contains a specified point.
+    /// Determines whether the specified point is contained within the rectangle.
     /// </summary>
-    /// <param name="point">The point to check.</param>
-    /// <returns><see langword="true"/> if the rectangle contains the point; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Contains(Vector2 point) => point.X >= X && point.X <= MaxX && point.Y >= Y && point.Y <= MaxY;
+    /// <param name="point">The point to test.</param>
+    /// <returns><see langword="true"/> if the point is contained within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool Contains(Vector2 point)
+    {
+        if (IsEmpty)
+            return false;
+
+        return point.X >= X && point.X <= MaxX && point.Y >= Y && point.Y <= MaxY;
+    }
 
     /// <summary>
-    /// Determines whether the rectangle contains a specified point.
+    /// Determines whether any of the specified points are contained within the rectangle.
     /// </summary>
-    /// <param name="points">The points to check.</param>
-    /// <returns><see langword="true"/> if the rectangle contains any of the points; otherwise, <see langword="false"/>.</returns>
+    /// <param name="points">The points to test.</param>
+    /// <returns><see langword="true"/> if any of the points are contained within the rectangle; otherwise, <see langword="false"/>.</returns>
     public readonly bool Contains(ReadOnlySpan<Vector2> points)
     {
         if (IsEmpty || points.IsEmpty)
             return false;
 
-        for (int i = 0; i < points.Length; i++)
+        foreach (Vector2 point in points)
         {
-            if (Contains(points[i]))
+            if (Contains(point))
                 return true;
         }
 
@@ -200,30 +206,35 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     }
 
     /// <summary>
-    /// Determines whether the rectangle contains a specified point.
+    /// Determines whether any of the specified points are contained within the rectangle.
     /// </summary>
-    /// <param name="points">The points to check.</param>
-    /// <returns><see langword="true"/> if the rectangle contains any of the points; otherwise, <see langword="false"/>.</returns>
+    /// <param name="points">The points to test.</param>
+    /// <returns><see langword="true"/> if any of the points are contained within the rectangle; otherwise, <see langword="false"/>.</returns>
     public readonly bool Contains(IEnumerable<Vector2> points)
     {
-        if (IsEmpty || points is null)
+        if (IsEmpty)
             return false;
 
-        if (points is Vector2[] array)
-            return Contains(array);
-
-        if (points is List<Vector2> list)
-            return Contains(CollectionsMarshal.AsSpan(list));
-
-        return points.Any(Contains);
+        return points switch
+        {
+            Vector2[] array => Contains(array),
+            List<Vector2> list => Contains(CollectionsMarshal.AsSpan(list)),
+            _ => points.Any(Contains)
+        };
     }
 
     /// <summary>
-    /// Expands the rectangle to contain the specified point.
+    /// Expands the rectangle to include the specified point.
     /// </summary>
     /// <param name="point">The point to encapsulate.</param>
+    /// <remarks>
+    /// If the rectangle already contains the point, no changes are made.
+    /// </remarks>
     public void Encapsulate(Vector2 point)
     {
+        if (Contains(point))
+            return;
+
         if (IsEmpty)
         {
             X = point.X;
@@ -244,43 +255,46 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     }
 
     /// <summary>
-    /// Expands the rectangle to include another rectangle.
+    /// Expands the rectangle to include the specified rectangle.
     /// </summary>
-    /// <param name="other">The rectangle to encapsulate.</param>
-    public void Encapsulate(Rect other)
+    /// <param name="rect">The rectangle to encapsulate.</param>
+    /// <remarks>
+    /// If the rectangle already contains the specified rectangle, no changes are made.
+    /// </remarks>
+    public void Encapsulate(Rect rect)
     {
+        if (this == rect || rect.IsEmpty)
+            return;
+
         if (IsEmpty)
         {
-            this = other;
+            this = rect;
             return;
         }
 
-        float maxX = MathF.Max(MaxX, other.MaxX);
-        float maxY = MathF.Max(MaxY, other.MaxY);
+        float maxX = MathF.Max(MaxX, rect.MaxX);
+        float maxY = MathF.Max(MaxY, rect.MaxY);
 
-        X = MathF.Min(X, other.X);
-        Y = MathF.Min(Y, other.Y);
+        X = MathF.Min(X, rect.X);
+        Y = MathF.Min(Y, rect.Y);
         Width = maxX - X;
         Height = maxY - Y;
     }
 
     /// <summary>
-    /// Calculates the intersection of two rectangles.
+    /// Computes the intersection of this rectangle with another rectangle.
     /// </summary>
-    /// <remarks>
-    /// If both rectangles are empty, the method returns an empty rectangle.
-    /// </remarks>
-    /// <param name="other">The rectangle to intersect.</param>
-    /// <returns>The intersections of two rectangles or an empty rectangle if there is no intersection.</returns>
-    public readonly Rect Intersects(Rect other)
+    /// <param name="rect">The rectangle to intersect with.</param>
+    /// <returns>A new rectangle representing the intersection area. If there is no intersection, an empty rectangle is returned.</returns>
+    public readonly Rect Intersects(Rect rect)
     {
-        if (IsEmpty || other.IsEmpty)
+        if (IsEmpty || rect.IsEmpty)
             return Zero;
 
-        float maxX = Math.Max(X, other.X);
-        float maxY = Math.Max(Y, other.Y);
-        float minWidth = Math.Min(MaxX, other.MaxX) - maxX;
-        float minHeight = Math.Min(MaxY, other.MaxY) - maxY;
+        float maxX = MathF.Max(X, rect.X);
+        float maxY = MathF.Max(Y, rect.Y);
+        float minWidth = MathF.Min(MaxX, rect.MaxX) - maxX;
+        float minHeight = MathF.Min(MaxY, rect.MaxY) - maxY;
 
         return new Rect(maxX, maxY, minWidth, minHeight);
     }
@@ -288,43 +302,39 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <summary>
     /// Determines whether this rectangle overlaps with another rectangle.
     /// </summary>
-    /// <param name="other">The rectangle to check.</param>
+    /// <param name="rect">The rectangle to test for overlap.</param>
     /// <returns><see langword="true"/> if the rectangles overlap; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Overlaps(Rect other)
+    public readonly bool Overlaps(Rect rect)
     {
-        if (IsEmpty || other.IsEmpty)
+        if (IsEmpty || rect.IsEmpty)
             return false;
 
-        return X < other.MaxX
-            && MaxX > other.X
-            && Y < other.MaxY
-            && MaxY > other.Y;
+        return X < rect.MaxX
+               && MaxX > rect.X
+               && Y < rect.MaxY
+               && MaxY > rect.Y;
     }
 
     /// <summary>
-    /// Calculates the union of two rectangles.
+    /// Computes the union of this rectangle with another rectangle.
     /// </summary>
-    /// <remarks>
-    /// If both rectangles are empty, it returns an empty rectangle.
-    /// If one of the rectangles is empty, it returns the other rectangle.
-    /// </remarks>
-    /// <param name="other">The rectangle to union.</param>
-    /// <returns>The union of two rectangles.</returns>
-    public readonly Rect Union(Rect other)
+    /// <param name="rect">The rectangle to unite with.</param>
+    /// <returns>A new rectangle representing the smallest rectangle that contains both rectangles.</returns>
+    public readonly Rect Union(Rect rect)
     {
-        if (IsEmpty && other.IsEmpty)
+        if (IsEmpty && rect.IsEmpty)
             return Zero;
 
         if (IsEmpty)
-            return other;
+            return rect;
 
-        if (other.IsEmpty)
+        if (rect.IsEmpty)
             return this;
 
-        float minX = Math.Min(X, other.X);
-        float minY = Math.Min(Y, other.Y);
-        float maxWidth = Math.Max(MaxX, other.MaxX) - minX;
-        float maxHeight = Math.Max(MaxY, other.MaxY) - minY;
+        float minX = MathF.Min(X, rect.X);
+        float minY = MathF.Min(Y, rect.Y);
+        float maxWidth = MathF.Max(MaxX, rect.MaxX) - minX;
+        float maxHeight = MathF.Max(MaxY, rect.MaxY) - minY;
 
         return new Rect(minX, minY, maxWidth, maxHeight);
     }
@@ -336,20 +346,22 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
             return true;
 
         return MathF.IsNearlyZero(X - other.X)
-            && MathF.IsNearlyZero(Y - other.Y)
-            && MathF.IsNearlyZero(Width - other.Width)
-            && MathF.IsNearlyZero(Height - other.Height);
+               && MathF.IsNearlyZero(Y - other.Y)
+               && MathF.IsNearlyZero(Width - other.Width)
+               && MathF.IsNearlyZero(Height - other.Height);
     }
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj)
-        => obj is Rect rectangle && Equals(rectangle);
+    public readonly override bool Equals([NotNullWhen(true)] object? obj) => obj is Rect rect && Equals(rect);
 
     /// <inheritdoc/>
-    public override readonly int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
+    public readonly override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
 
-    /// <inheritdoc/>
-    public override readonly string ToString() => $"{this}";
+    /// <summary>
+    /// The string representation of the rectangle in the format "(X, Y, Width, Height)".
+    /// </summary>
+    /// <returns>The string representation of the rectangle.</returns>
+    public readonly override string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();

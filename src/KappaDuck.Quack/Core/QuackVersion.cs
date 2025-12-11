@@ -1,6 +1,8 @@
 ﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+// ReSharper disable InconsistentNaming
+
 using KappaDuck.Quack.Interop.SDL;
 
 namespace KappaDuck.Quack.Core;

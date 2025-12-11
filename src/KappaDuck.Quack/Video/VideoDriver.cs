@@ -25,7 +25,7 @@ public static class VideoDriver
     /// Gets the name of the video driver at the specified index.
     /// </summary>
     /// <param name="index">The index of the video driver to get the name of.</param>
-    /// <returns>>The name of the video driver at the specified index.</returns>
+    /// <returns>The name of the video driver at the specified index.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative or greater than or equal to <see cref="Count"/>.</exception>
     public static string Get(int index)
     {

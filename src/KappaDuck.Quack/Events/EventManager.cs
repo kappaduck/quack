@@ -70,7 +70,7 @@ public static class EventManager
     /// Determines whether the specified event type is enabled.
     /// </summary>
     /// <param name="type">The event type to check.</param>
-    /// <returns>><see langword="true"/> if the event type is enabled; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the event type is enabled; otherwise, <see langword="false"/>.</returns>
     public static bool IsEnabled(EventType type) => Native.SDL_EventEnabled(type);
 
     /// <summary>
