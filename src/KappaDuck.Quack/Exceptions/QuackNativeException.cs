@@ -36,6 +36,12 @@ public sealed class QuackNativeException : QuackException
     internal static void ThrowIfNegative(int value, [CallerMemberName] string memberName = "")
         => ThrowIf(int.IsNegative(value), memberName);
 
+    internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string memberName = "") where T : unmanaged
+        => ThrowIf(value is null, memberName);
+
+    internal static void ThrowIfZero(uint value, [CallerMemberName] string memberName = "")
+        => ThrowIf(value == 0, memberName);
+
     [DoesNotReturn]
     private static void Throw(string memberName)
     {
