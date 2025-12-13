@@ -257,8 +257,8 @@ public sealed partial class Keyboard
         /// <para>
         /// Produces REVERSE SOLIDUS (backslash) and VERTICAL LINE in a US layout, REVERSE
         /// SOLIDUS and VERTICAL LINE in a UK Mac layout, NUMBER SIGN and TILDE in a UK
-        /// Windows layout, DOLLAR SIGN and POUND SIGN in a Swiss German layout, NUMBER SIGN and
-        /// APOSTROPHE in a German layout, GRAVE ACCENT and POUND SIGN in a French Mac layout,
+        /// Windows layout. DOLLAR SIGN and POUND SIGN in a Swiss German layout. NUMBER SIGN and
+        /// APOSTROPHE in a German layout. GRAVE ACCENT and POUND SIGN in a French Mac layout,
         /// and ASTERISK and MICRO SIGN in a French Windows layout.
         /// </para>
         /// </remarks>
@@ -894,7 +894,7 @@ public sealed partial class Keyboard
         CurrencyUnit = 180,
 
         /// <summary>
-        /// The currency sub-unit key.
+        /// The currency subunit key.
         /// </summary>
         CurrencySubUnit = 181,
 
@@ -1179,7 +1179,7 @@ public sealed partial class Keyboard
         MediaRecord = 264,
 
         /// <summary>
-        /// The media fast forward key.
+        /// The media fast-forward key.
         /// </summary>
         MediaFastForward = 265,
 

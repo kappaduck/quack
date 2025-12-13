@@ -1164,7 +1164,7 @@ public sealed partial class Keyboard
         MediaRecord = 0x40000108u,
 
         /// <summary>
-        /// Media fast forward.
+        /// Media fast-forward.
         /// </summary>
         MediaFastForward = 0x40000109u,
 

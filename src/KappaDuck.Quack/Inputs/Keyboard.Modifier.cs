@@ -85,7 +85,7 @@ public sealed partial class Keyboard
         Gui = LeftGui | RightGui,
 
         /// <summary>
-        /// The num lock key (may be located on an extended keypad).
+        /// The num lock key (can be located on an extended keypad).
         /// </summary>
         NumLock = 0x1000,
 
