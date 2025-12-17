@@ -8,6 +8,7 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// Details about the format of a pixel.
 /// </summary>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct PixelFormatDetails
 {
