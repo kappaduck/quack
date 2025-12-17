@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Collections;
@@ -13,7 +13,6 @@ namespace KappaDuck.Quack.Geometry;
 /// <param name="y">The y-coordinate of the top-left corner of the rectangle.</param>
 /// <param name="width">The width of the rectangle.</param>
 /// <param name="height">The height of the rectangle.</param>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct RectInt(int x, int y, int width, int height) : IEquatable<RectInt>, ISpanFormattable
 {
@@ -356,16 +355,16 @@ public struct RectInt(int x, int y, int width, int height) : IEquatable<RectInt>
     }
 
     /// <inheritdoc/>
-    public readonly override bool Equals([NotNullWhen(true)] object? obj) => obj is RectInt rect && Equals(rect);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is RectInt rect && Equals(rect);
 
     /// <inheritdoc/>
-    public readonly override int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
+    public override readonly int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
 
     /// <summary>
     /// The string representation of the rectangle in the format "(X, Y, Width, Height)".
     /// </summary>
     /// <returns>The string representation of the rectangle.</returns>
-    public readonly override string ToString() => $"{this}";
+    public override readonly string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();

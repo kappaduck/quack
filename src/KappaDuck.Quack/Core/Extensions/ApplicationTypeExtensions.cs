@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Core.Extensions;
@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Core.Extensions;
 /// <summary>
 /// Provides extension methods for <see cref="ApplicationType"/>.
 /// </summary>
-[PublicAPI]
 public static class ApplicationTypeExtensions
 {
     extension(ApplicationType type)

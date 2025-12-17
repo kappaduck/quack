@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Graphics.Pixels;
@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.Video.Displays;
 /// <summary>
 /// Represents a display mode, which includes resolution, refresh rate, and pixel format.
 /// </summary>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct DisplayMode
 {

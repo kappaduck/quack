@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
@@ -9,7 +9,6 @@ namespace KappaDuck.Quack.Geometry;
 /// <summary>
 /// Represents an angle measurement in geometry.
 /// </summary>
-[PublicAPI]
 [StructLayout(LayoutKind.Auto)]
 public readonly struct Angle :
     IAdditionOperators<Angle, Angle, Angle>,

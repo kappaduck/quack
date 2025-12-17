@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// The scaling mode to use when rendering a surface.
 /// </summary>
-[PublicAPI]
 public enum ScaleMode
 {
     /// <summary>

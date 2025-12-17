@@ -1,16 +1,16 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Video.Displays;
 
 /// <summary>
 /// Represents a display.
 /// </summary>
-[PublicAPI]
 public sealed class Display
 {
     private const string HdrEnabledProperty = "SDL.display.HDR_enabled";

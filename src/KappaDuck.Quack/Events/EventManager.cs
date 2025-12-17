@@ -1,5 +1,5 @@
-﻿// // Copyright (c) KappaDuck. All rights reserved.
-// // The source code is licensed under MIT License.
+// Copyright (c) KappaDuck. All rights reserved.
+// The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL;
@@ -10,7 +10,6 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Provides event management functionalities.
 /// </summary>
-[PublicAPI]
 public static class EventManager
 {
     private const uint None = 0;

@@ -1,14 +1,11 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
-
 namespace KappaDuck.Quack.Graphics.Pixels;
 
 /// <summary>
 /// Details about the format of a pixel.
 /// </summary>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct PixelFormatDetails
 {

@@ -10,7 +10,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// Provides loading and saving functionality for images.
 /// </summary>
-[PublicAPI]
 public static unsafe class Image
 {
     /// <summary>

@@ -15,7 +15,6 @@ namespace KappaDuck.Quack.Core;
 /// Subsystems are automatically managed by modules such as Audio, Graphics, Window, etc.
 /// Use <see cref="QuackEngine"/> only when you need to manually initialize or shut down a subsystem.
 /// </remarks>
-[PublicAPI]
 public static class QuackEngine
 {
     private static readonly Lock _lock = new();

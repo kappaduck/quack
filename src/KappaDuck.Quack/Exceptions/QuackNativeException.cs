@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
@@ -9,7 +9,6 @@ namespace KappaDuck.Quack.Exceptions;
 /// <summary>
 /// An exception that is thrown when a native error occurs in the Quack engine.
 /// </summary>
-[PublicAPI]
 public sealed class QuackNativeException : QuackException
 {
     internal QuackNativeException()

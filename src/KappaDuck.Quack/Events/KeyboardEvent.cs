@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Represents a keyboard event.
 /// </summary>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct KeyboardEvent
 {

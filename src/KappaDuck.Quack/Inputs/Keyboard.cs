@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
@@ -12,7 +12,6 @@ namespace KappaDuck.Quack.Inputs;
 /// <summary>
 /// Represents a keyboard device.
 /// </summary>
-[PublicAPI]
 public sealed partial class Keyboard
 {
     internal Keyboard(uint id)

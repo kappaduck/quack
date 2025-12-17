@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// Represents the format of a pixel.
 /// </summary>
-[PublicAPI]
 public enum PixelFormat
 {
     /// <summary>

@@ -9,7 +9,6 @@ namespace KappaDuck.Quack.Core;
 /// Represents a subsystem that can be enabled or disabled in the <see cref="QuackEngine"/>.
 /// </summary>
 [Flags]
-[PublicAPI]
 public enum Subsystem : uint
 {
     /// <summary>

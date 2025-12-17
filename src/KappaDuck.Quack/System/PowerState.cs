@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.System;
@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.System;
 /// <summary>
 /// Represents the power state of the system.
 /// </summary>
-[PublicAPI]
 public enum PowerState
 {
     /// <summary>

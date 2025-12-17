@@ -11,7 +11,6 @@ namespace KappaDuck.Quack.System;
 /// <summary>
 /// Represents a cursor.
 /// </summary>
-[PublicAPI]
 public sealed class Cursor : IDisposable
 {
     private readonly SDLCursorHandle _handle;

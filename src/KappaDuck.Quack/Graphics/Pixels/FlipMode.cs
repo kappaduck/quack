@@ -7,7 +7,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// Specifies the flip mode for a surface.
 /// </summary>
 [Flags]
-[PublicAPI]
 public enum FlipMode
 {
     /// <summary>

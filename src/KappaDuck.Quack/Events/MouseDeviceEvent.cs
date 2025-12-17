@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Represents a mouse device event.
 /// </summary>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MouseDeviceEvent
 {

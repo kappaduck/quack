@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.Exceptions;
 /// <summary>
 /// An exception that is thrown when an error occurs in the Quack engine.
 /// </summary>
-[PublicAPI]
 public class QuackException : Exception
 {
     internal QuackException()

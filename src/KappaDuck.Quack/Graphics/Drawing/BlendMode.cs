@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// <summary>
 /// A set of blend modes used in drawing operations.
 /// </summary>
-[PublicAPI]
 public enum BlendMode : uint
 {
     /// <summary>
@@ -56,7 +55,6 @@ public enum BlendMode : uint
 /// <summary>
 /// Provides extension methods for the <see cref="BlendMode"/>.
 /// </summary>
-[PublicAPI]
 public static class BlendModeExtensions
 {
     extension(BlendMode)

@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
@@ -8,7 +8,6 @@ namespace KappaDuck.Quack.System;
 /// <summary>
 /// Provides information about the system's power status, e.g. laptop battery status.
 /// </summary>
-[PublicAPI]
 public sealed class PowerStatus
 {
     private PowerStatus(int? remaining, int? percentage, PowerState state)

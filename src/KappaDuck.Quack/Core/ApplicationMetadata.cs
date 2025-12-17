@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Core;
@@ -18,7 +18,6 @@ namespace KappaDuck.Quack.Core;
 /// It is managed by the <see cref="QuackEngine"/> and can be set during initialization. The engine will keep a reference to it.
 /// </para>
 /// </remarks>
-[PublicAPI]
 public sealed record ApplicationMetadata
 {
     /// <summary>

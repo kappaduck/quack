@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 // ReSharper disable InconsistentNaming
@@ -10,7 +10,6 @@ namespace KappaDuck.Quack.Core;
 /// <summary>
 /// Provides version information about Quack! and its components.
 /// </summary>
-[PublicAPI]
 public static class QuackVersion
 {
     /// <summary>

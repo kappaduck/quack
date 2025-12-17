@@ -11,7 +11,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// <summary>
 /// Represents a color palette for indexed color graphics.
 /// </summary>
-[PublicAPI]
 public sealed unsafe class Palette : IDisposable
 {
     /// <summary>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
@@ -18,7 +18,6 @@ namespace KappaDuck.Quack.Windows;
 /// <remarks>
 /// TODO: Explain how to attach a graphics context to the window.
 /// </remarks>
-[PublicAPI]
 public sealed partial class Window : IDisposable, ISpanFormattable
 {
     private SDLWindowHandle _windowHandle = new();

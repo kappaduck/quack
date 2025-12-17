@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
@@ -11,7 +11,6 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="x">The x-coordinate of the vector.</param>
 /// <param name="y">The y-coordinate of the vector.</param>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector2Int(int x, int y) :
     IAdditionOperators<Vector2Int, Vector2Int, Vector2Int>,
@@ -188,13 +187,13 @@ public struct Vector2Int(int x, int y) :
     public readonly bool Equals(Vector2Int other) => X == other.X && Y == other.Y;
 
     /// <inheritdoc/>
-    public readonly override bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2Int other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2Int other && Equals(other);
 
     /// <inheritdoc/>
-    public readonly override int GetHashCode() => HashCode.Combine(X, Y);
+    public override readonly int GetHashCode() => HashCode.Combine(X, Y);
 
     /// <inheritdoc/>
-    public readonly override string ToString() => $"{this}";
+    public override readonly string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();

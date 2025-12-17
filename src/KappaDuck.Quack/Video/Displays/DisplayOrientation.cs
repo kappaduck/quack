@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Video.Displays;
@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Video.Displays;
 /// <summary>
 /// The orientation of a display.
 /// </summary>
-[PublicAPI]
 public enum DisplayOrientation
 {
     /// <summary>

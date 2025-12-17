@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
@@ -9,7 +9,6 @@ namespace KappaDuck.Quack.System;
 /// <summary>
 /// Provides access to system preferences.
 /// </summary>
-[PublicAPI]
 public static class SystemPreferences
 {
     /// <summary>

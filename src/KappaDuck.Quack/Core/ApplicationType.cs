@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Core;
@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Core;
 /// <summary>
 /// The type of the application.
 /// </summary>
-[PublicAPI]
 public enum ApplicationType
 {
     /// <summary>

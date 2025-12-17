@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
@@ -11,7 +11,6 @@ namespace KappaDuck.Quack.Inputs;
 /// <summary>
 /// Represents a mouse input device.
 /// </summary>
-[PublicAPI]
 public sealed class Mouse
 {
     internal Mouse(uint id)
@@ -160,7 +159,6 @@ public sealed class Mouse
     /// <summary>
     /// The cached state of the mouse.
     /// </summary>
-    [PublicAPI]
     [StructLayout(LayoutKind.Auto)]
     public readonly struct CachedState
     {

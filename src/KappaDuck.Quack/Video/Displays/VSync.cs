@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Video.Displays;
@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Video.Displays;
 /// <summary>
 /// Constants values for vertical synchronization (VSync) settings.
 /// </summary>
-[PublicAPI]
 public static class VSync
 {
     /// <summary>

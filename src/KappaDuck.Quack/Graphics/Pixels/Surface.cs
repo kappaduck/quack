@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 // ReSharper disable InconsistentNaming
@@ -32,7 +32,6 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// When a surface holds MJPG format data, pixels points at the compressed JPEG image and pitch is the length of that data.
 /// </para>
 /// </remarks>
-[PublicAPI]
 public sealed unsafe class Surface : IDisposable
 {
     /// <summary>

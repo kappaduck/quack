@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
@@ -13,7 +13,6 @@ namespace KappaDuck.Quack.System;
 /// The behavior of URI launching may vary depending on the operating system and its configuration.
 /// Ensure that the URI scheme is supported by the target system for successful launching.
 /// </remarks>
-[PublicAPI]
 public static class UriLauncher
 {
     /// <summary>

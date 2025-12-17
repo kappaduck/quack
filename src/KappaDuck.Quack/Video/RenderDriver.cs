@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
@@ -12,7 +12,6 @@ namespace KappaDuck.Quack.Video;
 /// A render driver is a set of code that handles rendering and texture management on a particular display.
 /// Normally there is only one, but some drivers may have several available with different capabilities.
 /// </remarks>
-[PublicAPI]
 public static class RenderDriver
 {
     /// <summary>

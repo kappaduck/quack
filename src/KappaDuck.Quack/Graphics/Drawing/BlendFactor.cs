@@ -6,7 +6,6 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// <summary>
 /// The normalized factor used to multiply pixel components.
 /// </summary>
-[PublicAPI]
 public enum BlendFactor : uint
 {
     /// <summary>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
@@ -12,7 +12,6 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="x">The x-coordinate of the vector.</param>
 /// <param name="y">The y-coordinate of the vector.</param>
-[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector2(float x, float y) :
     IAdditionOperators<Vector2, Vector2, Vector2>,
@@ -61,7 +60,7 @@ public struct Vector2(float x, float y) :
     /// <remarks>
     /// It compares the squared magnitude of the vector to a small tolerance.
     /// </remarks>
-    public readonly bool IsZero => MagnitudeSquared <= (float.Epsilon * float.Epsilon);
+    public readonly bool IsZero => MagnitudeSquared <= float.Epsilon * float.Epsilon;
 
     /// <summary>
     /// Gets the magnitude of the vector.
@@ -442,16 +441,16 @@ public struct Vector2(float x, float y) :
     }
 
     /// <inheritdoc/>
-    public readonly override bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2 vector && Equals(vector);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2 vector && Equals(vector);
 
     /// <inheritdoc/>
-    public readonly override int GetHashCode() => HashCode.Combine(X, Y);
+    public override readonly int GetHashCode() => HashCode.Combine(X, Y);
 
     /// <summary>
     /// The string representation of the vector in the format (X, Y).
     /// </summary>
     /// <returns>The string representation of the vector.</returns>
-    public readonly override string ToString() => $"{this}";
+    public override readonly string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
