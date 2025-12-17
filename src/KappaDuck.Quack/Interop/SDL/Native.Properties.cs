@@ -10,14 +10,15 @@ internal static partial class Native
 {
     internal class Properties : IDisposable
     {
-        private readonly uint _propertiesId;
         private bool _disposed;
 
         internal Properties()
         {
-            _propertiesId = SDL_CreateProperties();
-            QuackNativeException.ThrowIfZero(_propertiesId);
+            Id = SDL_CreateProperties();
+            QuackNativeException.ThrowIfZero(Id);
         }
+
+        internal uint Id { get; }
 
         public void Dispose()
         {
@@ -31,18 +32,18 @@ internal static partial class Native
                 return;
 
             if (disposing)
-                SDL_DestroyProperties(_propertiesId);
+                SDL_DestroyProperties(Id);
 
             _disposed = true;
         }
 
-        protected void Set(string name, bool value) => SetBooleanProperty(_propertiesId, name, value);
+        protected void Set(string name, bool value) => SetBooleanProperty(Id, name, value);
 
-        protected void Set(string name, float value) => SetFloatProperty(_propertiesId, name, value);
+        protected void Set(string name, float value) => SetFloatProperty(Id, name, value);
 
-        protected void Set(string name, string value) => SetStringProperty(_propertiesId, name, value);
+        protected void Set(string name, string value) => SetStringProperty(Id, name, value);
 
-        protected void Set(string name, int value) => SetNumberProperty(_propertiesId, name, value);
+        protected void Set(string name, int value) => SetNumberProperty(Id, name, value);
     }
 
     internal static bool GetBooleanProperty(uint propertiesId, string name, bool defaultValue) => SDL_GetBooleanProperty(propertiesId, name, defaultValue);

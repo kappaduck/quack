@@ -10,6 +10,11 @@ dotnet_diagnostic.CA1028.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1008
 dotnet_diagnostic.CA1008.severity = none
 
+# CA1030: Use events where appropriate
+# Not all delegate fields need to be events
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1030
+dotnet_diagnostic.CA1030.severity = none
+
 # CA1034: Do not nest type
 # Can nest type to group records/classes
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1034

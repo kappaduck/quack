@@ -33,6 +33,9 @@ public sealed class QuackNativeException : QuackException
     internal static void ThrowIfFailed(bool condition, [CallerMemberName] string memberName = "")
         => ThrowIf(!condition, memberName);
 
+    internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
+        => ThrowIf(handle.IsInvalid, memberName);
+
     internal static void ThrowIfNegative(int value, [CallerMemberName] string memberName = "")
         => ThrowIf(int.IsNegative(value), memberName);
 

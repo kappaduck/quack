@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL;
+using KappaDuck.Quack.Windows;
 using System.Text;
 
 namespace KappaDuck.Quack.Inputs;
@@ -126,7 +127,7 @@ public sealed partial class Keyboard
     /// an empty string is returned.
     /// </remarks>
     /// <param name="code">The scancode.</param>
-    /// <returns>>The name of the scancode or <see cref="string.Empty"/> if the scancode doesn't have a name.</returns>
+    /// <returns>The name of the scancode or <see cref="string.Empty"/> if the scancode doesn't have a name.</returns>
     public static string GetScancodeName(Scancode code) => Native.SDL_GetScancodeName(code);
 
     /// <summary>
@@ -138,7 +139,7 @@ public sealed partial class Keyboard
     /// <see cref="EventManager.Poll(out Event)"/> or <see cref="EventManager.Pump"/> to update the keyboard state.
     /// </remarks>
     /// <param name="code">The scancode.</param>
-    /// <returns>><see langword="true"/> if the scancode is currently pressed; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the scancode is currently pressed; otherwise, <see langword="false"/>.</returns>
     public static bool IsDown(Scancode code)
     {
         ReadOnlySpan<byte> keys = Native.SDL_GetKeyboardState(out _);

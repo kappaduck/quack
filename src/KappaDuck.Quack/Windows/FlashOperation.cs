@@ -6,6 +6,7 @@ namespace KappaDuck.Quack.Windows;
 /// <summary>
 /// The operation to perform when flashing the window.
 /// </summary>
+[PublicAPI]
 public enum FlashOperation
 {
     /// <summary>
