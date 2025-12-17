@@ -1,7 +1,7 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.Interop.SDL.Native;
+namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [Flags]
 internal enum SurfaceState : uint
