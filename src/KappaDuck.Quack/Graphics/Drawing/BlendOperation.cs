@@ -6,6 +6,7 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// <summary>
 /// The blend operation used when combining source and destination pixel components.
 /// </summary>
+[PublicAPI]
 public enum BlendOperation
 {
     /// <summary>

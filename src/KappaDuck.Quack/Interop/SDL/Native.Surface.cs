@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
 using KappaDuck.Quack.Interop.SDL.Primitives;
@@ -18,6 +19,10 @@ internal static unsafe partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_ClearSurface(SDLSurface* surface, float r, float g, float b, float a);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    internal static partial BlendMode SDL_ComposeCustomBlendMode(BlendFactor source, BlendFactor destination, BlendOperation operation, BlendFactor sourceAlpha, BlendFactor destinationAlpha, BlendOperation alphaOperation);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
