@@ -107,7 +107,7 @@ public sealed class Mouse
     /// <remarks>
     /// It will include any device or virtual driver that provides mouse functionality,
     /// including some game controllers, KVM switches, etc. You should wait for input from
-    /// a device befgore you consider it actively in use.
+    /// a device before you consider it actively in use.
     /// </remarks>
     /// <returns>All connected mice.</returns>
     public static Mouse[] GetMice()

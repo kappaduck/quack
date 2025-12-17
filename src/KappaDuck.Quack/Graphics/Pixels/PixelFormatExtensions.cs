@@ -32,6 +32,21 @@ public static class PixelFormatExtensions
         }
 
         /// <summary>
+        /// Gets a value indicating whether the pixel format is an indexed format.
+        /// </summary>
+        public bool IsIndexed
+        {
+            get
+            {
+                return format is PixelFormat.Index1LSB
+                    or PixelFormat.Index1MSB
+                    or PixelFormat.Index4LSB
+                    or PixelFormat.Index4MSB
+                    or PixelFormat.Index8;
+            }
+        }
+
+        /// <summary>
         /// Gets the name of the pixel format.
         /// </summary>
         /// <remarks>

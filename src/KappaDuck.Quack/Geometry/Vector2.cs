@@ -177,7 +177,7 @@ public struct Vector2(float x, float y) :
     /// Divides a vector by a scalar.
     /// </summary>
     /// <param name="left">The vector.</param>
-    /// <param name="right">>The scalar to divide by.</param>
+    /// <param name="right">The scalar to divide by.</param>
     /// <returns>The resulting vector.</returns>
     /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
     public static Vector2 operator /(Vector2 left, float right)
