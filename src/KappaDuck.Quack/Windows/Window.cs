@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
@@ -863,6 +864,8 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     {
         _icon?.Dispose();
         _windowHandle.Dispose();
+
+        QuackEngine.Release();
     }
 
     /// <summary>
@@ -1164,6 +1167,8 @@ public sealed partial class Window : IDisposable, ISpanFormattable
 
     private void InitializeWindow(int width, int height)
     {
+        QuackEngine.Init(Subsystem.Video);
+
         _width = width;
         _height = height;
 
