@@ -10,6 +10,10 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal static unsafe partial class Native
 {
+    [LibraryImport(Image, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    internal static partial SDLSurface* IMG_Load(string path);
+
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
