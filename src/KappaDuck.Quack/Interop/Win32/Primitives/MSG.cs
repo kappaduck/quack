@@ -1,10 +1,9 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace KappaDuck.Quack.Interop.Win32.Native;
+namespace KappaDuck.Quack.Interop.Win32.Primitives;
 
 /// <summary>
 /// The MSG structure contains message information from a thread's message queue.
