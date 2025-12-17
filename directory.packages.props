@@ -7,7 +7,7 @@
   <!-- Theses packages will be used by every project in a repository. Theses packages are added to the PackageReference with the following metadata -->
   <!-- IncludeAssets="analyzers,build,contentfiles,native,runtime" and PrivateAssets="all" -->
   <ItemGroup Label="Global analyzers">
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.14.1" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.16.1.129956" />
   </ItemGroup>
 
