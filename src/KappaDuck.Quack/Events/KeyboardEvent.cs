@@ -2,13 +2,13 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Inputs;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
 /// Represents a keyboard event.
 /// </summary>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct KeyboardEvent
 {

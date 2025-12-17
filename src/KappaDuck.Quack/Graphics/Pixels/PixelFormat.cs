@@ -1,11 +1,14 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+// ReSharper disable InconsistentNaming
+
 namespace KappaDuck.Quack.Graphics.Pixels;
 
 /// <summary>
 /// Represents the format of a pixel.
 /// </summary>
+[PublicAPI]
 public enum PixelFormat
 {
     /// <summary>

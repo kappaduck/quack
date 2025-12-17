@@ -3,13 +3,13 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Inputs;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
 /// Represents a mouse motion event.
 /// </summary>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct MouseMotionEvent
 {

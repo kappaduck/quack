@@ -1,13 +1,12 @@
-// Copyright (c) KappaDuck. All rights reserved.
+﻿// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
-
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Display state change event data.
+/// Represents a display event.
 /// </summary>
+[PublicAPI]
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct DisplayEvent
 {
