@@ -13,7 +13,7 @@ namespace KappaDuck.Quack.System;
 /// </summary>
 public sealed class Cursor : IDisposable
 {
-    private readonly SDLCursorHandle _handle;
+    private readonly SDL_CursorHandle _handle;
     private static Cursor? _cursor;
 
     /// <summary>
@@ -63,7 +63,7 @@ public sealed class Cursor : IDisposable
     {
     }
 
-    private Cursor(SDLCursorHandle handle) => _handle = handle;
+    private Cursor(SDL_CursorHandle handle) => _handle = handle;
 
     /// <summary>
     /// Gets the current cursor.

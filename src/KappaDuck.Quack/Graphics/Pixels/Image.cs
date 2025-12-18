@@ -24,7 +24,7 @@ public static unsafe class Image
         if (!File.Exists(path))
             throw new FileNotFoundException("The file does not exist.", path);
 
-        SDLSurface* handle = Native.IMG_Load(path);
+        SDL_Surface* handle = Native.IMG_Load(path);
         QuackNativeException.ThrowIfNull(handle);
 
         return new Surface(handle);

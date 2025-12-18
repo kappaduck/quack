@@ -1,21 +1,21 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.Handles;
 
 namespace KappaDuck.Quack.Interop.SDL.Handles;
 
-internal sealed class SDLWindowHandle : SafeHandleZeroInvalid
+internal sealed class SDL_WindowHandle : SafeHandleZeroInvalid
 {
-    public SDLWindowHandle() : base(ownsHandle: true)
+    public SDL_WindowHandle() : base(ownsHandle: true)
     {
     }
 
-    private SDLWindowHandle(nint handle, bool ownsHandle) : base(handle, ownsHandle)
+    private SDL_WindowHandle(nint handle, bool ownsHandle) : base(handle, ownsHandle)
     {
     }
 
-    internal SDLWindowHandle ToNonOwningHandle() => new(handle, ownsHandle: false);
+    internal SDL_WindowHandle ToNonOwningHandle() => new(handle, ownsHandle: false);
 
     protected override bool ReleaseHandle()
     {

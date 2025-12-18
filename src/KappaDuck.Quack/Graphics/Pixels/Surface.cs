@@ -53,7 +53,7 @@ public sealed unsafe class Surface : IDisposable
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Surface(SDLSurface* handle)
+    internal Surface(SDL_Surface* handle)
     {
         QuackNativeException.ThrowIfNull(handle);
 
@@ -102,7 +102,7 @@ public sealed unsafe class Surface : IDisposable
         {
             ThrowIfDisposed();
 
-            SDLPalette* palette = value is null ? null : value.Handle;
+            SDL_Palette* palette = value is null ? null : value.Handle;
             QuackNativeException.ThrowIfFailed(Native.SDL_SetSurfacePalette(Handle, palette));
 
             field = value;
@@ -119,7 +119,7 @@ public sealed unsafe class Surface : IDisposable
     /// </summary>
     public int Width { get; }
 
-    internal SDLSurface* Handle { get; private set; }
+    internal SDL_Surface* Handle { get; private set; }
 
     /// <summary>
     /// Clones a surface based on the current surface.
@@ -134,7 +134,7 @@ public sealed unsafe class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SDLSurface* handle = Native.SDL_DuplicateSurface(Handle);
+        SDL_Surface* handle = Native.SDL_DuplicateSurface(Handle);
         QuackNativeException.ThrowIfNull(handle);
 
         return new Surface(handle);
@@ -160,7 +160,7 @@ public sealed unsafe class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SDLSurface* handle = Native.SDL_ConvertSurface(Handle, format);
+        SDL_Surface* handle = Native.SDL_ConvertSurface(Handle, format);
         QuackNativeException.ThrowIfNull(handle);
 
         return new Surface(handle);
@@ -415,7 +415,7 @@ public sealed unsafe class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SDLSurface* handle = Native.SDL_ScaleSurface(Handle, width, height, mode);
+        SDL_Surface* handle = Native.SDL_ScaleSurface(Handle, width, height, mode);
         QuackNativeException.ThrowIfNull(handle);
 
         return new Surface(handle);

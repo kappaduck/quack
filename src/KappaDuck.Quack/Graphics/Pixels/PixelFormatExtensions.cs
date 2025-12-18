@@ -172,5 +172,5 @@ public static class PixelFormatExtensions
     }
 
     [SuppressMessage("Minor Code Smell", "S3398:\"private\" methods called only by inner classes should be moved to those classes", Justification = "Sonar seems to be confused by the 'extension' syntax.")]
-    private static unsafe SDLPalette* GetPaletteHandle(Palette? palette) => palette is not null ? palette.Handle : null;
+    private static unsafe SDL_Palette* GetPaletteHandle(Palette? palette) => palette is not null ? palette.Handle : null;
 }

@@ -27,13 +27,13 @@ public sealed unsafe class Palette : IDisposable
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Palette(SDLSurface* surface)
+    internal Palette(SDL_Surface* surface)
     {
         Handle = Native.SDL_CreateSurfacePalette(surface);
         QuackNativeException.ThrowIfNull(Handle);
     }
 
-    internal Palette(SDLPalette* handle)
+    internal Palette(SDL_Palette* handle)
     {
         QuackNativeException.ThrowIfNull(handle);
         Handle = handle;
@@ -42,7 +42,7 @@ public sealed unsafe class Palette : IDisposable
     /// <summary>
     /// Gets the native surface handle.
     /// </summary>
-    internal SDLPalette* Handle { get; private set; }
+    internal SDL_Palette* Handle { get; private set; }
 
     /// <summary>
     /// Releases the unmanaged resources used by the palette.
@@ -64,10 +64,10 @@ public sealed unsafe class Palette : IDisposable
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
     public void SetColors(int startIndex, ReadOnlySpan<Color> colors)
     {
-        Span<SDLColor> nativeColors = stackalloc SDLColor[colors.Length];
+        Span<SDL_Color> nativeColors = stackalloc SDL_Color[colors.Length];
 
         for (int i = 0; i < colors.Length; i++)
-            nativeColors[i] = new SDLColor(colors[i].R, colors[i].G, colors[i].B, colors[i].A);
+            nativeColors[i] = new SDL_Color(colors[i].R, colors[i].G, colors[i].B, colors[i].A);
 
         QuackNativeException.ThrowIfFailed(Native.SDL_SetPaletteColors(Handle, nativeColors, startIndex, colors.Length));
     }

@@ -6,6 +6,7 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Interop.SDL.Handles;
@@ -17,17 +18,18 @@ namespace KappaDuck.Quack.Windows;
 /// Represents a native OS window with no graphics context.
 /// </summary>
 /// <remarks>
-/// TODO: Explain how to attach a graphics context to the window.
+/// You should use one of the specialized windows such as <see cref="RenderWindow"/>.
 /// </remarks>
-public sealed partial class Window : IDisposable, ISpanFormattable
+public partial class Window : IDisposable, ISpanFormattable
 {
-    private SDLWindowHandle _windowHandle = new();
+    private SDL_WindowHandle _windowHandle = new();
     private Surface? _icon;
     private State _state;
     private Vector2Int? _position;
     private int _width;
     private int _height;
     private float? _opacity;
+    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Window"/>.
@@ -62,7 +64,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// Initializes a new instance of the <see cref="Window"/> with the specified title and size.
     /// </summary>
     /// <param name="title">The title of the window.</param>
-    /// <param name="size">The size of the window.</param>
+    /// <param name="size">The dimensions of the window.</param>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
     public Window(string title, Vector2Int size)
     {
@@ -812,7 +814,7 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// </summary>
     public int WidthInPixels { get; private set; }
 
-    internal SDLWindowHandle SDLHandle
+    internal SDL_WindowHandle SDLHandle
     {
         get
         {
@@ -862,10 +864,8 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// </summary>
     public void Dispose()
     {
-        _icon?.Dispose();
-        _windowHandle.Dispose();
-
-        QuackEngine.Release();
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -1164,6 +1164,26 @@ public sealed partial class Window : IDisposable, ISpanFormattable
     /// </remarks>
     /// <param name="position">The position within the window.</param>
     public void WarpMouse(Vector2 position) => WarpMouse(position.X, position.Y);
+
+    /// <summary>
+    /// Releases the unmanaged resources used by the <see cref="Window"/> class.
+    /// </summary>
+    /// <param name="disposing">value indicating whether the method call comes from a <see cref="Dispose()"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>).</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+
+        if (disposing)
+        {
+            _icon?.Dispose();
+            _icon = null;
+
+            _windowHandle.Dispose();
+        }
+    }
 
     private void InitializeWindow(int width, int height)
     {

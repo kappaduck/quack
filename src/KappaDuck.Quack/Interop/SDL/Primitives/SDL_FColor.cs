@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using System.Drawing;
@@ -6,9 +6,9 @@ using System.Drawing;
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [StructLayout(LayoutKind.Sequential)]
-internal readonly struct SDLColorFloat
+internal readonly struct SDL_FColor
 {
-    internal SDLColorFloat(byte r, byte g, byte b, byte a)
+    internal SDL_FColor(byte r, byte g, byte b, byte a)
     {
         _r = r / 255f;
         _g = g / 255f;

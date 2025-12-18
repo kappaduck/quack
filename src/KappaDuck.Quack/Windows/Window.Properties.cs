@@ -1,11 +1,11 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.SDL;
 
 namespace KappaDuck.Quack.Windows;
 
-public sealed partial class Window
+public partial class Window
 {
     private sealed class Properties : Native.Properties
     {

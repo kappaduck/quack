@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Geometry;
@@ -13,12 +13,12 @@ internal static unsafe partial class Native
 {
     [LibraryImport(Image, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLSurface* IMG_Load(string path);
+    internal static partial SDL_Surface* IMG_Load(string path);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_ClearSurface(SDLSurface* surface, float r, float g, float b, float a);
+    internal static partial bool SDL_ClearSurface(SDL_Surface* surface, float r, float g, float b, float a);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -26,46 +26,46 @@ internal static unsafe partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLSurface* SDL_ConvertSurface(SDLSurface* surface, PixelFormat format);
+    internal static partial SDL_Surface* SDL_ConvertSurface(SDL_Surface* surface, PixelFormat format);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLPalette* SDL_CreatePalette(int length);
+    internal static partial SDL_Palette* SDL_CreatePalette(int length);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLSurface* SDL_CreateSurface(int width, int height, PixelFormat format);
+    internal static partial SDL_Surface* SDL_CreateSurface(int width, int height, PixelFormat format);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLPalette* SDL_CreateSurfacePalette(SDLSurface* surface);
+    internal static partial SDL_Palette* SDL_CreateSurfacePalette(SDL_Surface* surface);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_DestroyPalette(SDLPalette* palette);
+    internal static partial void SDL_DestroyPalette(SDL_Palette* palette);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_DestroySurface(SDLSurface* surface);
+    internal static partial void SDL_DestroySurface(SDL_Surface* surface);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLSurface* SDL_DuplicateSurface(SDLSurface* surface);
-
-    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_FillSurfaceRect(SDLSurface* surface, RectInt* rect, uint color);
+    internal static partial SDL_Surface* SDL_DuplicateSurface(SDL_Surface* surface);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_FillSurfaceRects(SDLSurface* surface, ReadOnlySpan<RectInt> rects, int count, uint color);
+    internal static partial bool SDL_FillSurfaceRect(SDL_Surface* surface, RectInt* rect, uint color);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_FlipSurface(SDLSurface* surface, FlipMode mode);
+    internal static partial bool SDL_FillSurfaceRects(SDL_Surface* surface, ReadOnlySpan<RectInt> rects, int count, uint color);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_FlipSurface(SDL_Surface* surface, FlipMode mode);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -87,41 +87,41 @@ internal static unsafe partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, SDLPalette* palette, byte* r, byte* g, byte* b);
+    internal static partial void SDL_GetRGB(uint pixel, PixelFormatDetails* details, SDL_Palette* palette, byte* r, byte* g, byte* b);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, SDLPalette* palette, byte* r, byte* g, byte* b, byte* a);
+    internal static partial void SDL_GetRGBA(uint pixel, PixelFormatDetails* details, SDL_Palette* palette, byte* r, byte* g, byte* b, byte* a);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial uint SDL_MapRGB(PixelFormatDetails* details, SDLPalette* palette, byte r, byte g, byte b);
+    internal static partial uint SDL_MapRGB(PixelFormatDetails* details, SDL_Palette* palette, byte r, byte g, byte b);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial uint SDL_MapRGBA(PixelFormatDetails* details, SDLPalette* palette, byte r, byte g, byte b, byte a);
+    internal static partial uint SDL_MapRGBA(PixelFormatDetails* details, SDL_Palette* palette, byte r, byte g, byte b, byte a);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDLSurface* SDL_ScaleSurface(SDLSurface* surface, int width, int height, ScaleMode mode);
-
-    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetPaletteColors(SDLPalette* palette, ReadOnlySpan<SDLColor> colors, int startIndex, int length);
+    internal static partial SDL_Surface* SDL_ScaleSurface(SDL_Surface* surface, int width, int height, ScaleMode mode);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetSurfacePalette(SDLSurface* surface, SDLPalette* palette);
+    internal static partial bool SDL_SetPaletteColors(SDL_Palette* palette, ReadOnlySpan<SDL_Color> colors, int startIndex, int length);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SurfaceHasColorKey(SDLSurface* surface);
+    internal static partial bool SDL_SetSurfacePalette(SDL_Surface* surface, SDL_Palette* palette);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SurfaceHasRLE(SDLSurface* surface);
+    internal static partial bool SDL_SurfaceHasColorKey(SDL_Surface* surface);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_SurfaceHasRLE(SDL_Surface* surface);
 }

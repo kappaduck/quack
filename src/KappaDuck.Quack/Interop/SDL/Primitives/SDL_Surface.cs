@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Graphics.Pixels;
@@ -6,7 +6,7 @@ using KappaDuck.Quack.Graphics.Pixels;
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct SDLSurface
+internal unsafe struct SDL_Surface
 {
     internal readonly SurfaceState State;
 
