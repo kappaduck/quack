@@ -5,7 +5,6 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
-using KappaDuck.Quack.Interop.SDL.Primitives;
 
 namespace KappaDuck.Quack.Interop.SDL;
 

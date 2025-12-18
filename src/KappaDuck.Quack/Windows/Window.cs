@@ -8,8 +8,6 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.Handles;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Handles;
 using KappaDuck.Quack.Video.Displays;
 
 namespace KappaDuck.Quack.Windows;

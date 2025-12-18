@@ -1,12 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-// ReSharper disable InconsistentNaming
-
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Primitives;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Pixels;

@@ -20,6 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup Label="Global usings">
+    <Using Include="KappaDuck.Quack.Interop.SDL" />
+    <Using Include="KappaDuck.Quack.Interop.SDL.Handles" />
+    <Using Include="KappaDuck.Quack.Interop.SDL.Primitives" />
     <Using Include="System.Runtime.CompilerServices" />
     <Using Include="System.Runtime.InteropServices" />
     <Using Include="System.Runtime.InteropServices.Marshalling" />

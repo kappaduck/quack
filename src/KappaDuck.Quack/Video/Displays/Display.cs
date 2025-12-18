@@ -3,7 +3,6 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Video.Displays;

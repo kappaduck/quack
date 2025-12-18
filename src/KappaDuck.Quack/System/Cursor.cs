@@ -3,8 +3,6 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Handles;
 
 namespace KappaDuck.Quack.System;
 

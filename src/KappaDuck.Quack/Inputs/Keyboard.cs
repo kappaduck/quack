@@ -3,7 +3,6 @@
 
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
 using KappaDuck.Quack.Windows;
 using System.Text;
 

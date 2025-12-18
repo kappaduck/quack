@@ -19,4 +19,16 @@ internal abstract class SafeHandleZeroInvalid(bool ownsHandle) : SafeHandle(nint
 
     /// <inheritdoc/>
     public override bool IsInvalid => handle == nint.Zero;
+
+    protected abstract void Free();
+
+    protected override bool ReleaseHandle()
+    {
+        Free();
+
+        SetHandle(nint.Zero);
+        SetHandleAsInvalid();
+
+        return true;
+    }
 }

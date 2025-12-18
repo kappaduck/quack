@@ -3,7 +3,6 @@
 
 using KappaDuck.Quack.Core.Extensions;
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
 
 namespace KappaDuck.Quack.Core;
 

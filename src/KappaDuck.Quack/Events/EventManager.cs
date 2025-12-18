@@ -2,8 +2,6 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Primitives;
 
 namespace KappaDuck.Quack.Events;
 

@@ -7,13 +7,5 @@ namespace KappaDuck.Quack.Interop.SDL.Handles;
 
 internal sealed class SDL_CursorHandle() : SafeHandleZeroInvalid(ownsHandle: true)
 {
-    protected override bool ReleaseHandle()
-    {
-        Native.SDL_FreeCursor(handle);
-
-        SetHandle(nint.Zero);
-        SetHandleAsInvalid();
-
-        return true;
-    }
+    protected override void Free() => Native.SDL_FreeCursor(handle);
 }

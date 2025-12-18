@@ -1,8 +1,7 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Interop.SDL.Primitives;
 
 namespace KappaDuck.Quack.Interop.SDL;
 
