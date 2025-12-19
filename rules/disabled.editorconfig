@@ -50,11 +50,6 @@ dotnet_diagnostic.CA1716.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1812
 dotnet_diagnostic.CA1812.severity = none
 
-# CA1822: Mark members as static
-# Some methods should not be static because they are using the new C#14 feature: extension
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
-dotnet_diagnostic.CA1822.severity = none
-
 # CA2225: Operator overloads have named alternates
 # Not necessary to have named alternates for operator overloads
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2225

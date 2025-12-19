@@ -6,11 +6,11 @@
     <AnalysisLevel>latest-All</AnalysisLevel>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UseArtifactsOutput>true</UseArtifactsOutput>
+    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
 
     <!-- Configure packages which are only Development dependency -->
     <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
     <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
-    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
   </PropertyGroup>
 
   <ItemGroup Label="Configure analyzer rules">
