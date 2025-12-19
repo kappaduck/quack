@@ -12,7 +12,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// <summary>
 /// Represents a graphical texture resource used for rendering images or patterns.
 /// </summary>
-internal sealed class Texture : IDisposable
+public sealed class Texture : IDisposable
 {
     private readonly SDL_TextureHandle _handle;
     private readonly SDL_RendererHandle _renderer;
