@@ -1,63 +1,60 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Pixels;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Handles;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
-/// An efficient driver-specific representation of pixels.
+/// Represents a graphical texture resource used for rendering images or patterns.
 /// </summary>
-public sealed class Texture : IDisposable
+internal sealed class Texture : IDisposable
 {
     private readonly SDL_TextureHandle _handle;
-    private readonly Renderer _renderer;
+    private readonly SDL_RendererHandle _renderer;
 
-    internal Texture(Renderer renderer, PixelFormat pixelFormat, TextureAccess access, int width, int height)
+    internal Texture(SDL_RendererHandle renderer, PixelFormat format, TextureAccess access, int width, int height)
     {
         _renderer = renderer;
 
-        _handle = _renderer.CreateTexture(pixelFormat, access, width, height);
-        QuackNativeException.ThrowIf(_handle.IsInvalid);
+        _handle = Native.SDL_CreateTexture(_renderer, format, access, width, height);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
 
-        Format = pixelFormat;
-        Height = height;
+        Format = format;
         Width = width;
+        Height = height;
     }
 
-    internal unsafe Texture(Renderer renderer, Surface surface)
+    internal unsafe Texture(SDL_RendererHandle renderer, Surface surface)
     {
         _renderer = renderer;
 
-        _handle = _renderer.CreateTextureFromSurface(surface);
-        QuackNativeException.ThrowIf(_handle.IsInvalid);
+        _handle = Native.SDL_CreateTextureFromSurface(_renderer, surface.Handle);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
 
-        uint properties = SDL.Texture.SDL_GetTextureProperties(_handle);
-        Format = Properties.GetEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
+        uint properties = Native.SDL_GetTextureProperties(_handle);
+        Format = Native.GetEnumProperty(properties, "SDL.texture.format", PixelFormat.Unknown);
 
-        Height = surface.Height;
         Width = surface.Width;
+        Height = surface.Height;
     }
 
-    internal Texture(Renderer renderer, string file)
+    internal Texture(SDL_RendererHandle renderer, string file)
     {
         _renderer = renderer;
 
-        _handle = _renderer.LoadTexture(file);
-        QuackNativeException.ThrowIf(_handle.IsInvalid);
+        _handle = Native.IMG_LoadTexture(renderer, file);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
 
-        uint properties = SDL.Texture.SDL_GetTextureProperties(_handle);
-        Format = Properties.GetEnum(properties, "SDL.texture.format", PixelFormat.Unknown);
+        uint properties = Native.SDL_GetTextureProperties(_handle);
 
-        Height = Properties.Get(properties, "SDL.texture.height", 0);
-        Width = Properties.Get(properties, "SDL.texture.width", 0);
+        Format = Native.GetEnumProperty(properties, "SDL.texture.format", PixelFormat.Unknown);
+        Width = Native.GetNumberProperty(properties, "SDL.texture.width", 0);
+        Height = Native.GetNumberProperty(properties, "SDL.texture.height", 0);
     }
 
     /// <summary>
@@ -82,7 +79,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return 255;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureAlphaMod(_handle, out byte alpha));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetTextureAlphaMod(_handle, out byte alpha));
             return alpha;
         }
         set
@@ -90,7 +87,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureAlphaMod(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetTextureAlphaMod(_handle, value));
         }
     }
 
@@ -109,7 +106,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return BlendMode.None;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureBlendMode(_handle, out BlendMode mode));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetTextureBlendMode(_handle, out BlendMode mode));
             return mode;
         }
         set
@@ -117,7 +114,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureBlendMode(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetTextureBlendMode(_handle, value));
         }
     }
 
@@ -143,7 +140,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return Color.White;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureColorMod(_handle, out byte r, out byte g, out byte b));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetTextureColorMod(_handle, out byte r, out byte g, out byte b));
             return Color.FromArgb(r, g, b);
         }
         set
@@ -151,7 +148,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureColorMod(_handle, value.R, value.G, value.B));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetTextureColorMod(_handle, value.R, value.G, value.B));
         }
     }
 
@@ -171,7 +168,7 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return ScaleMode.Invalid;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_GetTextureScaleMode(_handle, out ScaleMode scale));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetTextureScaleMode(_handle, out ScaleMode scale));
             return scale;
         }
         set
@@ -179,12 +176,12 @@ public sealed class Texture : IDisposable
             if (_handle.IsInvalid)
                 return;
 
-            QuackNativeException.ThrowIfFailed(SDL.Texture.SDL_SetTextureScaleMode(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetTextureScaleMode(_handle, value));
         }
     }
 
     /// <summary>
-    /// Gets the height of the texture in pixels.
+    /// Gets the height of the texture.
     /// </summary>
     public int Height { get; }
 
@@ -194,7 +191,7 @@ public sealed class Texture : IDisposable
     public PixelFormat Format { get; }
 
     /// <summary>
-    /// Gets the width of the texture in pixels.
+    /// Gets the width of the texture.
     /// </summary>
     public int Width { get; }
 
@@ -203,14 +200,6 @@ public sealed class Texture : IDisposable
     /// </summary>
     public void Dispose() => _handle.Dispose();
 
-    /// <summary>
-    /// Copy a portion of the texture to the current rendering target at subpixel precision.
-    /// </summary>
-    /// <param name="source">The portion of the texture to copy.</param>
-    /// <param name="destination">The portion of the rendering target to copy the texture to.</param>
-    /// <param name="angle">An angle in degrees that indicates the rotation that will be applied to <paramref name="destination"/>, rotating it in a clockwise direction.</param>
-    /// <param name="center">A point indicating the point around which <paramref name="destination"/> will be rotated.</param>
-    /// <param name="flip">The flip mode to apply to the texture.</param>
-    internal unsafe void Draw(Rect source, Rect destination, double angle, Vector2 center, FlipMode flip)
-        => _renderer.RenderTexture(_handle, source, destination, angle, center, flip);
+    internal unsafe void Render(Rect source, Rect destination, double angle, Vector2 center, FlipMode mode)
+        => Native.SDL_RenderTextureRotated(_renderer, _handle, &source, &destination, angle, &center, mode);
 }
