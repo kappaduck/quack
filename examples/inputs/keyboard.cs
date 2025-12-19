@@ -3,15 +3,9 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Inputs;
 using KappaDuck.Quack.Windows;
-
-// Demonstrates how to handle keyboard input
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create the window
 using Window window = new("Keyboard example", 1080, 720);
@@ -56,7 +50,7 @@ while (window.IsOpen)
     }
 
     // You can also check if a key is pressed outside of the event loop
-    if (Keyboard.IsPressed(Keyboard.Scancode.S))
+    if (Keyboard.IsDown(Keyboard.Scancode.S))
     {
         Console.WriteLine("S key is pressed");
     }

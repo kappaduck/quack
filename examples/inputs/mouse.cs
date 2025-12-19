@@ -3,15 +3,9 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Inputs;
 using KappaDuck.Quack.Windows;
-
-// Demonstrates how to handle mouse input
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create the window
 using Window window = new("Mouse example", 1080, 720);
@@ -62,7 +56,7 @@ while (window.IsOpen)
     }
 
     // You can also use the Mouse class to check if the mouse button is pressed outside the event loop
-    if (Mouse.IsPressed(Mouse.Button.Middle))
+    if (Mouse.IsDown(Mouse.Button.Middle))
     {
         Console.WriteLine("Middle mouse button is pressed");
     }

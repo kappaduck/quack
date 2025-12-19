@@ -3,16 +3,10 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Graphics.Rendering;
 using System.Diagnostics;
 using System.Drawing;
-
-// Demonstrates how to clear the render target with a sine wave that smoothly transitions between colors.
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create the window
 using RenderWindow window = new("Sine wave", 1080, 720);
@@ -38,8 +32,8 @@ while (window.IsOpen)
     // Clear the window with a sine wave color
     window.Clear(SineWaveColor(stopwatch.Elapsed.TotalSeconds));
 
-    // Render the graphics to the window since the last call
-    window.Render();
+    // Presents all the drawn content on the window
+    window.Present();
 }
 
 static Color SineWaveColor(double seconds)

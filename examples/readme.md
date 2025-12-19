@@ -7,11 +7,11 @@ To run a example, run the following command in the terminal:
 
 ```bash
 # On Windows
-dotnet ./examples/windows/minimalWindow.cs
+dotnet ./examples/windows/window.cs
 
 # On Linux
-chmod +x ./examples/windows/minimalWindow.cs
-./examples/windows/minimalWindow.cs
+chmod +x ./examples/windows/window.cs
+./examples/windows/window.cs
 ```
 
 You can also open the example in your preferred IDE (e.g., Visual Studio, Rider, etc.).
@@ -25,7 +25,7 @@ Here the examples are categorized by module. Each example is a C# file that demo
 
 ## Windows
 
-- [Minimal Window](./windows/minimalWindow.cs) - Demonstrates how to create a simple window.
+- [Window](./windows/window.cs) - Demonstrates how to create a simple window.
 
 ## Graphics
 

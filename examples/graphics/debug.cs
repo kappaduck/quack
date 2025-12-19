@@ -3,18 +3,10 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
-using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using System.Drawing;
-
-// Demonstrates how to draw text for debugging purposes
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 const int Width = 1080;
 const int Height = 720;
@@ -47,30 +39,6 @@ while (window.IsOpen)
     // Draw the debug text
     window.DrawDebugText(position, "Demonstrates how to draw text for debugging purposes", Color.Red);
 
-    // Render the graphics to the window since the last call
-    window.Render();
-}
-
-file sealed class Rectangle : IDrawable
-{
-    private const int Points = 4;
-    private static readonly int[] _indices = [0, 1, 2, 2, 3, 0];
-    private readonly Vertex[] _vertices = new Vertex[Points];
-
-    public Rectangle(Color color, Vector2 position, Vector2 size)
-    {
-        _vertices[0].Position = position;
-        _vertices[0].Color = color;
-
-        _vertices[1].Position = position + new Vector2(size.X, 0);
-        _vertices[1].Color = color;
-
-        _vertices[2].Position = position + size;
-        _vertices[2].Color = color;
-
-        _vertices[3].Position = position + new Vector2(0, size.Y);
-        _vertices[3].Color = color;
-    }
-
-    public void Draw(IRenderTarget target) => target.Draw(_vertices, _indices);
+    // Presents all the drawn content on the window
+    window.Present();
 }

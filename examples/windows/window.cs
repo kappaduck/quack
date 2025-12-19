@@ -3,14 +3,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
-
-// Demonstrates how to create a minimal window
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 // Create a resizable window with the title "Minimal window" and dimensions 1080x720
 using Window window = new("Minimal window", 1080, 720)

@@ -3,18 +3,12 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack;
-using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using System.Drawing;
-
-// Demonstrates how to draw a rectangle using IDrawable
-// Initialize the engine with the Video subsystem
-using QuackEngine _ = QuackEngine.Init(Subsystem.Video);
 
 const int Width = 1080;
 const int Height = 720;
@@ -52,8 +46,8 @@ while (window.IsOpen)
     // You can draw from the drawable
     largeRectangle.Draw(window);
 
-    // Render the graphics to the window since the last call
-    window.Render();
+    // Presents all the drawn content on the window
+    window.Present();
 }
 
 file sealed class Rectangle : IDrawable
