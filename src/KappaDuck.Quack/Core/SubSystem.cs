@@ -7,7 +7,7 @@ namespace KappaDuck.Quack.Core;
 /// Represents a subsystem that can be enabled or disabled in the <see cref="QuackEngine"/>.
 /// </summary>
 [Flags]
-public enum Subsystem : uint
+internal enum Subsystem : uint
 {
     /// <summary>
     /// Enable the audio subsystem. Implicitly enables the <see cref="Events"/> subsystem.

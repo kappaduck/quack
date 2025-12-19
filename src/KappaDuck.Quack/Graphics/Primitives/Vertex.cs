@@ -2,9 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Graphics.Primitives;
 

@@ -10,19 +10,19 @@ using System.Drawing;
 namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
-/// Represents a render target that can be used to render graphics.
+/// Defines a render target that can be used to render graphics.
 /// </summary>
 public interface IRenderTarget
 {
     /// <summary>
-    /// Clears the render target with a default color.
+    /// Clears the render target.
     /// </summary>
     void Clear();
 
     /// <summary>
     /// Clears the render target with the specified color.
     /// </summary>
-    /// <param name="color">The color to clear the render target with.</param>
+    /// <param name="color">The color to clear the render target.</param>
     void Clear(Color color);
 
     /// <summary>

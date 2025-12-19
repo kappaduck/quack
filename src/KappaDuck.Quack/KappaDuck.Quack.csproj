@@ -5,6 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="Quack! package metadata">
@@ -37,6 +38,10 @@
   <ItemGroup Label="build files to include">
     <None Include="$(QuackRoot)SDL3\runtimes\**\*" Pack="true" PackagePath="runtimes\" IncludeInPackage="false" Visible="false" />
     <None Include="$(QuackRoot)$(MSBuildProjectName).targets" Pack="true" PackagePath="build\" IncludeInPackage="false" Link="targets" />
+  </ItemGroup>
+
+  <ItemGroup Label="Link quack.playground file">
+    <None Include="$(QuackRoot)quack.playground.cs" Link="playground.cs" />
   </ItemGroup>
 
   <ItemGroup Label="Enabling reproducible builds">
