@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
-    wget \
     pkg-config \
     mingw-w64 \
     ninja-build \
@@ -47,18 +46,22 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 
 # build args
-ARG SDL3=3.2.28
-ARG SDL3_Image=3.2.4
-ARG SDL3_ttf=3.2.2
+ARG SDL3=release-3.2.28
+ARG SDL3_Image=release-3.2.4
+ARG SDL3_ttf=release-3.2.2
 
 # Setup output directories
 RUN mkdir -p runtimes/linux-x64/native runtimes/win-x64/native toolchains
 
 # Build SDL3
-RUN wget https://github.com/libsdl-org/SDL/releases/download/release-${SDL3}/SDL3-${SDL3}.tar.gz && tar xzf SDL3-${SDL3}.tar.gz && mv SDL3-${SDL3} SDL3 && rm SDL3-${SDL3}.tar.gz
+RUN git clone --branch ${SDL3} --depth 1 https://github.com/libsdl-org/SDL.git
 
-RUN cmake -S SDL3 -B SDL3/build-linux -DCMAKE_BUILD_TYPE=Release && cmake --build SDL3/build-linux --config Release && cmake --install SDL3/build-linux --config Release --prefix SDL3/bin-linux
-RUN strip SDL3/bin-linux/lib/libSDL3.so.* && cp -r SDL3/bin-linux/lib/*.so* runtimes/linux-x64/native
+RUN cmake -S SDL -B SDL/build-linux \
+    -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build SDL/build-linux --config Release \
+    && cmake --install SDL/build-linux --config Release --prefix SDL/bin-linux \
+    && strip SDL/bin-linux/lib/libSDL3.so.* \
+    && cp -r SDL/bin-linux/lib/*.so* runtimes/linux-x64/native
 
 RUN mkdir -p toolchains && \
     echo "SET(CMAKE_SYSTEM_NAME Windows)\n\
@@ -68,25 +71,54 @@ RUN mkdir -p toolchains && \
     find_program(CMAKE_RC_COMPILER NAMES x86_64-w64-mingw32-windres windres REQUIRED)" \
     > toolchains/x86_64-w64-mingw32.cmake
 
-RUN cmake -S SDL3 -B SDL3/build-windows -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake && cmake --build SDL3/build-windows --config Release && cmake --install SDL3/build-windows --config Release --prefix SDL3/bin-windows
-RUN x86_64-w64-mingw32-strip SDL3/bin-windows/bin/SDL3.dll && cp -r SDL3/bin-windows/bin/SDL3.dll runtimes/win-x64/native
+RUN cmake -S SDL -B SDL/build-windows -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake \
+    && cmake --build SDL/build-windows --config Release \
+    && cmake --install SDL/build-windows --config Release --prefix SDL/bin-windows \
+    && x86_64-w64-mingw32-strip SDL/bin-windows/bin/SDL3.dll \
+    && cp -r SDL/bin-windows/bin/SDL3.dll runtimes/win-x64/native
 
 # Build SDL3_image
-RUN wget https://github.com/libsdl-org/SDL_image/releases/download/release-${SDL3_Image}/SDL3_image-${SDL3_Image}.tar.gz && tar xzf SDL3_image-${SDL3_Image}.tar.gz && mv SDL3_image-${SDL3_Image} SDL3_image && rm SDL3_image-${SDL3_Image}.tar.gz
-RUN SDL3_image/external/download.sh
+RUN git clone --branch ${SDL3_Image} --depth 1 https://github.com/libsdl-org/SDL_image.git && SDL_image/external/download.sh
 
-RUN cmake -S SDL3_image -B SDL3_image/build-linux -DSDLIMAGE_VENDORED=ON -DCMAKE_BUILD_TYPE=Release -DSDL3_DIR=../SDL3/bin-linux/lib/cmake/SDL3 && cmake --build SDL3_image/build-linux --config Release && cmake --install SDL3_image/build-linux --config Release --prefix SDL3_image/bin-linux
-RUN strip SDL3_image/bin-linux/lib/libSDL3_image.so.* && cp -r SDL3_image/bin-linux/lib/*.so* runtimes/linux-x64/native
+RUN cmake -S SDL_image -B SDL_image/build-linux \
+    -DSDLIMAGE_VENDORED=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DSDL3_DIR=../SDL/bin-linux/lib/cmake/SDL3 \
+    && cmake --build SDL_image/build-linux --config Release \
+    && cmake --install SDL_image/build-linux --config Release --prefix SDL_image/bin-linux \
+    && strip SDL_image/bin-linux/lib/libSDL3_image.so.* \
+    && cp -r SDL_image/bin-linux/lib/*.so* runtimes/linux-x64/native
 
-RUN cmake -S SDL3_image -B SDL3_image/build-windows -G Ninja -DSDLIMAGE_VENDORED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake -DSDL3_DIR=../SDL3/bin-windows/lib/cmake/SDL3 && cmake --build SDL3_image/build-windows --config Release && cmake --install SDL3_image/build-windows --config Release --prefix SDL3_image/bin-windows
-RUN x86_64-w64-mingw32-strip SDL3_image/bin-windows/bin/SDL3_image.dll && cp -r SDL3_image/bin-windows/bin/*.dll runtimes/win-x64/native
+RUN cmake -S SDL_image -B SDL_image/build-windows -G Ninja \
+    -DSDLIMAGE_VENDORED=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake \
+    -DSDL3_DIR=../SDL/bin-windows/lib/cmake/SDL3 \
+    && cmake --build SDL_image/build-windows --config Release \
+    && cmake --install SDL_image/build-windows --config Release --prefix SDL_image/bin-windows \
+    && x86_64-w64-mingw32-strip SDL_image/bin-windows/bin/SDL3_image.dll \
+    && cp -r SDL_image/bin-windows/bin/*.dll runtimes/win-x64/native
 
 # Build SDL3_ttf
-RUN wget https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDL3_ttf}/SDL3_ttf-${SDL3_ttf}.tar.gz && tar xzf SDL3_ttf-${SDL3_ttf}.tar.gz && mv SDL3_ttf-${SDL3_ttf} SDL3_ttf && rm SDL3_ttf-${SDL3_ttf}.tar.gz
-RUN SDL3_ttf/external/download.sh
+RUN git clone --branch ${SDL3_ttf} --depth 1 https://github.com/libsdl-org/SDL_ttf.git && SDL_ttf/external/download.sh
 
-RUN cmake -S SDL3_ttf -B SDL3_ttf/build-linux -DSDLTTF_VENDORED=ON -DCMAKE_BUILD_TYPE=Release -DSDL3_DIR=../SDL3/bin-linux/lib/cmake/SDL3 && cmake --build SDL3_ttf/build-linux --config Release && cmake --install SDL3_ttf/build-linux --config Release --prefix SDL3_ttf/bin-linux
-RUN strip SDL3_ttf/bin-linux/lib/libSDL3_ttf.so.* && cp -r SDL3_ttf/bin-linux/lib/*.so* runtimes/linux-x64/native
+RUN cmake -S SDL_ttf -B SDL_ttf/build-linux \
+    -DSDLTTF_VENDORED=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DSDL3_DIR=../SDL/bin-linux/lib/cmake/SDL3 \
+    && cmake --build SDL_ttf/build-linux --config Release \
+    && cmake --install SDL_ttf/build-linux --config Release --prefix SDL_ttf/bin-linux \
+    && strip SDL_ttf/bin-linux/lib/libSDL3_ttf.so.* \
+    && cp -r SDL_ttf/bin-linux/lib/*.so* runtimes/linux-x64/native
 
-RUN cmake -S SDL3_ttf -B SDL3_ttf/build-windows -G Ninja -DSDLTTF_VENDORED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake -DSDL3_DIR=../SDL3/bin-windows/lib/cmake/SDL3 && cmake --build SDL3_ttf/build-windows --config Release && cmake --install SDL3_ttf/build-windows --config Release --prefix SDL3_ttf/bin-windows
-RUN x86_64-w64-mingw32-strip SDL3_ttf/bin-windows/bin/SDL3_ttf.dll && cp -r SDL3_ttf/bin-windows/bin/*.dll runtimes/win-x64/native
+RUN cmake -S SDL_ttf -B SDL_ttf/build-windows -G Ninja \
+    -DSDLTTF_VENDORED=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchains/x86_64-w64-mingw32.cmake \
+    -DSDL3_DIR=../SDL/bin-windows/lib/cmake/SDL3 \
+    && cmake --build SDL_ttf/build-windows --config Release \
+    && cmake --install SDL_ttf/build-windows --config Release --prefix SDL_ttf/bin-windows \
+    && x86_64-w64-mingw32-strip SDL_ttf/bin-windows/bin/SDL3_ttf.dll \
+    && cp -r SDL_ttf/bin-windows/bin/*.dll runtimes/win-x64/native
