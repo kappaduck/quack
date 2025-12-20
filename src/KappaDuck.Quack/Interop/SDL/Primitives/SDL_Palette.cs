@@ -4,11 +4,11 @@
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct SDL_Palette
+internal readonly unsafe struct SDL_Palette
 {
-    internal readonly int Length;
+    internal int Length { get; }
 
-    internal SDL_Color* Colors;
+    internal SDL_Color* Colors { get; }
 
     private readonly uint _version;
     private readonly int _refCount;

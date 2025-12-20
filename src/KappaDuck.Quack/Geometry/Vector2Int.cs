@@ -24,12 +24,12 @@ public struct Vector2Int(int x, int y) :
     /// <summary>
     /// Gets or sets the x-coordinate of the vector.
     /// </summary>
-    public int X = x;
+    public int X { get; set; } = x;
 
     /// <summary>
     /// Gets or sets the y-coordinate of the vector.
     /// </summary>
-    public int Y = y;
+    public int Y { get; set; } = y;
 
     /// <summary>
     /// Gets a value indicating whether the vector is zero.

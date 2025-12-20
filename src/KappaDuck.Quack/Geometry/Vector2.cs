@@ -42,12 +42,12 @@ public struct Vector2(float x, float y) :
     /// <summary>
     /// Gets or sets the x-coordinate of the vector.
     /// </summary>
-    public float X = x;
+    public float X { get; set; } = x;
 
     /// <summary>
     /// Gets or sets the y-coordinate of the vector.
     /// </summary>
-    public float Y = y;
+    public float Y { get; set; } = y;
 
     /// <summary>
     /// Gets a value indicating whether the vector is normalized.

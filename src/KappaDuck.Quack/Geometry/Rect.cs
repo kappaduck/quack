@@ -37,7 +37,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <remarks>
     /// Setting this value will adjust <see cref="MaxX"/>.
     /// </remarks>
-    public float X = x;
+    public float X { get; set; } = x;
 
     /// <summary>
     /// Gets or sets the y-coordinate of the top-left corner of the rectangle.
@@ -45,7 +45,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <remarks>
     /// Setting this value will adjust <see cref="MaxY"/>.
     /// </remarks>
-    public float Y = y;
+    public float Y { get; set; } = y;
 
     /// <summary>
     /// Gets or sets the width of the rectangle, measured from the <see cref="X"/> position.
@@ -53,7 +53,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <remarks>
     /// Setting this value will adjust <see cref="MaxX"/>.
     /// </remarks>
-    public float Width = width;
+    public float Width { get; set; } = width;
 
     /// <summary>
     /// Gets or sets the height of the rectangle, measured from the <see cref="Y"/> position.
@@ -61,7 +61,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <remarks>
     /// Setting this value will adjust <see cref="MaxY"/>.
     /// </remarks>
-    public float Height = height;
+    public float Height { get; set; } = height;
 
     /// <summary>
     /// Gets the x-coordinate of the right side of the rectangle.

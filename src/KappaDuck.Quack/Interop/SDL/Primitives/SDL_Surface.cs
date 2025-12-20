@@ -6,19 +6,19 @@ using KappaDuck.Quack.Graphics.Pixels;
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [StructLayout(LayoutKind.Sequential)]
-internal unsafe struct SDL_Surface
+internal readonly unsafe struct SDL_Surface
 {
-    internal readonly SurfaceState State;
+    internal SurfaceState State { get; }
 
-    internal readonly PixelFormat Format;
+    internal PixelFormat Format { get; }
 
-    internal readonly int Width;
+    internal int Width { get; }
 
-    internal readonly int Height;
+    internal int Height { get; }
 
-    internal readonly int Pitch;
+    internal int Pitch { get; }
 
-    internal void* Pixels;
+    internal void* Pixels { get; }
 
     private readonly int _refCount;
     private readonly nint _reserved;

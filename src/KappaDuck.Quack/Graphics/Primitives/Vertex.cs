@@ -61,7 +61,7 @@ public struct Vertex
     /// <summary>
     /// Gets or sets the position of the vertex.
     /// </summary>
-    public Vector2 Position;
+    public Vector2 Position { get; set; }
 
     private SDL_FColor _color;
     private Vector2 _texCoord;

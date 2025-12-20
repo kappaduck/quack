@@ -14,13 +14,13 @@ internal readonly struct MSG
 {
     private readonly nint _hwnd;
 
-    public readonly uint Message;
+    public uint Message { get; }
 
-    public readonly nuint WParam;
+    public nuint WParam { get; }
 
-    public readonly nuint LParam;
+    public nuint LParam { get; }
 
     private readonly nuint _time;
 
-    public readonly POINT Point;
+    public POINT Point { get; }
 }
