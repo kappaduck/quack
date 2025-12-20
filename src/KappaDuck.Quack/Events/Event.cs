@@ -15,54 +15,54 @@ public struct Event
     /// <summary>
     /// The type of the event.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly EventType Type;
+    [field: FieldOffset(0)]
+    public readonly EventType Type { get; }
 
     /// <summary>
     /// The display event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly DisplayEvent Display;
+    [field: FieldOffset(0)]
+    public readonly DisplayEvent Display { get; }
 
     /// <summary>
     /// The keyboard device event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly KeyboardDeviceEvent KeyboardDevice;
+    [field: FieldOffset(0)]
+    public readonly KeyboardDeviceEvent KeyboardDevice { get; }
 
     /// <summary>
     /// The keyboard event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly KeyboardEvent Keyboard;
+    [field: FieldOffset(0)]
+    public readonly KeyboardEvent Keyboard { get; }
 
     /// <summary>
     /// The mouse button event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly MouseButtonEvent Mouse;
+    [field: FieldOffset(0)]
+    public readonly MouseButtonEvent Mouse { get; }
 
     /// <summary>
     /// The mouse device event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly MouseDeviceEvent MouseDevice;
+    [field: FieldOffset(0)]
+    public readonly MouseDeviceEvent MouseDevice { get; }
 
     /// <summary>
     /// The mouse motion event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly MouseMotionEvent Motion;
+    [field: FieldOffset(0)]
+    public readonly MouseMotionEvent Motion { get; }
 
     /// <summary>
     /// The mouse wheel event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly MouseWheelEvent Wheel;
+    [field: FieldOffset(0)]
+    public readonly MouseWheelEvent Wheel { get; }
 
     /// <summary>
     /// The window event data.
     /// </summary>
-    [FieldOffset(0)]
-    public readonly WindowEvent Window;
+    [field: FieldOffset(0)]
+    public readonly WindowEvent Window { get; }
 }
