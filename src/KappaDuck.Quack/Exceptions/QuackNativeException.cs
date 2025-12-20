@@ -10,15 +10,7 @@ namespace KappaDuck.Quack.Exceptions;
 /// </summary>
 public sealed class QuackNativeException : QuackException
 {
-    internal QuackNativeException()
-    {
-    }
-
-    internal QuackNativeException(string? message) : base(message)
-    {
-    }
-
-    internal QuackNativeException(string message, Exception innerException) : base(message, innerException)
+    private QuackNativeException(string? message) : base(message)
     {
     }
 

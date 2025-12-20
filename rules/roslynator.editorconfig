@@ -15,6 +15,11 @@ dotnet_diagnostic.RCS1110.severity = none
 # https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1135/
 dotnet_diagnostic.RCS1135.severity = none
 
+# RCS1194: Implement exception constructors
+# Not all exception constructors are always needed and exceptions are constructed internally.
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1194/
+dotnet_diagnostic.RCS1194.severity = none
+
 # RCS1237: Use bit shift operator
 # This rule is obsolete
 # https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1237/
