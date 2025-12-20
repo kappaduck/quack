@@ -7,20 +7,12 @@ using KappaDuck.Quack.Exceptions;
 namespace KappaDuck.Quack.Core;
 
 /// <summary>
-/// Manages <see cref="Subsystem"/>s and provides core engine functionality.
+/// The main Quack! engine for managing subsystems and application metadata.
 /// </summary>
-/// <remarks>
-/// In most cases, you do not need to use this class directly.
-/// Subsystems are automatically managed by modules such as Audio, Graphics, Window, etc.
-/// Use <see cref="QuackEngine"/> only when you need to manually initialize or shut down a subsystem.
-/// </remarks>
 public static class QuackEngine
 {
     private static readonly Lock _lock = new();
-
-    private static Subsystem _subsystem;
     private static int _refCount;
-    private static bool _initialized;
 
     /// <summary>
     /// Gets the application metadata.
@@ -49,7 +41,7 @@ public static class QuackEngine
     /// <exception cref="QuackNativeException">Fails to set metadata properties.</exception>
     public static void SetMetadata(ApplicationMetadata metadata)
     {
-        QuackException.ThrowIf(_initialized, "Cannot set metadata after engine initialization.");
+        QuackException.ThrowIf(_refCount > 0, "Cannot set metadata after engine initialization.");
         Metadata = metadata;
 
         SetMetadataProperty("SDL.app.metadata.identifier", metadata.Id);
@@ -69,24 +61,18 @@ public static class QuackEngine
         }
     }
 
-    internal static void Init(Subsystem subsystem)
+    internal static void Acquire(Subsystem subsystem)
     {
         lock (_lock)
         {
-            if (Has(subsystem))
-            {
-                Interlocked.Increment(ref _refCount);
-                return;
-            }
-
-            QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem & ~Subsystem.TTF));
-            _subsystem |= subsystem;
-
-            if (Has(Subsystem.TTF))
+            if ((subsystem & Subsystem.TTF) == Subsystem.TTF)
                 QuackNativeException.ThrowIfFailed(Native.TTF_Init());
 
-            Interlocked.Increment(ref _refCount);
-            _initialized = true;
+            Subsystem other = subsystem & ~Subsystem.TTF;
+            if (other != 0)
+                QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(other));
+
+            _refCount++;
         }
     }
 
@@ -94,19 +80,11 @@ public static class QuackEngine
     {
         lock (_lock)
         {
-            if (Interlocked.Decrement(ref _refCount) > 0)
-                return;
-
-            if (Has(Subsystem.TTF))
-                QuackNativeException.ThrowIfFailed(Native.TTF_Quit());
-
-            Native.SDL_QuitSubSystem(_subsystem & ~Subsystem.TTF);
-            Native.SDL_Quit();
-
-            _subsystem &= ~_subsystem;
-            _initialized = false;
+            if (--_refCount == 0)
+            {
+                Native.TTF_Quit();
+                Native.SDL_Quit();
+            }
         }
     }
-
-    private static bool Has(Subsystem subsystem) => (_subsystem & subsystem) == subsystem;
 }

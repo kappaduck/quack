@@ -1222,12 +1222,14 @@ public partial class Window : IDisposable, ISpanFormattable
             _icon = null;
 
             _windowHandle.Dispose();
+
+            QuackEngine.Release();
         }
     }
 
     private void InitializeWindow(int width, int height)
     {
-        QuackEngine.Init(Subsystem.Video);
+        QuackEngine.Acquire(Subsystem.Video);
 
         _width = width;
         _height = height;

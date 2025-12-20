@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Core;
@@ -41,6 +41,5 @@ internal static partial class Native
 
     [LibraryImport(TTF), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool TTF_Quit();
+    internal static partial void TTF_Quit();
 }

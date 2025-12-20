@@ -15,7 +15,7 @@ namespace KappaDuck.Quack.Core;
 /// such as "About" in the menu, the name of the application can be shown on some audi mixers, etc.
 /// </para>
 /// <para>
-/// It is managed by the <see cref="QuackEngine"/> and can be set during initialization. The engine will keep a reference to it.
+/// It is managed by <see cref="QuackEngine.SetMetadata(ApplicationMetadata)"/>. The engine will keep a reference to it.
 /// </para>
 /// </remarks>
 public sealed record ApplicationMetadata

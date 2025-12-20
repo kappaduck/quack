@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.Core.Extensions;
 
 /// <summary>
-/// Provides extension methods for <see cref="ApplicationType"/>.
+/// Provides extension on <see cref="ApplicationType"/>.
 /// </summary>
 public static class ApplicationTypeExtensions
 {
@@ -14,14 +14,13 @@ public static class ApplicationTypeExtensions
         /// Gets the human-readable name of the application type.
         /// </summary>
         /// <remarks>
-        /// It returns "Unknown" for unrecognized application types.
+        /// It returns <see cref="ApplicationType.Application"/> for unrecognized application types.
         /// </remarks>
         public string Name => type switch
         {
             ApplicationType.Game => nameof(ApplicationType.Game),
             ApplicationType.MediaPlayer => nameof(ApplicationType.MediaPlayer),
-            ApplicationType.Application => nameof(ApplicationType.Application),
-            _ => "Unknown"
+            _ => nameof(ApplicationType.Application)
         };
     }
 }
