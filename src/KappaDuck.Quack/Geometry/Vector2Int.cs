@@ -34,9 +34,6 @@ public struct Vector2Int(int x, int y) :
     /// <summary>
     /// Gets a value indicating whether the vector is zero.
     /// </summary>
-    /// <remarks>
-    /// It compares the squared length of the vector to a small tolerance.
-    /// </remarks>
     public readonly bool IsZero => X == 0 && Y == 0;
 
     /// <summary>
@@ -172,6 +169,13 @@ public struct Vector2Int(int x, int y) :
     /// <param name="right">The right vector.</param>
     /// <returns><see langword="true"/> if the vectors are not equal; otherwise, <see langword="false"/>.</returns>
     public static bool operator !=(Vector2Int left, Vector2Int right) => !(left == right);
+
+    /// <summary>
+    /// Deconstructs the size into its x and y components.
+    /// </summary>
+    /// <param name="x">The x component.</param>
+    /// <param name="y">The y component.</param>
+    public readonly void Deconstruct(out int x, out int y) => (x, y) = (X, Y);
 
     /// <summary>
     /// Converts the vector to a <see cref="Vector2"/>.

@@ -5,6 +5,7 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using System.Drawing;
+using Size = KappaDuck.Quack.Geometry.Size;
 
 namespace KappaDuck.Quack.Graphics.Drawing;
 
@@ -78,7 +79,7 @@ public sealed class Sprite(Texture texture, Vector2 position = default, Angle ro
     /// <summary>
     /// Gets or sets the size of the sprite.
     /// </summary>
-    public Vector2 Size
+    public Size Size
     {
         get => _target.Size;
         set => _target.Size = value;

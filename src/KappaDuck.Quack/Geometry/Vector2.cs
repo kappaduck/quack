@@ -367,6 +367,13 @@ public struct Vector2(float x, float y) :
     public readonly Vector2 Clamp(float maxLength) => Clamp(this, maxLength);
 
     /// <summary>
+    /// Deconstructs the size into its x and y components.
+    /// </summary>
+    /// <param name="x">The x component.</param>
+    /// <param name="y">The y component.</param>
+    public readonly void Deconstruct(out float x, out float y) => (x, y) = (X, Y);
+
+    /// <summary>
     /// Computes the distance between this vector and another vector.
     /// </summary>
     /// <param name="to">The other vector.</param>

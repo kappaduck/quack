@@ -27,7 +27,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>
-    public Rect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y)
+    public Rect(Vector2 position, Size size) : this(position.X, position.Y, size.Width, size.Height)
     {
     }
 
@@ -141,13 +141,13 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <summary>
     /// Gets or sets the size of the rectangle.
     /// </summary>
-    public Vector2 Size
+    public Size Size
     {
         readonly get => new(Width, Height);
         set
         {
-            Width = value.X;
-            Height = value.Y;
+            Width = value.Width;
+            Height = value.Height;
         }
     }
 
@@ -220,6 +220,21 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
             List<Vector2> list => Contains(CollectionsMarshal.AsSpan(list)),
             _ => points.Any(Contains)
         };
+    }
+
+    /// <summary>
+    /// Deconstructs the rectangle into its x, y, width, and height components.
+    /// </summary>
+    /// <param name="x">The x component.</param>
+    /// <param name="y">The y component.</param>
+    /// <param name="width">The width component.</param>
+    /// <param name="height">The height component.</param>
+    public readonly void Deconstruct(out float x, out float y, out float width, out float height)
+    {
+        x = X;
+        y = Y;
+        width = Width;
+        height = Height;
     }
 
     /// <summary>
