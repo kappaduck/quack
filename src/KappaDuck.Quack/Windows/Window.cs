@@ -18,7 +18,7 @@ namespace KappaDuck.Quack.Windows;
 /// <remarks>
 /// You should use one of the specialized windows such as <see cref="RenderWindow"/>.
 /// </remarks>
-public partial class Window : IDisposable, ISpanFormattable
+public abstract partial class Window : IDisposable, ISpanFormattable
 {
     private SDL_WindowHandle _windowHandle = new();
     private Surface? _icon;
@@ -36,7 +36,7 @@ public partial class Window : IDisposable, ISpanFormattable
     /// It does not create the window. Use <see cref="Create(string, int, int)"/> to create a window.
     /// It is useful to delay window creation until necessary.
     /// </remarks>
-    public Window()
+    protected Window()
     {
         Title = string.Empty;
         Handle = new WindowHandle(nint.Zero);
@@ -50,7 +50,7 @@ public partial class Window : IDisposable, ISpanFormattable
     /// <param name="height">The height of the window.</param>
     /// <remarks>It creates the window immediately upon instantiation.</remarks>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public Window(string title, int width, int height)
+    protected Window(string title, int width, int height)
     {
         Title = title;
         Handle = new WindowHandle(nint.Zero);
@@ -64,12 +64,12 @@ public partial class Window : IDisposable, ISpanFormattable
     /// <param name="title">The title of the window.</param>
     /// <param name="size">The dimensions of the window.</param>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public Window(string title, Vector2Int size)
+    protected Window(string title, SizeInt size)
     {
         Title = title;
         Handle = new WindowHandle(nint.Zero);
 
-        InitializeWindow(size.X, size.Y);
+        InitializeWindow(size.Width, size.Height);
     }
 
     /// <summary>
@@ -79,13 +79,13 @@ public partial class Window : IDisposable, ISpanFormattable
     /// <param name="position">The position of the window on the screen.</param>
     /// <param name="size">The size of the window.</param>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public Window(string title, Vector2Int position, Vector2Int size)
+    protected Window(string title, Vector2Int position, SizeInt size)
     {
         Title = title;
         Position = position;
         Handle = new WindowHandle(nint.Zero);
 
-        InitializeWindow(size.X, size.Y);
+        InitializeWindow(size.Width, size.Height);
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public partial class Window : IDisposable, ISpanFormattable
     /// and sets the window size to the mode's width and height.
     /// </remarks>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public Window(string title, DisplayMode mode)
+    protected Window(string title, DisplayMode mode)
     {
         Title = title;
         FullscreenMode = mode;
@@ -982,18 +982,18 @@ public partial class Window : IDisposable, ISpanFormattable
 
         if (e.Type == EventType.WindowResized)
         {
-            _width = e.Window.Data1;
-            _height = e.Window.Data2;
+            _width = e.Window.Size.Width;
+            _height = e.Window.Size.Height;
         }
 
         if (e.Type == EventType.WindowPixelSizeChanged)
         {
-            WidthInPixels = e.Window.Data1;
-            HeightInPixels = e.Window.Data2;
+            WidthInPixels = e.Window.SizeInPixels.Width;
+            HeightInPixels = e.Window.SizeInPixels.Height;
         }
 
         if (e.Type == EventType.WindowMoved)
-            _position = new Vector2Int(e.Window.Data1, e.Window.Data2);
+            _position = e.Window.Position;
 
         if (e.Type == EventType.MouseEnter)
             _state |= State.MouseFocus;

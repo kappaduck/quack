@@ -3,6 +3,7 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Inputs;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -17,45 +18,57 @@ public readonly struct MouseWheelEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The window with mouse focus.
+    /// Gets the window unique identifier which has the mouse focus.
     /// </summary>
-    public readonly uint WindowId;
+    public uint WindowId { get; }
 
     /// <summary>
-    /// The mouse instance id in relative mode or 0.
+    /// Gets the mouse unique identifier.
     /// </summary>
-    public readonly uint Which;
+    public uint Which { get; }
 
     /// <summary>
-    /// The horizontal scroll amount.
+    /// Gets the horizontal scroll amount.
     /// </summary>
     /// <remarks>
     /// Positive to the right, negative to the left.
     /// </remarks>
-    public readonly float X;
+    public float X { get; }
 
     /// <summary>
-    /// The vertical scroll amount.
+    /// Gets the vertical scroll amount.
     /// </summary>
     /// <remarks>
     /// Positive away from the user, negative towards the user.
     /// </remarks>
-    public readonly float Y;
+    public float Y { get; }
 
     /// <summary>
-    /// The direction of the scroll.
+    /// Gets the direction of the scroll.
     /// </summary>
     /// <remarks>
     /// When <see cref="Mouse.WheelDirection.Flipped"/> the values in X and Y will be opposite.
     /// Multiply by -1 to change them back.
     /// </remarks>
-    public readonly Mouse.WheelDirection Direction;
+    public Mouse.WheelDirection Direction { get; }
 
     private readonly float _mouseX;
     private readonly float _mouseY;
 
     /// <summary>
+    /// Gets the mouse device associated with <see cref="EventType.MouseWheel"/>.
+    /// </summary>
+    public Mouse Mouse
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.MouseWheel);
+            return Mouse.Get(Which);
+        }
+    }
+
+    /// <summary>
     /// Gets the position of the mouse, relative to window.
     /// </summary>
-    public readonly Vector2 MousePosition => new(_mouseX, _mouseY);
+    public Vector2 MousePosition => new(_mouseX, _mouseY);
 }

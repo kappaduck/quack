@@ -51,7 +51,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <param name="size">The dimensions of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public RenderWindow(string title, Vector2Int size, string? rendererName = null) : base(title, size)
+    public RenderWindow(string title, SizeInt size, string? rendererName = null) : base(title, size)
         => InitializeRenderer(rendererName);
 
     /// <summary>
@@ -62,7 +62,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <param name="size">The size of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
     /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public RenderWindow(string title, Vector2Int position, Vector2Int size, string? rendererName = null) : base(title, position, size)
+    public RenderWindow(string title, Vector2Int position, SizeInt size, string? rendererName = null) : base(title, position, size)
         => InitializeRenderer(rendererName);
 
     /// <summary>

@@ -53,6 +53,18 @@ public sealed partial class Keyboard
     public string Name { get; }
 
     /// <summary>
+    /// Retrieves a keyboard by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the keyboard.</param>
+    /// <returns>The keyboard with the speicified identifier.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="id"/> is negative.</exception>
+    public static Keyboard Get(uint id)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(id);
+        return new Keyboard(id);
+    }
+
+    /// <summary>
     /// Gets the keycode corresponding to the given scancode according to the current keyboard layout.
     /// </summary>
     /// <param name="code">The scancode.</param>

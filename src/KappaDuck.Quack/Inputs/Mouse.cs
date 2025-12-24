@@ -100,6 +100,18 @@ public sealed class Mouse
     }
 
     /// <summary>
+    /// Retrieves a mouse device with the specified identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the mouse.</param>
+    /// <returns>The mouse with the specified identifier.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="id"/> is negative or zero.</exception>
+    public static Mouse Get(uint id)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
+        return new Mouse(id);
+    }
+
+    /// <summary>
     /// Retrieves all connected mice.
     /// </summary>
     /// <remarks>

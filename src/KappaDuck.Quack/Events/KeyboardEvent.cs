@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Inputs;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -16,41 +17,53 @@ public readonly struct KeyboardEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The window with keyboard focus.
+    /// Gets the window id with keyboard focus.
     /// </summary>
-    public readonly uint WindowId;
+    public uint WindowId { get; }
 
     /// <summary>
-    /// The keyboard instance id or 0 if unknown or virtual.
+    /// Gets the keyboard id or 0 if unknown or virtual.
     /// </summary>
-    public readonly uint Which;
+    public uint Which { get; }
 
     /// <summary>
-    /// The physical key code.
+    /// Gets the physical key code.
     /// </summary>
-    public readonly Keyboard.Scancode Code;
+    public Keyboard.Scancode Code { get; }
 
     /// <summary>
-    /// The virtual key code.
+    /// Gets the virtual key code.
     /// </summary>
-    public readonly Keyboard.Keycode Key;
+    public Keyboard.Keycode Key { get; }
 
     /// <summary>
-    /// Current key modifiers.
+    /// Gets the key modifiers.
     /// </summary>
-    public readonly Keyboard.Modifier Modifiers;
+    public Keyboard.Modifier Modifiers { get; }
 
     private readonly ushort _raw;
     private readonly byte _down;
     private readonly byte _repeat;
 
     /// <summary>
+    /// Gets the keyboard device associated with <see cref="EventType.KeyDown"/> or <see cref="EventType.KeyUp"/>.
+    /// </summary>
+    public Keyboard Keyboard
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.KeyDown or EventType.KeyUp);
+            return Keyboard.Get(Which);
+        }
+    }
+
+    /// <summary>
     /// Gets a value indicating whether the key is pressed.
     /// </summary>
-    public readonly bool Down => _down != 0;
+    public bool Down => _down != 0;
 
     /// <summary>
     /// Gets a value indicating whether the key is repeated.
     /// </summary>
-    public readonly bool Repeat => _repeat != 0;
+    public bool Repeat => _repeat != 0;
 }

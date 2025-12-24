@@ -59,6 +59,11 @@ public enum EventType : uint
     ContentScaleChanged = 0x157,
 
     /// <summary>
+    /// Display has changed usable bounds.
+    /// </summary>
+    UsableBoundsChanged = 0x158,
+
+    /// <summary>
     /// Window has been shown.
     /// </summary>
     WindowShown = 0x202,
@@ -87,11 +92,6 @@ public enum EventType : uint
     /// The pixel size of the window has changed to data1 x data2.
     /// </summary>
     WindowPixelSizeChanged = 0x207,
-
-    /// <summary>
-    /// The pixel size of a Metal view associated with the window has changed.
-    /// </summary>
-    MetalViewResized = 0x208,
 
     /// <summary>
     /// Window has been minimized.
