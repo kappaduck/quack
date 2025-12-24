@@ -5,7 +5,7 @@ using KappaDuck.Quack.Interop.Handles;
 
 namespace KappaDuck.Quack.Interop.SDL.Handles;
 
-internal sealed class SDL_RendererHandle() : SafeHandleZeroInvalid(ownsHandle: true)
+internal sealed class SDL_Renderer() : SafeHandleZeroInvalid(ownsHandle: true)
 {
     protected override void Free() => Native.SDL_DestroyRenderer(handle);
 }

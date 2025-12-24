@@ -24,14 +24,14 @@ public struct Vector2(float x, float y) :
     ISpanFormattable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vector2"/> with both coordinates set to zero.
+    /// Creates an empty vector.
     /// </summary>
     public Vector2() : this(0f, 0f)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vector2"/> from polar coordinates.
+    /// Creates a vector from polar coordinates.
     /// </summary>
     /// <param name="radius">The radius (magnitude) of the vector.</param>
     /// <param name="angle">The angle of the vector.</param>

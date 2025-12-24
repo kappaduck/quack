@@ -13,7 +13,7 @@ public struct Event
     private unsafe fixed byte _padding[128];
 
     /// <summary>
-    /// The type of the event.
+    /// Gets the type of the event.
     /// </summary>
     [field: FieldOffset(0)]
     public EventType Type { get; }

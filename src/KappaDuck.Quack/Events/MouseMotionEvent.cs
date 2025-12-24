@@ -18,7 +18,7 @@ public readonly struct MouseMotionEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// Gets the window id with mouse focus.
+    /// Gets the window id which has the mouse focus.
     /// </summary>
     public uint WindowId { get; }
 

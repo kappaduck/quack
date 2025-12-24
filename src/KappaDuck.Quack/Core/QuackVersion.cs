@@ -9,19 +9,19 @@ namespace KappaDuck.Quack.Core;
 public static class QuackVersion
 {
     /// <summary>
+    /// Gets the version of the SDL_image library used by Quack!.
+    /// </summary>
+    public static Version Image { get; } = GetVersion(Native.IMG_Version());
+
+    /// <summary>
     /// Gets the current version of Quack!.
     /// </summary>
-    public static Version Version { get; } = new(0, 3, 0);
+    public static Version Quack { get; } = new(0, 3, 0);
 
     /// <summary>
     /// Gets the version of the SDL library used by Quack!.
     /// </summary>
     public static Version SDL { get; } = GetVersion(Native.SDL_GetVersion());
-
-    /// <summary>
-    /// Gets the version of the SDL_image library used by Quack!.
-    /// </summary>
-    public static Version Image { get; } = GetVersion(Native.IMG_Version());
 
     /// <summary>
     /// Gets the version of the SDL_ttf library used by Quack!.

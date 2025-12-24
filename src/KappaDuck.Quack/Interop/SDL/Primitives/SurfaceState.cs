@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
@@ -9,7 +9,7 @@ internal enum SurfaceState : uint
     None = 0x00000000u,
 
     /// <summary>
-    /// Surface uses preallocated pixel memory.
+    /// Surface uses pre-allocated pixel memory.
     /// </summary>
     PreAllocated = 0x00000001u,
 

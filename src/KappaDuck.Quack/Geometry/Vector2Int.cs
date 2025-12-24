@@ -21,6 +21,14 @@ public struct Vector2Int(int x, int y) :
     IEquatable<Vector2Int>,
     ISpanFormattable
 {
+
+    /// <summary>
+    /// Creates an empty vector.
+    /// </summary>
+    public Vector2Int() : this(0, 0)
+    {
+    }
+
     /// <summary>
     /// Gets or sets the x-coordinate of the vector.
     /// </summary>

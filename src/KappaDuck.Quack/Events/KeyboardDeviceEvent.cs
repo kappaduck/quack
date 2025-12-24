@@ -17,8 +17,11 @@ public readonly struct KeyboardDeviceEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// Gets the keyboard id or 0 if unknown or virtual.
+    /// Gets the keyboard id which was added or removed.
     /// </summary>
+    /// <remarks>
+    /// If the keyboard is unknown or virtual, this value is <c>0</c>
+    /// </remarks>
     public uint Which { get; }
 
     /// <summary>

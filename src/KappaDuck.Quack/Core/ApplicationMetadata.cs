@@ -12,7 +12,7 @@ namespace KappaDuck.Quack.Core;
 /// </para>
 /// <para>
 /// There are several locations where this metadata can be useful,
-/// such as "About" in the menu, the name of the application can be shown on some audi mixers, etc.
+/// such as "About" in the menu, the name of the application can be shown on some audio mixers, etc.
 /// </para>
 /// <para>
 /// It is managed by <see cref="QuackEngine.SetMetadata(ApplicationMetadata)"/>. The engine will keep a reference to it.

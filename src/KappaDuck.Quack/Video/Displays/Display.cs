@@ -33,7 +33,7 @@ public sealed class Display
     /// <summary>
     /// Gets the bounds of the display.
     /// </summary>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display bounds.</exception>
     public RectInt Bounds
     {
         get
@@ -44,9 +44,9 @@ public sealed class Display
     }
 
     /// <summary>
-    /// Gets the usable bounds of the display (excluding taskbars, docks, etc.).
+    /// Gets the usable bounds of the display (excluding taskbar, docks, etc.).
     /// </summary>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the usable display bounds.</exception>
     public RectInt UsableBounds
     {
         get
@@ -80,18 +80,15 @@ public sealed class Display
     /// When the display is in fullscreen mode, <see cref="CurrentMode"/> will return the mode that the display is currently using,
     /// and <see cref="DesktopMode"/> will return the mode that the desktop was using before going fullscreen.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public DisplayMode CurrentMode
+    /// <exception cref="QuackNativeException">Thrown when failed to get the current display mode.</exception>
+    public unsafe DisplayMode CurrentMode
     {
         get
         {
-            unsafe
-            {
-                DisplayMode* mode = Native.SDL_GetCurrentDisplayMode(Id);
+            DisplayMode* mode = Native.SDL_GetCurrentDisplayMode(Id);
 
-                QuackNativeException.ThrowIfNull(mode);
-                return *mode;
-            }
+            QuackNativeException.ThrowIfNull(mode);
+            return *mode;
         }
     }
 
@@ -104,17 +101,14 @@ public sealed class Display
     /// In that case, <see cref="DesktopMode"/> will return the mode that the desktop was using before going fullscreen,
     /// and <see cref="CurrentMode"/> will return the mode that the display is currently using.
     /// </remarks>
-    public DisplayMode DesktopMode
+    public unsafe DisplayMode DesktopMode
     {
         get
         {
-            unsafe
-            {
-                DisplayMode* mode = Native.SDL_GetDesktopDisplayMode(Id);
+            DisplayMode* mode = Native.SDL_GetDesktopDisplayMode(Id);
 
-                QuackNativeException.ThrowIfNull(mode);
-                return *mode;
-            }
+            QuackNativeException.ThrowIfNull(mode);
+            return *mode;
         }
     }
 
@@ -144,7 +138,7 @@ public sealed class Display
     /// Gets all available fullscreen display modes for the display.
     /// </summary>
     /// <returns>All available fullscreen display modes for the display.</returns>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the fullscreen display modes.</exception>
     public DisplayMode[] GetFullscreenModes()
     {
         DisplayMode[] fullscreenModes;
@@ -170,7 +164,7 @@ public sealed class Display
     /// </summary>
     /// <param name="query">The display mode query.</param>
     /// <returns>The closest matching fullscreen display mode.</returns>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to find a matching display mode.</exception>
     public DisplayMode SearchDisplayMode(DisplayModeQuery query)
     {
         bool success = Native.SDL_GetClosestFullscreenDisplayMode(Id, query.Width, query.Height, query.RefreshRate ?? 0, query.HighDensity, out DisplayMode mode);
@@ -196,17 +190,12 @@ public sealed class Display
     /// </summary>
     /// <param name="point">The point to check.</param>
     /// <returns>The display that contains the specified point.</returns>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public static Display GetDisplay(Vector2Int point)
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display for the point.</exception>
+    public static unsafe Display GetDisplay(Vector2Int point)
     {
-        uint id;
-
-        unsafe
-        {
-            id = Native.SDL_GetDisplayForPoint(&point);
-        }
-
+        uint id = Native.SDL_GetDisplayForPoint(&point);
         QuackNativeException.ThrowIfZero(id);
+
         return new Display(id);
     }
 
@@ -215,17 +204,12 @@ public sealed class Display
     /// </summary>
     /// <param name="rect">The rectangle to check.</param>
     /// <returns>The display containing the specified rectangle.</returns>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
-    public static Display GetDisplay(RectInt rect)
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display for the rectangle.</exception>
+    public static unsafe Display GetDisplay(RectInt rect)
     {
-        uint id;
-
-        unsafe
-        {
-            id = Native.SDL_GetDisplayForRect(&rect);
-        }
-
+        uint id = Native.SDL_GetDisplayForRect(&rect);
         QuackNativeException.ThrowIfZero(id);
+
         return new Display(id);
     }
 

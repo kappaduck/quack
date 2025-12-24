@@ -12,6 +12,7 @@ namespace KappaDuck.Quack.Interop.Win32.Primitives;
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct POINT
 {
-    public int X { get; }
-    public int Y { get; }
+    internal int X { get; }
+
+    internal int Y { get; }
 }

@@ -18,12 +18,12 @@ public readonly struct MouseWheelEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// Gets the window unique identifier which has the mouse focus.
+    /// Gets the window id which has the mouse focus.
     /// </summary>
     public uint WindowId { get; }
 
     /// <summary>
-    /// Gets the mouse unique identifier.
+    /// Gets the mouse id.
     /// </summary>
     public uint Which { get; }
 

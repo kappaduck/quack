@@ -12,15 +12,15 @@ internal static partial class Native
 {
     [LibraryImport(Image, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDL_TextureHandle IMG_LoadTexture(SDL_RendererHandle renderer, string file);
+    internal static partial SDL_Texture IMG_LoadTexture(SDL_Renderer renderer, string file);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial SDL_TextureHandle SDL_CreateTexture(SDL_RendererHandle renderer, PixelFormat format, TextureAccess access, int width, int height);
+    internal static partial SDL_Texture SDL_CreateTexture(SDL_Renderer renderer, PixelFormat format, TextureAccess access, int width, int height);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static unsafe partial SDL_TextureHandle SDL_CreateTextureFromSurface(SDL_RendererHandle renderer, SDL_Surface* surface);
+    internal static unsafe partial SDL_Texture SDL_CreateTextureFromSurface(SDL_Renderer renderer, SDL_Surface* surface);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -29,48 +29,48 @@ internal static partial class Native
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_GetTextureAlphaMod(SDL_TextureHandle texture, out byte alpha);
+    internal static partial bool SDL_GetTextureAlphaMod(SDL_Texture texture, out byte alpha);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_GetTextureBlendMode(SDL_TextureHandle texture, out BlendMode mode);
+    internal static partial bool SDL_GetTextureBlendMode(SDL_Texture texture, out BlendMode mode);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_GetTextureColorMod(SDL_TextureHandle texture, out byte r, out byte g, out byte b);
+    internal static partial bool SDL_GetTextureColorMod(SDL_Texture texture, out byte r, out byte g, out byte b);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_GetTextureScaleMode(SDL_TextureHandle texture, out ScaleMode scale);
+    internal static partial bool SDL_GetTextureScaleMode(SDL_Texture texture, out ScaleMode scale);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial uint SDL_GetTextureProperties(SDL_TextureHandle texture);
+    internal static partial uint SDL_GetTextureProperties(SDL_Texture texture);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static unsafe partial void SDL_RenderTextureRotated(SDL_RendererHandle renderer, SDL_TextureHandle texture, Rect* source, Rect* destination, double angle, Vector2* center, FlipMode flip);
-
-    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetTextureAlphaMod(SDL_TextureHandle texture, byte alpha);
+    internal static unsafe partial void SDL_RenderTextureRotated(SDL_Renderer renderer, SDL_Texture texture, Rect* source, Rect* destination, double angle, Vector2* center, FlipMode flip);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetTextureBlendMode(SDL_TextureHandle texture, BlendMode mode);
+    internal static partial bool SDL_SetTextureAlphaMod(SDL_Texture texture, byte alpha);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetTextureColorMod(SDL_TextureHandle texture, byte r, byte g, byte b);
+    internal static partial bool SDL_SetTextureBlendMode(SDL_Texture texture, BlendMode mode);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetTextureScaleMode(SDL_TextureHandle texture, ScaleMode scale);
+    internal static partial bool SDL_SetTextureColorMod(SDL_Texture texture, byte r, byte g, byte b);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_SetTextureScaleMode(SDL_Texture texture, ScaleMode scale);
 }

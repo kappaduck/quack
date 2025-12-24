@@ -14,7 +14,7 @@ public readonly struct RendererEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// Gets the window Id containing the renderer.
+    /// Gets the window id associated with the renderer event.
     /// </summary>
-    public readonly uint WindowId { get; }
+    public uint WindowId { get; }
 }

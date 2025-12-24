@@ -18,7 +18,7 @@ public static class UriLauncher
     /// Open the specified URI using the system's default application.
     /// </summary>
     /// <param name="uri">The URL/URI to open.</param>
-    /// <exception cref="QuackNativeException">Fails to open the URI.</exception>
+    /// <exception cref="QuackNativeException">Throw when failed to open the URI.</exception>
     public static void Open(string uri)
         => QuackNativeException.ThrowIfFailed(Native.SDL_OpenURL(uri));
 

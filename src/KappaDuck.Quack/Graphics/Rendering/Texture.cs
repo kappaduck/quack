@@ -14,10 +14,10 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// </summary>
 public sealed class Texture : IDisposable
 {
-    private readonly SDL_TextureHandle _handle;
-    private readonly SDL_RendererHandle _renderer;
+    private readonly SDL_Texture _handle;
+    private readonly SDL_Renderer _renderer;
 
-    internal Texture(SDL_RendererHandle renderer, PixelFormat format, TextureAccess access, int width, int height)
+    internal Texture(SDL_Renderer renderer, PixelFormat format, TextureAccess access, int width, int height)
     {
         _renderer = renderer;
 
@@ -29,7 +29,7 @@ public sealed class Texture : IDisposable
         Height = height;
     }
 
-    internal unsafe Texture(SDL_RendererHandle renderer, Surface surface)
+    internal unsafe Texture(SDL_Renderer renderer, Surface surface)
     {
         _renderer = renderer;
 
@@ -43,7 +43,7 @@ public sealed class Texture : IDisposable
         Height = surface.Height;
     }
 
-    internal Texture(SDL_RendererHandle renderer, string file)
+    internal Texture(SDL_Renderer renderer, string file)
     {
         _renderer = renderer;
 
@@ -71,7 +71,7 @@ public sealed class Texture : IDisposable
     /// Alpha modulation is not always supported by the renderer.
     /// </para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while setting or getting the alpha modulation.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the alpha modulation.</exception>
     public byte AlphaModulation
     {
         get
@@ -98,7 +98,7 @@ public sealed class Texture : IDisposable
     /// <para>If the texture is not valid, the default value of BlendMode.None is returned.</para>
     /// <para>If the blend mode is not supported, the closest supported mode is chosen.</para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while getting or setting the blend mode.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the blend mode.</exception>
     public BlendMode BlendMode
     {
         get
@@ -132,7 +132,7 @@ public sealed class Texture : IDisposable
     /// Color modulation is not always supported by the renderer.
     /// </para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while setting or getting the color modulation.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the color modulation.</exception>
     public Color ColorModulation
     {
         get
@@ -160,7 +160,7 @@ public sealed class Texture : IDisposable
     /// <para>If the texture is not valid, <see cref="ScaleMode.Invalid"/> is returned.</para>
     /// <para>If the scale mode is not supported, the closest supported mode is chosen.</para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">An error occurred while getting or setting the scale mode.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the scale.</exception>
     public ScaleMode Scale
     {
         get

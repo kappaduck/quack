@@ -17,7 +17,7 @@ public static class PixelFormatExtensions
         /// <summary>
         /// Gets the details of the pixel format.
         /// </summary>
-        /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+        /// <exception cref="QuackNativeException">Thrown when failed to get the pixel format details.</exception>
         public unsafe PixelFormatDetails Details
         {
             get
@@ -55,7 +55,7 @@ public static class PixelFormatExtensions
         /// <summary>
         /// Gets the bits per pixel and masks for the pixel format.
         /// </summary>
-        /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+        /// <exception cref="QuackNativeException">Thrown when failed to get the masks.</exception>
         public (int bitsPerPixel, uint RedMask, uint GreenMask, uint BlueMask, uint AlphaMask) Masks
         {
             get

@@ -17,7 +17,7 @@ public readonly struct KeyboardEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// Gets the window id with keyboard focus.
+    /// Gets the window id which has the keyboard focus.
     /// </summary>
     public uint WindowId { get; }
 

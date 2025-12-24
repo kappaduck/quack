@@ -12,77 +12,77 @@ public struct PixelFormatDetails
     /// <summary>
     /// Gets the pixel format.
     /// </summary>
-    public readonly PixelFormat Format { get; }
+    public PixelFormat Format { get; }
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public readonly byte BitsPerPixel { get; }
+    public byte BitsPerPixel { get; }
 
     /// <summary>
     /// Gets the number of bytes per pixel.
     /// </summary>
-    public readonly byte BytesPerPixel { get; }
+    public byte BytesPerPixel { get; }
 
     private unsafe fixed byte _padding[2];
 
     /// <summary>
     /// Gets the red mask.
     /// </summary>
-    public readonly uint RedMask { get; }
+    public uint RedMask { get; }
 
     /// <summary>
     /// Gets the green mask.
     /// </summary>
-    public readonly uint GreenMask { get; }
+    public uint GreenMask { get; }
 
     /// <summary>
     /// Gets the blue mask.
     /// </summary>
-    public readonly uint BlueMask { get; }
+    public uint BlueMask { get; }
 
     /// <summary>
     /// Gets the alpha mask.
     /// </summary>
-    public readonly uint AlphaMask { get; }
+    public uint AlphaMask { get; }
 
     /// <summary>
     /// Gets the red bits.
     /// </summary>
-    public readonly byte RedBits { get; }
+    public byte RedBits { get; }
 
     /// <summary>
     /// Gets the green bits.
     /// </summary>
-    public readonly byte GreenBits { get; }
+    public byte GreenBits { get; }
 
     /// <summary>
     /// Gets the blue bits.
     /// </summary>
-    public readonly byte BlueBits { get; }
+    public byte BlueBits { get; }
 
     /// <summary>
     /// Gets the alpha bits.
     /// </summary>
-    public readonly byte AlphaBits { get; }
+    public byte AlphaBits { get; }
 
     /// <summary>
     /// Gets the red shift.
     /// </summary>
-    public readonly byte RedShift { get; }
+    public byte RedShift { get; }
 
     /// <summary>
     /// Gets the green shift.
     /// </summary>
-    public readonly byte GreenShift { get; }
+    public byte GreenShift { get; }
 
     /// <summary>
     /// Gets the blue shift.
     /// </summary>
-    public readonly byte BlueShift { get; }
+    public byte BlueShift { get; }
 
     /// <summary>
     /// Gets the alpha shift.
     /// </summary>
-    public readonly byte AlphaShift { get; }
+    public byte AlphaShift { get; }
 }

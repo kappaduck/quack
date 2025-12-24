@@ -844,12 +844,12 @@ public sealed partial class Keyboard
         ClearAgain = 0x400000a2u,
 
         /// <summary>
-        /// Crsel.
+        /// CRSEL.
         /// </summary>
         Crsel = 0x400000a3u,
 
         /// <summary>
-        /// Exsel.
+        /// EXSEL.
         /// </summary>
         Exsel = 0x400000a4u,
 
@@ -1099,7 +1099,7 @@ public sealed partial class Keyboard
         LeftAlt = 0x400000e2u,
 
         /// <summary>
-        /// Left Gui.
+        /// Left GUI.
         /// </summary>
         LeftGui = 0x400000e3u,
 

@@ -110,7 +110,7 @@ chmod +x ./SDL3/build.cs # Make the script executable. No need to do this every 
 ```
 
 Open the solution file in your preferred IDE (e.g., Visual Studio, Rider, etc.):
-> Any IDE doesn't support single-file execution, so you will need to run as cli.
+> Any IDE doesn't support single-file execution, so you will need to run as CLI.
 >
 > Visual Code have intellisense support for single-file but can't run it directly.
 

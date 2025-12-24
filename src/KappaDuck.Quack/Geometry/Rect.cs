@@ -16,14 +16,14 @@ namespace KappaDuck.Quack.Geometry;
 public struct Rect(float x, float y, float width, float height) : IEquatable<Rect>, ISpanFormattable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Rect"/> with all values set to zero.
+    /// Creates an empty rectangle.
     /// </summary>
     public Rect() : this(0f, 0f, 0f, 0f)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Rect"/> with the specified position and size.
+    /// Creates a rectangle with position and size.
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>

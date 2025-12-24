@@ -164,12 +164,12 @@ public enum EventType : uint
     WindowOccluded = 0x216,
 
     /// <summary>
-    /// The window has entered Fullscreen mode.
+    /// The window has entered fullscreen mode.
     /// </summary>
     EnterFullScreen = 0x217,
 
     /// <summary>
-    /// The window has left Fullscreen mode.
+    /// The window has left fullscreen mode.
     /// </summary>
     LeaveFullScreen = 0x218,
 
@@ -207,7 +207,7 @@ public enum EventType : uint
     TextInput = 0x303,
 
     /// <summary>
-    /// Keymap changed due to a system event such as an input language or keyboard layout change.
+    /// Key map changed due to a system event such as an input language or keyboard layout change.
     /// </summary>
     KeymapChanged = 0x304,
 

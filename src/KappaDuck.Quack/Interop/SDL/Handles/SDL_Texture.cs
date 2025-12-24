@@ -5,7 +5,7 @@ using KappaDuck.Quack.Interop.Handles;
 
 namespace KappaDuck.Quack.Interop.SDL.Handles;
 
-internal sealed class SDL_TextureHandle() : SafeHandleZeroInvalid(ownsHandle: true)
+internal sealed class SDL_Texture() : SafeHandleZeroInvalid(ownsHandle: true)
 {
     protected override void Free() => Native.SDL_DestroyTexture(handle);
 }

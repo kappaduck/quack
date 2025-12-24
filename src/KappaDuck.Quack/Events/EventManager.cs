@@ -82,7 +82,7 @@ public static class EventManager
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="events"/> is empty.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failing to peek events.</exception>
     public static int Peek(Span<Event> events, EventType min, EventType? max = null)
     {
         ArgumentOutOfRangeException.ThrowIfZero(events.Length);
@@ -127,7 +127,7 @@ public static class EventManager
     /// <param name="events">The events to push onto the queue.</param>
     /// <returns>The number of events successfully pushed onto the queue.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="events"/> is empty.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failing to push events.</exception>
     public static int Push(Span<Event> events)
     {
         ArgumentOutOfRangeException.ThrowIfZero(events.Length);
@@ -150,7 +150,7 @@ public static class EventManager
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="events"/> is empty.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failing to retrieve events.</exception>
     public static int Retrieve(Span<Event> events, EventType min, EventType? max = null)
     {
         ArgumentOutOfRangeException.ThrowIfZero(events.Length);

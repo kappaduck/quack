@@ -16,7 +16,7 @@ public static unsafe class Image
     /// <param name="path">The path to the image file.</param>
     /// <returns>The loaded image.</returns>
     /// <exception cref="FileNotFoundException">The file does not exist.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to load the image.</exception>
     public static Surface Load(string path)
     {
         if (!File.Exists(path))

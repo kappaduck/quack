@@ -9,7 +9,7 @@ body:
     attributes:
       value: |
         Thank you for taking the time to suggest a new feature. Please fill in the information below to help us understand your new feature.
-        Please search to see if the rquested feature has already been suggested ([quack/issues](https://github.com/kappaduck/quack/issues))
+        Please search to see if the requested feature has already been suggested ([quack/issues](https://github.com/kappaduck/quack/issues))
   - type: textarea
     id: feature-description
     attributes:

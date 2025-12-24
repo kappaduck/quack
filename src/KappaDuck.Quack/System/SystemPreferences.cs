@@ -17,7 +17,7 @@ public static class SystemPreferences
     /// If you disable the screensaver, it is automatically re-enabled when the engine shuts down.
     /// The screensaver is disabled by default.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Failed to enable or disable the screensaver.</exception>
+    /// <exception cref="QuackNativeException">Throw when failed to enable or disable the screensaver.</exception>
     public static bool ScreenSaver
     {
         get;

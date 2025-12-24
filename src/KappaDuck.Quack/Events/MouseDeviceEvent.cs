@@ -17,7 +17,7 @@ public readonly struct MouseDeviceEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The mouse id which was added or removed.
+    /// Gets the mouse id which was added or removed.
     /// </summary>
     public uint Which { get; }
 

@@ -59,7 +59,7 @@ public sealed unsafe class Palette : IDisposable
     /// </summary>
     /// <param name="startIndex">The starting index in the palette to set colors.</param>
     /// <param name="colors">The colors to set in the palette.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the palette colors.</exception>
     public void SetColors(int startIndex, ReadOnlySpan<Color> colors)
     {
         Span<SDL_Color> nativeColors = stackalloc SDL_Color[colors.Length];

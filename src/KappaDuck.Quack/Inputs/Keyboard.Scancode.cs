@@ -269,7 +269,7 @@ public sealed partial class Keyboard
         /// </summary>
         /// <remarks>
         /// ISO USB keyboards actually use this code instead of 49 for the same key, but all
-        /// OSes I've seen treat the two codes identically. So, as an implementor, unless
+        /// OSes I've seen treat the two codes identically. So, as a developer, unless
         /// your keyboard generates both of those codes and your OS treats them differently,
         /// you should generate <see cref="Backslash"/> instead of this code. As a user, you
         /// should not rely on this code because SDL will never generate it with most (all?) keyboards.

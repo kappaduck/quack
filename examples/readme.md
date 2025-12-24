@@ -15,7 +15,7 @@ chmod +x ./examples/windows/window.cs
 ```
 
 You can also open the example in your preferred IDE (e.g., Visual Studio, Rider, etc.).
-> Any IDE doesn't support single-file execution, so you will need to run as cli.
+> Any IDE doesn't support single-file execution, so you will need to run as CLI.
 
 > Visual Code has intellisense support for single-file but can't run it directly.
 

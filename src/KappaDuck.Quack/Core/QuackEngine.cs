@@ -1,7 +1,6 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Core.Extensions;
 using KappaDuck.Quack.Exceptions;
 
 namespace KappaDuck.Quack.Core;

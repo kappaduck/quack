@@ -152,7 +152,7 @@ public sealed class Mouse
     /// </remarks>
     /// <param name="x">The x-coordinate in global screen space.</param>
     /// <param name="y">The y-coordinate in global screen space.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to warp the mouse.</exception>
     public static void Warp(float x, float y)
         => QuackNativeException.ThrowIfFailed(Native.SDL_WarpMouseGlobal(x, y));
 
@@ -164,7 +164,7 @@ public sealed class Mouse
     /// <para>It will not move the mouse when used over Microsoft Remote Desktop.</para>
     /// </remarks>
     /// <param name="position">The position in global screen space.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to warp the mouse.</exception>
     public static void Warp(Vector2 position) => Warp(position.X, position.Y);
 
     /// <summary>

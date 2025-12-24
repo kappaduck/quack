@@ -19,10 +19,10 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 public sealed class RenderWindow : Window, IRenderTarget
 {
     private bool _disposed;
-    private SDL_RendererHandle _renderer = new();
+    private SDL_Renderer _renderer = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RenderWindow"/>.
+    /// Creates an empty window.
     /// </summary>
     /// <remarks>
     /// It does not create the window. Use <see cref="Create(string, int, int, string?)"/> to create a window.
@@ -33,40 +33,39 @@ public sealed class RenderWindow : Window, IRenderTarget
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RenderWindow"/> with the specified title, dimensions, and optional renderer.
+    /// Creates a window with the title, dimensions, and optional renderer.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public RenderWindow(string title, int width, int height, string? rendererName = null) : base(title, width, height)
         => InitializeRenderer(rendererName);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RenderWindow"/> with the specified window title, size, and optional
-    /// renderer.
+    /// Creates a window with the title, size, and optional renderer.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="size">The dimensions of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public RenderWindow(string title, SizeInt size, string? rendererName = null) : base(title, size)
         => InitializeRenderer(rendererName);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RenderWindow"/> with the specified title, position, and size.
+    /// Creates a window with the title, position, and size.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="position">The position of the window on the screen.</param>
     /// <param name="size">The size of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public RenderWindow(string title, Vector2Int position, SizeInt size, string? rendererName = null) : base(title, position, size)
         => InitializeRenderer(rendererName);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RenderWindow"/> with the specified title and fullscreen display mode.
+    /// Creates a window with the title and fullscreen display mode.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="mode">The fullscreen display mode.</param>
@@ -75,7 +74,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// This creates the window immediately upon instantiation in fullscreen mode using the specified display mode,
     /// and sets the window size to the mode's width and height.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public RenderWindow(string title, DisplayMode mode, string? rendererName = null) : base(title, mode)
         => InitializeRenderer(rendererName);
 
@@ -87,7 +86,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// mode and output size. If logical presentation is <see cref="LogicalPresentation.Disabled"/>, it will fill
     /// the rectangle with the output size, in pixels.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the presentation rectangle.</exception>
     public Rect CalculatedPresentation
     {
         get
@@ -108,7 +107,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// otherwise if a logical size is set, it will return the logical size,
     /// otherwise it will return the value of <see cref="OutputSize"/>.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the current output size.</exception>
     internal (int Width, int Height) CurrentOutputSize
     {
         get
@@ -127,7 +126,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <remarks>
     /// It return the true output size in pixels, ignoring any render targets or logical size and presentation.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the output size.</exception>
     internal (int Width, int Height) OutputSize
     {
         get
@@ -152,11 +151,11 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// and in that case you get the full pixel resolution of the output window;
     /// it is safe to toggle logical presentation during the rendering of a frame: perhaps most of the rendering is done to specific dimensions
     /// but to make fonts look sharp, the app turns off logical presentation while drawing text.
-    /// Letterboxing will only happen if logical presentation is enabled during <see cref="Present"/>; be sure to reenable it first if you were using it.
+    /// Letterboxing will only happen if logical presentation is enabled during <see cref="Present"/>; be sure to re-enable it first if you were using it.
     /// You can convert coordinates in an event into rendering coordinates using <see cref="MapEventToCoordinates(ref Event)"/> or <see cref="MapPixelsToCoordinates(Vector2)"/>.
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the presentation.</exception>
     public (int Width, int Height, LogicalPresentation Mode) Presentation
     {
         get
@@ -194,7 +193,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// but it should not contain visually important or interactable content.
     /// </para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the safe area.</exception>
     public RectInt RenderSafeArea
     {
         get
@@ -219,7 +218,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <see cref="VSync.Adaptive"/> can be used for adaptive VSync or <see cref="VSync.Disabled"/> to disable. Not every value is supported by every driver.
     /// </para>
     /// </remarks>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get or set the VSync.</exception>
     public int VSync
     {
         get;
@@ -256,12 +255,13 @@ public sealed class RenderWindow : Window, IRenderTarget
     }
 
     /// <summary>
-    /// Initializes a new window with the specified title, size and an optional renderer
+    /// Creates a window with the title, size and an optional renderer
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
     /// <param name="rendererName">The name of the renderer to use for drawing, or <see langword="null"/> to use the default renderer.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public void Create(string title, int width, int height, string? rendererName)
     {
         Create(title, width, height);
@@ -306,6 +306,7 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <param name="position">The position to draw the text at.</param>
     /// <param name="text">The text to render.</param>
     /// <param name="color">The color of the text. If <see langword="null"/>, it will use white.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to draw the debug text.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void DrawDebugText(Vector2 position, string text, Color? color = null)
     {
@@ -356,7 +357,7 @@ public sealed class RenderWindow : Window, IRenderTarget
 
     private void InitializeRenderer(string? rendererName)
     {
-        _renderer = Native.SDL_CreateRenderer(SDLHandle, rendererName);
+        _renderer = Native.SDL_CreateRenderer(NativeHandle, rendererName);
         QuackNativeException.ThrowIfHandleInvalid(_renderer);
 
         QuackNativeException.ThrowIfFailed(Native.SDL_SetRenderVSync(_renderer, VSync));

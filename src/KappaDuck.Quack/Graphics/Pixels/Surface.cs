@@ -31,12 +31,12 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 public sealed unsafe class Surface : IDisposable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Surface"/> class with the specified width, height, and pixel format.
+    /// Creates a surface with the width, height, and pixel format.
     /// </summary>
     /// <param name="width">The width of the surface in pixels.</param>
     /// <param name="height">The height of the surface in pixels.</param>
     /// <param name="format">The pixel format of the surface.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the surface.</exception>
     public Surface(int width, int height, PixelFormat format)
     {
         Format = format;
@@ -90,7 +90,7 @@ public sealed unsafe class Surface : IDisposable
     /// Gets or sets the palette associated with the surface.
     /// </summary>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the palette.</exception>
     public Palette? Palette
     {
         get;
@@ -125,7 +125,7 @@ public sealed unsafe class Surface : IDisposable
     /// </remarks>
     /// <returns>The cloned surface.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to clone the surface.</exception>
     public Surface Clone()
     {
         ThrowIfDisposed();
@@ -151,7 +151,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="format">The desired pixel format for the new surface.</param>
     /// <returns>The converted surface in the new pixel format.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to convert the surface.</exception>
     public Surface Convert(PixelFormat format)
     {
         ThrowIfDisposed();
@@ -216,6 +216,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(byte r, byte g, byte b, byte a)
     {
         ThrowIfDisposed();
@@ -237,6 +238,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(float r, float g, float b, float a)
     {
         ThrowIfDisposed();
@@ -256,6 +258,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(byte r, byte g, byte b) => Fill(r, g, b, 255);
 
     /// <summary>
@@ -272,6 +275,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(float r, float g, float b) => Fill(r, g, b, 1.0f);
 
     /// <summary>
@@ -285,6 +289,7 @@ public sealed unsafe class Surface : IDisposable
     /// </remarks>
     /// <param name="color">The color to fill the surface with.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(Color color) => Fill(color.R, color.G, color.B, color.A);
 
     /// <summary>
@@ -299,6 +304,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="a">The alpha component of the color.</param>
     /// <param name="rect">The rectangle to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(byte r, byte g, byte b, byte a, RectInt rect)
     {
         ThrowIfDisposed();
@@ -318,6 +324,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="rect">The rectangle to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(byte r, byte g, byte b, RectInt rect)
     {
         ThrowIfDisposed();
@@ -335,6 +342,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="color">The color to fill the rectangle.</param>
     /// <param name="rect">The rectangle to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(Color color, RectInt rect) => Fill(color.R, color.G, color.B, color.A, rect);
 
     /// <summary>
@@ -349,6 +357,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="a">The alpha component of the color.</param>
     /// <param name="rects">The rectangles to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(byte r, byte g, byte b, byte a, params ReadOnlySpan<RectInt> rects)
     {
         ThrowIfDisposed();
@@ -368,6 +377,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="rects">The rectangles to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(byte r, byte g, byte b, params ReadOnlySpan<RectInt> rects)
     {
         ThrowIfDisposed();
@@ -385,6 +395,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="color">The color to fill the rectangle.</param>
     /// <param name="rects">The rectangles to fill.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(Color color, params ReadOnlySpan<RectInt> rects) => Fill(color.R, color.G, color.B, color.A, rects);
 
     /// <summary>
@@ -392,6 +403,7 @@ public sealed unsafe class Surface : IDisposable
     /// </summary>
     /// <param name="mode">The flip mode.</param>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to flip the surface.</exception>
     public void Flip(FlipMode mode)
     {
         ThrowIfDisposed();
@@ -406,7 +418,7 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="mode">The scale mode.</param>
     /// <returns>>The scaled surface.</returns>
     /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to scale the surface.</exception>
     public Surface Scale(int width, int height, ScaleMode mode)
     {
         ThrowIfDisposed();

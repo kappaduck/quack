@@ -56,7 +56,7 @@ public sealed partial class Keyboard
     /// Retrieves a keyboard by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the keyboard.</param>
-    /// <returns>The keyboard with the speicified identifier.</returns>
+    /// <returns>The keyboard with the specified identifier.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="id"/> is negative.</exception>
     public static Keyboard Get(uint id)
     {
@@ -65,22 +65,22 @@ public sealed partial class Keyboard
     }
 
     /// <summary>
-    /// Gets the keycode corresponding to the given scancode according to the current keyboard layout.
+    /// Gets the key corresponding to the given code according to the current keyboard layout.
     /// </summary>
-    /// <param name="code">The scancode.</param>
-    /// <param name="modifier">The modifier to apply when translating the scancode to a keycode.</param>
-    /// <returns>The corresponding keycore to the given scancode or <see cref="Keycode.Unknown"/> if the scancode does not have a corresponding keycode.</returns>
+    /// <param name="code">The code to translate to a key.</param>
+    /// <param name="modifier">The modifier to apply when translating the code to a key.</param>
+    /// <returns>The corresponding key from the given code or <see cref="Keycode.Unknown"/> if the code does not have a corresponding key.</returns>
     public static Keycode GetKeyFromScancode(Scancode code, Modifier modifier = Modifier.None)
         => Native.SDL_GetKeyFromScancode(code, modifier, keyEvents: false);
 
     /// <summary>
-    /// Gets the name of a keycode.
+    /// Gets the name of a key.
     /// </summary>
     /// <remarks>
     /// Letters will be presented in their uppercase form, if applicable.
     /// </remarks>
-    /// <param name="key">The keycode.</param>
-    /// <returns>The name of the keycode or <see cref="string.Empty"/> if the keycode doesn't have a name.</returns>
+    /// <param name="key">The key.</param>
+    /// <returns>The name of the key or <see cref="string.Empty"/> if the key doesn't have a name.</returns>
     public static string GetKeyName(Keycode key) => Native.SDL_GetKeyName(key);
 
     /// <summary>
@@ -108,17 +108,17 @@ public sealed partial class Keyboard
     }
 
     /// <summary>
-    /// Gets the scancode from the given name.
+    /// Gets the code from the given name.
     /// </summary>
-    /// <param name="name">The name of the scancode.</param>
-    /// <returns>The corresponding scancode or <see cref="Scancode.Unknown"/> if the name does not match any scancode.</returns>
+    /// <param name="name">The name of the code.</param>
+    /// <returns>The corresponding code or <see cref="Scancode.Unknown"/> if the name does not match any code.</returns>
     public static Scancode GetScancode(string name) => Native.SDL_GetScancodeFromName(name);
 
     /// <summary>
-    /// Gets the scancode and modifier from the given keycode.
+    /// Gets the code and modifier from the given key.
     /// </summary>
-    /// <param name="key">The keycode.</param>
-    /// <returns>>The corresponding scancode and modifier or <see cref="Scancode.Unknown"/> and <see langword="null"/> if the keycode does not have a corresponding scancode.</returns>
+    /// <param name="key">The key to translate to a code and optional modifier.</param>
+    /// <returns>>The corresponding code and modifier or <see cref="Scancode.Unknown"/> and <see langword="null"/> if the key does not have a corresponding code.</returns>
     public static unsafe (Scancode Code, Modifier? Modifier) GetScancode(Keycode key)
     {
         Modifier* modifier = null;
@@ -129,27 +129,27 @@ public sealed partial class Keyboard
     }
 
     /// <summary>
-    /// Gets the name of a scancode.
+    /// Gets the name of a code.
     /// </summary>
     /// <remarks>
     /// The name is by design and not stable across platforms, e.g. the name for <see cref="Scancode.LeftGui"/>
-    /// is "Left GUI" on Linux, but "Left Windows" on Windows. Some scancodes may not have a name, in which case
+    /// is "Left GUI" on Linux, but "Left Windows" on Windows. Some codes may not have a name, in which case
     /// an empty string is returned.
     /// </remarks>
-    /// <param name="code">The scancode.</param>
-    /// <returns>The name of the scancode or <see cref="string.Empty"/> if the scancode doesn't have a name.</returns>
+    /// <param name="code">The code.</param>
+    /// <returns>The name of the code or <see cref="string.Empty"/> if the code doesn't have a name.</returns>
     public static string GetScancodeName(Scancode code) => Native.SDL_GetScancodeName(code);
 
     /// <summary>
-    /// Determines whether the specified scancode is currently pressed.
+    /// Determines whether the specified code is currently pressed.
     /// </summary>
     /// <remarks>
     /// It gives you the current state of the keyboard after all events have been processed, so if a key is pressed and
-    /// released before you process events, then the key will not appear as presed. Uses <see cref="Window.Poll(out Event)"/>,
+    /// released before you process events, then the key will not appear as pressed. Uses <see cref="Window.Poll(out Event)"/>,
     /// <see cref="EventManager.Poll(out Event)"/> or <see cref="EventManager.Pump"/> to update the keyboard state.
     /// </remarks>
-    /// <param name="code">The scancode.</param>
-    /// <returns><see langword="true"/> if the scancode is currently pressed; otherwise, <see langword="false"/>.</returns>
+    /// <param name="code">The code to check.</param>
+    /// <returns><see langword="true"/> if the code is currently pressed; otherwise, <see langword="false"/>.</returns>
     public static bool IsDown(Scancode code)
     {
         ReadOnlySpan<byte> keys = Native.SDL_GetKeyboardState(out _);
@@ -165,11 +165,11 @@ public sealed partial class Keyboard
     public static void Reset() => Native.SDL_ResetKeyboard();
 
     /// <summary>
-    /// Sets the name of a scancode.
+    /// Sets the name of a code.
     /// </summary>
-    /// <param name="code">The scancode.</param>
+    /// <param name="code">The code.</param>
     /// <param name="name">The name to set.</param>
-    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the code name.</exception>
     public static void SetScancodeName(Scancode code, string name)
     {
         bool success = Native.SDL_SetScancodeName(code, Encoding.UTF8.GetBytes(name));

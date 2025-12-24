@@ -17,14 +17,14 @@ namespace KappaDuck.Quack.Geometry;
 public struct RectInt(int x, int y, int width, int height) : IEquatable<RectInt>, ISpanFormattable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RectInt"/> with all values set to zero.
+    /// Creates an empty rectangle.
     /// </summary>
     public RectInt() : this(0, 0, 0, 0)
     {
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RectInt"/> with the specified position and size.
+    /// Creates a rectangle with position and size.
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>
@@ -392,55 +392,55 @@ public struct RectInt(int x, int y, int width, int height) : IEquatable<RectInt>
 [StructLayout(LayoutKind.Auto)]
 file readonly struct PointEnumerable(RectInt rect) : IEnumerable<Vector2Int>
 {
-    public IEnumerator<Vector2Int> GetEnumerator() => new PointEnumerator(rect);
+    public IEnumerator<Vector2Int> GetEnumerator() => new Enumerator(rect);
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
 
-[StructLayout(LayoutKind.Auto)]
-file struct PointEnumerator : IEnumerator<Vector2Int>
-{
-    private readonly int _startX;
-    private readonly int _endX;
-
-    private readonly int _startY;
-    private readonly int _endY;
-
-    private Vector2Int _current;
-
-    internal PointEnumerator(RectInt rect)
+    [StructLayout(LayoutKind.Auto)]
+    private struct Enumerator : IEnumerator<Vector2Int>
     {
-        _startX = rect.X;
-        _endX = rect.MaxX;
+        private readonly int _startX;
+        private readonly int _endX;
 
-        _startY = rect.Y;
-        _endY = rect.MaxY;
+        private readonly int _startY;
+        private readonly int _endY;
 
-        _current = new Vector2Int(_startX - 1, _startY);
-    }
+        private Vector2Int _current;
 
-    public readonly Vector2Int Current => _current;
-
-    readonly object IEnumerator.Current => Current;
-
-    public bool MoveNext()
-    {
-        if (++_current.X >= _endX)
+        internal Enumerator(RectInt rect)
         {
-            _current.X = _startX;
-            _current.Y++;
+            _startX = rect.X;
+            _endX = rect.MaxX;
+
+            _startY = rect.Y;
+            _endY = rect.MaxY;
+
+            _current = new Vector2Int(_startX - 1, _startY);
         }
 
-        return _current.Y < _endY;
-    }
+        public readonly Vector2Int Current => _current;
 
-    public void Reset()
-    {
-        _current.X = _startX - 1;
-        _current.Y = _startY;
-    }
+        readonly object IEnumerator.Current => _current;
 
-    public readonly void Dispose()
-    {
+        public bool MoveNext()
+        {
+            if (++_current.X >= _endX)
+            {
+                _current.X = _startX;
+                _current.Y++;
+            }
+
+            return _current.Y < _endY;
+        }
+
+        public void Reset()
+        {
+            _current.X = _startX - 1;
+            _current.Y = _startY;
+        }
+
+        public readonly void Dispose()
+        {
+        }
     }
 }

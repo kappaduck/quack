@@ -13,7 +13,7 @@ namespace KappaDuck.Quack.Graphics.Primitives;
 public struct Vertex
 {
     /// <summary>
-    /// Creates a vertex with the specified position and color.
+    /// Creates a vertex with the position and color.
     /// </summary>
     /// <param name="position">The position of the vertex.</param>
     /// <param name="color">The color of the vertex.</param>
@@ -24,7 +24,7 @@ public struct Vertex
     }
 
     /// <summary>
-    /// Creates a vertex with the specified position and color.
+    /// Creates a vertex with the position and color.
     /// </summary>
     /// <param name="x">The x-coordinate of the vertex.</param>
     /// <param name="y">The y-coordinate of the vertex.</param>
@@ -34,7 +34,7 @@ public struct Vertex
     }
 
     /// <summary>
-    /// Creates a vertex with the specified position.
+    /// Creates a vertex with the position.
     /// </summary>
     /// <param name="x">The x-coordinate of the vertex.</param>
     /// <param name="y">The y-coordinate of the vertex.</param>
@@ -43,7 +43,7 @@ public struct Vertex
     }
 
     /// <summary>
-    /// Creates a vertex with the specified position.
+    /// Creates a vertex with the position.
     /// </summary>
     /// <param name="position">The position of the vertex.</param>
     public Vertex(Vector2 position) : this(position, Color.White)
@@ -51,7 +51,7 @@ public struct Vertex
     }
 
     /// <summary>
-    /// Creates a vertex with the specified color.
+    /// Creates a vertex with the color.
     /// </summary>
     /// <param name="color">The color of the vertex.</param>
     public Vertex(Color color) : this(new Vector2(0, 0), color)
