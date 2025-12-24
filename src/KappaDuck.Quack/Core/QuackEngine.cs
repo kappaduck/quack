@@ -7,7 +7,7 @@ using KappaDuck.Quack.Exceptions;
 namespace KappaDuck.Quack.Core;
 
 /// <summary>
-/// The main Quack! engine for managing subsystems and application metadata.
+/// The engine to manage subsystems and offers some utility functionalities.
 /// </summary>
 public static class QuackEngine
 {
@@ -31,17 +31,19 @@ public static class QuackEngine
     /// <summary>
     /// Sets the application metadata.
     /// </summary>
-    /// <param name="metadata">The application metadata to set.</param>
+    /// <param name="metadata">The application metadata</param>
     /// <remarks>
+    /// <para>
     /// You should call this method at the very start of your application.
     /// After calling this method, the metadata cannot be changed.
-    /// Setting the metadata is not required, but strongly recommended for better identification of the application.
+    /// </para>
+    /// <para>Setting the metadata is not required, but strongly recommended for better identification of the application.</para>
     /// </remarks>
     /// <exception cref="QuackException">Cannot set metadata after engine initialization.</exception>
     /// <exception cref="QuackNativeException">Fails to set metadata properties.</exception>
     public static void SetMetadata(ApplicationMetadata metadata)
     {
-        QuackException.ThrowIf(_refCount > 0, "Cannot set metadata after engine initialization.");
+        QuackException.ThrowIf(_refCount > 0 || Metadata is not null, "Cannot set metadata after engine initialization.");
         Metadata = metadata;
 
         SetMetadataProperty("SDL.app.metadata.identifier", metadata.Id);
@@ -68,9 +70,8 @@ public static class QuackEngine
             if ((subsystem & Subsystem.TTF) == Subsystem.TTF)
                 QuackNativeException.ThrowIfFailed(Native.TTF_Init());
 
-            Subsystem other = subsystem & ~Subsystem.TTF;
-            if (other != 0)
-                QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(other));
+            if ((subsystem & ~Subsystem.TTF) != Subsystem.None)
+                QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem));
 
             _refCount++;
         }

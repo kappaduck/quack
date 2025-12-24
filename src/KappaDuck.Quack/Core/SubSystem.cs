@@ -3,12 +3,14 @@
 
 namespace KappaDuck.Quack.Core;
 
-/// <summary>
-/// Represents a subsystem that can be enabled or disabled in the <see cref="QuackEngine"/>.
-/// </summary>
 [Flags]
 internal enum Subsystem : uint
 {
+    /// <summary>
+    /// Indicates that no subsystems are enabled.
+    /// </summary>
+    None = 0,
+
     /// <summary>
     /// Enable the audio subsystem. Implicitly enables the <see cref="Events"/> subsystem.
     /// </summary>

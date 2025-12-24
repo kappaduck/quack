@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace KappaDuck.Quack.Exceptions;
 
@@ -26,14 +27,14 @@ public sealed class QuackNativeException : QuackException
     internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
         => ThrowIf(handle.IsInvalid, memberName);
 
-    internal static void ThrowIfNegative(int value, [CallerMemberName] string memberName = "")
-        => ThrowIf(int.IsNegative(value), memberName);
+    internal static void ThrowIfNegative<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsNegative(value), memberName);
 
     internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string memberName = "") where T : unmanaged
         => ThrowIf(value is null, memberName);
 
-    internal static void ThrowIfZero(uint value, [CallerMemberName] string memberName = "")
-        => ThrowIf(value == 0, memberName);
+    internal static void ThrowIfZero<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsZero(value), memberName);
 
     [DoesNotReturn]
     private static void Throw(string memberName)
