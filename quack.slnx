@@ -4,8 +4,8 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path=".github/codeowners" />
-    <File Path="directory.build.props" />
-    <File Path="directory.packages.props" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
     <File Path="nuget.config" />
   </Folder>
   <Folder Name="/configurations/rules/">
@@ -26,7 +26,7 @@
     <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
   </Folder>
   <Folder Name="/examples/">
-    <File Path="examples/directory.build.props" />
+    <File Path="examples/Directory.Build.props" />
     <File Path="examples/readme.md" />
   </Folder>
   <Folder Name="/examples/graphics/">
@@ -47,7 +47,7 @@
     <File Path="sdl3/dockerfile" />
   </Folder>
   <Folder Name="/sandbox/">
-    <File Path="sandbox/directory.packages.props" />
+    <File Path="sandbox/Directory.Packages.props" />
     <File Path="sandbox/nuget.config" />
     <File Path="sandbox/quack.sandbox.cs" />
   </Folder>
