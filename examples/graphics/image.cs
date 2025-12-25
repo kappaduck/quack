@@ -4,15 +4,19 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Rendering;
-using System.Diagnostics;
-using System.Drawing;
+
+const int Width = 1080;
+const int Height = 720;
 
 // Create the window
-using RenderWindow window = new("Sine wave", 1080, 720);
+using RenderWindow window = new("Hello triangle!", Width, Height);
 
-// Start a stopwatch for the sine wave
-Stopwatch stopwatch = Stopwatch.StartNew();
+// Create the texture and the sprite so we can draw the image on the window
+using Texture texture = window.LoadTexture("icon.png");
+Sprite duck = new(texture, new Vector2((Width / 2) - 64, (Height / 2) - 64));
 
 // Run the main loop
 while (window.IsOpen)
@@ -28,18 +32,12 @@ while (window.IsOpen)
         }
     }
 
-    // Clear the window with a sine wave color
-    window.Clear(SineWaveColor(stopwatch.Elapsed.TotalSeconds));
+    // Clear the window with black color
+    window.Clear();
+
+    // Draw the image
+    window.Draw(duck);
 
     // Presents all the drawn content on the window
     window.Present();
-}
-
-static Color SineWaveColor(double seconds)
-{
-    double red = 0.5 + (0.5 * Math.Sin(seconds));
-    double green = 0.5 + (0.5 * Math.Sin(seconds + (Math.PI * 2 / 3)));
-    double blue = 0.5 + (0.5 * Math.Sin(seconds + (Math.PI * 4 / 3)));
-
-    return Color.FromArgb((byte)(red * 255), (byte)(green * 255), (byte)(blue * 255));
 }

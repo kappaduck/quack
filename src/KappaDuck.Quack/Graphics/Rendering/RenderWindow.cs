@@ -5,6 +5,7 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
+using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Video.Displays;
 using KappaDuck.Quack.Windows;
@@ -243,6 +244,9 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// </remarks>
     public void Clear()
     {
+        if (_renderer.IsInvalid)
+            return;
+
         Native.SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 1);
         Native.SDL_RenderClear(_renderer);
     }
@@ -250,6 +254,9 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <inheritdoc/>
     public void Clear(Color color)
     {
+        if (_renderer.IsInvalid)
+            return;
+
         Native.SDL_SetRenderDrawColor(_renderer, color.R, color.G, color.B, color.A);
         Native.SDL_RenderClear(_renderer);
     }
@@ -257,6 +264,9 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <summary>
     /// Creates a window with the title, size and an optional renderer
     /// </summary>
+    /// <remarks>
+    /// If the window is already created, this method has no effect.
+    /// </remarks>
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
@@ -264,19 +274,74 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <exception cref="QuackNativeException">Thrown when failed to create the window or renderer.</exception>
     public void Create(string title, int width, int height, string? rendererName)
     {
+        if (_renderer.IsInvalid)
+            return;
+
         Create(title, width, height);
         InitializeRenderer(rendererName);
     }
+
+    /// <summary>
+    /// Create a texture for a rendering context.
+    /// </summary>
+    /// <remarks>
+    /// <para>The contents of a texture when first created are not defined.</para>
+    /// <para>
+    /// The texture is bound to the render window who's creating it. It can't be used with other windows.
+    /// You must create a new texture for each render window.
+    /// </para>
+    /// </remarks>
+    /// <param name="format">The pixel format of the texture.</param>
+    /// <param name="access">The access level of the texture.</param>
+    /// <param name="width">The width of the texture.</param>
+    /// <param name="height">The height of the texture.</param>
+    /// <returns>The created texture.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the texture.</exception>
+    public Texture CreateTexture(PixelFormat format, TextureAccess access, int width, int height) => new(_renderer, format, access, width, height);
+
+    /// <summary>
+    /// Creates a texture from a surface.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The surface is not modified or freed by this method.
+    /// </para>
+    /// <para>
+    /// The texture access level is set to <see cref="TextureAccess.Static"/>.
+    /// </para>
+    /// <para>
+    /// The pixel format of the created texture may be different from the surface's pixel format.
+    /// </para>
+    /// <para>
+    /// The texture is bound to the render window who's creating it. It can't be used with other windows.
+    /// You must create a new texture for each render window.
+    /// </para>
+    /// </remarks>
+    /// <param name="surface">The surface to create the texture from.</param>
+    /// <returns>The created texture.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the texture.</exception>
+    public Texture CreateTexture(Surface surface) => new(_renderer, surface);
 
     /// <inheritdoc/>
     public void Draw(IDrawable drawable) => drawable.Draw(this);
 
     /// <inheritdoc/>
-    public unsafe void Draw(ReadOnlySpan<Vertex> vertices) => Native.SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length);
+    public unsafe void Draw(ReadOnlySpan<Vertex> vertices)
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Native.SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length);
+    }
 
     /// <inheritdoc/>
     public void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
-        => Native.SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length, indices, indices.Length);
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Native.SDL_RenderGeometry(_renderer, nint.Zero, vertices, vertices.Length, indices, indices.Length);
+    }
 
     /// <summary>
     /// Draw text to the window for debugging.
@@ -319,19 +384,51 @@ public sealed class RenderWindow : Window, IRenderTarget
         QuackNativeException.ThrowIfFailed(Native.SDL_RenderDebugText(_renderer, position.X, position.Y, text));
     }
 
+    /// <summary>
+    /// Load an image from a path into a texture.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This can be significantly more efficient than using a CPU-bound <see cref="Surface"/> if you don't need to manipulate the image directly after loading it.
+    /// If the loaded image has transparency or a color key, a texture with an alpha channel will be created.
+    /// Otherwise, the engine will attempt to create a texture in the most format that most reasonably represents the image data (but in many cases, this will just end up being 32-bit RGB or 32-bit RGBA).
+    /// </para>
+    /// <para>
+    /// If you would rather decode an image to a <see cref="Surface"/>, call <see cref="Image.Load(string)"/> instead.
+    /// </para>
+    /// </remarks>
+    /// <param name="file">The path to the image file.</param>
+    /// <returns>A texture representing the loaded image.</returns>
+    public Texture LoadTexture(string file) => new(_renderer, file);
+
+    /// <inheritdoc cref="LoadTexture(string)"/>
+    public Texture LoadTexture(FileInfo file) => LoadTexture(file.FullName);
+
     /// <inheritdoc/>
     public Vector2 MapCoordinatesToPixels(Vector2 point)
     {
+        if (_renderer.IsInvalid)
+            return default;
+
         Native.SDL_RenderCoordinatesToWindow(_renderer, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);
     }
 
     /// <inheritdoc/>
-    public void MapEventToCoordinates(ref Event e) => Native.SDL_ConvertEventToRenderCoordinates(_renderer, ref e);
+    public void MapEventToCoordinates(ref Event e)
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Native.SDL_ConvertEventToRenderCoordinates(_renderer, ref e);
+    }
 
     /// <inheritdoc/>
     public Vector2 MapPixelsToCoordinates(Vector2 point)
     {
+        if (_renderer.IsInvalid)
+            return default;
+
         Native.SDL_RenderCoordinatesFromWindow(_renderer, point.X, point.Y, out float x, out float y);
         return new Vector2(x, y);
     }
@@ -339,7 +436,13 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// <summary>
     /// Presents the current frame to the screen.
     /// </summary>
-    public void Present() => Native.SDL_RenderPresent(_renderer);
+    public void Present()
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Native.SDL_RenderPresent(_renderer);
+    }
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)

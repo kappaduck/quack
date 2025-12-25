@@ -4,11 +4,11 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Inputs;
-using KappaDuck.Quack.Windows;
 
 // Create the window
-using Window window = new("Keyboard example", 1080, 720);
+using RenderWindow window = new("Keyboard example", 1080, 720);
 
 // Run the main loop
 while (window.IsOpen)
@@ -16,11 +16,10 @@ while (window.IsOpen)
     // Poll events
     while (window.Poll(out Event e))
     {
-        // If the user requests to quit the application, close the window and exit the loop
+        // If the user requests to quit the application, it will automatically close the window and exit the loop.
         // You can close the window by clicking the close button or pressing Esc key
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
 
@@ -46,6 +45,18 @@ while (window.IsOpen)
         if (e.Type == EventType.KeyDown && e.Keyboard.Modifiers == Keyboard.Modifier.LeftShift)
         {
             Console.WriteLine("Shift key is pressed");
+        }
+
+        // Detect if a key is pressed along with a modifier key
+        if (e.IsKeyDown(Keyboard.Scancode.W, Keyboard.Modifier.LeftShift))
+        {
+            Console.WriteLine("W key is pressed while Left Shift is held down");
+        }
+
+        // You can also check for virtual keycodes instead of physical scancodes
+        if (e.IsKeyDown(Keyboard.Keycode.E))
+        {
+            Console.WriteLine("E key is pressed");
         }
     }
 

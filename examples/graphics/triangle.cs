@@ -24,11 +24,10 @@ while (window.IsOpen)
     // Poll events
     while (window.Poll(out Event e))
     {
-        // If the user requests to quit the application, close the window and exit the loop
+        // If the user requests to quit the application, it will automatically close the window and exit the loop.
         // You can close the window by clicking the close button or pressing Esc key
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
     }

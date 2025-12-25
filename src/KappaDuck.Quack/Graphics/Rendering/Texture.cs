@@ -201,5 +201,10 @@ public sealed class Texture : IDisposable
     public void Dispose() => _handle.Dispose();
 
     internal unsafe void Render(Rect source, Rect destination, double angle, Vector2 center, FlipMode mode)
-        => Native.SDL_RenderTextureRotated(_renderer, _handle, &source, &destination, angle, &center, mode);
+    {
+        if (_renderer.IsInvalid)
+            return;
+
+        Native.SDL_RenderTextureRotated(_renderer, _handle, &source, &destination, angle, &center, mode);
+    }
 }

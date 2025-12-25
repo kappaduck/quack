@@ -4,11 +4,11 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Inputs;
-using KappaDuck.Quack.Windows;
 
 // Create the window
-using Window window = new("Mouse example", 1080, 720);
+using RenderWindow window = new("Mouse example", 1080, 720);
 
 // Run the main loop
 while (window.IsOpen)
@@ -16,11 +16,10 @@ while (window.IsOpen)
     // Poll events
     while (window.Poll(out Event e))
     {
-        // If the user requests to quit the application, close the window and exit the loop
+        // If the user requests to quit the application, it will automatically close the window and exit the loop.
         // You can close the window by clicking the close button or pressing Esc key
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
 
@@ -31,13 +30,13 @@ while (window.IsOpen)
         }
 
         // You can use the extension methods to check if the mouse button is pressed
-        if (e.IsMouseButtonDown(Mouse.Button.Right))
+        if (e.IsButtonDown(Mouse.Button.Right))
         {
             Console.WriteLine("Right mouse button is pressed");
         }
 
         // Detect if the mouse button is released
-        if (e.IsMouseButtonUp(Mouse.Button.Left))
+        if (e.IsButtonUp(Mouse.Button.Left))
         {
             Console.WriteLine("Mouse button is released");
         }
