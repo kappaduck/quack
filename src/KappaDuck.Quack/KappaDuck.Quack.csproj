@@ -37,7 +37,7 @@
 
   <ItemGroup Label="build files to include">
     <None Include="$(QuackRoot)SDL3\runtimes\**\*" Pack="true" PackagePath="runtimes\" Visible="false" />
-    <None Include="$(QuackRoot)$(MSBuildProjectName).targets" Pack="true" PackagePath="build\" Link="targets" />
+    <None Include="$(QuackRoot)$(MSBuildProjectName).targets" Pack="true" PackagePath="build\any\" Link="targets" />
   </ItemGroup>
 
   <ItemGroup Label="Link quack.playground file">
