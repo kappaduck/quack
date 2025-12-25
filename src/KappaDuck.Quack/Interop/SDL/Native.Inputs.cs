@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Inputs;
@@ -10,12 +10,12 @@ internal static partial class Native
 {
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Keyboard.Keycode SDL_GetKeyFromScancode(Keyboard.Scancode code, Keyboard.Modifier modifier, [MarshalAs(UnmanagedType.U1)] bool keyEvents);
+    internal static partial Keycode SDL_GetKeyFromScancode(Scancode code, Modifier modifier, [MarshalAs(UnmanagedType.U1)] bool keyEvents);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    internal static partial string SDL_GetKeyName(Keyboard.Keycode code);
+    internal static partial string SDL_GetKeyName(Keycode code);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -34,20 +34,20 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Keyboard.Modifier SDL_GetModState();
+    internal static partial Modifier SDL_GetModState();
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static unsafe partial Keyboard.Scancode SDL_GetScancodeFromKey(Keyboard.Keycode code, Keyboard.Modifier* modifier);
+    internal static unsafe partial Scancode SDL_GetScancodeFromKey(Keycode code, Modifier* modifier);
 
     [LibraryImport(SDL, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Keyboard.Scancode SDL_GetScancodeFromName(string name);
+    internal static partial Scancode SDL_GetScancodeFromName(string name);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    internal static partial string SDL_GetScancodeName(Keyboard.Scancode code);
+    internal static partial string SDL_GetScancodeName(Scancode code);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -65,7 +65,7 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_SetModState(Keyboard.Modifier modifier);
+    internal static partial void SDL_SetModState(Modifier modifier);
 
     /// <summary>
     /// The string is not copied, so it must be valid for the lifetime of the application.
@@ -74,11 +74,11 @@ internal static partial class Native
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetScancodeName(Keyboard.Scancode code, Span<byte> name);
+    internal static partial bool SDL_SetScancodeName(Scancode code, Span<byte> name);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Mouse.ButtonState SDL_GetGlobalMouseState(out float x, out float y);
+    internal static partial MouseButtonState SDL_GetGlobalMouseState(out float x, out float y);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
@@ -87,11 +87,11 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Mouse.ButtonState SDL_GetMouseState(out float x, out float y);
+    internal static partial MouseButtonState SDL_GetMouseState(out float x, out float y);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial Mouse.ButtonState SDL_GetRelativeMouseState(out float x, out float y);
+    internal static partial MouseButtonState SDL_GetRelativeMouseState(out float x, out float y);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]

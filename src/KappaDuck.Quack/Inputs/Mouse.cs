@@ -44,7 +44,7 @@ public sealed class Mouse
     {
         get
         {
-            ButtonState buttons = Native.SDL_GetGlobalMouseState(out float x, out float y);
+            MouseButtonState buttons = Native.SDL_GetGlobalMouseState(out float x, out float y);
             return new CachedState(buttons, new Vector2(x, y));
         }
     }
@@ -72,7 +72,7 @@ public sealed class Mouse
     {
         get
         {
-            ButtonState buttons = Native.SDL_GetRelativeMouseState(out float x, out float y);
+            MouseButtonState buttons = Native.SDL_GetRelativeMouseState(out float x, out float y);
             return new CachedState(buttons, new Vector2(x, y));
         }
     }
@@ -94,7 +94,7 @@ public sealed class Mouse
     {
         get
         {
-            ButtonState buttons = Native.SDL_GetMouseState(out float x, out float y);
+            MouseButtonState buttons = Native.SDL_GetMouseState(out float x, out float y);
             return new CachedState(buttons, new Vector2(x, y));
         }
     }
@@ -141,7 +141,7 @@ public sealed class Mouse
     /// <remarks>It uses the cached <see cref="State"/> to determine the button state.</remarks>
     /// <param name="button">The button to check.</param>
     /// <returns><see langword="true"/> if the button is pressed; otherwise, <see langword="false"/>.</returns>
-    public static bool IsDown(Button button) => State.IsDown(button);
+    public static bool IsDown(MouseButton button) => State.IsDown(button);
 
     /// <summary>
     /// Moves the mouse cursor to the given position in global screen space.
@@ -173,7 +173,7 @@ public sealed class Mouse
     [StructLayout(LayoutKind.Auto)]
     public readonly struct CachedState
     {
-        internal CachedState(ButtonState buttons, Vector2 position)
+        internal CachedState(MouseButtonState buttons, Vector2 position)
         {
             Buttons = buttons;
             Position = position;
@@ -182,7 +182,7 @@ public sealed class Mouse
         /// <summary>
         /// Gets the state of the mouse buttons.
         /// </summary>
-        public ButtonState Buttons { get; }
+        public MouseButtonState Buttons { get; }
 
         /// <summary>
         /// Gets the position of the mouse.
@@ -194,105 +194,6 @@ public sealed class Mouse
         /// </summary>
         /// <param name="button">The button to check.</param>
         /// <returns><see langword="true"/> if the button is pressed; otherwise, <see langword="false"/>.</returns>
-        public bool IsDown(Button button) => (Buttons & (ButtonState)(1 << ((int)button - 1))) != ButtonState.None;
-    }
-
-    /// <summary>
-    /// Represents a mouse button.
-    /// </summary>
-    public enum Button : byte
-    {
-        /// <summary>
-        /// The left mouse button.
-        /// </summary>
-        Left = 1,
-
-        /// <summary>
-        /// The middle mouse button.
-        /// </summary>
-        Middle = 2,
-
-        /// <summary>
-        /// The right mouse button.
-        /// </summary>
-        Right = 3,
-
-        /// <summary>
-        /// The first extra mouse button.
-        /// </summary>
-        /// <remarks>
-        /// Generally is the side mouse button.
-        /// </remarks>
-        X1 = 4,
-
-        /// <summary>
-        /// The second extra mouse button.
-        /// </summary>
-        /// <remarks>
-        /// Generally is the side mouse button.
-        /// </remarks>
-        X2 = 5
-    }
-
-    /// <summary>
-    /// Represents the state of the mouse buttons.
-    /// </summary>
-    /// <remarks>
-    /// It is a mask of the current button state.
-    /// </remarks>
-    [Flags]
-    public enum ButtonState : uint
-    {
-        /// <summary>
-        /// No mouse button.
-        /// </summary>
-        None = 0,
-
-        /// <summary>
-        /// The left mouse button.
-        /// </summary>
-        Left = 0x1,
-
-        /// <summary>
-        /// The middle mouse button.
-        /// </summary>
-        Middle = 0x2,
-
-        /// <summary>
-        /// The right mouse button.
-        /// </summary>
-        Right = 0x4,
-
-        /// <summary>
-        /// The first extra mouse button.
-        /// </summary>
-        /// <remarks>
-        /// Generally is the side mouse button.
-        /// </remarks>
-        X1 = 0x08,
-
-        /// <summary>
-        /// The second extra mouse button.
-        /// </summary>
-        /// <remarks>
-        /// Generally is the side mouse button.
-        /// </remarks>
-        X2 = 0x10
-    }
-
-    /// <summary>
-    /// Represents a mouse wheel direction.
-    /// </summary>
-    public enum WheelDirection
-    {
-        /// <summary>
-        /// The scroll direction is normal.
-        /// </summary>
-        Normal = 0,
-
-        /// <summary>
-        /// The scroll direction is flipped.
-        /// </summary>
-        Flipped = 1
+        public bool IsDown(MouseButton button) => (Buttons & (MouseButtonState)(1 << ((int)button - 1))) != MouseButtonState.None;
     }
 }

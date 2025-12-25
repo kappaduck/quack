@@ -30,7 +30,7 @@ public readonly struct MouseButtonEvent
     /// <summary>
     /// Gets the mouse button.
     /// </summary>
-    public Mouse.Button Button { get; }
+    public MouseButton Button { get; }
 
     private readonly byte _down;
 

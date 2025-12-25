@@ -17,51 +17,51 @@ while (window.IsOpen)
     while (window.Poll(out Event e))
     {
         // If the user requests to quit the application, it will automatically close the window and exit the loop.
-        // You can close the window by clicking the close button or pressing Esc key
+        // You can close the window by clicking the close button or pressing ESC key
         if (e.RequestQuit())
         {
             return;
         }
 
         // Detect if a key is pressed
-        if (e.Type is EventType.KeyDown && e.Keyboard.Code is Keyboard.Scancode.A)
+        if (e.Type is EventType.KeyDown && e.Keyboard.Code is Scancode.A)
         {
             Console.WriteLine("A key is pressed");
         }
 
         // You can use the extension methods to check if a key is pressed
-        if (e.IsKeyDown(Keyboard.Scancode.D))
+        if (e.IsKeyDown(Scancode.D))
         {
             Console.WriteLine("D key is pressed");
         }
 
         // Detect if a key is released
-        if (e.IsKeyUp(Keyboard.Scancode.A))
+        if (e.IsKeyUp(Scancode.A))
         {
             Console.WriteLine("A key is released");
         }
 
         // Detect if a modifier key is pressed
-        if (e.Type == EventType.KeyDown && e.Keyboard.Modifiers == Keyboard.Modifier.LeftShift)
+        if (e.Type == EventType.KeyDown && e.Keyboard.Modifiers == Modifier.LeftShift)
         {
             Console.WriteLine("Shift key is pressed");
         }
 
         // Detect if a key is pressed along with a modifier key
-        if (e.IsKeyDown(Keyboard.Scancode.W, Keyboard.Modifier.LeftShift))
+        if (e.IsKeyDown(Scancode.W, Modifier.LeftShift))
         {
             Console.WriteLine("W key is pressed while Left Shift is held down");
         }
 
-        // You can also check for virtual keycodes instead of physical scancodes
-        if (e.IsKeyDown(Keyboard.Keycode.E))
+        // You can also check for virtual keys instead of physical codes
+        if (e.IsKeyDown(Keycode.E))
         {
             Console.WriteLine("E key is pressed");
         }
     }
 
     // You can also check if a key is pressed outside of the event loop
-    if (Keyboard.IsDown(Keyboard.Scancode.S))
+    if (Keyboard.IsDown(Scancode.S))
     {
         Console.WriteLine("S key is pressed");
     }

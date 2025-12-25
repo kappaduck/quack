@@ -11,7 +11,7 @@ namespace KappaDuck.Quack.Inputs;
 /// <summary>
 /// Represents a keyboard device.
 /// </summary>
-public sealed partial class Keyboard
+public sealed class Keyboard
 {
     internal Keyboard(uint id)
     {

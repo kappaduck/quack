@@ -30,7 +30,7 @@ public readonly struct MouseMotionEvent
     /// <summary>
     /// Gets The state of the mouse buttons.
     /// </summary>
-    public Mouse.ButtonState State { get; }
+    public MouseButtonState State { get; }
 
     private readonly float _x;
     private readonly float _y;

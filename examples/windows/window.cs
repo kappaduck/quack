@@ -20,14 +20,14 @@ while (window.IsOpen)
     while (window.Poll(out Event e))
     {
         // If the user requests to quit the application, it will automatically close the window and exit the loop.
-        // You can close the window by clicking the close button or pressing Esc key
+        // You can close the window by clicking the close button or pressing ESC key
         if (e.RequestQuit())
         {
             return;
         }
 
         // You can also manually close the window by pressing the Q key
-        if (e.IsKeyDown(Keyboard.Scancode.Q))
+        if (e.IsKeyDown(Scancode.Q))
         {
             window.Close();
             return;

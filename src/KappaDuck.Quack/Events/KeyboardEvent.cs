@@ -29,17 +29,17 @@ public readonly struct KeyboardEvent
     /// <summary>
     /// Gets the physical key code.
     /// </summary>
-    public Keyboard.Scancode Code { get; }
+    public Scancode Code { get; }
 
     /// <summary>
     /// Gets the virtual key code.
     /// </summary>
-    public Keyboard.Keycode Key { get; }
+    public Keycode Key { get; }
 
     /// <summary>
     /// Gets the key modifiers.
     /// </summary>
-    public Keyboard.Modifier Modifiers { get; }
+    public Modifier Modifiers { get; }
 
     private readonly ushort _raw;
     private readonly byte _down;

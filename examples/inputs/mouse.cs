@@ -17,26 +17,26 @@ while (window.IsOpen)
     while (window.Poll(out Event e))
     {
         // If the user requests to quit the application, it will automatically close the window and exit the loop.
-        // You can close the window by clicking the close button or pressing Esc key
+        // You can close the window by clicking the close button or pressing ESC key
         if (e.RequestQuit())
         {
             return;
         }
 
         // Detect if the mouse button is pressed
-        if (e.Type is EventType.MouseButtonDown && e.Mouse.Button == Mouse.Button.Left)
+        if (e.Type is EventType.MouseButtonDown && e.Mouse.Button == MouseButton.Left)
         {
             Console.WriteLine("Mouse button is pressed");
         }
 
         // You can use the extension methods to check if the mouse button is pressed
-        if (e.IsButtonDown(Mouse.Button.Right))
+        if (e.IsButtonDown(MouseButton.Right))
         {
             Console.WriteLine("Right mouse button is pressed");
         }
 
         // Detect if the mouse button is released
-        if (e.IsButtonUp(Mouse.Button.Left))
+        if (e.IsButtonUp(MouseButton.Left))
         {
             Console.WriteLine("Mouse button is released");
         }
@@ -55,7 +55,7 @@ while (window.IsOpen)
     }
 
     // You can also use the Mouse class to check if the mouse button is pressed outside the event loop
-    if (Mouse.IsDown(Mouse.Button.Middle))
+    if (Mouse.IsDown(MouseButton.Middle))
     {
         Console.WriteLine("Middle mouse button is pressed");
     }

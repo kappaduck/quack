@@ -47,10 +47,10 @@ public readonly struct MouseWheelEvent
     /// Gets the direction of the scroll.
     /// </summary>
     /// <remarks>
-    /// When <see cref="Mouse.WheelDirection.Flipped"/> the values in X and Y will be opposite.
+    /// When <see cref="WheelDirection.Flipped"/> the values in X and Y will be opposite.
     /// Multiply by -1 to change them back.
     /// </remarks>
-    public Mouse.WheelDirection Direction { get; }
+    public WheelDirection Direction { get; }
 
     private readonly float _mouseX;
     private readonly float _mouseY;
