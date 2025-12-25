@@ -18,7 +18,7 @@ void BuildImage(string image, string source)
     ProcessStartInfo info = new()
     {
         FileName = "docker",
-        Arguments = $"build {source} -t {image}",
+        Arguments = $"build {source} -t {image} --platform linux/amd64",
         RedirectStandardOutput = true,
         RedirectStandardError = true,
         UseShellExecute = false
