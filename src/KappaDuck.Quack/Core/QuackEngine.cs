@@ -12,6 +12,7 @@ public static class QuackEngine
 {
     private static readonly Lock _lock = new();
     private static int _refCount;
+    private static Subsystem _subsystems;
 
     /// <summary>
     /// Gets the application metadata.
@@ -66,12 +67,19 @@ public static class QuackEngine
     {
         lock (_lock)
         {
+            if ((_subsystems & subsystem) != Subsystem.None)
+            {
+                _refCount++;
+                return;
+            }
+
             if ((subsystem & Subsystem.TTF) == Subsystem.TTF)
                 QuackNativeException.ThrowIfFailed(Native.TTF_Init());
 
             if ((subsystem & ~Subsystem.TTF) != Subsystem.None)
                 QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem));
 
+            _subsystems |= subsystem;
             _refCount++;
         }
     }

@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Core;
+using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 
@@ -11,8 +13,7 @@ namespace KappaDuck.Quack.System;
 /// </summary>
 public sealed class Cursor : IDisposable
 {
-    private readonly SDL_CursorHandle _handle;
-    private static Cursor? _cursor;
+    private readonly SDL_Cursor _handle;
 
     /// <summary>
     /// Creates a custom cursor.
@@ -23,8 +24,14 @@ public sealed class Cursor : IDisposable
     /// <param name="height">The height of the cursor.</param>
     /// <param name="hotSpotX">the x-axis offset from the left of the cursor image to the mouse x position, in the range of 0 to <paramref name="width"/> - 1.</param>
     /// <param name="hotSpotY">The y-axis offset from the top of the cursor image to the mouse y position, in the range of 0 to <paramref name="height"/> - 1.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the cursor.</exception>
     public Cursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, int hotSpotX, int hotSpotY)
-        => _handle = Native.SDL_CreateCursor(pixels, mask, width, height, hotSpotX, hotSpotY);
+    {
+        QuackEngine.Acquire(Subsystem.Video);
+
+        _handle = Native.SDL_CreateCursor(pixels, mask, width, height, hotSpotX, hotSpotY);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
+    }
 
     /// <summary>
     /// Creates a custom cursor.
@@ -34,14 +41,23 @@ public sealed class Cursor : IDisposable
     /// <param name="width">The width of the cursor.</param>
     /// <param name="height">The height of the cursor.</param>
     /// <param name="hotSpot">The hot spot of the cursor.</param>
-    public Cursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, Vector2Int hotSpot)
-        => _handle = Native.SDL_CreateCursor(pixels, mask, width, height, hotSpot.X, hotSpot.Y);
+    /// <exception cref="QuackNativeException">Thrown when failed to create the cursor.</exception>
+    public Cursor(ReadOnlySpan<byte> pixels, ReadOnlySpan<byte> mask, int width, int height, Vector2Int hotSpot) : this(pixels, mask, width, height, hotSpot.X, hotSpot.Y)
+    {
+    }
 
     /// <summary>
-    /// Initializes a system cursor.
-    /// </summary>
+    /// Creates a system cursor.
+    ///</summary>
     /// <param name="type">The type of the cursor.</param>
-    public Cursor(CursorType type) => _handle = Native.SDL_CreateSystemCursor(type);
+    /// <exception cref="QuackNativeException">Thrown when failed to create the cursor.</exception>
+    public Cursor(CursorType type)
+    {
+        QuackEngine.Acquire(Subsystem.Video);
+
+        _handle = Native.SDL_CreateSystemCursor(type);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
+    }
 
     /// <summary>
     /// Creates a custom cursor.
@@ -49,8 +65,14 @@ public sealed class Cursor : IDisposable
     /// <param name="surface">The surface to use for the cursor.</param>
     /// <param name="hotSpotX">The x-coordinate of the cursor's hot spot.</param>
     /// <param name="hotSpotY">The y-coordinate of the cursor's hot spot.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the cursor.</exception>
     public unsafe Cursor(Surface surface, int hotSpotX, int hotSpotY)
-        => _handle = Native.SDL_CreateColorCursor(surface.Handle, hotSpotX, hotSpotY);
+    {
+        QuackEngine.Acquire(Subsystem.Video);
+
+        _handle = Native.SDL_CreateColorCursor(surface.Handle, hotSpotX, hotSpotY);
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
+    }
 
     /// <summary>
     /// Creates a custom cursor.
@@ -61,16 +83,35 @@ public sealed class Cursor : IDisposable
     {
     }
 
-    private Cursor(SDL_CursorHandle handle) => _handle = handle;
+    private Cursor()
+    {
+        QuackEngine.Acquire(Subsystem.Video);
+
+        _handle = Native.SDL_GetDefaultCursor();
+        QuackNativeException.ThrowIfHandleInvalid(_handle);
+    }
 
     /// <summary>
     /// Gets the current cursor.
     /// </summary>
-    public static Cursor Current => _cursor ?? new Cursor(Native.SDL_GetDefaultCursor());
+    /// <remarks>
+    /// If no cursor has been set, this property returns the default cursor.
+    /// </remarks>
+    public static Cursor Current
+    {
+        get => field ?? Default;
+        private set;
+    }
 
     /// <summary>
-    /// Gets a value indicating whether the cursor is visible.
+    /// Gets the system's default cursor.
     /// </summary>
+    public static Cursor Default { get; } = new Cursor();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the cursor is visible.
+    /// </summary>
+    /// <exception cref="QuackNativeException">Thrown when failed to show or hide the cursor.</exception>
     public bool Visible
     {
         get;
@@ -80,28 +121,34 @@ public sealed class Cursor : IDisposable
                 return;
 
             field = value;
-            if (field)
+
+            if (value)
             {
-                Native.SDL_ShowCursor();
+                QuackNativeException.ThrowIfFailed(Native.SDL_ShowCursor());
                 return;
             }
 
-            Native.SDL_HideCursor();
+            QuackNativeException.ThrowIfFailed(Native.SDL_HideCursor());
         }
     }
 
     /// <summary>
     /// Releases the resources used by the cursor.
     /// </summary>
-    public void Dispose() => _handle.Dispose();
+    public void Dispose()
+    {
+        _handle.Dispose();
+        QuackEngine.Release();
+    }
 
     /// <summary>
     /// Sets the current cursor.
     /// </summary>
     /// <param name="cursor">The cursor to set as current.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the cursor.</exception>
     public static void Set(Cursor cursor)
     {
-        _cursor = cursor;
-        Native.SDL_SetCursor(_cursor._handle);
+        Current = cursor;
+        QuackNativeException.ThrowIfFailed(Native.SDL_SetCursor(cursor._handle));
     }
 }
