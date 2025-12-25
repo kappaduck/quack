@@ -109,15 +109,15 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// otherwise it will return the value of <see cref="OutputSize"/>.
     /// </remarks>
     /// <exception cref="QuackNativeException">Thrown when failed to get the current output size.</exception>
-    internal (int Width, int Height) CurrentOutputSize
+    public SizeInt CurrentOutputSize
     {
         get
         {
             if (_renderer.IsInvalid)
-                return (0, 0);
+                return new(0, 0);
 
             QuackNativeException.ThrowIfFailed(Native.SDL_GetCurrentRenderOutputSize(_renderer, out int w, out int h));
-            return (w, h);
+            return new(w, h);
         }
     }
 
@@ -128,15 +128,15 @@ public sealed class RenderWindow : Window, IRenderTarget
     /// It return the true output size in pixels, ignoring any render targets or logical size and presentation.
     /// </remarks>
     /// <exception cref="QuackNativeException">Thrown when failed to get the output size.</exception>
-    internal (int Width, int Height) OutputSize
+    public SizeInt OutputSize
     {
         get
         {
             if (_renderer.IsInvalid)
-                return (0, 0);
+                return new(0, 0);
 
             QuackNativeException.ThrowIfFailed(Native.SDL_GetRenderOutputSize(_renderer, out int w, out int h));
-            return (w, h);
+            return new(w, h);
         }
     }
 

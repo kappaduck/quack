@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Windows;
@@ -193,10 +194,10 @@ public sealed class Display
     /// <exception cref="QuackNativeException">Thrown when failed to get the display for the point.</exception>
     public static unsafe Display GetDisplay(Vector2Int point)
     {
-        uint id = Native.SDL_GetDisplayForPoint(&point);
-        QuackNativeException.ThrowIfZero(id);
+        QuackEngine.DangerousAcquire(Subsystem.Video);
 
-        return new Display(id);
+        uint id = Native.SDL_GetDisplayForPoint(&point);
+        return GetDisplay(id);
     }
 
     /// <summary>
@@ -207,10 +208,10 @@ public sealed class Display
     /// <exception cref="QuackNativeException">Thrown when failed to get the display for the rectangle.</exception>
     public static unsafe Display GetDisplay(RectInt rect)
     {
-        uint id = Native.SDL_GetDisplayForRect(&rect);
-        QuackNativeException.ThrowIfZero(id);
+        QuackEngine.DangerousAcquire(Subsystem.Video);
 
-        return new Display(id);
+        uint id = Native.SDL_GetDisplayForRect(&rect);
+        return GetDisplay(id);
     }
 
     /// <summary>
@@ -219,6 +220,8 @@ public sealed class Display
     /// <returns>All connected displays.</returns>
     public static Display[] GetDisplays()
     {
+        QuackEngine.DangerousAcquire(Subsystem.Video);
+
         ReadOnlySpan<uint> ids = Native.SDL_GetDisplays(out _);
 
         if (ids.IsEmpty)
@@ -236,5 +239,11 @@ public sealed class Display
     /// Gets the primary display.
     /// </summary>
     /// <returns>The primary display.</returns>
-    public static Display GetPrimaryDisplay() => new(Native.SDL_GetPrimaryDisplay());
+    public static Display GetPrimaryDisplay()
+    {
+        QuackEngine.DangerousAcquire(Subsystem.Video);
+
+        uint id = Native.SDL_GetPrimaryDisplay();
+        return GetDisplay(id);
+    }
 }

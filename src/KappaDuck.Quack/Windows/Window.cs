@@ -440,7 +440,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">Width or height is negative.</exception>
     /// <exception cref="QuackNativeException">Thrown when failed to set the maximum size.</exception>
-    public (int Width, int Height) MaximumSize
+    public SizeInt MaximumSize
     {
         get;
         set
@@ -479,7 +479,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">Width or height is negative.</exception>
     /// <exception cref="QuackNativeException">Thrown when failed to set the minimum size.</exception>
-    public (int Width, int Height) MinimumSize
+    public SizeInt MinimumSize
     {
         get;
         set

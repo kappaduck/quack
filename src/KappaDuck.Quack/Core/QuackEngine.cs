@@ -84,6 +84,33 @@ public static class QuackEngine
         }
     }
 
+    /// <summary>
+    /// Dangerously initializes the specified subsystem without increasing the reference count.
+    /// </summary>
+    /// <remarks>
+    /// The reason for this method to exist is to allow certain subsystems to be initialized directly and
+    /// we assume the engine will manage correctly during the application lifetime.
+    /// </remarks>
+    /// <param name="subsystem">The subsystem to initialize</param>
+    internal static void DangerousAcquire(Subsystem subsystem)
+    {
+        lock (_lock)
+        {
+            if ((_subsystems & subsystem) != Subsystem.None)
+            {
+                return;
+            }
+
+            if ((subsystem & Subsystem.TTF) == Subsystem.TTF)
+                QuackNativeException.ThrowIfFailed(Native.TTF_Init());
+
+            if ((subsystem & ~Subsystem.TTF) != Subsystem.None)
+                QuackNativeException.ThrowIfFailed(Native.SDL_InitSubSystem(subsystem));
+
+            _subsystems |= subsystem;
+        }
+    }
+
     internal static void Release()
     {
         lock (_lock)
