@@ -1,6 +1,10 @@
 <Project>
   <ItemGroup>
-    <NativeLibs Include="$(MSBuildThisFileDirectory)win32\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Visible="false" />
+    <NativeLibs Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Visible="false" />
+    <Content Include="@(NativeLibs)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <NativeLibs Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\*.so" Condition="$([System.OperatingSystem]::IsLinux())" Visible="false" />
     <Content Include="@(NativeLibs)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 </Project>

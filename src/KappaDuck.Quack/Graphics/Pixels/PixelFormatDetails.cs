@@ -1,8 +1,6 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
-
 namespace KappaDuck.Quack.Graphics.Pixels;
 
 /// <summary>
@@ -14,77 +12,77 @@ public struct PixelFormatDetails
     /// <summary>
     /// Gets the pixel format.
     /// </summary>
-    public readonly PixelFormat Format;
+    public PixelFormat Format { get; }
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public readonly byte BitsPerPixel;
+    public byte BitsPerPixel { get; }
 
     /// <summary>
     /// Gets the number of bytes per pixel.
     /// </summary>
-    public readonly byte BytesPerPixel;
+    public byte BytesPerPixel { get; }
 
     private unsafe fixed byte _padding[2];
 
     /// <summary>
     /// Gets the red mask.
     /// </summary>
-    public readonly uint RedMask;
+    public uint RedMask { get; }
 
     /// <summary>
     /// Gets the green mask.
     /// </summary>
-    public uint GreenMask;
+    public uint GreenMask { get; }
 
     /// <summary>
     /// Gets the blue mask.
     /// </summary>
-    public uint BlueMask;
+    public uint BlueMask { get; }
 
     /// <summary>
     /// Gets the alpha mask.
     /// </summary>
-    public readonly uint AlphaMask;
+    public uint AlphaMask { get; }
 
     /// <summary>
     /// Gets the red bits.
     /// </summary>
-    public readonly byte RedBits;
+    public byte RedBits { get; }
 
     /// <summary>
     /// Gets the green bits.
     /// </summary>
-    public readonly byte GreenBits;
+    public byte GreenBits { get; }
 
     /// <summary>
     /// Gets the blue bits.
     /// </summary>
-    public readonly byte BlueBits;
+    public byte BlueBits { get; }
 
     /// <summary>
     /// Gets the alpha bits.
     /// </summary>
-    public readonly byte AlphaBits;
+    public byte AlphaBits { get; }
 
     /// <summary>
     /// Gets the red shift.
     /// </summary>
-    public readonly byte RedShift;
+    public byte RedShift { get; }
 
     /// <summary>
     /// Gets the green shift.
     /// </summary>
-    public readonly byte GreenShift;
+    public byte GreenShift { get; }
 
     /// <summary>
     /// Gets the blue shift.
     /// </summary>
-    public readonly byte BlueShift;
+    public byte BlueShift { get; }
 
     /// <summary>
     /// Gets the alpha shift.
     /// </summary>
-    public readonly byte AlphaShift;
+    public byte AlphaShift { get; }
 }

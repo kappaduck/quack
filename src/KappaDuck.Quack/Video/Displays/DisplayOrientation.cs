@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.Video.Displays;
 
 /// <summary>
-/// Represents the orientation of a display.
+/// The orientation of a display.
 /// </summary>
 public enum DisplayOrientation
 {
@@ -19,7 +19,7 @@ public enum DisplayOrientation
     Landscape = 1,
 
     /// <summary>
-    /// The display is in landscape mode, with the left side up, relative to portrait mode.
+    /// The display is in landscape mode, but flipped upside down, relative to portrait mode.
     /// </summary>
     LandscapeFlipped = 2,
 
@@ -29,7 +29,7 @@ public enum DisplayOrientation
     Portrait = 3,
 
     /// <summary>
-    /// The display is in portrait mode, upside down.
+    /// The display is in portrait mode, but flipped upside down.
     /// </summary>
     PortraitFlipped = 4
 }

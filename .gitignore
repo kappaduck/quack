@@ -1,22 +1,9 @@
 # Quack files
 
-src/quack.playground.cs
+quack.playground.cs
+SDL3/runtimes/
 
-# Visual studio
-
-## User-specific files
-
-*.rsuser
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-## cache/options directory
-
-.vs/
-
-## build results
+# build outputs
 
 [Aa]rtifacts/
 [Bb]uild/
@@ -27,15 +14,11 @@ src/quack.playground.cs
 [Bb]in/
 [Oo]bj/
 
-# Visual Studio Code
+# Visual Studio files
 
-.vscode/*
-*.code-workspace
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# SDL
-
-SDL3/
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/

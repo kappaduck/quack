@@ -4,231 +4,225 @@
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Video.Displays;
 
 /// <summary>
-/// Represents a display such as monitor.
+/// Represents a display.
 /// </summary>
 public sealed class Display
 {
     private const string HdrEnabledProperty = "SDL.display.HDR_enabled";
 
-    internal Display(uint id) => Id = id;
+    internal Display(uint id)
+    {
+        Id = id;
+        Name = Native.SDL_GetDisplayName(Id);
+    }
 
     /// <summary>
-    /// Gets the Display Id.
+    /// Gets the unique identifier for the display.
     /// </summary>
-    public uint Id { get; init; }
+    public uint Id { get; }
 
     /// <summary>
     /// Gets the name of the display.
     /// </summary>
-    public string Name => SDL.Video.SDL_GetDisplayName(Id);
+    public string Name { get; }
 
     /// <summary>
     /// Gets the bounds of the display.
     /// </summary>
-    /// <exception cref="QuackNativeException">Failed to get the display bounds.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display bounds.</exception>
     public RectInt Bounds
     {
         get
         {
-            QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetDisplayBounds(Id, out RectInt bounds));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetDisplayBounds(Id, out RectInt bounds));
             return bounds;
         }
     }
 
     /// <summary>
-    /// Gets the usable desktop area represented by a display, in screen coordinates.
+    /// Gets the usable bounds of the display (excluding taskbar, docks, etc.).
     /// </summary>
-    /// <remarks>
-    /// This is the same area as <see cref="Bounds"/> reports, but with portions reserved by the system removed.
-    /// </remarks>
-    /// <exception cref="QuackNativeException">Failed to get the usable display bounds.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the usable display bounds.</exception>
     public RectInt UsableBounds
     {
         get
         {
-            QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetDisplayUsableBounds(Id, out RectInt bounds));
+            QuackNativeException.ThrowIfFailed(Native.SDL_GetDisplayUsableBounds(Id, out RectInt bounds));
             return bounds;
         }
     }
 
     /// <summary>
-    /// Gets content scale of the display.
+    /// Gets the content scale of the display.
     /// </summary>
     /// <remarks>
     /// <para>
     /// The content scale is the expected scale for content based on the DPI settings of the display.
-    /// For example, a 4K display might have a 2.0 (200%) display scale,
-    /// which means that the user expects UI elements to be twice as big on this display, to aid in readability.
+    /// For example, a 4K display might have a 2.0 (200%) content scale to make text and UI elements more readable.
     /// </para>
     /// <para>
-    /// After window creation, SDL_GetWindowDisplayScale() should be used to query the content scale factor for individual windows
-    /// instead of querying the display for a window and calling this function, as the per-window content scale factor may differ
-    /// from the base value of the display it is on, particularly on high-DPI and/or multi-monitor desktop configurations.
+    /// After the window is created, <see cref="Window.DisplayScale"/> should be used to query the content scale factor for individual windows
+    /// instead of this property, as the per-window content scale factor may differ from the global display content scale factor. Especially on
+    /// high-DPI and/or multi-monitor setups.
     /// </para>
     /// </remarks>
-    public float ContentScale => SDL.Video.SDL_GetDisplayContentScale(Id);
+    public float ContentScale => Native.SDL_GetDisplayContentScale(Id);
 
     /// <summary>
-    /// Gets information about the current display mode.
+    /// Gets the current display mode.
     /// </summary>
     /// <remarks>
     /// There's a difference between <see cref="CurrentMode"/> and <see cref="DesktopMode"/>.
-    /// When SDL run fullscreen and has changed the resolution. In that case, <see cref="CurrentMode"/> will return the current resolution,
-    /// and not the previous native display mode.
+    /// When the display is in fullscreen mode, <see cref="CurrentMode"/> will return the mode that the display is currently using,
+    /// and <see cref="DesktopMode"/> will return the mode that the desktop was using before going fullscreen.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Failed to get the current display mode.</exception>
-    public DisplayMode CurrentMode
+    /// <exception cref="QuackNativeException">Thrown when failed to get the current display mode.</exception>
+    public unsafe DisplayMode CurrentMode
     {
         get
         {
-            unsafe
-            {
-                DisplayMode* mode = SDL.Video.SDL_GetCurrentDisplayMode(Id);
+            DisplayMode* mode = Native.SDL_GetCurrentDisplayMode(Id);
 
-                QuackNativeException.ThrowIfNull(mode);
-
-                return *mode;
-            }
+            QuackNativeException.ThrowIfNull(mode);
+            return *mode;
         }
     }
 
     /// <summary>
-    /// Gets information about the desktop display mode.
+    /// Gets the desktop display mode.
     /// </summary>
     /// <remarks>
     /// There's a difference between <see cref="DesktopMode"/> and <see cref="CurrentMode"/>.
-    /// When SDL run fullscreen and has changed the resolution. In that case, <see cref="DesktopMode"/> will return the previous native display mode,
-    /// and not the current display mode.
+    /// When the display is in fullscreen mode and changed resolution.
+    /// In that case, <see cref="DesktopMode"/> will return the mode that the desktop was using before going fullscreen,
+    /// and <see cref="CurrentMode"/> will return the mode that the display is currently using.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Failed to get the desktop display mode.</exception>
-    public DisplayMode DesktopMode
+    public unsafe DisplayMode DesktopMode
     {
         get
         {
-            unsafe
-            {
-                DisplayMode* mode = SDL.Video.SDL_GetDesktopDisplayMode(Id);
+            DisplayMode* mode = Native.SDL_GetDesktopDisplayMode(Id);
 
-                QuackNativeException.ThrowIfNull(mode);
-
-                return *mode;
-            }
+            QuackNativeException.ThrowIfNull(mode);
+            return *mode;
         }
     }
 
     /// <summary>
-    /// Gets a value indicating whether HDR is enabled on the display.
+    /// Gets whether HDR is enabled on the display.
     /// </summary>
     public bool HdrEnabled
     {
         get
         {
-            uint properties = SDL.Video.SDL_GetDisplayProperties(Id);
-            return Properties.Get(properties, HdrEnabledProperty, defaultValue: false);
+            uint properties = Native.SDL_GetDisplayProperties(Id);
+            return Native.GetBooleanProperty(properties, HdrEnabledProperty, defaultValue: false);
         }
     }
 
     /// <summary>
-    /// Gets the orientation of a display.
+    /// Gets the orientation of the display.
     /// </summary>
-    public DisplayOrientation Orientation => SDL.Video.SDL_GetCurrentDisplayOrientation(Id);
+    public DisplayOrientation Orientation => Native.SDL_GetCurrentDisplayOrientation(Id);
 
     /// <summary>
-    /// Gets the orientation of a display when it is unrotated.
+    /// Gets the default orientation of the display when no rotation is applied.
     /// </summary>
-    public DisplayOrientation NaturalOrientation => SDL.Video.SDL_GetNaturalDisplayOrientation(Id);
+    public DisplayOrientation DefaultOrientation => Native.SDL_GetNaturalDisplayOrientation(Id);
 
     /// <summary>
-    /// Get a list of fullscreen display modes available for the display.
+    /// Gets all available fullscreen display modes for the display.
     /// </summary>
-    /// <returns>A list of fullscreen display modes.</returns>
-    /// <exception cref="QuackNativeException">Failed to get the fullscreen display modes.</exception>
-    public DisplayMode[] GetFullScreenModes()
+    /// <returns>All available fullscreen display modes for the display.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the fullscreen display modes.</exception>
+    public DisplayMode[] GetFullscreenModes()
     {
-        DisplayMode[] displayModes;
+        DisplayMode[] fullscreenModes;
 
         unsafe
         {
-            DisplayMode** modes = SDL.Video.SDL_GetFullscreenDisplayModes(Id, out int length);
+            DisplayMode** modes = Native.SDL_GetFullscreenDisplayModes(Id, out int length);
 
-            QuackNativeException.ThrowIf(modes is null);
-
-            displayModes = new DisplayMode[length];
+            QuackNativeException.ThrowIf(modes is null || length == 0);
+            fullscreenModes = new DisplayMode[length];
 
             for (int i = 0; i < length; i++)
-                displayModes[i] = *modes[i];
+                fullscreenModes[i] = *modes[i];
 
-            SDL.Memory.Free(modes);
+            Native.Free(modes);
         }
 
-        return displayModes;
+        return fullscreenModes;
     }
 
     /// <summary>
-    /// Get the display with the specified identifier.
+    /// Searches for the closest matching fullscreen display mode.
     /// </summary>
-    /// <param name="displayId">The display id.</param>
-    /// <returns>The display.</returns>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="displayId"/> is zero or negative.</exception>
-    public static Display GetDisplay(uint displayId)
+    /// <param name="query">The display mode query.</param>
+    /// <returns>The closest matching fullscreen display mode.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to find a matching display mode.</exception>
+    public DisplayMode SearchDisplayMode(DisplayModeQuery query)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(displayId);
+        bool success = Native.SDL_GetClosestFullscreenDisplayMode(Id, query.Width, query.Height, query.RefreshRate ?? 0, query.HighDensity, out DisplayMode mode);
+        QuackNativeException.ThrowIfFailed(success);
 
-        return new Display(displayId);
+        return mode;
     }
 
     /// <summary>
-    /// Get the display containing the specified point.
+    /// Gets a display by its unique identifier.
     /// </summary>
-    /// <param name="point">The point to query.</param>
-    /// <returns>The display containing the specified point.</returns>
-    /// <exception cref="QuackNativeException">Failed to get the display containing the specified point.</exception>
-    public static Display GetDisplay(Vector2Int point)
+    /// <param name="id">The unique identifier of the display.</param>
+    /// <returns>The display with the specified identifier.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="id"/> is zero or negative.</exception>
+    public static Display GetDisplay(uint id)
     {
-        uint display;
-
-        unsafe
-        {
-            display = SDL.Video.SDL_GetDisplayForPoint(&point);
-        }
-
-        QuackNativeException.ThrowIfZero(display);
-
-        return new Display(display);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
+        return new Display(id);
     }
 
     /// <summary>
-    /// Get the display containing the specified rectangle.
+    /// Gets the display that contains the specified point.
     /// </summary>
-    /// <param name="rectangle">The rectangle to query.</param>
-    /// <returns>The display entirely containing the specified rectangle or closest to the center of the rectangle.</returns>
-    /// <exception cref="QuackNativeException">Failed to get the display containing the specified rectangle.</exception>
-    public static Display GetDisplay(RectInt rectangle)
+    /// <param name="point">The point to check.</param>
+    /// <returns>The display that contains the specified point.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display for the point.</exception>
+    public static unsafe Display GetDisplay(Vector2Int point)
     {
-        uint display;
+        QuackEngine.DangerousAcquire(Subsystem.Video);
 
-        unsafe
-        {
-            display = SDL.Video.SDL_GetDisplayForRect(&rectangle);
-        }
-
-        QuackNativeException.ThrowIfZero(display);
-
-        return new Display(display);
+        uint id = Native.SDL_GetDisplayForPoint(&point);
+        return GetDisplay(id);
     }
 
     /// <summary>
-    /// Get a list of currently connected displays.
+    /// Gets the display containing the specified rectangle.
     /// </summary>
-    /// <returns>A list of currently connected displays.</returns>
+    /// <param name="rect">The rectangle to check.</param>
+    /// <returns>The display containing the specified rectangle.</returns>
+    /// <exception cref="QuackNativeException">Thrown when failed to get the display for the rectangle.</exception>
+    public static unsafe Display GetDisplay(RectInt rect)
+    {
+        QuackEngine.DangerousAcquire(Subsystem.Video);
+
+        uint id = Native.SDL_GetDisplayForRect(&rect);
+        return GetDisplay(id);
+    }
+
+    /// <summary>
+    /// Gets all connected displays.
+    /// </summary>
+    /// <returns>All connected displays.</returns>
     public static Display[] GetDisplays()
     {
-        ReadOnlySpan<uint> ids = SDL.Video.SDL_GetDisplays(out _);
+        QuackEngine.DangerousAcquire(Subsystem.Video);
+
+        ReadOnlySpan<uint> ids = Native.SDL_GetDisplays(out _);
 
         if (ids.IsEmpty)
             return [];
@@ -242,23 +236,14 @@ public sealed class Display
     }
 
     /// <summary>
-    /// Search the closest matching display mode for the display.
-    /// </summary>
-    /// <param name="width">The width in pixels of the desired display mode.</param>
-    /// <param name="height">The height in pixels of the desired display mode.</param>
-    /// <param name="refreshRate">The refresh rate of the desired display mode, or 0 for the desktop refresh rate.</param>
-    /// <param name="includeHighDensityMode">include high density modes in the search.</param>
-    /// <returns>The closest display mode equal to or larger than the desired mode.</returns>
-    /// <exception cref="QuackNativeException">Failed to search the display mode.</exception>
-    public DisplayMode SearchDisplayMode(int width, int height, float refreshRate, bool includeHighDensityMode)
-    {
-        QuackNativeException.ThrowIfFailed(SDL.Video.SDL_GetClosestFullscreenDisplayMode(Id, width, height, refreshRate, includeHighDensityMode, out DisplayMode displayMode));
-        return displayMode;
-    }
-
-    /// <summary>
-    /// Get the primary display.
+    /// Gets the primary display.
     /// </summary>
     /// <returns>The primary display.</returns>
-    public static Display GetPrimaryDisplay() => new(SDL.Video.SDL_GetPrimaryDisplay());
+    public static Display GetPrimaryDisplay()
+    {
+        QuackEngine.DangerousAcquire(Subsystem.Video);
+
+        uint id = Native.SDL_GetPrimaryDisplay();
+        return GetDisplay(id);
+    }
 }

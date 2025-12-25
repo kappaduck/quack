@@ -1,7 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
+using KappaDuck.Quack.Inputs;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -16,7 +17,19 @@ public readonly struct MouseDeviceEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The mouse instance id which was added or removed.
+    /// Gets the mouse id which was added or removed.
     /// </summary>
-    public readonly uint Which;
+    public uint Which { get; }
+
+    /// <summary>
+    /// Gets the mouse device associated with <see cref="EventType.MouseAdded"/> or <see cref="EventType.MouseRemoved"/>.
+    /// </summary>
+    public Mouse Mouse
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.MouseAdded or EventType.MouseRemoved);
+            return Mouse.Get(Which);
+        }
+    }
 }

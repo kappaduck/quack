@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] &#8212; YYYY-MM-DD
+
+Major overhaul of the public API to improve flexibility and usability.
+
+### Changed
+
+<!-- 0.3.0 -->
+
 ## 0.2.0 &#8212; 2025-12-03
 
 ### Added
@@ -62,7 +70,7 @@ Focus on bare essentials enough to make a Snake or Pong game and use input like 
 - Input handling for keyboard and mouse events ([#86], [#89])
 - Event handling ([#83])
 - Window which is a native OS window with no graphics context. ([#105])
-- RenderWindow which is a window that can be used to render 2D graphics using SDL renderer api. ([#113], [#116], [#125], [#130])
+- RenderWindow which is a window that can be used to render 2D graphics using SDL renderer API. ([#113], [#116], [#125], [#130])
 - IDrawable interface for objects that can be drawn on the screen. ([#114])
 - Pixel format with details and extensions ([#126])
 - Color management ([#119])
@@ -77,7 +85,7 @@ Focus on bare essentials enough to make a Snake or Pong game and use input like 
 - Quack engine ([#43], [#47])
 - Power management ([#60])
 - System preference management ([#61])
-- Launch any url from the system ([#62])
+- Launch any URL from the system ([#62])
 
 <!-- 0.1.0 -->
 [#43]: https://github.com/kappaduck/quack/issues/43

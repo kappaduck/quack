@@ -1,14 +1,19 @@
 is_global = true
 
-# RCS1036: Remove unnecessary blank line
-# This rule is obsolete
-# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1036/
-dotnet_diagnostic.RCS1036.severity = none
-
 # RCS1110: Declare class inside namespace
 # file-based app/top-level can have class without namespace
 # https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1110/
 dotnet_diagnostic.RCS1110.severity = none
+
+# RCS1135: Declare enum member with zero value (when enum has FlagsAttribute)
+# Sometimes having no zero value is clearer
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1135/
+dotnet_diagnostic.RCS1135.severity = none
+
+# RCS1194: Implement exception constructors
+# Not all exception constructors are always needed and exceptions are constructed internally.
+# https://josefpihrt.github.io/docs/roslynator/analyzers/RCS1194/
+dotnet_diagnostic.RCS1194.severity = none
 
 # RCS1237: Use bit shift operator
 # This rule is obsolete

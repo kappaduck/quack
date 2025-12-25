@@ -1,8 +1,6 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Interop.SDL;
-
 namespace KappaDuck.Quack.Graphics.Drawing;
 
 /// <summary>
@@ -70,6 +68,6 @@ public static class BlendModeExtensions
         /// <param name="alphaOperation">The operation used to combine the source and destination alpha components.</param>
         /// <returns>The composed blend mode.</returns>
         public static BlendMode Compose(BlendFactor source, BlendFactor destination, BlendOperation operation, BlendFactor sourceAlpha, BlendFactor destinationAlpha, BlendOperation alphaOperation)
-            => SDL.Surface.SDL_ComposeCustomBlendMode(source, destination, operation, sourceAlpha, destinationAlpha, alphaOperation);
+            => Native.SDL_ComposeCustomBlendMode(source, destination, operation, sourceAlpha, destinationAlpha, alphaOperation);
     }
 }

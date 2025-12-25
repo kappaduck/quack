@@ -1,7 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
+using KappaDuck.Quack.Inputs;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -16,7 +17,22 @@ public readonly struct KeyboardDeviceEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The keyboard instance id which was added or removed.
+    /// Gets the keyboard id which was added or removed.
     /// </summary>
-    public readonly uint Which;
+    /// <remarks>
+    /// If the keyboard is unknown or virtual, this value is <c>0</c>
+    /// </remarks>
+    public uint Which { get; }
+
+    /// <summary>
+    /// Gets the keyboard device associated with <see cref="EventType.KeyboardAdded"/> or <see cref="EventType.KeyboardRemoved"/>.
+    /// </summary>
+    public Keyboard Device
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.KeyboardAdded or EventType.KeyboardRemoved);
+            return Keyboard.Get(Which);
+        }
+    }
 }

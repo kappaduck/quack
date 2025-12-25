@@ -13,71 +13,88 @@ public static class EventExtensions
     extension(Event e)
     {
         /// <summary>
-        /// Determines whether the event is a key down event with the specified scancode.
+        /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
         /// </summary>
-        /// <param name="code">The scancode to compare.</param>
-        /// <returns><see langword="true"/> if the event is a key down event with the specified scancode; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyDown(Keyboard.Scancode code)
-            => e.Type is EventType.KeyDown && e.Keyboard.Code == code;
+        /// <param name="code">The code to compare.</param>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyDown(Scancode code, Modifier mod = Modifier.None) => e.Type is EventType.KeyDown && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
-        /// Determines whether the event is a key down event with the specified keycode.
+        /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
         /// </summary>
-        /// <param name="key">The keycode to compare.</param>
-        /// <returns><see langword="true"/> if the event is a key down event with the specified keycode; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyDown(Keyboard.Keycode key)
-            => e.Type is EventType.KeyDown && e.Keyboard.Key == key;
+        /// <param name="key">The key to compare.</param>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyDown(Keycode key, Modifier mod = Modifier.None) => e.Type is EventType.KeyDown && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
-        /// Determines whether the event is a key up event with the specified scancode.
+        /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
         /// </summary>
-        /// <param name="code">The scancode to compare.</param>
-        /// <returns><see langword="true"/> if the event is a key up event with the specified scancode; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyUp(Keyboard.Scancode code)
-            => e.Type is EventType.KeyUp && e.Keyboard.Code == code;
+        /// <param name="code">The code to compare.</param>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyUp(Scancode code, Modifier mod = Modifier.None) => e.Type is EventType.KeyUp && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
-        /// Determines whether the event is a key up event with the specified keycode.
+        /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
         /// </summary>
-        /// <param name="key">The keycode to compare.</param>
-        /// <returns><see langword="true"/> if the event is a key up event with the specified keycode; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyUp(Keyboard.Keycode key)
-            => e.Type is EventType.KeyUp && e.Keyboard.Key == key;
+        /// <param name="key">The key to compare.</param>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyUp(Keycode key, Modifier mod = Modifier.None) => e.Type is EventType.KeyUp && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
-        /// Determines whether the event is a mouse button down event with the specified button.
-        /// </summary>
-        /// <param name="button">The button to compare.</param>
-        /// <returns><see langword="true"/> if the event is a mouse button down event with the specified button; otherwise, <see langword="false"/>.</returns>
-        public bool IsMouseButtonDown(Mouse.Button button)
-            => e.Type is EventType.MouseButtonDown && e.Mouse.Button == button;
-
-        /// <summary>
-        /// Determines whether the event is a mouse button up event with the specified button.
+        /// Determines whether the specified mouse button is currently pressed and the event is a <see cref="EventType.MouseButtonDown"/>.
         /// </summary>
         /// <param name="button">The button to compare.</param>
-        /// <returns><see langword="true"/> if the event is a mouse button up event with the specified button; otherwise, <see langword="false"/>.</returns>
-        public bool IsMouseButtonUp(Mouse.Button button)
-            => e.Type is EventType.MouseButtonUp && e.Mouse.Button == button;
+        /// <returns><see langword="true"/> if the specified mouse button is currently pressed; otherwise, <see langword="false"/>.</returns>
+        public bool IsButtonDown(MouseButton button) => e.Type is EventType.MouseButtonDown && e.Mouse.Button == button;
 
         /// <summary>
-        /// Requests to quit the application.
+        /// Determines whether the specified mouse button was released and the event is a <see cref="EventType.MouseButtonUp"/>.
+        /// </summary>
+        /// <param name="button">The button to compare.</param>
+        /// <returns><see langword="true"/> if the specified mouse button was released; otherwise, <see langword="false"/>.</returns>
+        public bool IsButtonUp(MouseButton button) => e.Type is EventType.MouseButtonUp && e.Mouse.Button == button;
+
+        /// <summary>
+        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> or <see cref="EventType.WindowCloseRequested"/> event.
         /// </summary>
         /// <remarks>
-        /// It checks if is a <see cref="EventType.Quit"/> event or the specified key is pressed.
-        /// By default, it checks if the <see cref="Keyboard.Scancode.Escape"/> key is pressed.
+        /// <para>By default, it checks if the <see cref="Scancode.Escape"/> key is pressed.</para>
+        /// <para>
+        /// The window close request is only considered if a <paramref name="windowId"/> is provided.
+        /// It helps to know which window is requesting to close in multi-window applications.
+        /// </para>
         /// </remarks>
-        /// <param name="code">The scancode of the key to compare.</param>
-        /// <returns><see langword="true"/> if is a <see cref="EventType.Quit"/> event or the escape key is pressed; otherwise, <see langword="false"/>.</returns>
-        public bool RequestQuit(Keyboard.Scancode code = Keyboard.Scancode.Escape)
-            => e.Type is EventType.Quit || IsKeyDown(e, code);
+        /// <param name="code">The code to quit.</param>
+        /// <param name="windowId">The identifier of the window to monitor the close request.</param>
+        /// <returns>true if a quit request is detected by the specified key or window close event; otherwise, false.</returns>
+        [OverloadResolutionPriority(1)]
+        public bool RequestQuit(Scancode code = Scancode.Escape, uint? windowId = null)
+        {
+            bool quit = e.Type is EventType.Quit || (e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId);
+            return quit || IsKeyDown(e, code);
+        }
 
         /// <summary>
-        /// A request has been made that a window is closing.
+        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> or <see cref="EventType.WindowCloseRequested"/> event.
         /// </summary>
-        /// <param name="windowId">The identifier of the window is closing.</param>
-        /// <returns><see langword="true"/> if is a <see cref="EventType.WindowCloseRequested"/> event for the specified window; otherwise, <see langword="false"/>.</returns>
-        public bool WindowRequestQuit(uint windowId)
-            => e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId;
+        /// <remarks>
+        /// <para>By default, it checks if the <see cref="Keycode.Escape"/> key is pressed.</para>
+        /// <para>
+        /// The window close request is only considered if a <paramref name="windowId"/> is provided.
+        /// It helps to know which window is requesting to close in multi-window applications.
+        /// </para>
+        /// </remarks>
+        /// <param name="key">The key to quit.</param>
+        /// <param name="windowId">The identifier of the window to monitor the close request.</param>
+        /// <returns>true if a quit request is detected by the specified key or window close event; otherwise, false.</returns>
+        public bool RequestQuit(Keycode key = Keycode.Escape, uint? windowId = null)
+        {
+            bool quit = e.Type is EventType.Quit || (e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId);
+            return quit || IsKeyDown(e, key);
+        }
     }
 }

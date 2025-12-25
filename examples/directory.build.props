@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <IncludeNativeLibraries>true</IncludeNativeLibraries>
+    <IncludeNativeLibs>true</IncludeNativeLibs>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ using KappaDuck.Quack.Graphics.Rendering;
 namespace KappaDuck.Quack.Graphics.Drawing;
 
 /// <summary>
-/// Represents an object that can be drawn on a render target.
+/// Defines an object that can be drawn on a render target.
 /// </summary>
 public interface IDrawable
 {

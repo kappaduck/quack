@@ -2,8 +2,6 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Native;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -19,18 +17,30 @@ public static class PixelFormatExtensions
         /// <summary>
         /// Gets the details of the pixel format.
         /// </summary>
-        /// <exception cref="QuackNativeException">Thrown if failed to retrieve the details.</exception>
-        public PixelFormatDetails Details
+        /// <exception cref="QuackNativeException">Thrown when failed to get the pixel format details.</exception>
+        public unsafe PixelFormatDetails Details
         {
             get
             {
-                unsafe
-                {
-                    PixelFormatDetails* details = SDL.Surface.SDL_GetPixelFormatDetails(format);
-                    QuackNativeException.ThrowIfNull(details);
+                PixelFormatDetails* details = Native.SDL_GetPixelFormatDetails(format);
+                QuackNativeException.ThrowIfNull(details);
 
-                    return *details;
-                }
+                return *details;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the pixel format is an indexed format.
+        /// </summary>
+        public bool IsIndexed
+        {
+            get
+            {
+                return format is PixelFormat.Index1LSB
+                    or PixelFormat.Index1MSB
+                    or PixelFormat.Index4LSB
+                    or PixelFormat.Index4MSB
+                    or PixelFormat.Index8;
             }
         }
 
@@ -40,17 +50,17 @@ public static class PixelFormatExtensions
         /// <remarks>
         /// It will return <see cref="PixelFormat.Unknown"/> if the format isn't recognized.
         /// </remarks>
-        public string Name => SDL.Surface.SDL_GetPixelFormatName(format);
+        public string Name => Native.SDL_GetPixelFormatName(format);
 
         /// <summary>
         /// Gets the bits per pixel and masks for the pixel format.
         /// </summary>
-        /// <exception cref="QuackNativeException">Thrown if failed to retrieve the mask.</exception>
+        /// <exception cref="QuackNativeException">Thrown when failed to get the masks.</exception>
         public (int bitsPerPixel, uint RedMask, uint GreenMask, uint BlueMask, uint AlphaMask) Masks
         {
             get
             {
-                QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_GetMasksForPixelFormat(format, out int bitsPerPixel, out uint redMask, out uint greenMask, out uint blueMask, out uint alphaMask));
+                QuackNativeException.ThrowIfFailed(Native.SDL_GetMasksForPixelFormat(format, out int bitsPerPixel, out uint redMask, out uint greenMask, out uint blueMask, out uint alphaMask));
                 return (bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
             }
         }
@@ -65,7 +75,7 @@ public static class PixelFormatExtensions
         /// <param name="alphaMask">Alpha mask.</param>
         /// <returns>The corresponding pixel format or <see cref="PixelFormat.Unknown"/>.</returns>
         public static PixelFormat FromMasks(int bitsPerPixel, uint redMask, uint greenMask, uint blueMask, uint alphaMask)
-            => SDL.Surface.SDL_GetPixelFormatForMasks(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
+            => Native.SDL_GetPixelFormatForMasks(bitsPerPixel, redMask, greenMask, blueMask, alphaMask);
 
         /// <summary>
         /// Gets the color from a pixel value.
@@ -91,17 +101,14 @@ public static class PixelFormatExtensions
         /// <param name="details">The description of the pixel format.</param>
         /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The RGB components of the pixel.</returns>
-        public static (byte Red, byte Green, byte Blue) GetRGB(uint pixel, PixelFormatDetails details, Palette? palette = null)
+        public static unsafe (byte Red, byte Green, byte Blue) GetRGB(uint pixel, PixelFormatDetails details, Palette? palette = null)
         {
-            unsafe
-            {
-                byte r;
-                byte g;
-                byte b;
+            byte r;
+            byte g;
+            byte b;
 
-                SDL.Surface.SDL_GetRGB(pixel, &details, GetPaletteHandle(palette), &r, &g, &b);
-                return (r, g, b);
-            }
+            Native.SDL_GetRGB(pixel, &details, GetPaletteHandle(palette), &r, &g, &b);
+            return (r, g, b);
         }
 
         /// <summary>
@@ -116,18 +123,15 @@ public static class PixelFormatExtensions
         /// <param name="details">The description of the pixel format.</param>
         /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The RGBA components of the pixel.</returns>
-        public static (byte Red, byte Green, byte Blue, byte Alpha) GetRGBA(uint pixel, PixelFormatDetails details, Palette? palette = null)
+        public static unsafe (byte Red, byte Green, byte Blue, byte Alpha) GetRGBA(uint pixel, PixelFormatDetails details, Palette? palette = null)
         {
-            unsafe
-            {
-                byte r;
-                byte g;
-                byte b;
-                byte a;
+            byte r;
+            byte g;
+            byte b;
+            byte a;
 
-                SDL.Surface.SDL_GetRGBA(pixel, &details, GetPaletteHandle(palette), &r, &g, &b, &a);
-                return (r, g, b, a);
-            }
+            Native.SDL_GetRGBA(pixel, &details, GetPaletteHandle(palette), &r, &g, &b, &a);
+            return (r, g, b, a);
         }
 
         /// <summary>
@@ -139,13 +143,8 @@ public static class PixelFormatExtensions
         /// <param name="b">The blue component.</param>
         /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
-        public static uint MapRGB(PixelFormatDetails details, byte r, byte g, byte b, Palette? palette = null)
-        {
-            unsafe
-            {
-                return SDL.Surface.SDL_MapRGB(&details, GetPaletteHandle(palette), r, g, b);
-            }
-        }
+        public static unsafe uint MapRGB(PixelFormatDetails details, byte r, byte g, byte b, Palette? palette = null)
+            => Native.SDL_MapRGB(&details, GetPaletteHandle(palette), r, g, b);
 
         /// <summary>
         /// Maps the RGBA components to a pixel value.
@@ -157,13 +156,8 @@ public static class PixelFormatExtensions
         /// <param name="a">The alpha component.</param>
         /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
-        public static uint MapRGBA(PixelFormatDetails details, byte r, byte g, byte b, byte a, Palette? palette = null)
-        {
-            unsafe
-            {
-                return SDL.Surface.SDL_MapRGBA(&details, GetPaletteHandle(palette), r, g, b, a);
-            }
-        }
+        public static unsafe uint MapRGBA(PixelFormatDetails details, byte r, byte g, byte b, byte a, Palette? palette = null)
+            => Native.SDL_MapRGBA(&details, GetPaletteHandle(palette), r, g, b, a);
 
         /// <summary>
         /// Maps the color components to a pixel value.

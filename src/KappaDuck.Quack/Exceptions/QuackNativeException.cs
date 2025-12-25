@@ -1,51 +1,47 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Interop.Marshalling;
-using KappaDuck.Quack.Interop.SDL;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
+using System.Numerics;
 
 namespace KappaDuck.Quack.Exceptions;
 
 /// <summary>
-/// An exception that is thrown when an error occurs from native calls.
+/// An exception that is thrown when a native error occurs in the Quack engine.
 /// </summary>
-public sealed partial class QuackNativeException : QuackException
+public sealed class QuackNativeException : QuackException
 {
-    internal QuackNativeException(string? message) : base(message)
+    private QuackNativeException(string? message) : base(message)
     {
     }
 
-    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition)
+    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, [CallerMemberName] string memberName = "")
     {
         if (condition)
-            Throw();
+            Throw(memberName);
     }
 
-    internal static void ThrowIfFailed(bool result) => ThrowIf(!result);
+    internal static void ThrowIfFailed(bool condition, [CallerMemberName] string memberName = "")
+        => ThrowIf(!condition, memberName);
 
-    internal static void ThrowIfNegative(int value) => ThrowIf(int.IsNegative(value));
+    internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
+        => ThrowIf(handle.IsInvalid, memberName);
 
-    internal static unsafe void ThrowIfNull<T>(T* value) where T : unmanaged => ThrowIf(value is null);
+    internal static void ThrowIfNegative<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsNegative(value), memberName);
 
-    internal static void ThrowIfZero(uint value) => ThrowIf(value == 0);
+    internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string memberName = "") where T : unmanaged
+        => ThrowIf(value is null, memberName);
+
+    internal static void ThrowIfZero<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsZero(value), memberName);
 
     [DoesNotReturn]
-    private static void Throw()
+    private static void Throw(string memberName)
     {
-        string message = SDL_GetError();
-        SDL_ClearError();
+        string message = Native.SDL_GetError();
+        Native.SDL_ClearError();
 
-        throw new QuackNativeException(message);
+        throw new QuackNativeException($"{memberName} failed: {message}");
     }
-
-    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    private static partial void SDL_ClearError();
-
-    [LibraryImport(SDL.Core), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLOwnedStringMarshaller))]
-    private static partial string SDL_GetError();
 }

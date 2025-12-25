@@ -4,10 +4,8 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path=".github/codeowners" />
-    <File Path=".github/dependabot.yml" />
     <File Path="directory.build.props" />
     <File Path="directory.packages.props" />
-    <File Path="dotnet.config" />
     <File Path="nuget.config" />
   </Folder>
   <Folder Name="/configurations/rules/">
@@ -26,7 +24,6 @@
     <File Path=".github/ISSUE_TEMPLATE/bug.yml" />
     <File Path=".github/ISSUE_TEMPLATE/config.yml" />
     <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
-    <File Path=".github/ISSUE_TEMPLATE/task.yml" />
   </Folder>
   <Folder Name="/examples/">
     <File Path="examples/directory.build.props" />
@@ -43,11 +40,16 @@
     <File Path="examples/inputs/mouse.cs" />
   </Folder>
   <Folder Name="/examples/windows/">
-    <File Path="examples/windows/minimalWindow.cs" />
+    <File Path="examples/windows/window.cs" />
   </Folder>
-  <Folder Name="/src/">
-    <File Path="src/quack.playground.cs" />
-    <File Path="src/install.sdl.cs" />
+  <Folder Name="/sdl3/">
+    <File Path="sdl3/build.cs" />
+    <File Path="sdl3/dockerfile" />
+  </Folder>
+  <Folder Name="/sandbox/">
+    <File Path="sandbox/directory.packages.props" />
+    <File Path="sandbox/nuget.config" />
+    <File Path="sandbox/quack.sandbox.cs" />
   </Folder>
   <Folder Name="/workflows/">
     <File Path=".github/dependabot.yml" />

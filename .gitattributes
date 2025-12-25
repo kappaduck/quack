@@ -41,7 +41,7 @@ codeowners  text
 
 *.json      text
 *.toml      text
-*.xml       text
+*.xml       text eol=lf
 *.yaml      text eol=lf
 *.yml       text eol=lf
 

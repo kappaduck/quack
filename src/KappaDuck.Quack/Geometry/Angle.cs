@@ -3,12 +3,11 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace KappaDuck.Quack.Geometry;
 
 /// <summary>
-/// Represents an angle in radians or degrees.
+/// Represents an angle measurement in geometry.
 /// </summary>
 [StructLayout(LayoutKind.Auto)]
 public readonly struct Angle :
@@ -30,9 +29,9 @@ public readonly struct Angle :
     public float Radians { get; }
 
     /// <summary>
-    /// Gets an angle in degrees.
+    /// Gets the angle in degrees.
     /// </summary>
-    public float Degrees => (float)(Radians * (180.0f / Math.PI));
+    public float Degrees => (float)(Radians * (180f / Math.PI));
 
     /// <summary>
     /// Gets the computed sine of the angle.
@@ -67,59 +66,60 @@ public readonly struct Angle :
     public static explicit operator float(Angle angle) => angle.Radians;
 
     /// <summary>
-    /// Adds two angles.
+    /// Adds two angles together.
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns>The sum of the angles.</returns>
+    /// <returns>The resulting angle.</returns>
     public static Angle operator +(Angle left, Angle right) => new(left.Radians + right.Radians);
 
     /// <summary>
-    /// Subtracts two angles.
+    /// Subtracts one angle from another.
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns>The difference of the angles.</returns>
+    /// <returns>The resulting angle.</returns>
     public static Angle operator -(Angle left, Angle right) => new(left.Radians - right.Radians);
 
     /// <summary>
     /// Multiplies an angle by a scalar.
     /// </summary>
     /// <param name="left">The angle.</param>
-    /// <param name="right">Scalar to multiply by.</param>
-    /// <returns>The product of the angle and the scalar.</returns>
+    /// <param name="right">The scalar to multiply by.</param>
+    /// <returns>The resulting angle.</returns>
     public static Angle operator *(Angle left, float right) => new(left.Radians * right);
 
     /// <summary>
     /// Multiplies an angle by a scalar.
     /// </summary>
-    /// <param name="left">Scalar to multiply by.</param>
+    /// <param name="left">The scalar to multiply by.</param>
     /// <param name="right">The angle.</param>
-    /// <returns>The product of the angle and the scalar.</returns>
-    public static Angle operator *(float left, Angle right) => new(left * right.Radians);
+    /// <returns>The resulting angle.</returns>
+    public static Angle operator *(float left, Angle right) => right * left;
 
     /// <summary>
     /// Divides an angle by a scalar.
     /// </summary>
     /// <param name="left">The angle.</param>
-    /// <param name="right">Scalar to divide by.</param>
-    /// <returns>The quotient of the angle and the scalar.</returns>
+    /// <param name="right">The scalar to divide by.</param>
+    /// <returns>The resulting angle.</returns>
+    /// <exception cref="DivideByZeroException">The angle is divided by zero.</exception>
     public static Angle operator /(Angle left, float right)
     {
         Math.ThrowIfDividedByZero(right);
 
-        return new(left.Radians / right);
+        return new Angle(left.Radians / right);
     }
 
     /// <summary>
-    /// Negates an angle.
+    /// Negates the angle.
     /// </summary>
     /// <param name="value">The angle to negate.</param>
     /// <returns>The negated angle.</returns>
     public static Angle operator -(Angle value) => new(-value.Radians);
 
     /// <summary>
-    /// Compares two angles are equal.
+    /// Determines whether two angles are equal.
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
@@ -127,7 +127,7 @@ public readonly struct Angle :
     public static bool operator ==(Angle left, Angle right) => left.Equals(right);
 
     /// <summary>
-    /// Compares two angles are not equal.
+    /// Determines whether two angles are not equal.
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
@@ -139,7 +139,7 @@ public readonly struct Angle :
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns><see langword="true"/> if the left angle is less than the right angle; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the left angle is lesser than the right angle; otherwise, <see langword="false"/>.</returns>
     public static bool operator <(Angle left, Angle right) => left.Radians < right.Radians;
 
     /// <summary>
@@ -155,7 +155,7 @@ public readonly struct Angle :
     /// </summary>
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
-    /// <returns><see langword="true"/> if the left angle is less than or equal to the right angle; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if the left angle is lesser than or equal to the right angle; otherwise, <see langword="false"/>.</returns>
     public static bool operator <=(Angle left, Angle right) => left.Radians <= right.Radians;
 
     /// <summary>
@@ -181,16 +181,19 @@ public readonly struct Angle :
     public static Angle FromRadians(float radians) => new(radians);
 
     /// <summary>
-    /// Normalizes the angle to a range.
+    /// Normalizes the angle to be within the specified range.
     /// </summary>
     /// <remarks>
-    /// By default, the range is from 0 to 360 degrees.
+    /// By default, the angle is normalized to be within the range of 0 to 360 degrees.
     /// </remarks>
     /// <param name="min">The minimum value of the range.</param>
     /// <param name="max">The maximum value of the range.</param>
     /// <returns>The normalized angle.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="min"/> is greater than <paramref name="max"/>.</exception>
     public Angle Normalize(float min = 0f, float max = 360f)
     {
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(min, max);
+
         float range = max - min;
         return FromDegrees(((((Degrees - min) % range) + range) % range) + min);
     }
@@ -199,41 +202,40 @@ public readonly struct Angle :
     public int CompareTo(Angle other) => Radians.CompareTo(other.Radians);
 
     /// <inheritdoc/>
-    public int CompareTo(object? obj)
+    public int CompareTo(object? obj) => obj switch
     {
-        if (obj is null)
-            return 1;
-
-        if (obj is Angle x)
-            return CompareTo(x);
-
-        throw new ArgumentException("Object must be of type Angle", nameof(obj));
-    }
+        null => 1,
+        Angle x => CompareTo(x),
+        _ => throw new ArgumentException("Object must be of type Angle", nameof(obj))
+    };
 
     /// <summary>
-    /// Compares two angles are equal.
+    /// Determines whether the angle is equal to another angle.
     /// </summary>
-    /// <param name="other">The angle to compare.</param>
+    /// <param name="other">The other angle.</param>
     /// <returns><see langword="true"/> if the angles are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(Angle other) => MathF.IsNearlyZero(Radians - other.Radians);
-
-    /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj)
-        => obj is Angle angle && Equals(angle);
-
-    /// <inheritdoc/>
-    public override readonly int GetHashCode() => Radians.GetHashCode();
+    public bool Equals(Angle other) => MathF.IsNearlyZero(Radians - other.Radians);
 
     /// <summary>
-    /// Returns a string representation of the angle in degrees.
+    /// Determines whether the angle is equal to another object.
     /// </summary>
-    /// <returns>A string representation of the angle.</returns>
+    /// <param name="obj">The other object.</param>
+    /// <returns><see langword="true"/> if the object is an angle and is equal to this angle; otherwise, <see langword="false"/>.</returns>
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is Angle angle && Equals(angle);
+
+    /// <inheritdoc/>
+    public override int GetHashCode() => Radians.GetHashCode();
+
+    /// <summary>
+    /// The string representation of the angle in degrees.
+    /// </summary>
+    /// <returns>The string representation of the angle.</returns>
     public override string ToString() => $"{this}";
 
     /// <inheritdoc/>
     public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <inheritdoc/>
-    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"{Degrees}°", out charsWritten);
 }

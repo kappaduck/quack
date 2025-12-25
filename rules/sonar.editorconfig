@@ -15,6 +15,11 @@ dotnet_diagnostic.S1481.severity = none
 # https://rules.sonarsource.com/csharp/RSPEC-2325/
 dotnet_diagnostic.S2325.severity = none
 
+# S3218: Rename this method to not shadow the outer class member with the same name
+# There is no issue with shadowing in some cases
+# https://rules.sonarsource.com/csharp/RSPEC-3218/
+dotnet_diagnostic.S3218.severity = none
+
 # S3903: Move class into a named namespace
 # file-based app/top-level can have class without namespace
 # https://rules.sonarsource.com/csharp/RSPEC-3903/

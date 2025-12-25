@@ -3,7 +3,7 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Inputs;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -18,40 +18,50 @@ public readonly struct MouseButtonEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The window with mouse focus.
+    /// Gets the window id which has the mouse focus.
     /// </summary>
-    public readonly uint WindowId;
+    public uint WindowId { get; }
 
     /// <summary>
-    /// The mouse instance id in relative mode.
+    /// Gets the mouse id.
     /// </summary>
-    public readonly uint Which;
+    public uint Which { get; }
 
     /// <summary>
-    /// The mouse button index.
+    /// Gets the mouse button.
     /// </summary>
-    public readonly Mouse.Button Button;
+    public MouseButton Button { get; }
 
     private readonly byte _down;
 
     /// <summary>
-    /// 1 for single-click, 2 for double-click, etc.
+    /// Gets the number of clicks. 1 for single-click, 2 for double-click, etc.
     /// </summary>
-    public readonly byte Clicks;
+    public byte Clicks { get; }
 
     private readonly byte _padding;
-
     private readonly float _x;
-
     private readonly float _y;
+
+    /// <summary>
+    /// Gets the mouse device associated with <see cref="EventType.MouseButtonDown"/> or <see cref="EventType.MouseButtonUp"/>.
+    /// </summary>
+    public Mouse Mouse
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.MouseButtonDown or EventType.MouseButtonUp);
+            return Mouse.Get(Which);
+        }
+    }
 
     /// <summary>
     /// Gets a value indicating whether the button is pressed.
     /// </summary>
-    public readonly bool Down => _down != 0;
+    public bool Down => _down != 0;
 
     /// <summary>
     /// Gets the position of the mouse, relative to window.
     /// </summary>
-    public readonly Vector2 Position => new(_x, _y);
+    public Vector2 Position => new(_x, _y);
 }

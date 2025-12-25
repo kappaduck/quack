@@ -3,7 +3,7 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Inputs;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
@@ -18,24 +18,36 @@ public readonly struct MouseMotionEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The window with mouse focus.
+    /// Gets the window id which has the mouse focus.
     /// </summary>
-    public readonly uint WindowId;
+    public uint WindowId { get; }
 
     /// <summary>
-    /// The mouse instance id in relative mode.
+    /// gets the mouse id.
     /// </summary>
-    public readonly uint Which;
+    public uint Which { get; }
 
     /// <summary>
-    /// The state of the mouse buttons.
+    /// Gets The state of the mouse buttons.
     /// </summary>
-    public readonly Mouse.ButtonState State;
+    public MouseButtonState State { get; }
 
     private readonly float _x;
     private readonly float _y;
     private readonly float _xRel;
     private readonly float _yRel;
+
+    /// <summary>
+    /// Gets the mouse device associated with <see cref="EventType.MouseMotion"/>.
+    /// </summary>
+    public Mouse Mouse
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.MouseMotion);
+            return Mouse.Get(Which);
+        }
+    }
 
     /// <summary>
     /// Gets the position of the mouse, relative to window.

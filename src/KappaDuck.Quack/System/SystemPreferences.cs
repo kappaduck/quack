@@ -2,12 +2,11 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
 
 namespace KappaDuck.Quack.System;
 
 /// <summary>
-/// Represents system preferences such as the current theme and screen saver.
+/// Provides access to system preferences.
 /// </summary>
 public static class SystemPreferences
 {
@@ -18,24 +17,27 @@ public static class SystemPreferences
     /// If you disable the screensaver, it is automatically re-enabled when the engine shuts down.
     /// The screensaver is disabled by default.
     /// </remarks>
-    /// <exception cref="QuackNativeException">Failed to enable or disable the screensaver.</exception>
+    /// <exception cref="QuackNativeException">Throw when failed to enable or disable the screensaver.</exception>
     public static bool ScreenSaver
     {
-        get => SDL.System.SDL_ScreenSaverEnabled();
+        get;
         set
         {
             if (value)
             {
-                QuackNativeException.ThrowIfFailed(SDL.System.SDL_EnableScreenSaver());
+                QuackNativeException.ThrowIfFailed(Native.SDL_EnableScreenSaver());
+
+                field = true;
                 return;
             }
 
-            QuackNativeException.ThrowIfFailed(SDL.System.SDL_DisableScreenSaver());
+            QuackNativeException.ThrowIfFailed(Native.SDL_DisableScreenSaver());
+            field = false;
         }
     }
 
     /// <summary>
     /// Gets the current system theme.
     /// </summary>
-    public static SystemTheme Theme => SDL.System.SDL_GetSystemTheme();
+    public static Theme Theme => Native.SDL_GetSystemTheme();
 }

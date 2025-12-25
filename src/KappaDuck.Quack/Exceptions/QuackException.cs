@@ -10,23 +10,13 @@ namespace KappaDuck.Quack.Exceptions;
 /// </summary>
 public class QuackException : Exception
 {
-    internal QuackException()
-    {
-    }
-
     internal QuackException(string? message) : base(message)
     {
     }
 
-    internal QuackException(string? message, Exception? innerException) : base(message, innerException)
-    {
-    }
-
-    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string? message)
+    internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string message, [CallerMemberName] string memberName = "")
     {
         if (condition)
-            throw new QuackException(message);
+            throw new QuackException($"{memberName} failed: {message}");
     }
-
-    internal static void ThrowIfNull<T>([NotNull] T? value, string? message) => ThrowIf(value is null, message);
 }

@@ -1,12 +1,14 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.InteropServices;
+using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Video.Displays;
+using System.Diagnostics;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Display state change event data.
+/// Represents a display event.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct DisplayEvent
@@ -16,17 +18,70 @@ public readonly struct DisplayEvent
     private readonly ulong _timestamp;
 
     /// <summary>
-    /// The associated display.
+    /// Gets the associated display id.
     /// </summary>
-    public readonly uint Id;
+    public uint Id { get; }
+
+    private readonly int _data1;
+    private readonly int _data2;
 
     /// <summary>
-    /// The event data1.
+    /// Gets the display associated with the current display-related event.
     /// </summary>
-    public readonly int Data1;
+    public Display Current
+    {
+        get
+        {
+            Debug.Assert(IsDisplayEvent(_type));
+            return Display.GetDisplay(Id);
+
+            static bool IsDisplayEvent(EventType type)
+            {
+                return type is EventType.ContentScaleChanged
+                    or EventType.CurrentModeChanged
+                    or EventType.DesktopModeChanged
+                    or EventType.DisplayAdded
+                    or EventType.DisplayMoved
+                    or EventType.DisplayOrientationChanged
+                    or EventType.DisplayRemoved
+                    or EventType.UsableBoundsChanged;
+            }
+        }
+    }
 
     /// <summary>
-    /// The event data2.
+    /// Gets the new display size from <see cref="EventType.CurrentModeChanged"/>.
     /// </summary>
-    public readonly int Data2;
+    public SizeInt DisplaySize
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.CurrentModeChanged);
+            return new(_data1, _data2);
+        }
+    }
+
+    /// <summary>
+    /// Gets the new desktop size from <see cref="EventType.DesktopModeChanged"/>.
+    /// </summary>
+    public SizeInt DesktopSize
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.DesktopModeChanged);
+            return new(_data1, _data2);
+        }
+    }
+
+    /// <summary>
+    /// Gets the new orientation from <see cref="EventType.DisplayOrientationChanged"/>.
+    /// </summary>
+    public DisplayOrientation Orientation
+    {
+        get
+        {
+            Debug.Assert(_type is EventType.DisplayOrientationChanged);
+            return (DisplayOrientation)_data1;
+        }
+    }
 }

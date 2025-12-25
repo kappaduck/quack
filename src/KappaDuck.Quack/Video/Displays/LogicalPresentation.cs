@@ -4,32 +4,32 @@
 namespace KappaDuck.Quack.Video.Displays;
 
 /// <summary>
-/// How the logical size is mapped to the output.
+/// Types of logical presentations for display content.
 /// </summary>
 public enum LogicalPresentation
 {
     /// <summary>
-    /// There is no logical size in effect.
+    /// The logical presentation is disabled.
     /// </summary>
     Disabled = 0,
 
     /// <summary>
-    /// The rendered content is stretched to the output resolution.
+    /// The rendered content is stretched to fill the entire display area.
     /// </summary>
     Stretch = 1,
 
     /// <summary>
-    /// The rendered content is fit to the largest dimension and the other dimension is letterboxed with black bars.
+    /// The rendered content is fitted within the display area while maintaining its aspect ratio, potentially adding black bars (letterboxing) to fill any remaining space.
     /// </summary>
     Letterbox = 2,
 
     /// <summary>
-    /// The rendered content is fit to the smallest dimension and the other dimension extends beyond the output bounds.
+    /// The rendered content is fit to the smallest dimension of the display area, potentially cropping parts of the content that exceed the display bounds.
     /// </summary>
     OverScan = 3,
 
     /// <summary>
-    /// The rendered content is scaled up by integer multiples to fit the output resolution.
+    /// The rendered content is scaled up by an integer factor to fit within the display area, maintaining the original aspect ratio without any distortion.
     /// </summary>
     IntegerScale = 4
 }

@@ -3,8 +3,6 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
@@ -30,21 +28,23 @@ namespace KappaDuck.Quack.Graphics.Pixels;
 /// When a surface holds MJPG format data, pixels points at the compressed JPEG image and pitch is the length of that data.
 /// </para>
 /// </remarks>
-/// <remarks>
-/// Initializes a new instance of the <see cref="Surface"/>.
-/// </remarks>
 public sealed unsafe class Surface : IDisposable
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Surface"/>.
+    /// Creates a surface with the width, height, and pixel format.
     /// </summary>
-    /// <param name="width">The width of the surface.</param>
-    /// <param name="height">The height of the surface.</param>
+    /// <param name="width">The width of the surface in pixels.</param>
+    /// <param name="height">The height of the surface in pixels.</param>
     /// <param name="format">The pixel format of the surface.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to create the surface.</exception>
     public Surface(int width, int height, PixelFormat format)
     {
-        FormatDetails = format.Details;
-        Handle = SDL.Surface.SDL_CreateSurface(width, height, format);
+        Format = format;
+        Details = format.Details;
+        Width = width;
+        Height = height;
+
+        Handle = Native.SDL_CreateSurface(width, height, format);
 
         QuackNativeException.ThrowIfNull(Handle);
     }
@@ -53,116 +53,91 @@ public sealed unsafe class Surface : IDisposable
     {
         QuackNativeException.ThrowIfNull(handle);
 
-        FormatDetails = handle->Format.Details;
+        Format = handle->Format;
+        Details = Format.Details;
+        Width = handle->Width;
+        Height = handle->Height;
+
         Handle = handle;
     }
 
     /// <summary>
     /// Gets the pixel format of the surface.
     /// </summary>
-    public PixelFormat Format
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Handle->Format;
-        }
-    }
+    public PixelFormat Format { get; }
 
     /// <summary>
     /// Gets the pixel format details of the surface.
     /// </summary>
-    public PixelFormatDetails FormatDetails { get; private set; }
-
-    /// <summary>
-    /// Gets the native surface handle.
-    /// </summary>
-    internal SDL_Surface* Handle { get; private set; }
+    public PixelFormatDetails Details { get; }
 
     /// <summary>
     /// Gets a value indicating whether the surface has a color key.
     /// </summary>
-    public bool HasColorKey => SDL.Surface.SDL_SurfaceHasColorKey(Handle);
+    public bool HasColorKey => Native.SDL_SurfaceHasColorKey(Handle);
 
     /// <summary>
-    /// Gets a value indicating whether the surface has RLE (Run-Length Encoding) enabled.
+    /// Gets a value indicating whether the surface uses RLE acceleration.
     /// </summary>
-    public bool HasRLE => SDL.Surface.SDL_SurfaceHasRLE(Handle);
+    public bool HasRLE => Native.SDL_SurfaceHasRLE(Handle);
 
     /// <summary>
-    /// Gets the height of the surface.
+    /// Gets the height of the surface in pixels.
     /// </summary>
-    public int Height
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Handle->Height;
-        }
-    }
+    public int Height { get; }
 
     /// <summary>
     /// Gets or sets the palette associated with the surface.
     /// </summary>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the palette.</exception>
     public Palette? Palette
     {
-        get
-        {
-            ThrowIfDisposed();
-
-            SDL_Palette* palette = SDL.Surface.SDL_GetSurfacePalette(Handle);
-            return palette is not null ? new Palette(palette) : null;
-        }
+        get;
         set
         {
             ThrowIfDisposed();
 
-            SDL_Palette* palette = value is not null ? value.Handle : null;
-            QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_SetSurfacePalette(Handle, palette));
+            SDL_Palette* palette = value is null ? null : value.Handle;
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetSurfacePalette(Handle, palette));
+
+            field = value;
         }
     }
 
     /// <summary>
-    /// Gets the pitch (row stride) of the surface.
+    /// Gets the pitch (length of a row of pixels) of the surface.
     /// </summary>
-    public int Pitch
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Handle->Pitch;
-        }
-    }
+    public int Pitch { get; }
 
     /// <summary>
-    /// Gets the width of the surface.
+    /// Gets the width of the surface in pixels.
     /// </summary>
-    public int Width
-    {
-        get
-        {
-            ThrowIfDisposed();
-            return Handle->Width;
-        }
-    }
+    public int Width { get; }
+
+    internal SDL_Surface* Handle { get; private set; }
 
     /// <summary>
-    /// Creates a new surface identical to the current surface.
+    /// Clones a surface based on the current surface.
     /// </summary>
     /// <remarks>
-    /// If the original surface has alternate images, the new surface will have a reference to them as well.
+    /// If the original surface has alternate images, the cloned surface will have a reference to them as well.
     /// </remarks>
-    /// <returns>A new surface that is a duplicate of the current surface.</returns>
+    /// <returns>The cloned surface.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to clone the surface.</exception>
     public Surface Clone()
     {
         ThrowIfDisposed();
 
-        SDL_Surface* newHandle = SDL.Surface.SDL_DuplicateSurface(Handle);
-        return new Surface(newHandle);
+        SDL_Surface* handle = Native.SDL_DuplicateSurface(Handle);
+        QuackNativeException.ThrowIfNull(handle);
+
+        return new Surface(handle);
     }
 
     /// <summary>
-    /// Copies the surface to a new surface with the specified pixel format.
+    /// Converts the surface to a new pixel format.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -173,18 +148,22 @@ public sealed unsafe class Surface : IDisposable
     /// If the original surface has alternate images, the new surface will have a reference to them as well.
     /// </para>
     /// </remarks>
-    /// <param name="format">The pixel format to convert the surface to.</param>
-    /// <returns>A new surface that is a copy of the original surface with the specified pixel format.</returns>
+    /// <param name="format">The desired pixel format for the new surface.</param>
+    /// <returns>The converted surface in the new pixel format.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to convert the surface.</exception>
     public Surface Convert(PixelFormat format)
     {
         ThrowIfDisposed();
 
-        SDL_Surface* newHandle = SDL.Surface.SDL_ConvertSurface(Handle, format);
-        return new Surface(newHandle);
+        SDL_Surface* handle = Native.SDL_ConvertSurface(Handle, format);
+        QuackNativeException.ThrowIfNull(handle);
+
+        return new Surface(handle);
     }
 
     /// <summary>
-    /// Creates a palette and associates it with the surface.
+    /// Creates and associates a new palette with the surface.
     /// </summary>
     /// <remarks>
     /// <para>The surface must be in an indexed pixel format (1, 4, or 8 bits per pixel) to have a palette.</para>
@@ -200,38 +179,31 @@ public sealed unsafe class Surface : IDisposable
     /// If this function is called for a surface that already has a palette, a new palette will be created to replace it.
     /// </para>
     /// </remarks>
-    /// <returns>A new palette associated with the surface.</returns>
+    /// <returns>The created palette associated with the surface.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackException">Thrown when the surface is not in an indexed pixel format.</exception>
     public Palette CreatePalette()
     {
         ThrowIfDisposed();
-        QuackException.ThrowIf(!IsIndexedFormat(Format), $"The format {Format} is not an indexed format.");
+        QuackException.ThrowIf(!Format.IsIndexed, $"The format {Format} is not indexed and cannot have a palette.");
 
         return new Palette(Handle);
-
-        static bool IsIndexedFormat(PixelFormat format)
-        {
-            return format is PixelFormat.Index1LSB
-                   or PixelFormat.Index1MSB
-                   or PixelFormat.Index4LSB
-                   or PixelFormat.Index4MSB
-                   or PixelFormat.Index8;
-        }
     }
 
     /// <summary>
-    /// Disposes the surface and releases any unmanaged resources.
+    /// Disposes the surface and releases its unmanaged resources.
     /// </summary>
     public void Dispose()
     {
-        if (Handle is not null)
-        {
-            SDL.Surface.SDL_DestroySurface(Handle);
-            Handle = null;
-        }
+        if (Handle is null)
+            return;
+
+        Native.SDL_DestroySurface(Handle);
+        Handle = null;
     }
 
     /// <summary>
-    /// Fills the entire surface with the specified color.
+    /// Fills the entire surface with the specified RGBA color.
     /// </summary>
     /// <remarks>
     /// <para>This function handles all surface formats, and ignores any clip rectangle.</para>
@@ -243,14 +215,16 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(byte r, byte g, byte b, byte a)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f));
+        QuackNativeException.ThrowIfFailed(Native.SDL_ClearSurface(Handle, r / 255f, g / 255f, b / 255f, a / 255f));
     }
 
     /// <summary>
-    /// Fills the entire surface with the specified color.
+    /// Fills the entire surface with the specified RGBA color.
     /// </summary>
     /// <remarks>
     /// <para>The color components are expected to be in the range 0.0 to 1.0.</para>
@@ -263,14 +237,16 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(float r, float g, float b, float a)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_ClearSurface(Handle, r, g, b, a));
+        QuackNativeException.ThrowIfFailed(Native.SDL_ClearSurface(Handle, r, g, b, a));
     }
 
     /// <summary>
-    /// Fills the entire surface with the specified color.
+    /// Fills the entire surface with the specified RGB color and full opacity.
     /// </summary>
     /// <remarks>
     /// <para>This function handles all surface formats, and ignores any clip rectangle.</para>
@@ -281,7 +257,26 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="r">The red component of the color.</param>
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(byte r, byte g, byte b) => Fill(r, g, b, 255);
+
+    /// <summary>
+    /// Fills the entire surface with the specified RGB color and full opacity.
+    /// </summary>
+    /// <remarks>
+    /// <para>The color components are expected to be in the range 0.0 to 1.0.</para>
+    /// <para>This function handles all surface formats, and ignores any clip rectangle.</para>
+    /// <para>
+    /// If the surface is YUV, the color is assumed to be in the sRGB colorspace, otherwise the color is assumed to be in the colorspace of the surface.
+    /// </para>
+    /// </remarks>
+    /// <param name="r">The red component of the color.</param>
+    /// <param name="g">The green component of the color.</param>
+    /// <param name="b">The blue component of the color.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
+    public void Fill(float r, float g, float b) => Fill(r, g, b, 1.0f);
 
     /// <summary>
     /// Fills the entire surface with the specified color.
@@ -293,6 +288,8 @@ public sealed unsafe class Surface : IDisposable
     /// </para>
     /// </remarks>
     /// <param name="color">The color to fill the surface with.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the entire surface.</exception>
     public void Fill(Color color) => Fill(color.R, color.G, color.B, color.A);
 
     /// <summary>
@@ -306,12 +303,14 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
     /// <param name="rect">The rectangle to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(byte r, byte g, byte b, byte a, RectInt rect)
     {
         ThrowIfDisposed();
 
-        uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRect(Handle, &rect, rgba));
+        uint rgba = PixelFormat.MapRGBA(Details, r, g, b, a);
+        QuackNativeException.ThrowIfFailed(Native.SDL_FillSurfaceRect(Handle, &rect, rgba));
     }
 
     /// <summary>
@@ -324,12 +323,14 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="rect">The rectangle to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(byte r, byte g, byte b, RectInt rect)
     {
         ThrowIfDisposed();
 
-        uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRect(Handle, &rect, rgb));
+        uint rgb = PixelFormat.MapRGB(Details, r, g, b);
+        QuackNativeException.ThrowIfFailed(Native.SDL_FillSurfaceRect(Handle, &rect, rgb));
     }
 
     /// <summary>
@@ -338,8 +339,10 @@ public sealed unsafe class Surface : IDisposable
     /// <remarks>
     /// If there is a clip rectangle set on the surface, it will fill based on the intersection of the clip rectangle and rect.
     /// </remarks>
-    /// <param name="color">The color to fill the rectangle with.</param>
+    /// <param name="color">The color to fill the rectangle.</param>
     /// <param name="rect">The rectangle to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangle.</exception>
     public void Fill(Color color, RectInt rect) => Fill(color.R, color.G, color.B, color.A, rect);
 
     /// <summary>
@@ -353,12 +356,14 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="b">The blue component of the color.</param>
     /// <param name="a">The alpha component of the color.</param>
     /// <param name="rects">The rectangles to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(byte r, byte g, byte b, byte a, params ReadOnlySpan<RectInt> rects)
     {
         ThrowIfDisposed();
 
-        uint rgba = PixelFormat.MapRGBA(FormatDetails, r, g, b, a);
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba));
+        uint rgba = PixelFormat.MapRGBA(Details, r, g, b, a);
+        QuackNativeException.ThrowIfFailed(Native.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgba));
     }
 
     /// <summary>
@@ -371,12 +376,14 @@ public sealed unsafe class Surface : IDisposable
     /// <param name="g">The green component of the color.</param>
     /// <param name="b">The blue component of the color.</param>
     /// <param name="rects">The rectangles to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(byte r, byte g, byte b, params ReadOnlySpan<RectInt> rects)
     {
         ThrowIfDisposed();
 
-        uint rgb = PixelFormat.MapRGB(FormatDetails, r, g, b);
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb));
+        uint rgb = PixelFormat.MapRGB(Details, r, g, b);
+        QuackNativeException.ThrowIfFailed(Native.SDL_FillSurfaceRects(Handle, rects, rects.Length, rgb));
     }
 
     /// <summary>
@@ -385,35 +392,41 @@ public sealed unsafe class Surface : IDisposable
     /// <remarks>
     /// If there is a clip rectangle set on the surface, it will fill based on the intersection of the clip rectangle and rect.
     /// </remarks>
-    /// <param name="color">The color to fill the rectangle with.</param>
+    /// <param name="color">The color to fill the rectangle.</param>
     /// <param name="rects">The rectangles to fill.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to fill the rectangles.</exception>
     public void Fill(Color color, params ReadOnlySpan<RectInt> rects) => Fill(color.R, color.G, color.B, color.A, rects);
 
     /// <summary>
-    /// Flip a surface vertically or horizontally.
+    /// Flips the surface according to the specified mode.
     /// </summary>
-    /// <param name="mode">The flip mode to apply.</param>
+    /// <param name="mode">The flip mode.</param>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to flip the surface.</exception>
     public void Flip(FlipMode mode)
     {
         ThrowIfDisposed();
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_FlipSurface(Handle, mode));
+        QuackNativeException.ThrowIfFailed(Native.SDL_FlipSurface(Handle, mode));
     }
 
     /// <summary>
-    /// Scales the surface to the specified dimensions using the given scaling mode.
+    /// Scales the surface to the specified width and height using the given scale mode.
     /// </summary>
-    /// <param name="width">The target width of the scaled surface.</param>
-    /// <param name="height">The target height of the scaled surface.</param>
-    /// <param name="mode">The scaling mode to use.</param>
-    /// <returns>A new surface representing the scaled version of the original surface.</returns>
+    /// <param name="width">The target width.</param>
+    /// <param name="height">The target height.</param>
+    /// <param name="mode">The scale mode.</param>
+    /// <returns>>The scaled surface.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown if the surface has been disposed.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to scale the surface.</exception>
     public Surface Scale(int width, int height, ScaleMode mode)
     {
         ThrowIfDisposed();
 
-        SDL_Surface* scaledSurface = SDL.Surface.SDL_ScaleSurface(Handle, width, height, mode);
-        QuackNativeException.ThrowIfNull(scaledSurface);
+        SDL_Surface* handle = Native.SDL_ScaleSurface(Handle, width, height, mode);
+        QuackNativeException.ThrowIfNull(handle);
 
-        return new Surface(scaledSurface);
+        return new Surface(handle);
     }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Surface));

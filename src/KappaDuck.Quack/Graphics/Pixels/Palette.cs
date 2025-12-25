@@ -2,8 +2,6 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL;
-using KappaDuck.Quack.Interop.SDL.Native;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Pixels;
@@ -20,15 +18,16 @@ public sealed unsafe class Palette : IDisposable
     /// The palette entries are initialized to white.
     /// </remarks>
     /// <param name="length">The number of colors in the palette.</param>
+    /// <exception cref="QuackNativeException">Thrown when the underlying native call fails.</exception>
     public Palette(int length)
     {
-        Handle = SDL.Surface.SDL_CreatePalette(length);
+        Handle = Native.SDL_CreatePalette(length);
         QuackNativeException.ThrowIfNull(Handle);
     }
 
     internal Palette(SDL_Surface* surface)
     {
-        Handle = SDL.Surface.SDL_CreateSurfacePalette(surface);
+        Handle = Native.SDL_CreateSurfacePalette(surface);
         QuackNativeException.ThrowIfNull(Handle);
     }
 
@@ -50,7 +49,7 @@ public sealed unsafe class Palette : IDisposable
     {
         if (Handle is not null)
         {
-            SDL.Surface.SDL_DestroyPalette(Handle);
+            Native.SDL_DestroyPalette(Handle);
             Handle = null;
         }
     }
@@ -60,7 +59,7 @@ public sealed unsafe class Palette : IDisposable
     /// </summary>
     /// <param name="startIndex">The starting index in the palette to set colors.</param>
     /// <param name="colors">The colors to set in the palette.</param>
-    /// <exception cref="QuackNativeException">An error occurred while setting the palette colors.</exception>
+    /// <exception cref="QuackNativeException">Thrown when failed to set the palette colors.</exception>
     public void SetColors(int startIndex, ReadOnlySpan<Color> colors)
     {
         Span<SDL_Color> nativeColors = stackalloc SDL_Color[colors.Length];
@@ -68,6 +67,6 @@ public sealed unsafe class Palette : IDisposable
         for (int i = 0; i < colors.Length; i++)
             nativeColors[i] = new SDL_Color(colors[i].R, colors[i].G, colors[i].B, colors[i].A);
 
-        QuackNativeException.ThrowIfFailed(SDL.Surface.SDL_SetPaletteColors(Handle, nativeColors, startIndex, colors.Length));
+        QuackNativeException.ThrowIfFailed(Native.SDL_SetPaletteColors(Handle, nativeColors, startIndex, colors.Length));
     }
 }

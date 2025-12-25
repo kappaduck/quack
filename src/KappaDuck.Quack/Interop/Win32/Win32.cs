@@ -1,8 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Interop.Win32.Native;
-using System.Runtime.InteropServices;
+using KappaDuck.Quack.Interop.Win32.Primitives;
 using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Interop.Win32;
