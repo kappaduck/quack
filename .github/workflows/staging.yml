@@ -25,8 +25,11 @@ jobs:
           $date = Get-Date -Format "yyyyMMddHHmmss"
           echo "date=$date" >> $env:GITHUB_ENV
 
+      - name: Make build script executable
+        run: chmod +x SDL3/build.cs
+
       - name: Install SDL dependencies
-        run: dotnet .\SDL3\build.cs
+        run: SDL3/build.cs
 
       - name: Restore dependencies
         run: dotnet restore
