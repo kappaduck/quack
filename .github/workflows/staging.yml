@@ -13,7 +13,7 @@ permissions:
 jobs:
   build:
     name: Build/Deploy
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -25,11 +25,8 @@ jobs:
           $date = Get-Date -Format "yyyyMMddHHmmss"
           echo "date=$date" >> $env:GITHUB_ENV
 
-      - name: Make build script executable
-        run: chmod +x SDL3/build.cs
-
       - name: Install SDL dependencies
-        run: SDL3/build.cs
+        run: dotnet .\SDL3\setup.cs
 
       - name: Restore dependencies
         run: dotnet restore
