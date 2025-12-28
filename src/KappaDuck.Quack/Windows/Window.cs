@@ -1251,7 +1251,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
         QuackNativeException.ThrowIfZero(Id);
 
         uint propertiesId = Native.SDL_GetWindowProperties(_handle);
-        Handle = new WindowHandle(Native.GetPointerProperty(propertiesId, "SDL.window.win32.hwnd", nint.Zero));
+        Handle = new WindowHandle(Native.GetPointerProperty(propertiesId, $"SDL.window.{GetWindowHandleName()}", nint.Zero));
 
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowAspectRatio(_handle, AspectRatio.Minimum, AspectRatio.Maximum));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowFullscreenMode(_handle, FullscreenMode));
@@ -1259,5 +1259,19 @@ public abstract partial class Window : IDisposable, ISpanFormattable
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMinimumSize(_handle, MinimumSize.Width, MinimumSize.Height));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMouseRect(_handle, MouseClip));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowOpacity(_handle, Opacity));
+    }
+
+    private static string GetWindowHandleName()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            if (OperatingSystem.IsX11())
+                return "x11.display";
+
+            if (OperatingSystem.IsWayland())
+                return "wayland.surface";
+        }
+
+        return "win32.hwnd";
     }
 }
