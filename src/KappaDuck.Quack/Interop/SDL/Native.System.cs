@@ -2,6 +2,9 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.System;
+using System.Runtime.Versioning;
+using Win32Native = KappaDuck.Quack.Interop.Win32.Win32;
+using X11Native = KappaDuck.Quack.Interop.X11.X11;
 
 namespace KappaDuck.Quack.Interop.SDL;
 
@@ -63,6 +66,16 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_SetCursor(SDL_Cursor cursor);
+
+    [SupportedOSPlatform("windows")]
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    internal static partial void SDL_SetWindowsMessageHook(Win32Native.MessageCallback callback, nint data);
+
+    [SupportedOSPlatform("linux")]
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    internal static partial void SDL_SetX11EventHook(X11Native.MesageCallback callback, nint data);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
