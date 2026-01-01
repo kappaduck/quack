@@ -8,35 +8,35 @@ It offers a range of features such as rendering ([SDL_renderer] and [SDL_gpu]), 
 
 Below is a list of Quack! versions and their compatible SDL versions:
 
-| Quack! version | SDL version | SDL_image version | SDL_mixer version | SDL_ttf version |
-|:--------------:|:-----------:|:-----------------:|:-----------------:|:---------------:|
-|    `source`    |  `3.2.28`   |      `3.2.4`      |       `N/A`       |     `3.2.2`     |
-|    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |       `N/A`       |     `3.2.2`     |
-|    `0.1.0`     |  `3.2.18`   |       `N/A`       |       `N/A`       |      `N/A`      |
+| Quack! version | SDL version | SDL_image version | SDL_mixer version | SDL_ttf version | SDL_mixer version |
+| :------------: | :---------: | :---------------: | :---------------: | :-------------: | :---------------: |
+|    `source`    |  `3.2.30`   |      `3.2.6`      |       `N/A`       |     `3.2.2`     |       `N/A`       |
+|    `0.3.0`     |  `3.2.30`   |      `3.2.6`      |       `N/A`       |     `3.2.2`     |       `N/A`       |
+|    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |       `N/A`       |     `3.2.2`     |       `N/A`       |
+|    `0.1.0`     |  `3.2.18`   |       `N/A`       |       `N/A`       |      `N/A`      |       `N/A`       |
 
-> Support for SDL_mixer is planned for future releases. It needs SDL3 3.4.0 which is not yet released.
->
 > The current Quack! development can update the SDL dependencies many times before the release.
 
 ## Cross-platform support
 
-Quack! currently supports Windows, with Linux support planned for future releases.
-> The API is designed to be cross-platform, so porting to other platforms should be straightforward.
->
-> Other platforms may be considered in the future, but there are no current plans for them.
+Quack! currently supports Windows and Linux.
+
+The API is designed to be cross-platform thanks to SDL's abstraction layer. So porting to other platforms should be straightforward.
+
+> Other platforms may be considered such as Android and WebAssembly in the future, but there are no current plans for them.
 
 ## Installation
 
 Quack! is available as a NuGet package. You can install it using the following command:
 
 ```bash
-dotnet add package KappaDuck.Quack -v 0.2.0
+dotnet add package KappaDuck.Quack -v 0.3.0
 ```
 
 or by adding the following line to your `.csproj` file:
 
 ```xml
-<PackageReference Include="KappaDuck.Quack" Version="0.2.0" />
+<PackageReference Include="KappaDuck.Quack" Version="0.3.0" />
 ```
 
 or by using the NuGet Package Manager in Visual Studio or JetBrains Rider.
@@ -47,9 +47,9 @@ A simple example of how to use Quack! to create a window:
 
 ```csharp
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Graphics.Rendering;
 
-using Window window = new("Minimal window", 800, 600)
+using RenderWindow window = new("Quack! Playground", 1080, 720)
 {
     Resizable = true
 };
@@ -60,7 +60,6 @@ while (window.IsOpen)
     {
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
     }
@@ -120,14 +119,14 @@ You can use the following code snippet as a starting point for your `quack.playg
 
 // Ignore the warning about missing copyright header in this file
 #:property NoWarn=IDE0073
-#:property TargetFramework=net10.0
-#:property IncludeNativeLibraries=true
-#:project KappaDuck.Quack
+#:property TargetFramework=net10.0-windows
+#:property IncludeNativeLibs=true
+#:project src/KappaDuck.Quack
 
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Graphics.Rendering;
 
-using Window window = new("Quack! Playground", 800, 600)
+using RenderWindow window = new("Quack! Playground", 1080, 720)
 {
     Resizable = true
 };
@@ -138,11 +137,11 @@ while (window.IsOpen)
     {
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
     }
 }
+
 ```
 
 ```bash
