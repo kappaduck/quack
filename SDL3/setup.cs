@@ -7,7 +7,7 @@ using System.Formats.Tar;
 using System.IO.Compression;
 using System.Security.Cryptography;
 
-const string Tag = "v3.2.28";
+const string Tag = "v3.2.30";
 
 const string Runtimes = $"https://github.com/kappaduck/quack.runtimes/releases/download/{Tag}/quack.sdl3.runtimes.tar.gz";
 const string Checksums = $"https://github.com/kappaduck/quack.runtimes/releases/download/{Tag}/checksums.txt";

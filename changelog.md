@@ -4,13 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] &#8212; YYYY-MM-DD
+## 0.3.0 &#8212; 2026-01-01
 
-Major overhaul of the public API to improve flexibility and usability.
+Major overhaul of the public API with breaking changes ([#272], [#273], [#275])
+
+### Added
+
+- Linux support ([#15])
 
 ### Changed
 
+- Native window handle now returns `X11` or `Wayland` handle on linux depending on the backend used. ([#15])
+
 <!-- 0.3.0 -->
+[#15]: https://github.com/kappaduck/quack/issues/15
+[#272]: https://github.com/kappaduck/quack/issues/272
+[#273]: https://github.com/kappaduck/quack/issues/273
+[#275]: https://github.com/kappaduck/quack/issues/275
 
 ## 0.2.0 &#8212; 2025-12-03
 
