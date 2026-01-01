@@ -13,7 +13,7 @@
 
   <PropertyGroup Label="Quack! package metadata">
     <Authors>KappaDuck</Authors>
-    <VersionPrefix>0.3.0</VersionPrefix>
+    <VersionPrefix>0.4.0</VersionPrefix>
     <Company>@(Authors)</Company>
     <Copyright>Copyright © KappaDuck $([System.DateTime]::Now.Year)</Copyright>
     <PackageReadmeFile>readme.md</PackageReadmeFile>

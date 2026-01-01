@@ -17,7 +17,6 @@ while (window.IsOpen)
     {
         if (e.RequestQuit())
         {
-            window.Close();
             return;
         }
     }
