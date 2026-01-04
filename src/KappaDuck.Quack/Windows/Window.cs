@@ -9,6 +9,8 @@ using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.Video.Displays;
+using KappaDuck.Quack.Windows.Progress;
+using System.Collections.Concurrent;
 
 namespace KappaDuck.Quack.Windows;
 
@@ -20,6 +22,9 @@ namespace KappaDuck.Quack.Windows;
 /// </remarks>
 public abstract partial class Window : IDisposable, ISpanFormattable
 {
+    private readonly int _threadId = Environment.CurrentManagedThreadId;
+    private readonly ConcurrentQueue<Action> _invocations = [];
+
     private SDL_Window _handle = SDL_Window.Null;
     private Surface? _icon;
     private State _state;
@@ -28,6 +33,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     private int _height;
     private float? _opacity;
     private bool _disposed;
+    private TaskbarProgress? _taskbarProgress;
 
     /// <summary>
     /// Creates an empty window.
@@ -645,6 +651,11 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     public PixelFormat PixelFormat => !IsOpen ? PixelFormat.Unknown : Native.SDL_GetWindowPixelFormat(_handle);
 
     /// <summary>
+    /// Gets the taskbar progress bar for the window.
+    /// </summary>
+    public TaskbarProgress TaskbarProgress => _taskbarProgress ??= new TaskbarProgress(this);
+
+    /// <summary>
     /// Gets or sets a value indicating whether the window can be resized by the user.
     /// </summary>
     /// <exception cref="QuackNativeException">Thrown when failed to set the resizable state.</exception>
@@ -969,6 +980,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             return false;
         }
 
+        ProcessDeferredInvocations();
         bool hasEvent = EventManager.Poll(out e);
 
         if (e.Window.Id != Id)
@@ -1224,15 +1236,35 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             _icon?.Dispose();
             _icon = null;
 
+            _taskbarProgress?.Dispose();
+            _taskbarProgress = null;
+
             _handle.Dispose();
 
             QuackEngine.Release();
         }
     }
 
+    internal void Invoke(Action action)
+    {
+        if (Environment.CurrentManagedThreadId == _threadId)
+        {
+            action();
+            return;
+        }
+
+        _invocations.Enqueue(action);
+    }
+
     private bool HasState(State state) => (_state & state) == state;
 
     private void SetState(State state, bool apply) => _state = apply ? _state | state : _state & ~state;
+
+    private void ProcessDeferredInvocations()
+    {
+        while (_invocations.TryDequeue(out Action? invocation))
+            invocation();
+    }
 
     private void Initialize(int width, int height)
     {
