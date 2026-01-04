@@ -5,6 +5,7 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Video.Displays;
 using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windows.Progress;
 
 namespace KappaDuck.Quack.Interop.SDL;
 
@@ -178,6 +179,16 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_SetWindowPosition(SDL_Window window, int x, int y);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_SetWindowProgressState(SDL_Window window, TaskbarProgressState state);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_SetWindowProgressValue(SDL_Window window, float value);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
