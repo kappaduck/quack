@@ -6,7 +6,7 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 
-namespace KappaDuck.Quack.System;
+namespace KappaDuck.Quack.System.UI;
 
 /// <summary>
 /// Represents a cursor.
