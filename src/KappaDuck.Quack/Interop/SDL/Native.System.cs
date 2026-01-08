@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.System;
+using KappaDuck.Quack.System.UI;
 using System.Runtime.Versioning;
 using Win32Native = KappaDuck.Quack.Interop.Win32.Win32;
 using X11Native = KappaDuck.Quack.Interop.X11.X11;
@@ -81,4 +82,9 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_ShowCursor();
+
+    [LibraryImport(SDL, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_ShowSimpleMessageBox(uint flags, string title, string message, SDL_Window window);
 }

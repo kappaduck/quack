@@ -20,7 +20,7 @@ namespace KappaDuck.Quack.Windows;
 /// </remarks>
 public abstract partial class Window : IDisposable, ISpanFormattable
 {
-    private SDL_Window _handle = new();
+    private SDL_Window _handle = SDL_Window.Null;
     private Surface? _icon;
     private State _state;
     private Vector2Int? _position;

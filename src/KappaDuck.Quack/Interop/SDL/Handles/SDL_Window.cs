@@ -15,6 +15,8 @@ internal sealed class SDL_Window : SafeHandleZeroInvalid
     {
     }
 
+    internal static SDL_Window Null { get; } = new SDL_Window();
+
     internal SDL_Window ToNonOwningHandle() => new(handle, ownsHandle: false);
 
     protected override void Free() => Native.SDL_DestroyWindow(handle);
