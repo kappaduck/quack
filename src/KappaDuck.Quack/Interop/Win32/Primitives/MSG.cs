@@ -8,7 +8,7 @@ namespace KappaDuck.Quack.Interop.Win32.Primitives;
 /// <summary>
 /// The MSG structure contains message information from a thread's message queue.
 /// </summary>
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct MSG
 {

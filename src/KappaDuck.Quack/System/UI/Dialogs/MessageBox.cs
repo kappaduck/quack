@@ -66,7 +66,7 @@ public static class MessageBox
     public static int ShowInformation(MessageBoxOptions options) => Show(options, MessageBoxLevel.Information);
 
     private static void Show(string title, string message, MessageBoxLevel level, Window? parent = null)
-        => QuackNativeException.ThrowIfFailed(Native.SDL_ShowSimpleMessageBox((uint)level, title, message, parent?.NativeHandle ?? SDL_Window.Null));
+        => QuackNativeException.ThrowIfFailed(Native.SDL_ShowSimpleMessageBox((uint)level, title, message, parent?.NativeHandle ?? SDL_Window.Zero));
 
     private static int Show(MessageBoxOptions options, MessageBoxLevel level)
     {

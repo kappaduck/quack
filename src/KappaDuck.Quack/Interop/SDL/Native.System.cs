@@ -69,12 +69,12 @@ internal static partial class Native
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_SetCursor(SDL_Cursor cursor);
 
-    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     internal static partial void SDL_SetWindowsMessageHook(Win32Native.MessageCallback callback, nint data);
 
-    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform(nameof(OSPlatform.Linux))]
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     internal static partial void SDL_SetX11EventHook(X11Native.MesageCallback callback, nint data);

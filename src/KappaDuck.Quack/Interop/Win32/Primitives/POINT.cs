@@ -8,7 +8,7 @@ namespace KappaDuck.Quack.Interop.Win32.Primitives;
 /// <summary>
 /// The POINT structure defines the x and y coordinates of a point.
 /// </summary>
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct POINT
 {

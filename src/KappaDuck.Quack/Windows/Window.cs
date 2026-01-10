@@ -25,7 +25,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     private readonly int _threadId = Environment.CurrentManagedThreadId;
     private readonly ConcurrentQueue<Action<SDL_Window>> _invocations = [];
 
-    private SDL_Window _handle = SDL_Window.Null;
+    private SDL_Window _handle = SDL_Window.Zero;
     private Surface? _icon;
     private State _state;
     private Vector2Int? _position;
@@ -44,7 +44,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     protected Window()
     {
         Title = string.Empty;
-        Handle = new WindowHandle(nint.Zero);
+        Handle = WindowHandle.Zero;
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     protected Window(string title, int width, int height)
     {
         Title = title;
-        Handle = new WindowHandle(nint.Zero);
+        Handle = WindowHandle.Zero;
 
         Initialize(width, height);
     }
@@ -72,7 +72,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     protected Window(string title, SizeInt size)
     {
         Title = title;
-        Handle = new WindowHandle(nint.Zero);
+        Handle = WindowHandle.Zero;
 
         Initialize(size.Width, size.Height);
     }
@@ -88,7 +88,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     {
         Title = title;
         Position = position;
-        Handle = new WindowHandle(nint.Zero);
+        Handle = WindowHandle.Zero;
 
         Initialize(size.Width, size.Height);
     }
@@ -107,7 +107,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     {
         Title = title;
         FullscreenMode = mode;
-        Handle = new WindowHandle(nint.Zero);
+        Handle = WindowHandle.Zero;
 
         Initialize(mode.Width, mode.Height);
     }
@@ -632,6 +632,11 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     }
 
     /// <summary>
+    /// Gets the window's taskbar progress bar.
+    /// </summary>
+    public WindowProgressBar ProgressBar => field ??= new WindowProgressBar(this);
+
+    /// <summary>
     /// Gets the pixel density of the window.
     /// </summary>
     /// <remarks>
@@ -736,11 +741,6 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowSize(_handle, _width, _height));
         }
     }
-
-    /// <summary>
-    /// Gets the window's taskbar progress bar.
-    /// </summary>
-    public WindowProgressBar ProgressBar => field ??= new WindowProgressBar(this);
 
     /// <summary>
     /// Gets or sets the title of the window.

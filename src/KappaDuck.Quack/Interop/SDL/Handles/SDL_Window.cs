@@ -15,7 +15,7 @@ internal sealed class SDL_Window : SafeHandleZeroInvalid
     {
     }
 
-    internal static SDL_Window Null { get; } = new SDL_Window();
+    internal static SDL_Window Zero { get; } = new SDL_Window();
 
     internal SDL_Window ToNonOwningHandle() => new(handle, ownsHandle: false);
 
