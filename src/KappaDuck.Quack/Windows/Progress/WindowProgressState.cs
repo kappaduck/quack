@@ -3,10 +3,7 @@
 
 namespace KappaDuck.Quack.Windows.Progress;
 
-/// <summary>
-/// The taskbar progress state.
-/// </summary>
-public enum TaskbarProgressState
+internal enum WindowProgressState
 {
     /// <summary>
     /// Show no progress bar.

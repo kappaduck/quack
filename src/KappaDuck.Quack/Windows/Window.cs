@@ -23,7 +23,7 @@ namespace KappaDuck.Quack.Windows;
 public abstract partial class Window : IDisposable, ISpanFormattable
 {
     private readonly int _threadId = Environment.CurrentManagedThreadId;
-    private readonly ConcurrentQueue<Action> _invocations = [];
+    private readonly ConcurrentQueue<Action<SDL_Window>> _invocations = [];
 
     private SDL_Window _handle = SDL_Window.Null;
     private Surface? _icon;
@@ -33,7 +33,6 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     private int _height;
     private float? _opacity;
     private bool _disposed;
-    private TaskbarProgress? _taskbarProgress;
 
     /// <summary>
     /// Creates an empty window.
@@ -651,11 +650,6 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     public PixelFormat PixelFormat => !IsOpen ? PixelFormat.Unknown : Native.SDL_GetWindowPixelFormat(_handle);
 
     /// <summary>
-    /// Gets the taskbar progress bar for the window.
-    /// </summary>
-    public TaskbarProgress TaskbarProgress => _taskbarProgress ??= new TaskbarProgress(this);
-
-    /// <summary>
     /// Gets or sets a value indicating whether the window can be resized by the user.
     /// </summary>
     /// <exception cref="QuackNativeException">Thrown when failed to set the resizable state.</exception>
@@ -742,6 +736,11 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowSize(_handle, _width, _height));
         }
     }
+
+    /// <summary>
+    /// Gets the window's taskbar progress bar.
+    /// </summary>
+    public WindowProgressBar ProgressBar => field ??= new WindowProgressBar(this);
 
     /// <summary>
     /// Gets or sets the title of the window.
@@ -1236,20 +1235,17 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             _icon?.Dispose();
             _icon = null;
 
-            _taskbarProgress?.Dispose();
-            _taskbarProgress = null;
-
             _handle.Dispose();
 
             QuackEngine.Release();
         }
     }
 
-    internal void Invoke(Action action)
+    internal void Invoke(Action<SDL_Window> action)
     {
         if (Environment.CurrentManagedThreadId == _threadId)
         {
-            action();
+            action(NativeHandle);
             return;
         }
 
@@ -1262,8 +1258,8 @@ public abstract partial class Window : IDisposable, ISpanFormattable
 
     private void ProcessDeferredInvocations()
     {
-        while (_invocations.TryDequeue(out Action? invocation))
-            invocation();
+        while (_invocations.TryDequeue(out Action<SDL_Window>? invocation))
+            invocation(NativeHandle);
     }
 
     private void Initialize(int width, int height)

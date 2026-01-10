@@ -183,7 +183,7 @@ internal static partial class Native
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal static partial bool SDL_SetWindowProgressState(SDL_Window window, TaskbarProgressState state);
+    internal static partial bool SDL_SetWindowProgressState(SDL_Window window, WindowProgressState state);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
