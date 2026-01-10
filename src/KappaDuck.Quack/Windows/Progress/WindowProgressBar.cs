@@ -18,6 +18,7 @@ public sealed class WindowProgressBar
 
     private float _oldValue = -1f;
     private double _lastAppliedMilliseconds;
+
     private bool _isCompleted;
     private bool _isReporting;
 
@@ -34,41 +35,150 @@ public sealed class WindowProgressBar
     public event Action? Completed;
 
     /// <summary>
+    /// Occurs when an error is encountered during the reporting.
+    /// </summary>
+    public event Action<Exception>? ErrorOccurred;
+
+    /// <summary>
     /// Occurs when the progress value changes.
     /// </summary>
     public event Action<float>? ProgressChanged;
 
     /// <summary>
-    /// Gets or sets a value indicating whether to reset the window progress bar after completion.
+    /// Resets the window's progress state and value to their default settings.
     /// </summary>
     /// <remarks>
-    /// By default, the value is <see langword="true"/>.
+    /// Use this method to clear any existing progress state or value from the window's taskbar icon. Especially useful after encountering an error.
     /// </remarks>
-    public bool ResetAfterCompletion { get; set; } = true;
-
-    /// <summary>
-    /// Start a new synchronous progress operation which will reporting to the taskbar.
-    /// </summary>
-    /// <param name="total">The maximum value representing the 100% for the progress.</param>
-    /// <returns>The created scope for the progress operation.</returns>
-    public ProgressScope Start(int total = 100)
+    /// <exception cref="QuackNativeException">Thrown if the underlying native call fails.</exception>
+    public void Reset()
     {
-        QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
+        _isCompleted = false;
+        _isReporting = false;
 
-        StartReporting(WindowProgressState.Normal);
-        return new(this, total);
+        _window.Invoke(static handle =>
+        {
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowProgressState(handle, WindowProgressState.None));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowProgressValue(handle, 0));
+        });
     }
 
     /// <summary>
-    /// Start a new synchronous progress operation in indeterminate state which will reporting to the taskbar.
+    /// Start a synchronous progress operation which will reporting to the taskbar within the provided action.
     /// </summary>
-    /// <returns>The created scope for the indeterminate progress operation.</returns>
-    public IndeterminateScope StartIndeterminate()
+    /// <remarks>
+    /// Any unhandled exceptions thrown within the action will be caught and reported to <see cref="ErrorOccurred"/> event and set window's taskbar icon to error state.
+    /// </remarks>
+    /// <param name="action">The action that performs the progress operation.</param>
+    /// <param name="total">The maximum value representing the 100% for the progress.</param>
+    /// <exception cref="QuackException">Thrown if a progress report is already in progress.</exception>
+    public void Start(Action<Progress> action, int total = 100)
     {
         QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
+        StartReporting(WindowProgressState.Normal);
 
+        try
+        {
+            Progress progress = new(this, total);
+            action(progress);
+        }
+        catch (Exception ex)
+        {
+            Fail(ex);
+        }
+    }
+
+    /// <summary>
+    /// Start a new asynchronous progress operation which will reporting to the taskbar within the provided action.
+    /// </summary>
+    /// <remarks>
+    /// Any unhandled exceptions thrown within the action will be caught and reported to <see cref="ErrorOccurred"/> event and set window's taskbar icon to error state.
+    /// </remarks>
+    /// <param name="action">The action that performs the progress operation.</param>
+    /// <param name="total">The maximum value representing the 100% for the progress.</param>
+    /// <returns>The task representing the asynchronous operation.</returns>
+    public async ValueTask StartAsync(Func<AsyncProgress, ValueTask> action, int total = 100)
+    {
+        QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
+        StartReporting(WindowProgressState.Normal);
+
+        try
+        {
+            using AsyncProgress progress = new(this, total);
+            await action(progress).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            Cancel();
+        }
+        catch (Exception ex)
+        {
+            Fail(ex);
+        }
+    }
+
+    /// <summary>
+    /// Start a synchronous indeterminate progress operation which will reporting to the taskbar within the provided action.
+    /// </summary>
+    /// <remarks>
+    /// Any unhandled exceptions thrown within the action will be caught and reported to <see cref="ErrorOccurred"/> event and set window's taskbar icon to error state.
+    /// </remarks>
+    /// <param name="action">The action that performs the progress operation.</param>
+    /// <exception cref="QuackException">Thrown if a progress report is already in progress.</exception>"
+    public void StartIndeterminate(Action<IndeterminateProgress> action)
+    {
+        QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
         StartReporting(WindowProgressState.Indeterminate);
-        return new(this);
+
+        try
+        {
+            IndeterminateProgress progress = new();
+            action(progress);
+
+            if (progress.IsCancelled)
+            {
+                Cancel();
+                return;
+            }
+
+            Complete();
+        }
+        catch (Exception ex)
+        {
+            SetValue(0.5f);
+            Fail(ex);
+        }
+    }
+
+    /// <summary>
+    /// Start a new asynchronous progress operation in indeterminate state which will reporting to the taskbar within the provided action.
+    /// </summary>
+    /// <remarks>
+    /// Any unhandled exceptions thrown within the action will be caught and reported to <see cref="ErrorOccurred"/> event and set window's taskbar icon to error state.
+    /// </remarks>
+    /// <param name="action">The action that performs the indeterminate progress operation.</param>
+    /// <returns>The task representing the asynchronous operation.</returns>
+    public async ValueTask StartIndeterminateAsync(Func<AsyncIndeterminateProgress, ValueTask> action)
+    {
+        QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
+        StartReporting(WindowProgressState.Indeterminate);
+
+        try
+        {
+            using AsyncIndeterminateProgress progress = new();
+            await action(progress).ConfigureAwait(false);
+
+            Complete();
+        }
+        catch (OperationCanceledException)
+        {
+            Cancel();
+        }
+        catch (Exception ex)
+        {
+            SetValue(0.5f);
+            Fail(ex);
+        }
     }
 
     internal void Cancel()
@@ -83,6 +193,16 @@ public sealed class WindowProgressBar
         _isReporting = false;
 
         Completed?.Invoke();
+        Reset();
+    }
+
+    private void Fail(Exception ex)
+    {
+        _isCompleted = false;
+        _isReporting = false;
+
+        ErrorOccurred?.Invoke(ex);
+        _window.Invoke(handle => Native.SDL_SetWindowProgressState(handle, WindowProgressState.Error));
     }
 
     internal void Report(float value)
@@ -99,26 +219,9 @@ public sealed class WindowProgressBar
         ProgressChanged?.Invoke(progress);
 
         if (CanComplete())
-        {
             Complete();
 
-            if (ResetAfterCompletion)
-                Reset();
-        }
-
         bool CanComplete() => !_isCompleted && progress >= 1f;
-    }
-
-    internal void Reset()
-    {
-        _isCompleted = false;
-        _isReporting = false;
-
-        _window.Invoke(static handle =>
-        {
-            Native.SDL_SetWindowProgressState(handle, WindowProgressState.None);
-            Native.SDL_SetWindowProgressValue(handle, 0);
-        });
     }
 
     private void StartReporting(WindowProgressState state)

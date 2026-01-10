@@ -4,9 +4,9 @@
 namespace KappaDuck.Quack.Windows.Progress;
 
 /// <summary>
-/// Represents a synchronous progress reporting scope for <see cref="WindowProgressBar"/>.
+/// Represents a synchronous progress reporting for <see cref="WindowProgressBar"/>.
 /// </summary>
-public sealed class ProgressScope : IDisposable
+public sealed class Progress
 {
     private readonly WindowProgressBar _progressBar;
     private readonly int _total;
@@ -14,7 +14,7 @@ public sealed class ProgressScope : IDisposable
     private bool _isCancelled;
     private int _current;
 
-    internal ProgressScope(WindowProgressBar progressBar, int total)
+    internal Progress(WindowProgressBar progressBar, int total)
     {
         _progressBar = progressBar;
         _total = total;
@@ -37,18 +37,6 @@ public sealed class ProgressScope : IDisposable
     }
 
     /// <summary>
-    /// Resets the window progress bar to its default state.
-    /// </summary>
-    public void Dispose()
-    {
-        if (_isCancelled)
-            return;
-
-        _isCancelled = false;
-        _progressBar.Reset();
-    }
-
-    /// <summary>
     /// Reports progress by incrementing by <c>1</c>
     /// </summary>
     /// <remarks>
@@ -60,7 +48,7 @@ public sealed class ProgressScope : IDisposable
     /// Reports progress by incrementing by a step.
     /// </summary>
     /// <remarks>
-    /// The total provided from <see cref="WindowProgressBar.Start(int)"/> will be used as the maximum limit
+    /// The total provided from <see cref="WindowProgressBar.Start(Action{Progress}, int)"/> will be used as the maximum limit
     /// if the resulting current progress is greater than the total.
     /// </remarks>
     /// <param name="steps">The number of steps to increment.</param>
@@ -83,7 +71,7 @@ public sealed class ProgressScope : IDisposable
     /// Otherwise use <see cref="Advance"/> or <see cref="Increment(int)"/> for relative value.
     /// </para>
     /// <para>
-    /// The total provided from <see cref="WindowProgressBar.Start(int)"/> will be used as the maximum limit
+    /// The total provided from <see cref="WindowProgressBar.Start(Action{Progress}, int)"/> will be used as the maximum limit
     /// if the <paramref name="current"/> is greater than the total.
     /// </para>
     /// </remarks>
