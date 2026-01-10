@@ -186,8 +186,7 @@ public struct RectInt(int x, int y, int width, int height) : IEquatable<RectInt>
     /// </summary>
     /// <param name="point">The point to test.</param>
     /// <returns><see langword="true"/> if the point is contained within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Contains(Vector2Int point)
-        => point.X >= X && point.X <= MaxX && point.Y >= Y && point.Y <= MaxY;
+    public readonly bool Contains(Vector2Int point) => !IsEmpty && point.X >= X && point.X <= MaxX && point.Y >= Y && point.Y <= MaxY;
 
     /// <summary>
     /// Determines whether any of the specified points are contained within the rectangle.

@@ -31,7 +31,7 @@ public readonly struct Angle :
     /// <summary>
     /// Gets the angle in degrees.
     /// </summary>
-    public float Degrees => (float)(Radians * (180f / Math.PI));
+    public float Degrees => (float)double.RadiansToDegrees(Radians);
 
     /// <summary>
     /// Gets the computed sine of the angle.
@@ -171,7 +171,7 @@ public readonly struct Angle :
     /// </summary>
     /// <param name="degrees">The angle in degrees.</param>
     /// <returns>The angle.</returns>
-    public static Angle FromDegrees(float degrees) => new((float)(degrees * Math.PI / 180f));
+    public static Angle FromDegrees(float degrees) => new(float.CreateChecked(double.DegreesToRadians(degrees)));
 
     /// <summary>
     /// Creates an angle from radians.

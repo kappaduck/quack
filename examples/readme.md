@@ -25,6 +25,7 @@ Here the examples are categorized by module. Each example is a C# file that demo
 
 ## Windows
 
+- [Progress Bar](./windows/progress.cs) - Demonstrates how to use the window's taskbar progress bar.
 - [Window](./windows/window.cs) - Demonstrates how to create a simple window.
 
 ## Graphics

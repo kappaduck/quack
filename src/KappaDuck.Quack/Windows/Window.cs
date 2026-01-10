@@ -9,6 +9,8 @@ using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.Video.Displays;
+using KappaDuck.Quack.Windows.Progress;
+using System.Collections.Concurrent;
 
 namespace KappaDuck.Quack.Windows;
 
@@ -20,6 +22,9 @@ namespace KappaDuck.Quack.Windows;
 /// </remarks>
 public abstract partial class Window : IDisposable, ISpanFormattable
 {
+    private readonly int _threadId = Environment.CurrentManagedThreadId;
+    private readonly ConcurrentQueue<Action<SDL_Window>> _invocations = [];
+
     private SDL_Window _handle = SDL_Window.Null;
     private Surface? _icon;
     private State _state;
@@ -733,6 +738,11 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     }
 
     /// <summary>
+    /// Gets the window's taskbar progress bar.
+    /// </summary>
+    public WindowProgressBar ProgressBar => field ??= new WindowProgressBar(this);
+
+    /// <summary>
     /// Gets or sets the title of the window.
     /// </summary>
     /// <exception cref="QuackNativeException">Thrown when failed to set the window title.</exception>
@@ -969,6 +979,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
             return false;
         }
 
+        ProcessDeferredInvocations();
         bool hasEvent = EventManager.Poll(out e);
 
         if (e.Window.Id != Id)
@@ -1230,9 +1241,26 @@ public abstract partial class Window : IDisposable, ISpanFormattable
         }
     }
 
+    internal void Invoke(Action<SDL_Window> action)
+    {
+        if (Environment.CurrentManagedThreadId == _threadId)
+        {
+            action(NativeHandle);
+            return;
+        }
+
+        _invocations.Enqueue(action);
+    }
+
     private bool HasState(State state) => (_state & state) == state;
 
     private void SetState(State state, bool apply) => _state = apply ? _state | state : _state & ~state;
+
+    private void ProcessDeferredInvocations()
+    {
+        while (_invocations.TryDequeue(out Action<SDL_Window>? invocation))
+            invocation(NativeHandle);
+    }
 
     private void Initialize(int width, int height)
     {
