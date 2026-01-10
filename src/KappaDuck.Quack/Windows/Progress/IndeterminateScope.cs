@@ -3,13 +3,43 @@
 
 namespace KappaDuck.Quack.Windows.Progress;
 
-internal readonly struct IndeterminateScope(TaskbarProgress progress) : IDisposable
+/// <summary>
+/// Represents a synchronous indeterminate progress reporting scope for <see cref="WindowProgressBar"/>.
+/// </summary>
+public sealed class IndeterminateScope : IDisposable
 {
-    public void Dispose()
+    private readonly WindowProgressBar _progressBar;
+    private bool _isCancelled;
+
+    internal IndeterminateScope(WindowProgressBar progressBar) => _progressBar = progressBar;
+
+    /// <summary>
+    /// Requests cancellation of the progress operation.
+    /// </summary>
+    /// <remarks>
+    /// This will stop any further progress reporting, triggering <see cref="WindowProgressBar.Cancelled"/> and
+    /// resetting the progress bar to its default state.
+    /// </remarks>
+    public void Cancel()
     {
-        if (progress.IsCompleted || progress.IsCancelled)
+        if (_isCancelled)
             return;
 
-        progress.Complete(forceReset: true);
+        _isCancelled = true;
+        _progressBar.Cancel();
+    }
+
+    /// <summary>
+    /// Resets the window progress bar to its default state.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_isCancelled)
+            return;
+
+        _isCancelled = false;
+
+        _progressBar.Complete();
+        _progressBar.Reset();
     }
 }

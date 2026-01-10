@@ -47,7 +47,7 @@ public sealed class WindowProgressBar
     public bool ResetAfterCompletion { get; set; } = true;
 
     /// <summary>
-    /// Start a new progress operation which will reporting to the taskbar.
+    /// Start a new synchronous progress operation which will reporting to the taskbar.
     /// </summary>
     /// <param name="total">The maximum value representing the 100% for the progress.</param>
     /// <returns>The created scope for the progress operation.</returns>
@@ -59,10 +59,30 @@ public sealed class WindowProgressBar
         return new(this, total);
     }
 
+    /// <summary>
+    /// Start a new synchronous progress operation in indeterminate state which will reporting to the taskbar.
+    /// </summary>
+    /// <returns>The created scope for the indeterminate progress operation.</returns>
+    public IndeterminateScope StartIndeterminate()
+    {
+        QuackException.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
+
+        StartReporting(WindowProgressState.Indeterminate);
+        return new(this);
+    }
+
     internal void Cancel()
     {
         Cancelled?.Invoke();
         Reset();
+    }
+
+    internal void Complete()
+    {
+        _isCompleted = true;
+        _isReporting = false;
+
+        Completed?.Invoke();
     }
 
     internal void Report(float value)
@@ -80,10 +100,7 @@ public sealed class WindowProgressBar
 
         if (CanComplete())
         {
-            _isCompleted = true;
-            _isReporting = false;
-
-            Completed?.Invoke();
+            Complete();
 
             if (ResetAfterCompletion)
                 Reset();

@@ -8,15 +8,15 @@ namespace KappaDuck.Quack.Windows.Progress;
 /// </summary>
 public sealed class ProgressScope : IDisposable
 {
-    private readonly WindowProgressBar _taskbar;
-    private readonly CancellationTokenSource _cts = new();
+    private readonly WindowProgressBar _progressBar;
     private readonly int _total;
 
+    private bool _isCancelled;
     private int _current;
 
-    internal ProgressScope(WindowProgressBar taskbar, int total)
+    internal ProgressScope(WindowProgressBar progressBar, int total)
     {
-        _taskbar = taskbar;
+        _progressBar = progressBar;
         _total = total;
     }
 
@@ -29,11 +29,11 @@ public sealed class ProgressScope : IDisposable
     /// </remarks>
     public void Cancel()
     {
-        if (_cts.IsCancellationRequested)
+        if (_isCancelled)
             return;
 
-        _cts.Cancel();
-        _taskbar.Cancel();
+        _isCancelled = true;
+        _progressBar.Cancel();
     }
 
     /// <summary>
@@ -41,11 +41,11 @@ public sealed class ProgressScope : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_cts.IsCancellationRequested)
+        if (_isCancelled)
             return;
 
-        _cts.Dispose();
-        _taskbar.Reset();
+        _isCancelled = false;
+        _progressBar.Reset();
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public sealed class ProgressScope : IDisposable
     /// <exception cref="ArgumentOutOfRangeException">Throws if <paramref name="steps"/> is negative.</exception>
     public void Increment(int steps)
     {
-        if (_cts.IsCancellationRequested)
+        if (_isCancelled)
             return;
 
         ArgumentOutOfRangeException.ThrowIfNegative(steps);
@@ -91,12 +91,12 @@ public sealed class ProgressScope : IDisposable
     /// <exception cref="ArgumentOutOfRangeException">Throws if <paramref name="current"/> is negative.</exception>
     public void Report(int current)
     {
-        if (_cts.IsCancellationRequested)
+        if (_isCancelled)
             return;
 
         ArgumentOutOfRangeException.ThrowIfNegative(current);
 
         _current = Math.Min(current, _total);
-        _taskbar.Report((float)_current / _total);
+        _progressBar.Report((float)_current / _total);
     }
 }
