@@ -135,13 +135,11 @@ public sealed class WindowProgressBar
             IndeterminateProgress progress = new();
             action(progress);
 
-            if (progress.IsCancelled)
-            {
-                Cancel();
-                return;
-            }
-
             Complete();
+        }
+        catch (OperationCanceledException)
+        {
+            Cancel();
         }
         catch (Exception ex)
         {

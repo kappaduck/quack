@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace KappaDuck.Quack.Windows.Progress;
 
 /// <summary>
@@ -12,8 +14,6 @@ public sealed class IndeterminateProgress
     {
     }
 
-    internal bool IsCancelled { get; private set; }
-
     /// <summary>
     /// Requests cancellation of the progress operation.
     /// </summary>
@@ -21,5 +21,7 @@ public sealed class IndeterminateProgress
     /// This will stop any further progress reporting, triggering <see cref="WindowProgressBar.Cancelled"/> and
     /// resetting the progress bar to its default state.
     /// </remarks>
-    public void Cancel() => IsCancelled = true;
+    /// <exception cref="OperationCanceledException">Thrown when the operation is cancelled.</exception>
+    [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "The method is part of the instance API.")]
+    public void Cancel() => throw new OperationCanceledException("The indeterminate progress operation has been cancelled.");
 }
