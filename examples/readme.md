@@ -1,43 +1,56 @@
-# How to use Quack! Engine
+# How to use Quack! Engine examples 🦆
 
-This document provides a overview of how to use the Quack! game engine by running or checking out various examples.
-> You need to have .NET 10.0 SDK installed to run theses examples as [dotnet run app.cs].
+This document provides an overview of how to run and explore the Quack! game engine examples.
+> You need to have **.NET 10.0 SDK** installed to run theses examples via [dotnet run app.cs].
 
-To run a example, run the following command in the terminal:
+## Prerequisites
 
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- SDL and its dependencies should be installed (see [Setup section](../readme.md#setup)).
+
+> Quack! examples are single-file C# scripts, so most IDEs cannot run them directly.
+>
+> VS Code provides intellisense but requires running via the terminal.
+
+## Running Examples
+
+Run the example directly in your terminal:
+
+#### Window
 ```bash
-# On Windows
 dotnet ./examples/windows/window.cs
+```
 
-# On Linux
-chmod +x ./examples/windows/window.cs
+#### Linux
+```bash
+chmod +x ./examples/windows/window.cs # only needed once
 ./examples/windows/window.cs
 ```
 
-You can also open the example in your preferred IDE (e.g., Visual Studio, Rider, etc.).
-> Any IDE doesn't support single-file execution, so you will need to run as CLI.
+Alternatively, you can open the example in VS Code for editing and exploring the code, but
+execution must be done via the terminal as shown above.
 
-> Visual Code has intellisense support for single-file but can't run it directly.
+> For more details on single-file, see [dotnet run app.cs]
 
 ## Examples
 
-Here the examples are categorized by module. Each example is a C# file that demonstrates a specific feature or capability of the Quack! engine.
+Each example demonstrates a specific feature or capability of the Quack! engine.
 
 ## Windows
 
-- [Progress Bar](./windows/progress.cs) - Demonstrates how to use the window's taskbar progress bar.
-- [Window](./windows/window.cs) - Demonstrates how to create a simple window.
+- [Window](./windows/window.cs) - Show how to create a simple window.
+- [Progress Bar](./windows/progress.cs) - Show how to use the window's taskbar progress bar.
 
 ## Graphics
 
-- [Debug](./graphics/debug.cs) - Demonstrates how to draw text for debugging purposes.
-- [Drawable](./graphics/drawable.cs) - Demonstrates how to use the IDrawable interface.
-- [Sine Wave](./graphics/sinewave.cs) - Demonstrates how to render a sine wave.
-- [Triangle](./graphics/triangle.cs) - Demonstrates how to draw a triangle using vertices.
+- [Debug](./graphics/debug.cs) - Draw text for debugging purposes.
+- [Drawable](./graphics/drawable.cs) - Demonstrates the `IDrawable` interface.
+- [Sine Wave](./graphics/sinewave.cs) - Clear the screen with a sine wave pattern.
+- [Triangle](./graphics/triangle.cs) - Draw a triangle using vertices and indices.
 
 ## Inputs
 
-- [Keyboard Input](./inputs/keyboard.cs) - Demonstrates how to handle keyboard input.
-- [Mouse Input](./inputs/mouse.cs) - Demonstrates how to handle mouse input.
+- [Keyboard Input](./inputs/keyboard.cs) - Handle keyboard input events.
+- [Mouse Input](./inputs/mouse.cs) - Handle mouse input events.
 
 [dotnet run app.cs]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/

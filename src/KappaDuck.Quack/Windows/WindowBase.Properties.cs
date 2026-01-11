@@ -3,7 +3,7 @@
 
 namespace KappaDuck.Quack.Windows;
 
-public partial class WindowBase : IWindow
+public partial class WindowBase
 {
     private sealed class Properties : Native.Properties
     {
