@@ -2,7 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.System.UI.Dialogs;
+using KappaDuck.Quack.UI.System.Dialog;
 
 namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 

@@ -66,7 +66,7 @@ public sealed class Display
     /// For example, a 4K display might have a 2.0 (200%) content scale to make text and UI elements more readable.
     /// </para>
     /// <para>
-    /// After the window is created, <see cref="Window.DisplayScale"/> should be used to query the content scale factor for individual windows
+    /// After the window is created, <see cref="WindowBase.DisplayScale"/> should be used to query the content scale factor for individual windows
     /// instead of this property, as the per-window content scale factor may differ from the global display content scale factor. Especially on
     /// high-DPI and/or multi-monitor setups.
     /// </para>

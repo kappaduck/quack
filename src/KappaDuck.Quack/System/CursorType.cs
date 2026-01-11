@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.System.UI;
+namespace KappaDuck.Quack.System;
 
 /// <summary>
 /// Cursor types.

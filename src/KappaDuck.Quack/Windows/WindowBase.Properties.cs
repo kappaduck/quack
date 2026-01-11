@@ -3,11 +3,11 @@
 
 namespace KappaDuck.Quack.Windows;
 
-public partial class Window
+public partial class WindowBase : IWindow
 {
     private sealed class Properties : Native.Properties
     {
-        internal Properties(Window window)
+        internal Properties(WindowBase window)
         {
             Set("SDL.window.create.always_on_top", window.AlwaysOnTop);
             Set("SDL.window.create.borderless", window.Borderless);

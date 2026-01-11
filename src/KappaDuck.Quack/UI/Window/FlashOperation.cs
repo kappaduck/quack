@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.UI.Window;
 
 /// <summary>
 /// The operation to perform when flashing the window.

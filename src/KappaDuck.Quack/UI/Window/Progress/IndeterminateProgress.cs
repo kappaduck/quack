@@ -3,7 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace KappaDuck.Quack.Windows.Progress;
+namespace KappaDuck.Quack.UI.Window.Progress;
 
 /// <summary>
 /// Represents a synchronous indeterminate progress reporting for <see cref="WindowProgressBar"/>.

@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.System.UI.Dialogs;
+namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
 /// Specifies the default key that is considered as the primary action in a message box dialog.

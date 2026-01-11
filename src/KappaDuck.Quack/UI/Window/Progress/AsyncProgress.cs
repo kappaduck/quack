@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.Windows.Progress;
+namespace KappaDuck.Quack.UI.Window.Progress;
 
 /// <summary>
 /// Represents an asynchronous progress reporting for <see cref="WindowProgressBar"/>.

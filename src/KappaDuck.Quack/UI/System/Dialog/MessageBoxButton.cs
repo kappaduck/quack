@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-namespace KappaDuck.Quack.System.UI.Dialogs;
+namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
 /// Represents a button displayed in a message box.

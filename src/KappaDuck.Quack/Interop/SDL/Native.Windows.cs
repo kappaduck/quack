@@ -3,9 +3,9 @@
 
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
+using KappaDuck.Quack.UI.Window;
+using KappaDuck.Quack.UI.Window.Progress;
 using KappaDuck.Quack.Video.Displays;
-using KappaDuck.Quack.Windows;
-using KappaDuck.Quack.Windows.Progress;
 
 namespace KappaDuck.Quack.Interop.SDL;
 

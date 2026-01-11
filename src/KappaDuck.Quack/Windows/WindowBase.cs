@@ -8,8 +8,9 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.Handles;
+using KappaDuck.Quack.UI.Window;
+using KappaDuck.Quack.UI.Window.Progress;
 using KappaDuck.Quack.Video.Displays;
-using KappaDuck.Quack.Windows.Progress;
 using System.Collections.Concurrent;
 
 namespace KappaDuck.Quack.Windows;
@@ -20,7 +21,7 @@ namespace KappaDuck.Quack.Windows;
 /// <remarks>
 /// You should use one of the specialized windows such as <see cref="RenderWindow"/>.
 /// </remarks>
-public abstract partial class Window : IDisposable, ISpanFormattable
+public abstract partial class WindowBase : IDisposable, ISpanFormattable
 {
     private readonly int _threadId = Environment.CurrentManagedThreadId;
     private readonly ConcurrentQueue<Action<SDL_Window>> _invocations = [];
@@ -41,7 +42,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// It does not create the window. Use <see cref="Create(string, int, int)"/> to create a window.
     /// It is useful to delay window creation until necessary.
     /// </remarks>
-    protected Window()
+    protected WindowBase()
     {
         Title = string.Empty;
         Handle = WindowHandle.Zero;
@@ -55,7 +56,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// <param name="height">The height of the window.</param>
     /// <remarks>It creates the window immediately upon instantiation.</remarks>
     /// <exception cref="QuackNativeException">Thrown when failed to create the window.</exception>
-    protected Window(string title, int width, int height)
+    protected WindowBase(string title, int width, int height)
     {
         Title = title;
         Handle = WindowHandle.Zero;
@@ -69,7 +70,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// <param name="title">The title of the window.</param>
     /// <param name="size">The dimensions of the window.</param>
     /// <exception cref="QuackNativeException">Thrown when failed to create the window.</exception>
-    protected Window(string title, SizeInt size)
+    protected WindowBase(string title, SizeInt size)
     {
         Title = title;
         Handle = WindowHandle.Zero;
@@ -84,7 +85,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// <param name="position">The position of the window on the screen.</param>
     /// <param name="size">The size of the window.</param>
     /// <exception cref="QuackNativeException">Thrown when failed to create the window.</exception>
-    protected Window(string title, Vector2Int position, SizeInt size)
+    protected WindowBase(string title, Vector2Int position, SizeInt size)
     {
         Title = title;
         Position = position;
@@ -103,7 +104,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     /// and sets the window size to the mode's width and height.
     /// </remarks>
     /// <exception cref="QuackNativeException">Thrown when failed to create the window.</exception>
-    protected Window(string title, DisplayMode mode)
+    protected WindowBase(string title, DisplayMode mode)
     {
         Title = title;
         FullscreenMode = mode;
@@ -316,7 +317,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     {
         get
         {
-            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(Window));
+            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(WindowBase));
             return field;
         }
         private set;
@@ -826,7 +827,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     {
         get
         {
-            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(Window));
+            ObjectDisposedException.ThrowIf(_handle.IsInvalid, typeof(WindowBase));
             return _handle.ToNonOwningHandle();
         }
     }
@@ -1220,7 +1221,7 @@ public abstract partial class Window : IDisposable, ISpanFormattable
     public void WarpMouse(Vector2 position) => WarpMouse(position.X, position.Y);
 
     /// <summary>
-    /// Releases the unmanaged resources used by the <see cref="Window"/> class.
+    /// Releases the unmanaged resources used by the <see cref="WindowBase"/> class.
     /// </summary>
     /// <param name="disposing">value indicating whether the method call comes from a <see cref="Dispose()"/> method (its value is <see langword="true"/>) or from a finalizer (its value is <see langword="false"/>).</param>
     protected virtual void Dispose(bool disposing)

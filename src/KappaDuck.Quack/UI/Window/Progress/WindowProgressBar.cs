@@ -4,8 +4,9 @@
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Windows;
 
-namespace KappaDuck.Quack.Windows.Progress;
+namespace KappaDuck.Quack.UI.Window.Progress;
 
 /// <summary>
 /// Represents the progress bar for a window's taskbar icon.
@@ -14,7 +15,7 @@ public sealed class WindowProgressBar
 {
     private const int ThrottleInMilliseconds = 35;
 
-    private readonly Window _window;
+    private readonly WindowBase _window;
 
     private float _oldValue = -1f;
     private double _lastAppliedMilliseconds;
@@ -22,7 +23,7 @@ public sealed class WindowProgressBar
     private bool _isCompleted;
     private bool _isReporting;
 
-    internal WindowProgressBar(Window window) => _window = window;
+    internal WindowProgressBar(WindowBase window) => _window = window;
 
     /// <summary>
     /// Occurs when the reporting is cancelled.

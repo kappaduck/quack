@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Interop.SDL.Marshalling;
 using KappaDuck.Quack.Windows;
 
-namespace KappaDuck.Quack.System.UI.Dialogs;
+namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
 /// Represents the configuration options for a message box.
@@ -36,7 +36,7 @@ public sealed record MessageBoxOptions(string Title, string Message)
     /// <summary>
     /// Gets or sets the parent window or <see langword="null"/> for no parent.
     /// </summary>
-    public Window? Parent { get; set; }
+    public WindowBase? Parent { get; set; }
 
     internal MessageBoxLevel Level { get; set; }
 }

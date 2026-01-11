@@ -2,8 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.System;
-using KappaDuck.Quack.System.UI;
-using KappaDuck.Quack.System.UI.Dialogs;
+using KappaDuck.Quack.UI.System.Dialog;
 using System.Runtime.Versioning;
 using Win32Native = KappaDuck.Quack.Interop.Win32.Win32;
 using X11Native = KappaDuck.Quack.Interop.X11.X11;

@@ -4,10 +4,10 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Windows;
 
-namespace KappaDuck.Quack.System.UI.Dialogs;
+namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
-/// Represents a native message box that can be displayed to the user.
+/// Represents a dialog box that displays a message to the user and optionally provides buttons for user response.
 /// </summary>
 public static class MessageBox
 {
@@ -18,7 +18,7 @@ public static class MessageBox
     /// <param name="message">The message box's message.</param>
     /// <param name="parent">The parent window, or <see langword="null"/> for no parent.</param>
     /// <exception cref="QuackNativeException">Throw when failed to display the error message box.</exception>
-    public static void ShowError(string title, string message, Window? parent = null)
+    public static void ShowError(string title, string message, WindowBase? parent = null)
         => Show(title, message, MessageBoxLevel.Error, parent);
 
     /// <summary>
@@ -36,7 +36,7 @@ public static class MessageBox
     /// <param name="message">The message box's message.</param>
     /// <param name="parent">The parent window, or <see langword="null"/> for no parent.</param>
     /// <exception cref="QuackNativeException">Throw when failed to display the warning message box.</exception>
-    public static void ShowWarning(string title, string message, Window? parent = null)
+    public static void ShowWarning(string title, string message, WindowBase? parent = null)
         => Show(title, message, MessageBoxLevel.Warning, parent);
 
     /// <summary>
@@ -54,7 +54,7 @@ public static class MessageBox
     /// <param name="message">The message box's message.</param>
     /// <param name="parent">The parent window, or <see langword="null"/> for no parent.</param>
     /// <exception cref="QuackNativeException">Throw when failed to display the information message box.</exception>
-    public static void ShowInformation(string title, string message, Window? parent = null)
+    public static void ShowInformation(string title, string message, WindowBase? parent = null)
         => Show(title, message, MessageBoxLevel.Information, parent);
 
     /// <summary>
@@ -65,7 +65,7 @@ public static class MessageBox
     /// <exception cref="QuackNativeException">Throw when failed to display the information message box.</exception>
     public static int ShowInformation(MessageBoxOptions options) => Show(options, MessageBoxLevel.Information);
 
-    private static void Show(string title, string message, MessageBoxLevel level, Window? parent = null)
+    private static void Show(string title, string message, MessageBoxLevel level, WindowBase? parent = null)
         => QuackNativeException.ThrowIfFailed(Native.SDL_ShowSimpleMessageBox((uint)level, title, message, parent?.NativeHandle ?? SDL_Window.Zero));
 
     private static int Show(MessageBoxOptions options, MessageBoxLevel level)
