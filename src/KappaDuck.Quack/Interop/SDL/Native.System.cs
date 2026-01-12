@@ -71,7 +71,7 @@ internal static partial class Native
     [SupportedOSPlatform(nameof(OSPlatform.Windows))]
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_SetWindowsMessageHook(Win32Native.MessageCallback callback, nint data);
+    internal static partial void SDL_SetWindowsMessageHook(Win32Native.MessageCallback callback, nint data = default);
 
     [SupportedOSPlatform(nameof(OSPlatform.Linux))]
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

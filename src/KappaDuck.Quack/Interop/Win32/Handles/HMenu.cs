@@ -7,14 +7,10 @@ using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Interop.Win32.Handles;
 
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 internal sealed class HMenu() : SafeHandleZeroInvalid(ownsHandle: true)
 {
-    protected override void Free()
-    {
-        if (!User32.DestroyMenu(handle))
-        {
-            throw new Win32Exception();
-        }
-    }
+    public static HMenu Zero { get; } = new HMenu();
+
+    protected override void Free() => Win32Exception.ThrowIfFailed(User32.DestroyMenu(handle));
 }

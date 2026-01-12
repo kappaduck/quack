@@ -7,10 +7,20 @@ using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Interop.Win32;
 
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 internal static partial class User32
 {
     private const string Core = "user32";
+
+    [LibraryImport(Core, SetLastError = true, StringMarshalling = StringMarshalling.Utf16), UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool AppendMenuW(HMenu menu, uint flags, uint itemId, string label);
+
+    [LibraryImport(Core, SetLastError = true, StringMarshalling = StringMarshalling.Utf16), UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool AppendMenuW(HMenu menu, uint flags, HMenu subMenu, string label);
 
     [LibraryImport(Core), UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
