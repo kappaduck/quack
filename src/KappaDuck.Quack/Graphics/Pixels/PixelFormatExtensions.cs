@@ -167,8 +167,8 @@ public static class PixelFormatExtensions
         /// <param name="palette">The palette to use for indexed color formats, or <see langword="null" /> for non-indexed formats.</param>
         /// <returns>The pixel value.</returns>
         public static uint MapColor(PixelFormatDetails details, Color color, Palette? palette = null) => MapRGBA(details, color.R, color.G, color.B, color.A, palette);
-    }
 
-    [SuppressMessage("Minor Code Smell", "S3398:\"private\" methods called only by inner classes should be moved to those classes", Justification = "Sonar seems to be confused by the 'extension' syntax.")]
-    private static unsafe SDL_Palette* GetPaletteHandle(Palette? palette) => palette is not null ? palette.Handle : null;
+        [SuppressMessage("Style", "IDE0051:Remove unused private members", Justification = "Visual Studio has a bug where it thinks the method is not used.")]
+        private static unsafe SDL_Palette* GetPaletteHandle(Palette? palette) => palette is not null ? palette.Handle : null;
+    }
 }

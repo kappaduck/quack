@@ -7,11 +7,6 @@ namespace KappaDuck.Quack.Geometry;
 
 internal static class MathExtensions
 {
-    /// <summary>
-    /// The machine epsilon for <see cref="float"/>. It is based on C++'s FLT_EPSILON.
-    /// </summary>
-    private const float MachineEpsilon = 1.192092896e-07f;
-
     extension(Math)
     {
         internal static void ThrowIfDividedByZero<T>(T value) where T : INumber<T>
@@ -23,6 +18,14 @@ internal static class MathExtensions
 
     extension(MathF)
     {
-        internal static bool IsNearlyZero(float value) => MathF.Abs(value) < MachineEpsilon;
+        /// <summary>
+        /// Determines whether the value is zero within a small tolerance.
+        /// </summary>
+        /// <remarks>
+        /// The tolerance is based on the C++'s FLT_EPSILON constant.
+        /// </remarks>
+        /// <param name="value">The value to check.</param>
+        /// <returns><see langword="true"/> if the value is nearly zero; otherwise, <see langword="false"/>.</returns>
+        internal static bool IsNearlyZero(float value) => MathF.Abs(value) < 1.192092896e-07f;
     }
 }
