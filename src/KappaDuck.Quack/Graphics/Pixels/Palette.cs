@@ -42,9 +42,7 @@ public sealed unsafe class Palette : IDisposable
     /// </summary>
     internal SDL_Palette* Handle { get; private set; }
 
-    /// <summary>
-    /// Releases the unmanaged resources used by the palette.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (Handle is not null)

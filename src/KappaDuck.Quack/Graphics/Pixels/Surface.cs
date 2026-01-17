@@ -190,9 +190,7 @@ public sealed unsafe class Surface : IDisposable
         return new Palette(Handle);
     }
 
-    /// <summary>
-    /// Disposes the surface and releases its unmanaged resources.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
         if (Handle is null)

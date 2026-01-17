@@ -916,9 +916,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
         Initialize(width, height);
     }
 
-    /// <summary>
-    /// Disposes the window and releases all associated resources.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose(true);

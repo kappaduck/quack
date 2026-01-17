@@ -195,9 +195,7 @@ public sealed class Texture : IDisposable
     /// </summary>
     public int Width { get; }
 
-    /// <summary>
-    /// Releases the unmanaged resources used by the texture.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose() => _handle.Dispose();
 
     internal unsafe void Render(Rect source, Rect destination, double angle, Vector2 center, FlipMode mode)

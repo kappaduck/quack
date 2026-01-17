@@ -75,7 +75,7 @@ public sealed class AsyncProgress : IDisposable
         return _cts.CancelAsync();
     }
 
-    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// <inheritdoc/>
     public void Dispose() => _cts.Dispose();
 
     /// <summary>

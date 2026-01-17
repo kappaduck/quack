@@ -132,9 +132,7 @@ public sealed class Cursor : IDisposable
         }
     }
 
-    /// <summary>
-    /// Releases the resources used by the cursor.
-    /// </summary>
+    /// <inheritdoc/>
     public void Dispose()
     {
         _handle.Dispose();
