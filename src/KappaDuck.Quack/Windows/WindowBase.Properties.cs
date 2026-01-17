@@ -1,13 +1,15 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Geometry;
+
 namespace KappaDuck.Quack.Windows;
 
 public partial class WindowBase
 {
     private sealed class Properties : Native.Properties
     {
-        internal Properties(WindowBase window)
+        internal Properties(WindowBase window, Vector2Int? position)
         {
             Set("SDL.window.create.always_on_top", window.AlwaysOnTop);
             Set("SDL.window.create.borderless", window.Borderless);
@@ -22,13 +24,13 @@ public partial class WindowBase
             Set("SDL.window.create.transparent", window.UseTransparentBuffer);
 
             Set("SDL.window.create.title", window.Title);
-            Set("SDL.window.create.width", window._width);
-            Set("SDL.window.create.height", window._height);
+            Set("SDL.window.create.width", window.Width);
+            Set("SDL.window.create.height", window.Height);
 
-            if (window._position.HasValue)
+            if (position.HasValue)
             {
-                Set("SDL.window.create.x", window._position.Value.X);
-                Set("SDL.window.create.y", window._position.Value.Y);
+                Set("SDL.window.create.x", position.Value.X);
+                Set("SDL.window.create.y", position.Value.Y);
             }
         }
     }
@@ -36,6 +38,11 @@ public partial class WindowBase
     [Flags]
     private enum State : ulong
     {
+        /// <summary>
+        /// Indicates that the window has no state set.
+        /// </summary>
+        None = 0,
+
         /// <summary>
         /// The window is in fullscreen mode.
         /// </summary>

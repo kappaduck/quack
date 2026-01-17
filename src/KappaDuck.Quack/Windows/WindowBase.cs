@@ -7,11 +7,13 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
+using KappaDuck.Quack.Inputs;
 using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.UI.Window;
 using KappaDuck.Quack.UI.Window.Progress;
 using KappaDuck.Quack.Video.Displays;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KappaDuck.Quack.Windows;
 
@@ -28,6 +30,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
 
     private SDL_Window _handle = SDL_Window.Zero;
     private Surface? _icon;
+
     private State _state;
     private Vector2Int? _position;
     private int _width;
@@ -59,8 +62,6 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     protected WindowBase(string title, int width, int height)
     {
         Title = title;
-        Handle = WindowHandle.Zero;
-
         Initialize(width, height);
     }
 
@@ -73,8 +74,6 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     protected WindowBase(string title, SizeInt size)
     {
         Title = title;
-        Handle = WindowHandle.Zero;
-
         Initialize(size.Width, size.Height);
     }
 
@@ -89,7 +88,6 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     {
         Title = title;
         Position = position;
-        Handle = WindowHandle.Zero;
 
         Initialize(size.Width, size.Height);
     }
@@ -108,7 +106,6 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     {
         Title = title;
         FullscreenMode = mode;
-        Handle = WindowHandle.Zero;
 
         Initialize(mode.Width, mode.Height);
     }
@@ -149,7 +146,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowAspectRatio(_handle, value.Minimum, value.Maximum));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowAspectRatio(_handle, field.Minimum, field.Maximum));
         }
     }
 
@@ -284,19 +281,27 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowFullscreenMode(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowFullscreenMode(_handle, field));
         }
     }
 
     /// <summary>
     /// Gets a value indicating whether the window currently has keyboard focus.
     /// </summary>
-    public bool HasKeyboardFocus => HasState(State.InputFocus);
+    public bool HasKeyboardFocus
+    {
+        get => HasState(State.InputFocus);
+        private set => SetState(State.InputFocus, value);
+    }
 
     /// <summary>
     /// Gets a value indicating whether the window currently has mouse focus.
     /// </summary>
-    public bool HasMouseFocus => HasState(State.MouseFocus);
+    public bool HasMouseFocus
+    {
+        get => HasState(State.MouseFocus);
+        private set => SetState(State.MouseFocus, value);
+    }
 
     /// <summary>
     /// Gets a safe, non-owning handle to the native window.
@@ -368,12 +373,12 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     public int HeightInPixels { get; private set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window is hidden.
+    /// Gets or inits a value indicating whether the window is hidden.
     /// </summary>
     public bool Hidden
     {
         get => HasState(State.Hidden);
-        set => SetState(State.Hidden, value);
+        init => SetState(State.Hidden, value);
     }
 
     /// <summary>
@@ -425,15 +430,15 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window is maximized.
+    /// Gets or inits a value indicating whether the window is maximized.
     /// </summary>
     public bool Maximized
     {
         get => HasState(State.Maximized);
-        set
+        init
         {
             SetState(State.Maximized, value);
-            _state &= ~State.Minimized;
+            RemoveState(State.Minimized);
         }
     }
 
@@ -459,20 +464,20 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMaximumSize(_handle, value.Width, value.Height));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMaximumSize(_handle, field.Width, field.Height));
         }
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window is minimized.
+    /// Gets or inits a value indicating whether the window is minimized.
     /// </summary>
     public bool Minimized
     {
         get => HasState(State.Minimized);
-        set
+        init
         {
             SetState(State.Minimized, value);
-            _state &= ~State.Maximized;
+            RemoveState(State.Maximized);
         }
     }
 
@@ -498,15 +503,29 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMinimumSize(_handle, value.Width, value.Height));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMinimumSize(_handle, field.Width, field.Height));
         }
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window has captured the mouse.
+    /// Gets a value indicating whether the window has captured the mouse.
     /// </summary>
-    /// <remarks>It is not related to <see cref="MouseGrabbed"/>.</remarks>
-    public bool MouseCaptured => HasState(State.MouseCapture);
+    /// <remarks>
+    /// <para>
+    /// For more information about mouse capture, see <see cref="Mouse.Capture(bool)"/>.
+    /// </para>
+    /// <para>
+    /// It is not related to <see cref="MouseGrabbed"/>.
+    /// </para>
+    /// </remarks>
+    public bool MouseCaptured
+    {
+        get
+        {
+            State state = (State)Native.SDL_GetWindowFlags(_handle);
+            return (state & State.MouseCapture) == State.MouseCapture;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the mouse clipping rectangle relative to the window's client area.
@@ -526,7 +545,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMouseRect(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMouseRect(_handle, field));
         }
     }
 
@@ -549,23 +568,52 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     }
 
     /// <summary>
-    /// Gets a value indicating whether the window is in relative mouse mode.
+    /// Gets or sets a value indicating whether to use relative mouse mode for the window.
     /// </summary>
-    public bool MouseRelativeMode => HasState(State.MouseRelativeMode);
+    /// <remarks>
+    /// <para>
+    /// While the window has focus and relative mouse mode is enabled, the cursor is hidden, the mouse position is constrained to the window,
+    /// and the engine will report continuous relative mouse motion even if the mouse is at the edge of the window.
+    /// </para>
+    /// <para>
+    /// If you'd like to keep the mouse position fixed while in relative mode, consider <see cref="MouseClip"/>.
+    /// </para>
+    /// <para>
+    /// If you'd like the cursor to be at a specific position when relative mode ends,
+    /// consider <see cref="WarpMouse(float, float)"/>/<see cref="WarpMouse(Vector2)"/> before disabling relative mode.
+    /// </para>
+    /// </remarks>
+    public bool MouseRelativeMode
+    {
+        get => HasState(State.MouseRelativeMode);
+        set
+        {
+            SetState(State.MouseRelativeMode, value);
+
+            if (!IsOpen)
+                return;
+
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowRelativeMouseMode(_handle, value));
+        }
+    }
 
     /// <summary>
     /// Gets a value indicating whether the window is occluded (completely covered by other windows).
     /// </summary>
-    public bool Occluded => HasState(State.Occluded);
+    public bool Occluded
+    {
+        get => HasState(State.Occluded);
+        private set => SetState(State.Occluded, value);
+    }
 
     /// <summary>
     /// Gets or sets the opacity of the window's client area.
     /// </summary>
     /// <remarks>
     /// <para>The default value is 1.0f.</para>
-    /// <para>The opacity value should be in the range 0.0f - 1.0f.</para>
+    /// <para>The opacity value should be in the range 0.0f - 1.0f. Otherwise the value will be clamped.</para>
     /// </remarks>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when the opacity is negative or greater than 1.0f.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the opacity is negative.</exception>
     /// <exception cref="QuackNativeException">Thrown when failed to set the window opacity.</exception>
     public float Opacity
     {
@@ -573,14 +621,13 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 1.0f);
 
-            _opacity = value;
+            _opacity = Math.Clamp(value, 0.0f, 1.0f);
 
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowOpacity(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowOpacity(_handle, _opacity.Value));
         }
     }
 
@@ -757,26 +804,26 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             if (!IsOpen)
                 return;
 
-            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowTitle(_handle, value));
+            QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowTitle(_handle, field));
         }
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window uses a high pixel density back buffer.
+    /// Gets or inits a value indicating whether the window uses a high pixel density back buffer.
     /// </summary>
     public bool UseHighPixelDensity
     {
         get => HasState(State.HighPixelDensity);
-        set => SetState(State.HighPixelDensity, value);
+        init => SetState(State.HighPixelDensity, value);
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the window has a transparent buffer.
+    /// Gets or inits a value indicating whether the window has a transparent buffer.
     /// </summary>
     public bool UseTransparentBuffer
     {
         get => HasState(State.TransparentBuffer);
-        set => SetState(State.TransparentBuffer, value);
+        init => SetState(State.TransparentBuffer, value);
     }
 
     /// <summary>
@@ -847,6 +894,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             return;
 
         Dispose();
+        _state = State.None;
     }
 
     /// <summary>
@@ -900,7 +948,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             return;
 
         QuackNativeException.ThrowIfFailed(Native.SDL_HideWindow(_handle));
-        _state |= State.Hidden;
+        SetState(State.Hidden);
     }
 
     /// <summary>
@@ -931,8 +979,8 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
 
         QuackNativeException.ThrowIfFailed(Native.SDL_MaximizeWindow(_handle));
 
-        _state |= State.Maximized;
-        _state &= ~State.Minimized;
+        SetState(State.Maximized);
+        RemoveState(State.Minimized);
     }
 
     /// <summary>
@@ -960,8 +1008,8 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
 
         QuackNativeException.ThrowIfFailed(Native.SDL_MinimizeWindow(_handle));
 
-        _state |= State.Minimized;
-        _state &= ~State.Maximized;
+        SetState(State.Minimized);
+        RemoveState(State.Maximized);
     }
 
     /// <summary>
@@ -990,10 +1038,10 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             Close();
 
         if (e.Type == EventType.WindowExposed)
-            _state &= ~State.Occluded;
+            Occluded = false;
 
         if (e.Type == EventType.WindowOccluded)
-            _state |= State.Occluded;
+            Occluded = true;
 
         if (e.Type == EventType.WindowResized)
         {
@@ -1011,19 +1059,19 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             _position = e.Window.Position;
 
         if (e.Type == EventType.MouseEnter)
-            _state |= State.MouseFocus;
+            HasMouseFocus = true;
 
         if (e.Type == EventType.MouseLeave)
-            _state &= ~State.MouseFocus;
+            HasMouseFocus = false;
 
         if (e.Type == EventType.FocusGained)
-            _state |= State.InputFocus;
+            HasKeyboardFocus = true;
 
         if (e.Type == EventType.FocusLost)
-            _state &= ~State.InputFocus;
+            HasKeyboardFocus = false;
 
         if (e.Type == EventType.WindowRestored)
-            _state &= ~(State.Minimized | State.Maximized);
+            RemoveState(State.Maximized | State.Minimized);
 
         return hasEvent;
     }
@@ -1045,7 +1093,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             return;
 
         QuackNativeException.ThrowIfFailed(Native.SDL_RaiseWindow(_handle));
-        _state |= State.InputFocus;
+        HasKeyboardFocus = true;
     }
 
     /// <summary>
@@ -1071,6 +1119,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             return;
 
         QuackNativeException.ThrowIfFailed(Native.SDL_RestoreWindow(_handle));
+        RemoveState(State.Maximized | State.Minimized);
     }
 
     /// <summary>
@@ -1120,7 +1169,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             return;
 
         QuackNativeException.ThrowIfFailed(Native.SDL_ShowWindow(_handle));
-        _state &= ~State.Hidden;
+        RemoveState(State.Hidden);
     }
 
     /// <summary>
@@ -1237,7 +1286,6 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             _icon = null;
 
             _handle.Dispose();
-
             QuackEngine.Release();
         }
     }
@@ -1255,7 +1303,9 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
 
     private bool HasState(State state) => (_state & state) == state;
 
-    private void SetState(State state, bool apply) => _state = apply ? _state | state : _state & ~state;
+    private void RemoveState(State state) => _state &= ~state;
+
+    private void SetState(State state, bool apply = true) => _state = apply ? _state | state : _state & ~state;
 
     private void ProcessDeferredInvocations()
     {
@@ -1263,6 +1313,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
             invocation(NativeHandle);
     }
 
+    [MemberNotNull(nameof(Handle))]
     private void Initialize(int width, int height)
     {
         QuackEngine.Acquire(Subsystem.Video);
@@ -1270,7 +1321,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
         _width = width;
         _height = height;
 
-        using (Properties properties = new(this))
+        using (Properties properties = new(this, _position))
         {
             _handle = Native.SDL_CreateWindowWithProperties(properties.Id);
             QuackNativeException.ThrowIfHandleInvalid(_handle);
@@ -1286,6 +1337,7 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowFullscreenMode(_handle, FullscreenMode));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMaximumSize(_handle, MaximumSize.Width, MaximumSize.Height));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMinimumSize(_handle, MinimumSize.Width, MinimumSize.Height));
+        QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowRelativeMouseMode(_handle, MouseRelativeMode));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMouseRect(_handle, MouseClip));
         QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowOpacity(_handle, Opacity));
     }

@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Inputs;
 
@@ -98,6 +99,42 @@ public sealed class Mouse
             return new CachedState(buttons, new Vector2(x, y));
         }
     }
+
+    /// <summary>
+    /// Capture the mouse and to track input outside the window.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Capturing enables your app to obtain mouse events globally, instead of just within your window.
+    /// Not all video targets support this feature. When capturing is enabled, the current window will get all mouse
+    /// events, but unlike relative mode, no change is made to the cursor and it is not restrained to your window.
+    /// </para>
+    /// <para>
+    /// This method may also deny mouse input to other windows, both those in your application and others on
+    /// the system, so you should use this method sparingly and in small bursts. For example, you might want to track
+    /// the mouse while the user is dragging something, until the user releases a mouse button.
+    /// It is not recommended that you capture the mouse for long periods of time, such as the entire time
+    /// your app is running. For that, consider using <see cref="WindowBase.MouseRelativeMode"/> or <see cref="WindowBase.MouseGrabbed"/>, depending on your needs.
+    /// </para>
+    /// <para>
+    /// While captured, mouse events still report coordinates relative to the current (foreground) window,
+    /// but those coordinates may be outside the bounds of the window (including negative values).
+    /// Capturing is only allowed for the foreground window. If the window loses focus while capturing,
+    /// the capture will be disabled automatically.
+    /// </para>
+    /// <para>
+    /// While capturing is enabled, the current window will have the <see cref="WindowBase.MouseCaptured"/> set to <see langword="true"/>.
+    /// </para>
+    /// <para>
+    /// Please note that the engine will attemp to "auto capture" the mouse while the user is pressing a button;
+    /// this is to try and make mouse behavior more consistent between platforms, and deal with the common case of
+    /// a user dragging the mouse outside of the window. This means that if you are calling this method only to
+    /// deal with this situation, you do not have to (although it is safe to do so).
+    /// </para>
+    /// </remarks>
+    /// <param name="enabled">value indicating whether to enable or disable mouse capture.</param>
+    /// <exception cref="QuackNativeException">Thrown when failed to set mouse capture.</exception>
+    public static void Capture(bool enabled) => QuackNativeException.ThrowIfFailed(Native.SDL_CaptureMouse(enabled));
 
     /// <summary>
     /// Retrieves a mouse device with the specified identifier.

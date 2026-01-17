@@ -10,6 +10,11 @@ internal static partial class Native
 {
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_CaptureMouse([MarshalAs(UnmanagedType.U1)] bool enabled);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     internal static partial Keycode SDL_GetKeyFromScancode(Scancode code, Modifier modifier, [MarshalAs(UnmanagedType.U1)] bool keyEvents);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

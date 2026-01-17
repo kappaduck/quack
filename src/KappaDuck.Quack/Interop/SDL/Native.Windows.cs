@@ -38,6 +38,10 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    internal static partial ulong SDL_GetWindowFlags(SDL_Window handle);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     internal static partial uint SDL_GetWindowID(SDL_Window handle);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -189,6 +193,11 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_SetWindowProgressValue(SDL_Window window, float value);
+
+    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool SDL_SetWindowRelativeMouseMode(SDL_Window window, [MarshalAs(UnmanagedType.U1)] bool enabled);
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
