@@ -9,11 +9,15 @@ using KappaDuck.Quack.Graphics.Pixels;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Inputs;
 using KappaDuck.Quack.Interop.Handles;
+using KappaDuck.Quack.UI.System.Menu;
+using KappaDuck.Quack.UI.System.Menu.Items;
 using KappaDuck.Quack.UI.Window;
+using KappaDuck.Quack.UI.Window.Menu;
 using KappaDuck.Quack.UI.Window.Progress;
 using KappaDuck.Quack.Video.Displays;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Windows;
 
@@ -465,6 +469,25 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
                 return;
 
             QuackNativeException.ThrowIfFailed(Native.SDL_SetWindowMaximumSize(_handle, field.Width, field.Height));
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the menu bar associated with the window.
+    /// </summary>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public MenuBar? MenuBar
+    {
+        get;
+        set
+        {
+            if (field == value)
+                return;
+
+            field?.Dispose();
+
+            field = value;
+            field?.AttachTo(this);
         }
     }
 
@@ -1171,6 +1194,190 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
     }
 
     /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="x">The x-coordinate location of the context menu.</param>
+    /// <param name="y">The y-coordinate location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, int x, int y, ContextMenuOptions options, Action<IMenuCommand> callback)
+    {
+        if (!IsOpen)
+            return;
+
+        using ContextMenu menu = new(definition);
+        menu.ItemClicked += callback;
+
+        menu.Show(this, x, y, options);
+        menu.ItemClicked -= callback;
+    }
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="x">The x-coordinate location of the context menu.</param>
+    /// <param name="y">The y-coordinate location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, int x, int y, Action<IMenuCommand> callback)
+        => ShowContextMenu(definition, x, y, ContextMenuOptions.Default, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, Vector2Int position, ContextMenuOptions options, Action<IMenuCommand> callback)
+        => ShowContextMenu(definition, position.X, position.Y, options, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, Vector2Int position, Action<IMenuCommand> callback)
+        => ShowContextMenu(definition, position, ContextMenuOptions.Default, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, Vector2 position, ContextMenuOptions options, Action<IMenuCommand> callback)
+        => ShowContextMenu(definition, (int)position.X, (int)position.Y, options, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="definition">The definition of the context menu.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(MenuDefinition definition, Vector2 position, Action<IMenuCommand> callback)
+        => ShowContextMenu(definition, position, ContextMenuOptions.Default, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="x">The x-coordinate location of the context menu.</param>
+    /// <param name="y">The y-coordinate location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, int x, int y, ContextMenuOptions options, Action<IMenuCommand> callback)
+    {
+        if (!IsOpen)
+            return;
+
+        using ContextMenu contextMenu = new(menu);
+        contextMenu.ItemClicked += callback;
+
+        contextMenu.Show(this, x, y, options);
+        contextMenu.ItemClicked -= callback;
+    }
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="x">The x-coordinate location of the context menu.</param>
+    /// <param name="y">The y-coordinate location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, int x, int y, Action<IMenuCommand> callback)
+        => ShowContextMenu(menu, x, y, ContextMenuOptions.Default, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, Vector2Int position, ContextMenuOptions options, Action<IMenuCommand> callback)
+        => ShowContextMenu(menu, position.X, position.Y, options, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, Vector2Int position, Action<IMenuCommand> callback)
+        => ShowContextMenu(menu, position, ContextMenuOptions.Default, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="options">The context menu display options.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, Vector2 position, ContextMenuOptions options, Action<IMenuCommand> callback)
+        => ShowContextMenu(menu, (int)position.X, (int)position.Y, options, callback);
+
+    /// <summary>
+    /// Shows the context menu.
+    /// </summary>
+    /// <remarks>
+    /// The provided coordinates are converted from client-area coordinates to screen coordinates.
+    /// </remarks>
+    /// <param name="menu">The context menu to show.</param>
+    /// <param name="position">The location of the context menu.</param>
+    /// <param name="callback">The callback invoked when a menu item is clicked.</param>
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    public void ShowContextMenu(ISubMenu menu, Vector2 position, Action<IMenuCommand> callback)
+        => ShowContextMenu(menu, position, ContextMenuOptions.Default, callback);
+
+    /// <summary>
     /// Display the system-level window menu.
     /// </summary>
     /// <remarks>
@@ -1282,6 +1489,11 @@ public abstract partial class WindowBase : IDisposable, ISpanFormattable
         {
             _icon?.Dispose();
             _icon = null;
+
+            if (OperatingSystem.IsWindows())
+            {
+                MenuBar?.Dispose();
+            }
 
             _handle.Dispose();
             QuackEngine.Release();
