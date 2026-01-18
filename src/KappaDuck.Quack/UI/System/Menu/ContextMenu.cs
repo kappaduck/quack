@@ -81,7 +81,7 @@ public sealed class ContextMenu : IDisposable
         User32.ClientToScreen(window.Handle, ref point);
 
         uint id = User32.TrackPopupMenu(_handle, options.Flags, point, window.Handle);
-        ItemClicked?.Invoke(MenuTree.Commands[id]);
+        ItemClicked?.Invoke(MenuTree.Commands[(int)id]);
     }
 
     /// <summary>

@@ -14,13 +14,13 @@ namespace KappaDuck.Quack.UI.System.Menu.Items;
 /// </remarks>
 /// <param name="Id">The unique identifier of the menu command.</param>
 /// <param name="Label">The label of the menu command.</param>
-public sealed record MenuCommand(uint Id, string Label) : IMenuCommand
+public sealed record MenuCommand(int Id, string Label) : IMenuCommand
 {
     /// <inheritdoc/>
     public bool Checked { get; init; }
 
     /// <inheritdoc/>
-    public uint Id { get; } = Id;
+    public int Id { get; } = Id;
 
     /// <inheritdoc/>
     public MenuItemLayout Layout { get; init; } = MenuItemLayout.Default;

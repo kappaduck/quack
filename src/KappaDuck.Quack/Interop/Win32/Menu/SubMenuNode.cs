@@ -9,5 +9,5 @@ internal sealed record SubMenuNode(HMenu Handle, ISubMenuNode SubMenu) : ISubMen
 {
     public List<IMenuNode> Items { get; } = [];
 
-    public uint Position => (uint)SubMenu.Items.IndexOf(this);
+    public int Position => SubMenu.Items.IndexOf(this);
 }

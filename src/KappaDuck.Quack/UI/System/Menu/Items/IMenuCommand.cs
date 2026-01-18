@@ -15,5 +15,5 @@ public interface IMenuCommand : IInteractableMenuItem
     /// <summary>
     /// Gets the unique identifier of the menu command.
     /// </summary>
-    uint Id { get; }
+    int Id { get; }
 }

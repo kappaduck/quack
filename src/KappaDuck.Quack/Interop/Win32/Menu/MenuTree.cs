@@ -15,7 +15,7 @@ internal sealed class MenuTree : IDisposable
 
     internal MenuTree(MenuRoot root) => _root = root;
 
-    internal static Dictionary<uint, IMenuCommand> Commands { get; } = [];
+    internal static Dictionary<int, IMenuCommand> Commands { get; } = [];
 
     public void Dispose()
     {
@@ -48,7 +48,7 @@ internal sealed class MenuTree : IDisposable
             parent.Items.Add(node);
 
             Commands.TryAdd(item.Id, item);
-            User32.AppendMenuW(parent.Handle, GetFlags(item), item.Id, item.Label);
+            User32.AppendMenuW(parent.Handle, GetFlags(item), (uint)item.Id, item.Label);
 
             return;
         }

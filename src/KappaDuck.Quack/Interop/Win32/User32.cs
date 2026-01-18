@@ -92,6 +92,3 @@ internal static partial class User32
     [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     private static partial uint TrackPopupMenuEx(HMenu menu, uint flags, int x, int y, WindowHandle window, nint parameters = default);
 }
-
-// https://learn.microsoft.com/en-us/windows/win32/menurc/menus
-// https://learn.microsoft.com/en-us/windows/win32/menurc/keyboard-accelerators

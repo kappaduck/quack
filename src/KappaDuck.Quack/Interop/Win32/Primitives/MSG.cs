@@ -18,9 +18,11 @@ internal readonly struct MSG
 
     internal nuint WParam { get; }
 
-    internal nuint LParam { get; }
+    internal nint LParam { get; }
 
     private readonly nuint _time;
 
     internal POINT Point { get; }
+
+    private readonly uint _private;
 }

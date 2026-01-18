@@ -5,5 +5,5 @@ namespace KappaDuck.Quack.Interop.Win32.Menu;
 
 internal sealed record MenuSeparatorNode(ISubMenuNode SubMenu) : IMenuNode
 {
-    public uint Position => (uint)SubMenu.Items.IndexOf(this);
+    public int Position => SubMenu.Items.IndexOf(this);
 }

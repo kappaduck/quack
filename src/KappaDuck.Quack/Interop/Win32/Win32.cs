@@ -1,7 +1,6 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.Win32.Primitives;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -24,7 +23,7 @@ internal static class Win32
         internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string message, [CallerMemberName] string memberName = "")
         {
             if (condition)
-                throw new QuackException($"{memberName} failed: {message}");
+                throw new Win32Exception($"{memberName} failed: {message}");
         }
 
         internal static void ThrowIfFailed(bool condition, [CallerMemberName] string memberName = "")
@@ -36,5 +35,5 @@ internal static class Win32
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal delegate bool MessageCallback(nint data, MSG message);
+    internal unsafe delegate bool MessageCallback(nint data, MSG* message);
 }

@@ -101,11 +101,11 @@ public sealed class MenuBar : IDisposable
         _window = null;
     }
 
-    private void HookWindowsMessage()
+    private unsafe void HookWindowsMessage()
     {
         QuackEngine.HookToWindowsMessage((_, msg) =>
         {
-            if (IsItemClicked(msg) && MenuTree.Commands.TryGetValue(msg.WParam.Lower16Bits, out IMenuCommand? command))
+            if (IsItemClicked(msg) && MenuTree.Commands.TryGetValue(msg->WParam.Lower16Bits, out IMenuCommand? command))
             {
                 ItemClicked?.Invoke(command);
                 return false;
@@ -114,12 +114,12 @@ public sealed class MenuBar : IDisposable
             return true;
         });
 
-        static bool IsItemClicked(MSG msg)
+        static bool IsItemClicked(MSG* msg)
         {
             const int wmCommand = 0x0111;
             const int menu = 0x0000;
 
-            return msg.Message == wmCommand && msg.WParam.Upper16Bits == menu;
+            return msg->Message == wmCommand && msg->WParam.Upper16Bits == menu;
         }
     }
 }

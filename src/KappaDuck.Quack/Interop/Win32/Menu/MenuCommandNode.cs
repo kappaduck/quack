@@ -3,7 +3,7 @@
 
 namespace KappaDuck.Quack.Interop.Win32.Menu;
 
-internal sealed record MenuCommandNode(uint Id, ISubMenuNode SubMenu) : IMenuNode
+internal sealed record MenuCommandNode(int Id, ISubMenuNode SubMenu) : IMenuNode
 {
-    public uint Position => (uint)SubMenu.Items.IndexOf(this);
+    public int Position => SubMenu.Items.IndexOf(this);
 }

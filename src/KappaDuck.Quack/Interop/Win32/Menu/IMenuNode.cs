@@ -7,5 +7,5 @@ internal interface IMenuNode
 {
     ISubMenuNode SubMenu { get; }
 
-    uint Position { get; }
+    int Position { get; }
 }
