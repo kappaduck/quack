@@ -29,6 +29,9 @@ internal static class Win32
 
         internal static void ThrowIfFailed(bool condition, [CallerMemberName] string memberName = "")
             => ThrowIf(!condition, memberName);
+
+        internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
+            => ThrowIf(handle.IsInvalid, memberName);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

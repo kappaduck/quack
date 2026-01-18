@@ -1,13 +1,16 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Runtime.Versioning;
+
 namespace KappaDuck.Quack.UI.System.Menu;
 
 /// <summary>
-/// Represents a menu entry, which can be a menu item or a sub-menu.
+/// Represents a menu entry that can be displayed within a menu system.
 /// </summary>
 /// <remarks>
-/// This interface is used as marker for menu entries in the menu system.
-/// Do not implement this interface directly; instead, use the provided implementations such as <see cref="MenuItem"/> and <see cref="Menu"/>.
+/// This is a marker interface used to identify menu entries within the menu system.
+/// Do not implement this marker directly; instead, use derived interfaces such as <see cref="MenuCommand"/>, <see cref="SubMenu"/> or <see cref="MenuSeparator"/>.
 /// </remarks>
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 public interface IMenuEntry;

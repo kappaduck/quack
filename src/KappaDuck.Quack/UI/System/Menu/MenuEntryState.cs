@@ -1,12 +1,15 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Runtime.Versioning;
+
 namespace KappaDuck.Quack.UI.System.Menu;
 
 /// <summary>
-/// Represents the state of a menu item.
+/// Represents the state of a menu entry in terms of its interactivity.
 /// </summary>
-public enum MenuItemState : uint
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
+public enum MenuEntryState : uint
 {
     /// <summary>
     /// Enables the menu item so that it can be selected, and restores it from its grayed state.
