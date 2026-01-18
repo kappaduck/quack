@@ -2,6 +2,8 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
+using KappaDuck.Quack.Interop.Win32;
+using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Core;
 
@@ -13,6 +15,7 @@ public static class QuackEngine
     private static readonly Lock _lock = new();
     private static int _refCount;
     private static Subsystem _subsystems;
+    private static bool _windowsMessageHooked;
 
     /// <summary>
     /// Gets the application metadata.
@@ -109,6 +112,16 @@ public static class QuackEngine
 
             _subsystems |= subsystem;
         }
+    }
+
+    [SupportedOSPlatform(nameof(OSPlatform.Windows))]
+    internal static void HookToWindowsMessage(Win32.MessageCallback callback)
+    {
+        if (_windowsMessageHooked)
+            return;
+
+        Native.SDL_SetWindowsMessageHook(callback);
+        _windowsMessageHooked = true;
     }
 
     internal static void Release()

@@ -145,7 +145,7 @@ public sealed class Keyboard
     /// </summary>
     /// <remarks>
     /// It gives you the current state of the keyboard after all events have been processed, so if a key is pressed and
-    /// released before you process events, then the key will not appear as pressed. Uses <see cref="Window.Poll(out Event)"/>,
+    /// released before you process events, then the key will not appear as pressed. Uses <see cref="WindowBase.Poll(out Event)"/>,
     /// <see cref="EventManager.Poll(out Event)"/> or <see cref="EventManager.Pump"/> to update the keyboard state.
     /// </remarks>
     /// <param name="code">The code to check.</param>

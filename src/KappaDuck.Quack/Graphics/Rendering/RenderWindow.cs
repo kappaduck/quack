@@ -17,7 +17,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// <summary>
 /// Represents a window that can be used to render 2D graphics.
 /// </summary>
-public sealed class RenderWindow : Window, IRenderTarget
+public sealed class RenderWindow : WindowBase, IRenderTarget
 {
     private bool _disposed;
     private SDL_Renderer _renderer = new();

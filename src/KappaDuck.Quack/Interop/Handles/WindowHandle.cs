@@ -20,6 +20,8 @@ public sealed class WindowHandle : NonOwningSafeHandleZeroInvalid
     {
     }
 
+    internal static WindowHandle Zero { get; } = new WindowHandle(nint.Zero);
+
     /// <inheritdoc/>
     protected override bool ReleaseHandle() => true;
 }

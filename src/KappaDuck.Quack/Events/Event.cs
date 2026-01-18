@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Windows;
+
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
@@ -126,7 +128,7 @@ public struct Event
     /// </summary>
     /// <remarks>
     /// <para>
-    /// It is already managed by <see cref="Windows.Window.Poll(out Event)"/> but you can
+    /// It is already managed by <see cref="WindowBase.Poll(out Event)"/>
     /// manage manually.
     /// </para>
     /// The event is available when <see cref="EventType"/> is

@@ -82,3 +82,13 @@ csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
 # Always use file scoped namespace
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0160
 csharp_style_namespace_declarations = file_scoped
+
+# CA5392: Use DefaultDllImportSearchPaths attribute for P/Invokes
+# Enable the warning to protect from malicious DLL in the default DLL search directories
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5392
+dotnet_diagnostic.CA5392.severity = warning
+
+# CA5393: Do not use unsafe DllImportSearchPath value
+# Enable the warning to protect from malicious DLL in the default DLL search directories
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5393
+dotnet_diagnostic.CA5393.severity = warning

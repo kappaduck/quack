@@ -2,11 +2,13 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Interop.Win32.Primitives;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
 
 namespace KappaDuck.Quack.Interop.Win32;
 
-[SupportedOSPlatform("windows")]
+[SupportedOSPlatform(nameof(OSPlatform.Windows))]
 internal static class Win32
 {
     extension(nuint pointer)
@@ -16,7 +18,22 @@ internal static class Win32
         internal ushort Upper16Bits => (ushort)((pointer >> 16) & 0xFFFF);
     }
 
+    extension(Win32Exception)
+    {
+        internal static void ThrowIf([DoesNotReturnIf(true)] bool condition, string message, [CallerMemberName] string memberName = "")
+        {
+            if (condition)
+                throw new Win32Exception($"{memberName} failed: {message}");
+        }
+
+        internal static void ThrowIfFailed(bool condition, [CallerMemberName] string memberName = "")
+            => ThrowIf(!condition, memberName);
+
+        internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
+            => ThrowIf(handle.IsInvalid, memberName);
+    }
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal delegate bool MessageCallback(nint data, MSG message);
+    internal delegate bool MessageCallback(nint data, ref MSG message);
 }

@@ -43,8 +43,7 @@
     <File Path="examples/windows/window.cs" />
   </Folder>
   <Folder Name="/sdl3/">
-    <File Path="sdl3/build.cs" />
-    <File Path="sdl3/dockerfile" />
+    <File Path="sdl3/setup.cs" />
   </Folder>
   <Folder Name="/sandbox/">
     <File Path="sandbox/Directory.Packages.props" />
