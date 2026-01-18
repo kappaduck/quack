@@ -12,7 +12,6 @@ namespace KappaDuck.Quack.Interop.Win32;
 internal static partial class User32
 {
     private const string DLL = "user32";
-    private const uint MF_BYPOSITION = 0x00000400;
     private const uint TPM_RETURNCMD = 0x0100;
 
     [LibraryImport(DLL, SetLastError = true, StringMarshalling = StringMarshalling.Utf16), UnmanagedCallConv(CallConvs = [typeof(CallConvStdcall)])]
