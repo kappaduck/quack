@@ -35,5 +35,5 @@ internal static class Win32
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    internal unsafe delegate bool MessageCallback(nint data, MSG* message);
+    internal delegate bool MessageCallback(nint data, ref MSG message);
 }
