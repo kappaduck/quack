@@ -1,15 +1,12 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
-using System.Runtime.Versioning;
-
-namespace KappaDuck.Quack.UI.System.Menu;
+namespace KappaDuck.Quack.UI.System.Menu.Items;
 
 /// <summary>
-/// Represents the layout options for a menu entry.
+/// Represents the layout options for a menu item.
 /// </summary>
-[SupportedOSPlatform(nameof(OSPlatform.Windows))]
-public enum MenuEntryLayout : uint
+public enum MenuItemLayout : uint
 {
     /// <summary>
     /// Specifies the default layout behavior.
