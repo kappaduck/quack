@@ -50,6 +50,18 @@ public readonly struct WindowEvent
     }
 
     /// <summary>
+    /// Gets a value indicating whether the window is currently being resized interactively by the user from <see cref="EventType.WindowExposed"/>.
+    /// </summary>
+    public bool IsLiveResize
+    {
+        get
+        {
+            Debug.Assert(_type == EventType.WindowExposed);
+            return _data1 != 0;
+        }
+    }
+
+    /// <summary>
     /// Gets the new position of the window from <see cref="EventType.WindowMoved"/>.
     /// </summary>
     public Vector2Int Position
