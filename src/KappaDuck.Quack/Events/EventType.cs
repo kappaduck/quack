@@ -227,6 +227,16 @@ public enum EventType : uint
     TextEditingCandidates = 0x307,
 
     /// <summary>
+    /// The on-screen keyboard has been shown.
+    /// </summary>
+    ScreenKeyboardShown = 0x308,
+
+    /// <summary>
+    /// The on-screen keyboard has been hidden.
+    /// </summary>
+    ScreenKeyboardHidden = 0x309,
+
+    /// <summary>
     /// Mouse moved.
     /// </summary>
     MouseMotion = 0x400,
