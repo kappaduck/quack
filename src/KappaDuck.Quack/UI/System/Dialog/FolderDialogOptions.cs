@@ -6,9 +6,9 @@ using KappaDuck.Quack.Windows;
 namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
-/// Represents configuration options for customizing the behavior of <see cref="FileDialog"/>.
+/// Represents configuration options for customizing the behavior of <see cref="FolderDialog"/>.
 /// </summary>
-public sealed record FileDialogOptions
+public sealed record FolderDialogOptions
 {
     /// <summary>
     /// Gets or inits the title of the dialog.

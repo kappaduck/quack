@@ -16,33 +16,61 @@ public static class EventExtensions
         /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
         /// </summary>
         /// <param name="code">The code to compare.</param>
-        /// <param name="mod">The modifier to compare.</param>
         /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyDown(Scancode code, Modifier mod = Modifier.None) => e.Type is EventType.KeyDown && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
+        public bool IsKeyDown(Scancode code) => e.Type is EventType.KeyDown && e.Keyboard.Code == code;
+
+        /// <summary>
+        /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
+        /// </summary>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <param name="code">The code to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyDown(Modifier mod, Scancode code) => e.Type is EventType.KeyDown && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
         /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
         /// </summary>
         /// <param name="key">The key to compare.</param>
-        /// <param name="mod">The modifier to compare.</param>
         /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyDown(Keycode key, Modifier mod = Modifier.None) => e.Type is EventType.KeyDown && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
+        public bool IsKeyDown(Keycode key) => e.Type is EventType.KeyDown && e.Keyboard.Key == key;
+
+        /// <summary>
+        /// Determines whether the specified key is currently pressed and the event is a <see cref="EventType.KeyDown"/>.
+        /// </summary>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <param name="key">The key to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is pressed; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyDown(Modifier mod, Keycode key) => e.Type is EventType.KeyDown && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
         /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
         /// </summary>
         /// <param name="code">The code to compare.</param>
-        /// <param name="mod">The modifier to compare.</param>
         /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyUp(Scancode code, Modifier mod = Modifier.None) => e.Type is EventType.KeyUp && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
+        public bool IsKeyUp(Scancode code) => e.Type is EventType.KeyUp && e.Keyboard.Code == code;
+
+        /// <summary>
+        /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
+        /// </summary>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <param name="code">The code to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyUp(Modifier mod, Scancode code) => e.Type is EventType.KeyUp && e.Keyboard.Code == code && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
         /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
         /// </summary>
         /// <param name="key">The key to compare.</param>
-        /// <param name="mod">The modifier to compare.</param>
         /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
-        public bool IsKeyUp(Keycode key, Modifier mod = Modifier.None) => e.Type is EventType.KeyUp && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
+        public bool IsKeyUp(Keycode key) => e.Type is EventType.KeyUp && e.Keyboard.Key == key;
+
+        /// <summary>
+        /// Determines whether the specified key was released and the event is a <see cref="EventType.KeyUp"/>.
+        /// </summary>
+        /// <param name="mod">The modifier to compare.</param>
+        /// <param name="key">The key to compare.</param>
+        /// <returns><see langword="true"/> if the specified key is released; otherwise, <see langword="false"/>.</returns>
+        public bool IsKeyUp(Modifier mod, Keycode key) => e.Type is EventType.KeyUp && e.Keyboard.Key == key && (e.Keyboard.Modifiers & mod) == mod;
 
         /// <summary>
         /// Determines whether the specified mouse button is currently pressed and the event is a <see cref="EventType.MouseButtonDown"/>.

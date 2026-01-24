@@ -295,6 +295,9 @@ public static class FileDialog
             if (options.Location is not null)
                 Set("SDL.filedialog.location", options.Location);
 
+            if (options.Window is not null)
+                Set("SDL.filedialog.window", options.Window.NativeHandle);
+
             if (multiSelect)
                 Set("SDL.filedialog.many", true);
         }
