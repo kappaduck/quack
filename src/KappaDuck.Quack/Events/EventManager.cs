@@ -179,6 +179,19 @@ public static class EventManager
         return Native.SDL_WaitEventTimeout(out e, (int)timeout.Value.TotalMilliseconds);
     }
 
+    /// <summary>
+    /// Creates an event watcher that invokes the specified callback function whenever an event is added to the event queue.
+    /// </summary>
+    /// <param name="callback">The callback function to be invoked when an event is added.</param>
+    public static EventWatcher Watch(Action<Event> callback)
+    {
+        return new EventWatcher((_, ref e) =>
+        {
+            callback(e);
+            return true;
+        });
+    }
+
     private static void ThrowIfInvalidRange(EventType min, EventType? max)
     {
         if (max is null)
