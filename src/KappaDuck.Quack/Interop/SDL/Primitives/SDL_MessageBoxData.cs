@@ -6,17 +6,17 @@ namespace KappaDuck.Quack.Interop.SDL.Primitives;
 [StructLayout(LayoutKind.Sequential)]
 internal unsafe struct SDL_MessageBoxData
 {
-    public uint Flags { get; set; }
+    internal uint Flags { get; set; }
 
-    public IntPtr Window { get; set; }
+    internal IntPtr Window { get; set; }
 
-    public byte* Title { get; set; }
+    internal byte* Title { get; set; }
 
-    public byte* Message { get; set; }
+    internal byte* Message { get; set; }
 
-    public int NumButtons { get; set; }
+    internal int NumButtons { get; set; }
 
-    public SDL_MessageBoxButtonData* Buttons { get; set; }
+    internal SDL_MessageBoxButtonData* Buttons { get; set; }
 
     private readonly nint _colorScheme;
 }
