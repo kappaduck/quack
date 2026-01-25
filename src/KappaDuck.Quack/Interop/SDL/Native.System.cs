@@ -85,10 +85,6 @@ internal static partial class Native
 
     [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
-    internal static partial void SDL_ShowFileDialogWithProperties(SDL_FileDialogType type, SDL_DialogFileCallback callback, nint data, uint propertiesId);
-
-    [LibraryImport(SDL), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_ShowMessageBox(MessageBoxOptions options, out int buttonId);
 
@@ -96,7 +92,4 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     internal static partial bool SDL_ShowSimpleMessageBox(uint flags, string title, string message, SDL_Window window);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal unsafe delegate void SDL_DialogFileCallback(void* data, byte** files, int filter);
 }

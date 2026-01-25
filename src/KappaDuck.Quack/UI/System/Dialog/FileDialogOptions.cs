@@ -6,9 +6,9 @@ using KappaDuck.Quack.Windows;
 namespace KappaDuck.Quack.UI.System.Dialog;
 
 /// <summary>
-/// Represents configuration options for customizing the behavior of <see cref="FileDialog"/>.
+/// Represents configuration options for customizing the behavior of a <see cref="FileDialog"/>.
 /// </summary>
-public sealed record FileDialogOptions
+public sealed record FileDialogOptions : IDialogOptions
 {
     /// <summary>
     /// Gets or inits the title of the dialog.
@@ -34,4 +34,9 @@ public sealed record FileDialogOptions
     /// Gets or inits the window that the dialog should be modal.
     /// </summary>
     public WindowBase? Window { get; init; }
+
+    /// <summary>
+    /// Gets or inits the filters to apply in the dialog.
+    /// </summary>
+    public FileDialogFilter[] Filters { get; init; } = [];
 }
