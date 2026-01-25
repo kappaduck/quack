@@ -1,4 +1,4 @@
-﻿// Copyright (c) KappaDuck. All rights reserved.
+// Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Exceptions;
@@ -44,6 +44,11 @@ internal static partial class Native
         protected void Set(string name, string value) => SetStringProperty(Id, name, value);
 
         protected void Set(string name, int value) => SetNumberProperty(Id, name, value);
+
+        protected void Set(string name, SafeHandle handle) => SetPointerProperty(Id, name, handle);
+
+        protected unsafe void Set<T>(string name, T* pointer) where T : unmanaged
+            => SetPointerProperty(Id, name, pointer);
     }
 
     internal static bool GetBooleanProperty(uint propertiesId, string name, bool defaultValue) => SDL_GetBooleanProperty(propertiesId, name, defaultValue);
@@ -89,6 +94,18 @@ internal static partial class Native
     internal static void SetNumberProperty(uint propertiesId, string name, int value)
     {
         bool success = SDL_SetNumberProperty(propertiesId, name, long.CreateChecked(value));
+        QuackNativeException.ThrowIfFailed(success);
+    }
+
+    internal static void SetPointerProperty(uint propertiesId, string name, SafeHandle handle)
+    {
+        bool success = SDL_SetPointerProperty(propertiesId, name, handle);
+        QuackNativeException.ThrowIfFailed(success);
+    }
+
+    internal static unsafe void SetPointerProperty<T>(uint propertiesId, string name, T* pointer) where T : unmanaged
+    {
+        bool success = SDL_SetPointerProperty(propertiesId, name, (nint)pointer);
         QuackNativeException.ThrowIfFailed(success);
     }
 
@@ -141,6 +158,16 @@ internal static partial class Native
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool SDL_SetNumberProperty(uint propertiesId, string name, long value);
+
+    [LibraryImport(SDL, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SetPointerProperty(uint propertiesId, string name, SafeHandle handle);
+
+    [LibraryImport(SDL, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    private static partial bool SDL_SetPointerProperty(uint propertiesId, string name, nint pointer);
 
     [LibraryImport(SDL, StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
