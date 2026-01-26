@@ -4,9 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] &#8212; YYYY-MM-DD
+## 0.4.0 &#8212; 2026-01-25
 
-<!-- Unreleased -->
+### Added
+
+- Added MenuBar to create top menu bars for windows-only applications. ([#100])
+- Added FileDialog and FolderDialog to show native file and folder dialogs. ([#102])
+- Added MessageBox dialog to show simple message boxes. ([#103])
+- Added Taskbar progress bar for the window. ([#172])
+- Added EventWatcher and EventManager.Watch to easily watch added events to the event queue. ([#184])
+- Added ContextMenu to show context menus for windows-only applications. ([#267])
+- Added two new event types: ScreenKeyboardShown and ScreenKeyboardHidden. ([#297])
+
+### Changed
+
+- Updated SDL to version 3.4.0 ([#173])
+- Window exposed event now provides IsLiveResize property to indicate if the window is being live resized. ([#296])
+
+<!-- 0.4.0 -->
+[#100]: https://github.com/kappaduck/quack/issues/100
+[#102]: https://github.com/kappaduck/quack/issues/102
+[#103]: https://github.com/kappaduck/quack/issues/103
+[#172]: https://github.com/kappaduck/quack/issues/172
+[#173]: https://github.com/kappaduck/quack/issues/173
+[#184]: https://github.com/kappaduck/quack/issues/184
+[#267]: https://github.com/kappaduck/quack/issues/267
+[#296]: https://github.com/kappaduck/quack/issues/296
+[#297]: https://github.com/kappaduck/quack/issues/297
 
 ## 0.3.0 &#8212; 2026-01-01
 
