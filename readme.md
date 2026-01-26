@@ -19,6 +19,7 @@ Below is a compatibility table showing which versions of SDL are used in each Qu
 | Quack! version | SDL version | SDL_image version | SDL_ttf version | SDL_mixer version |
 | :------------: | :---------: | :---------------: | :-------------: | :---------------: |
 |    `source`    |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
+|    `0.4.0`     |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
 |    `0.3.0`     |  `3.2.30`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
 |    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |     `3.2.2`     |       `N/A`       |
 |    `0.1.0`     |  `3.2.18`   |       `N/A`       |      `N/A`      |       `N/A`       |
@@ -38,13 +39,13 @@ The API is designed to be cross-platform thanks to SDL's abstraction layer, maki
 Quack! is available on [NuGet]. Install it via the .NET CLI:
 
 ```bash
-dotnet add package KappaDuck.Quack -v 0.3.0
+dotnet add package KappaDuck.Quack -v 0.4.0
 ```
 
 or add it directly to your `.csproj` file:
 
 ```xml
-<PackageReference Include="KappaDuck.Quack" Version="0.3.0" />
+<PackageReference Include="KappaDuck.Quack" Version="0.4.0" />
 ```
 
 You can also install via the NuGet Package Manager in your Visual Studio or JetBrains Rider.
