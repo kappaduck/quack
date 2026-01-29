@@ -2,25 +2,55 @@ version: 2
 
 updates:
   - package-ecosystem: nuget
-    target-branch: main
+    target-branch: develop
     directory: /
     schedule:
       interval: weekly
-      day: tuesday
+      day: wednesday
     commit-message:
-      prefix: .NET packages
+      prefix: NuGet packages
     labels: [dependencies]
     assignees: [beauchama]
     groups:
-      dotnet:
+      analyzers:
+        patterns:
+          - '*Analyzers'
+          - SonarAnalyzer.CSharp
+          - AsyncFixer
+      deps:
         patterns:
           - '*'
-  - package-ecosystem: github-actions
-    target-branch: main
+        exclude-patterns:
+          - '*Analyzers'
+          - SonarAnalyzer.CSharp
+          - AsyncFixer
+          - NSubstitute
+          - TUnit
+      tests:
+        patterns:
+          - NSubstitute
+          - TUnit
+
+  - package-ecosystem: dotnet-sdk
+    target-branch: develop
     directory: /
     schedule:
       interval: weekly
-      day: tuesday
+      day: wednesday
+    commit-message:
+      prefix: .NET SDK
+    labels: [dependencies]
+    assignees: [beauchama]
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+
+  - package-ecosystem: github-actions
+    target-branch: develop
+    directory: /
+    schedule:
+      interval: weekly
+      day: wednesday
     commit-message:
       prefix: GitHub Actions
     labels: [dependencies]
