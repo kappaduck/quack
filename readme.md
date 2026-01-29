@@ -1,67 +1,48 @@
-# Quack! 🦆 ![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=stable)
+# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0%2C%2010.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=stable)][NuGet]
 
-Quack! is a fast, lightweight, and code-first 2D/3D game engine built on [SDL] and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
-It is designed for modern .NET 9+ games and desktop apps, providing a clean and flexible API that abstracts low-level platform details.
 
-Quack! offers a wide range of features, including:
+A lightweight, modern .NET game framework built on SDL
+---
 
-- Rendering 2D/3D graphics using SDL's rendering API ([SDL_renderer] and [SDL_gpu])
-- Window management and event handling
-- Input handling for keyboard, mouse, and game controllers
+## Overview
+
+Quack! is a fast and lightweight game framework built on top of [SDL] and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
+It targets modern .NET 9+ desktop apps and games, providing a clean and flexible API that abstracts away low-level native and platform-specific details.
+
+## Features
+
+- 2D/3D rendering using the [GPU API]
+- Window and display management
+- Input handling (keyboard, mouse, gamepads, etc...)
+- Event system
 - Audio playback and management
-- And much more!
-
-## Quack & SDL compatibility
-
-Quack! is shipped with native binaries of SDL and its extensions.
-Below is a compatibility table showing which versions of SDL are used in each Quack! release.
-
-| Quack! version | SDL version | SDL_image version | SDL_ttf version | SDL_mixer version |
-| :------------: | :---------: | :---------------: | :-------------: | :---------------: |
-|    `source`    |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.4.0`     |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.3.0`     |  `3.2.30`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |     `3.2.2`     |       `N/A`       |
-|    `0.1.0`     |  `3.2.18`   |       `N/A`       |      `N/A`      |       `N/A`       |
-
-> :warning: During active development, SDL dependencies may be updated frequently. :warning:
-
-## Cross-platform support
-
-Quack! currently supports Windows and Linux.
-
-The API is designed to be cross-platform thanks to SDL's abstraction layer, making porting to other platforms straightforward.
-
-> Other platforms such as Android or WebAssembly may be supported in the future, but there are no immediate plans.
+- System utilities (power management, clipboard, etc...)
+- Native UI integration (Context menus, dialogs, etc...)
+- Cross-platform support (Windows, Linux)
 
 ## Installation
 
-Quack! is available on [NuGet]. Install it via the .NET CLI:
+You can install Quack! via [NuGet]
 
 ```bash
-dotnet add package KappaDuck.Quack -v 0.4.0
+dotnet add package KappaDuck.Quack -v 0.5.0
 ```
 
-or add it directly to your `.csproj` file:
+or via the `.csproj` file:
 
 ```xml
-<PackageReference Include="KappaDuck.Quack" Version="0.4.0" />
+<PackageReference Include="KappaDuck.Quack" Version="0.5.0" />
 ```
 
-You can also install via the NuGet Package Manager in your Visual Studio or JetBrains Rider.
+You can also install via the NuGet Package Manager in Visual Studio or JetBrains Rider.
 
 ## Usage
 
-A minimal example creating a resizable window and handling quit events:
-
 ```csharp
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Graphics.Rendering;
+using KappaDuck.Quack.Windows;
 
-using RenderWindow window = new("Quack! Playground", 1080, 720)
-{
-    Resizable = true
-};
+using Window window = new Window("Quack!", 1080, 720);
 
 while (window.IsOpen)
 {
@@ -69,6 +50,7 @@ while (window.IsOpen)
     {
         if (e.RequestQuit())
         {
+            window.Close();
             return;
         }
     }
@@ -77,9 +59,33 @@ while (window.IsOpen)
 
 More examples can be found in the [Examples] directory.
 
+## Cross-Platform Support
+
+Quack! currently supports Windows and Linux platforms thanks to SDL's abstraction layer, making porting to other platforms easier in the future.
+
+The framework may have platform-specific implementations or limitations depending on the underlying SDL support. Using theses platform-specific features will have a warning in the editors saying that the code may not be portable.
+
+> :information_source: Other platforms such as Android or WebAssembly may be supported in the future, but there are no immediate plans.
+
+## SDL compatibility
+
+Quack! is shipped with precompiled SDL binaries for Windows and Linux which are built from [quack.runtimes].
+
+Below is a compatibility table for the SDL libraries used in each Quack! release.
+
+| Quack! version | SDL version | SDL_image version | SDL_ttf version | SDL_mixer version |
+| :------------: | :---------: | :---------------: | :-------------: | :---------------: |
+|    `0.5.0`     |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
+|    `0.4.0`     |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
+|    `0.3.0`     |  `3.2.30`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
+|    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |     `3.2.2`     |       `N/A`       |
+|    `0.1.0`     |  `3.2.18`   |       `N/A`       |      `N/A`      |       `N/A`       |
+
+> :warning: During active development, SDL dependencies may be updated frequently.
+
 ## Development & Playground
 
-You can build Quack! from source or run quick experiments using a playground file.
+You can build Quack! from source and running quick experiments using the playground file or [examples] provided in the repository.
 
 ### Prerequisites
 
@@ -100,21 +106,21 @@ cd quack
 
 #### Windows
 ```bash
-dotnet ./SDL3/setup.cs
+dotnet ./SDL3/dependencies.cs
 ```
 
 #### Linux
 ```bas
-chmod +x ./SDL3/setup.cs
-./SDL3/setup.cs
+chmod +x ./SDL3/dependencies.cs
+./SDL3/dependencies.cs
 ```
 
-> The setup script installs SDL and all required extensions. On linux, you only need to make it executable once.
+> The dependencies script installs SDL and all required extensions. On linux, you only need to make it executable once.
 
 ### Build & Run
 
 Open the solution in your preferred IDE (e.g., Visual Studio, Rider, VS Code).
-> Most IDEs do not support running single-file scripts directly, so you'll need to run the playground file from the command line.
+> :warning: Most IDEs do not support running single-file scripts directly, so you'll need to run the playground file from the command line.
 >
 > VS Code provides intellisense but cannot run the playground file directly.
 
@@ -128,19 +134,15 @@ Create a file named `quack.playground.cs` at the root of the repository with the
 ```csharp
 #!/usr/bin/env dotnet
 
-// Ignore the warning about missing copyright header in this file
 #:property NoWarn=IDE0073
 #:property TargetFramework=net10.0-windows
-#:property IncludeNativeLibs=true
-#:project src/KappaDuck.Quack
+#:property IncludeBinaries=true
+#:project KappaDuck.Quack
 
 using KappaDuck.Quack.Events;
-using KappaDuck.Quack.Graphics.Rendering;
+using KappaDuck.Quack.Windows;
 
-using RenderWindow window = new("Quack! Playground", 1080, 720)
-{
-    Resizable = true
-};
+using Window window = new Window("Quack!", 1080, 720);
 
 while (window.IsOpen)
 {
@@ -148,11 +150,11 @@ while (window.IsOpen)
     {
         if (e.RequestQuit())
         {
+            window.Close();
             return;
         }
     }
 }
-
 ```
 
 ### Run the playground
@@ -167,26 +169,24 @@ dotnet ./quack.playground.cs
 chmod +x ./quack.playground.cs # only needed once
 ./quack.playground.cs
 ```
+## :raised_hands: Credits
 
-## Credits
-
-Quack! draws inspiration from and leverages the following projects:
+Built with inspiration from
 
 - [SDL]
 - [SDL_image]
 - [SDL_ttf]
 - [SDL_mixer]
+- [SFML](https://www.sfml-dev.org/)
 - [LazyFoo](https://lazyfoo.net/index.php)
 - [Sayers.SDL2.Core](https://github.com/JeremySayers/Sayers.SDL2.Core)
 - [SDL3-CS](https://github.com/flibitijibibo/SDL3-CS)
-- [SFML](https://www.sfml-dev.org/)
 
-[SDL]: https://www.libsdl.org/
-[SDL_image]: https://www.libsdl.org/projects/SDL_image/
-[SDL_ttf]: https://www.libsdl.org/projects/SDL_ttf/
-[SDL_mixer]: https://www.libsdl.org/projects/SDL_mixer/
-[SDL_renderer]: https://wiki.libsdl.org/CategoryRender
-[SDL_gpu]: https://wiki.libsdl.org/CategoryGPU
 [Examples]: examples
-[dotnet run app.cs]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/
 [NuGet]: https://www.nuget.org/packages/KappaDuck.Quack/
+[SDL]: https://www.libsdl.org/
+[GPU API]: https://wiki.libsdl.org/CategoryGPU
+[SDL_image]: https://www.libsdl.org/projects/SDL_image/
+[SDL_mixer]: https://www.libsdl.org/projects/SDL_mixer/
+[SDL_ttf]: https://www.libsdl.org/projects/SDL_ttf/
+[quack.runtimes]: https://github.com/kappaduck/quack.runtimes

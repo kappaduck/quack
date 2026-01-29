@@ -1,0 +1,18 @@
+name: Epic
+description: A large body of work that can be broken down into smaller tasks (issues).
+labels: ["triage"]
+type: Epic
+assignees: [beauchama]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the epic in detail. Break it down into smaller tasks (issues) as needed.
+  - type: textarea
+    id: epic-description
+    attributes:
+      label: Description
+      description: A clear and concise description of the epic.
+      placeholder: This epic involves...
+    validations:
+      required: true
