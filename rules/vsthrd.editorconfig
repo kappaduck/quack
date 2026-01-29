@@ -1,0 +1,6 @@
+is_global = true
+
+# VSTHRD111: Consider calling ConfigureAwait on the awaited task
+# Is a duplicate of MA0004: https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0004.md
+# https://github.com/Microsoft/vs-threading/blob/main/doc/analyzers/VSTHRD111.md
+dotnet_diagnostic.VSTHRD111.severity = none
