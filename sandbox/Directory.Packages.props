@@ -1,6 +1,0 @@
-<Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('directory.packages.props', '$(MSBuildThisFileDirectory)../'))" />
-  <ItemGroup>
-    <PackageVersion Include="KappaDuck.Quack" Version="0.3.0-alpha.20260101142528" />
-  </ItemGroup>
-</Project>

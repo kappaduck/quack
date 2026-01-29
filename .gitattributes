@@ -11,7 +11,6 @@
 # Documents
 
 *.md        text diff=markdown linguist-detectable
-*.txt       text
 
 # Github files
 
@@ -24,41 +23,12 @@ codeowners  text
 *.jpeg      binary
 *.gif       binary
 
-# Linux script files
-
-*.bash      text eol=lf
-*.fish      text eol=lf
-*.sh        text eol=lf
-*zsh        text eol=lf
-
-# Windows script files
-
-*.bat       text eol=crlf
-*.cmd       text eol=crlf
-*.ps1       text eol=crlf
-
 # Serialisation
 
 *.json      text
-*.toml      text
 *.xml       text eol=lf
 *.yaml      text eol=lf
 *.yml       text eol=lf
-
-# Web files
-
-*.html     text diff=html
-
-# Web style files
-
-*.css      text diff=css
-*.scss     text diff=scss
-*.sass     text diff=sass
-
-# Web script files
-
-*.js       text diff=javascript
-*.ts       text diff=typescript
 
 # Exclude files form exporting
 

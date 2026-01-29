@@ -38,28 +38,3 @@ indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
-
-# Web files
-
-[*.{cshtml,htm,html,svg}]
-indent_size = 2
-
-# Web style files
-
-[*.{css,sass,scss}]
-indent_size = 2
-
-# Web script files
-
-[*.{js,ts}]
-indent_size = 2
-
-# Window script files
-
-[*.{bat,cmd,ps1}]
-end_of_line = crlf
-
-# Linux script files
-
-[*.sh]
-end_of_line = lf

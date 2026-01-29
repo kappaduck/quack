@@ -1,0 +1,26 @@
+name: Bug report
+description: Report a bug or unexpected behavior in Quack!
+labels: ["triage"]
+type: Bug
+assignees: [beauchama]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug in Quack! Please fill in the details below to help us understand and reproduce the issue.
+        Please search existing issues if your bug has already been reported ([quack/issues](https://github.com/kappaduck/quack/issues)).
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: >-
+        Please describe the bug or unexpected behavior you encountered. Include steps to reproduce the issue if possible.
+      description: A clear and concise description of what the bug is.
+      placeholder: I encountered a bug when...
+    validations:
+      required: true
+  - type: textarea
+    id: anything-else
+    attributes:
+      label: Is there anything else you'd like to add?
+      description: Additional context, screenshots, or information that may help us address the issue.
+      placeholder: Additional information...
