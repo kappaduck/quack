@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest an idea to improve or add to Quack!
+labels: ["triage"]
+type: Feature
+assignees: [beauchama]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest an idea to improve Quack! Please fill in the details below to help us understand your request.
+        Please search existing issues if your idea has already been suggested ([quack/issues](https://github.com/kappaduck/quack/issues)).
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: >-
+        Is there a feature you would like to see or an improvement to an existing feature? Please describe it below.
+      description: A clear and concise description of what you want to happen.
+      placeholder: I would like to see...
+    validations:
+      required: true

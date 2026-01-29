@@ -1,5 +1,10 @@
 is_global = true
 
+# CA2007: Consider calling ConfigureAwait on the awaited task
+# Only for console applications and libraries
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
+dotnet_code_quality.CA2007.output_kind = ConsoleApplication, DynamicallyLinkedLibrary
+
 # IDE0007 IDE0008: Use explicit type
 # Always use explicit type
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0007-ide0008
