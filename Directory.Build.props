@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup Label="Configure all .csproj files">
+    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+
+    <!-- Configure packages which are only Development dependency -->
+    <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
+    <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
+  </PropertyGroup>
+
+  <ItemGroup Label="Configure analyzer rules">
+    <GlobalAnalyzerConfigFiles Include="$(QuackRoot)\rules\*.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup Label="Link SDL libraries" Condition="$(IncludeBinaries) == 'true'">
+    <None Include="$(QuackRoot)\SDL3\runtimes\win-x64\native\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(QuackRoot)\SDL3\runtimes\linux-x64\native\*.so" Condition="$([System.OperatingSystem]::IsLinux())" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+</Project>
