@@ -10,6 +10,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup Label="Make internals visible to test project">
+    <InternalsVisibleTo Include="Unit.Tests" />
+    <InternalsVisibleTo Include="Integration.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
   <PropertyGroup Label="Quack! package metadata">
     <Authors>KappaDuck</Authors>
     <VersionPrefix>0.5.0</VersionPrefix>
