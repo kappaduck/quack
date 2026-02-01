@@ -1,0 +1,8 @@
+<Project>
+  <ItemGroup>
+    <Binaries Include="$(MSBuildThisFileDirectory)runtimes\win-x64\native\*.dll" Condition="'$([System.OperatingSystem]::IsWindows())" />
+    <Binaries Include="$(MSBuildThisFileDirectory)runtimes\linux-x64\native\*.so" Condition="'$([System.OperatingSystem]::IsLinux())" />
+
+    <Content Include="@(Binaries)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+</Project>

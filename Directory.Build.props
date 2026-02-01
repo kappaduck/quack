@@ -1,0 +1,31 @@
+<Project>
+  <PropertyGroup Label="Configure all .csproj files">
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+
+    <!-- Configure packages which are only Development dependency -->
+    <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
+    <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Custom properties">
+    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
+    <DefaultNetVersion>net10.0</DefaultNetVersion>
+    <IncludeBinaries>false</IncludeBinaries>
+  </PropertyGroup>
+
+  <ItemGroup Label="Configure analyzer rules">
+    <GlobalAnalyzerConfigFiles Include="$(QuackRoot)\rules\*.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup Label="Link SDL libraries" Condition="$(IncludeBinaries) == 'true'">
+    <Binaries Include="$(QuackRoot)\SDL3\runtimes\win-x64\native\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" />
+    <Binaries Include="$(QuackRoot)\SDL3\runtimes\linux-x64\native\*.so" Condition="$([System.OperatingSystem]::IsLinux())" />
+
+    <Content Include="@(Binaries)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+</Project>
