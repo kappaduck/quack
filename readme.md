@@ -133,7 +133,10 @@ Create a file named `quack.sandbox.cs` at the root of the repository with the fo
 ```csharp
 #!/usr/bin/env dotnet
 
-#:property Sandbox=true
+#:property TargetFramework=net10.0
+#:property IncludeBinaries=true
+#:property NoWarn=IDE0073
+#:project KappaDuck.Quack
 
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
