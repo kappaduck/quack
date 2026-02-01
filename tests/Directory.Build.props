@@ -1,0 +1,29 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup Label="Configure .csproj">
+    <TargetFramework>net10.0</TargetFramework>
+    <IncludeBinaries>true</IncludeBinaries>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup Label="Exclude tests project from code coverage">
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Global usings">
+    <Using Include="NSubstitute" />
+    <Using Include="TUnit" />
+    <Using Include="TUnit.Assertions" />
+    <Using Include="TUnit.Core" />
+  </ItemGroup>
+
+  <ItemGroup Label="Common test NuGets">
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="TUnit" />
+  </ItemGroup>
+</Project>
