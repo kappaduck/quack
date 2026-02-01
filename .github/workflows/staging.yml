@@ -3,8 +3,10 @@ name: Staging
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
-    paths: [ 'src/KappaDuck.Quack/**', '.github/workflows/staging.yml' ]
+    branches: [develop]
+    paths:
+      - 'src/KappaDuck.Quack/**'
+      - '.github/workflows/staging.yml'
 
 permissions:
   contents: read
@@ -19,6 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ./global.json
+
       - name: Get version
         shell: pwsh
         run: |
@@ -26,16 +33,16 @@ jobs:
           echo "date=$date" >> $env:GITHUB_ENV
 
       - name: Install SDL dependencies
-        run: dotnet .\SDL3\setup.cs
+        run: dotnet .\SDL3\deps.cs
 
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration release --no-restore
+        run: dotnet build KappaDuck.Quack\KappaDuck.Quack.csproj --configuration release --no-restore
 
       - name: Package
-        run: dotnet pack --no-build --no-restore --output ./artifacts --version-suffix alpha.${{ env.date }}
+        run: dotnet pack KappaDuck.Quack\KappaDuck.Quack.csproj --no-build --no-restore --output ./artifacts --version-suffix alpha.${{ env.date }}
 
       - name: Publish to NuGet
         run: dotnet nuget push "**/*.nupkg" --source https://apiint.nugettest.org/v3/index.json --api-key ${{ secrets.NUGET_STAGING_API_KEY }} --skip-duplicate
