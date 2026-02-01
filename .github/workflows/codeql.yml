@@ -1,8 +1,11 @@
 name: CodeQL
 
 on:
-  schedule:
-    - cron: '0 2 * * 2' # Every Tuesday at 2 AM UTC
+  push:
+    branches: [develop]
+    paths:
+      - 'KappaDuck.Quack/**'
+      - '.github/workflows/**'
 
 jobs:
   analyze:
@@ -30,6 +33,12 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+
+      - name: Setup .NET
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ./global.json
 
       - name: Restore dependencies
         if: matrix.language == 'csharp'
