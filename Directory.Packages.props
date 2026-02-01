@@ -8,10 +8,10 @@
     <GlobalPackageReference Include="AsyncFixer" Version="2.1.0" />
     <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.18.0.131500" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.19.0.132793" />
   </ItemGroup>
 
   <ItemGroup Label="Centralized package">
-    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="2.0.1" PrivateAssets="all" IncludeAssets="$(IncludedAssets)" />
+    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="2.0.2" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
   </ItemGroup>
 </Project>
