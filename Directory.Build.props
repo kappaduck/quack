@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup Label="Link SDL libraries" Condition="$(IncludeBinaries) == 'true'">
-    <None Include="$(QuackRoot)\SDL3\runtimes\win-x64\native\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
-    <None Include="$(QuackRoot)\SDL3\runtimes\linux-x64\native\*.so" Condition="$([System.OperatingSystem]::IsLinux())" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <Binaries Include="$(QuackRoot)\SDL3\runtimes\win-x64\native\*.dll" Condition="$([System.OperatingSystem]::IsWindows())" />
+    <Binaries Include="$(QuackRoot)\SDL3\runtimes\linux-x64\native\*.so" Condition="$([System.OperatingSystem]::IsLinux())" />
+
+    <Content Include="@(Binaries)" Link="%(FileName)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 </Project>
