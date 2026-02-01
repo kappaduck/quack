@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Configuration">
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <IsAotCompatible>true</IsAotCompatible>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configure nupkg generation" Condition="'$(Configuration)' == 'Debug'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Quack! package metadata">
+    <Authors>KappaDuck</Authors>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <Company>@(Authors)</Company>
+    <Copyright>Copyright © KappaDuck $([System.DateTime]::Now.Year)</Copyright>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageLicenseFile>license</PackageLicenseFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <Description>Quack! is a modern, lightweight and fast game framework built on top of SDL and its extensions (image, mixer, ttf). It targets .NET 9+ desktop apps and games, providing a clean and flexible API that hides the complexity of SDL.</Description>
+    <PackageTags>NET;SDL;SDL3;GameEngine;Engine;CSharp;Game;Multimedia;GameFramework</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup Label="Global usings">
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Runtime.InteropServices" />
+    <Using Include="System.Runtime.InteropServices.Marshalling" />
+  </ItemGroup>
+
+  <ItemGroup Label="Common files to include">
+    <None Include="$(QuackRoot)$(PackageReadmeFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(QuackRoot)$(PackageLicenseFile)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(QuackRoot)$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Label="build files to include">
+    <None Include="$(QuackRoot)SDL3\runtimes\**\*" Pack="true" PackagePath="runtimes\" Visible="false" />
+    <None Include="$(QuackRoot)$(MSBuildProjectName).targets" Pack="true" PackagePath="build\any\" Link="targets" />
+  </ItemGroup>
+
+  <ItemGroup Label="Enabling reproducible builds">
+    <PackageReference Include="DotNet.ReproducibleBuilds" />
+  </ItemGroup>
+</Project>
