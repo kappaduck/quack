@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [develop]
     paths:
-      - 'src/KappaDuck.Quack/**'
+      - 'KappaDuck.Quack/**'
       - '.github/workflows/pull-request.yml'
 
 permissions:
