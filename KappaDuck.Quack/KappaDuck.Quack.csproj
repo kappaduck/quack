@@ -4,6 +4,7 @@
     <IsAotCompatible>true</IsAotCompatible>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>AD0001</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="Configure nupkg generation" Condition="'$(Configuration)' == 'Debug'">
@@ -19,6 +20,7 @@
   <PropertyGroup Label="Quack! package metadata">
     <Authors>KappaDuck</Authors>
     <VersionPrefix>0.5.0</VersionPrefix>
+    <FileVersion>$(VersionPrefix)</FileVersion>
     <Company>@(Authors)</Company>
     <Copyright>Copyright © KappaDuck $([System.DateTime]::Now.Year)</Copyright>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -31,6 +33,7 @@
   <ItemGroup Label="Global usings">
     <Using Include="KappaDuck.Quack.Interop" />
     <Using Include="KappaDuck.Quack.Interop.SDL" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
     <Using Include="System.Runtime.CompilerServices" />
     <Using Include="System.Runtime.InteropServices" />
     <Using Include="System.Runtime.InteropServices.Marshalling" />

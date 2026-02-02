@@ -6,6 +6,7 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 /// <summary>
 /// Custom marshaller for a caller-owned UTF-8 encoded string.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(CallerStringMarshaller))]
 internal static unsafe class CallerStringMarshaller
 {
