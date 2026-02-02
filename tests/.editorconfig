@@ -12,12 +12,12 @@ dotnet_diagnostic.VSTHRD200.severity = none
 # IDE0021: Use expression body for constructors
 # Reason: Disabled expression body to read the code easily
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0021
-csharp_style_expression_bodied_constructors = false:silent
+dotnet_diagnostic.IDE0021.severity = none
 
 # IDE0022: Use expression body for methods
 # Reason: Disabled expression body to read the code easily
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0022
-csharp_style_expression_bodied_methods = false:silent
+dotnet_diagnostic.IDE0022.severity = none
 
 # CA2007: Consider calling ConfigureAwait on the awaited task
 # Reason: No need to call ConfigureAwait in tests
