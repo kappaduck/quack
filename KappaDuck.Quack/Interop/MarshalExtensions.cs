@@ -3,6 +3,7 @@
 
 namespace KappaDuck.Quack.Interop;
 
+[ExcludeFromCodeCoverage]
 internal static class MarshalExtensions
 {
     extension(Marshal)

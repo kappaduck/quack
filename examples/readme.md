@@ -51,7 +51,7 @@ _**no examples**_
 
 ### Core
 
-_**no examples**_
+- [Application Metadata](./core/metadata.cs) - Demonstrates how to set up application metadata.
 
 ### Events
 
