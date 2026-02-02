@@ -3,9 +3,11 @@ name: Pull Request
 on:
   workflow_dispatch:
   pull_request:
-    branches: [develop]
+    branches:
+      - main
+      - develop
     paths:
-      - 'src/KappaDuck.Quack/**'
+      - 'KappaDuck.Quack/**'
       - '.github/workflows/pull-request.yml'
 
 permissions:

@@ -5,7 +5,7 @@ on:
   push:
     branches: [develop]
     paths:
-      - 'src/KappaDuck.Quack/**'
+      - 'KappaDuck.Quack/**'
       - '.github/workflows/staging.yml'
 
 permissions:
