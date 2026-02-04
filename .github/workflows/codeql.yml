@@ -5,6 +5,7 @@ on:
     branches: [develop]
     paths:
       - 'KappaDuck.Quack/**'
+      - 'tests/**'
       - '.github/workflows/**'
 
 jobs:
