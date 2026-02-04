@@ -6,6 +6,7 @@ on:
     branches: [develop]
     paths:
       - 'KappaDuck.Quack/**'
+      - 'global.json'
       - '.github/workflows/staging.yml'
 
 permissions:

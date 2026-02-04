@@ -8,6 +8,8 @@ on:
       - develop
     paths:
       - 'KappaDuck.Quack/**'
+      - 'tests/**'
+      - 'global.json'
       - '.github/workflows/pull-request.yml'
 
 permissions:
