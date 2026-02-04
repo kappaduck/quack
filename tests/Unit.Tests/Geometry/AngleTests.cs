@@ -243,7 +243,7 @@ public sealed class AngleTests
     }
 
     [Test]
-    public async Task ShouldMultiplyAngleByScalarCommutative()
+    public async Task ShouldMultiplyAngleByScalarReversed()
     {
         const float scalar = 3.0f;
         Angle angle = Angle.FromDegrees(20.0f);
