@@ -133,12 +133,12 @@ public readonly struct Angle :
 
     /// <inheritdoc/>
     [ExcludeFromCodeCoverage]
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite(provider, $"{Degrees}°", out charsWritten);
 
     /// <inheritdoc/>
     [ExcludeFromCodeCoverage]
-    public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public readonly bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => Utf8.TryWrite(utf8Destination, provider, $"{Degrees}°", out bytesWritten);
 
     /// <summary>

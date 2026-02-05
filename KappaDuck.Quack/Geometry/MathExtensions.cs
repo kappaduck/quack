@@ -7,8 +7,11 @@ namespace KappaDuck.Quack.Geometry;
 
 internal static class MathExtensions
 {
-    [SuppressMessage("Style", "IDE0051:Remove unused private members", Justification = "Visual Studio has a bug where it thinks the property is not used.")]
-    private const float MachineEpsilon = 1.192092896e-07f;
+    private const float GeometryEpsilon = 1e-6f;
+
+    internal const float GeometryEpsilonSquared = GeometryEpsilon * GeometryEpsilon;
+
+    internal const float NormalizedEpsilon = 1e-6f;
 
     extension(Math)
     {
@@ -21,8 +24,8 @@ internal static class MathExtensions
 
     extension(MathF)
     {
-        internal static bool ApproximatelyZero(float value) => MathF.Abs(value) < MachineEpsilon;
+        internal static bool ApproximatelyZero(float value) => MathF.Abs(value) < GeometryEpsilon;
 
-        internal static bool ApproximatelyEqual(float left, float right) => MathF.Abs(left - right) < MachineEpsilon;
+        internal static bool ApproximatelyEqual(float left, float right) => MathF.Abs(left - right) < GeometryEpsilon;
     }
 }

@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Text.Unicode;
+
 namespace KappaDuck.Quack.Geometry;
 
 /// <summary>
@@ -8,7 +10,7 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="width">The width component of the size.</param>
 /// <param name="height">The height component of the size.</param>
-public struct Size(float width, float height) : ISpanFormattable
+public struct Size(float width, float height) : ISpanFormattable, IUtf8SpanFormattable
 {
     /// <summary>
     /// Gets or sets the width component.
@@ -34,6 +36,12 @@ public struct Size(float width, float height) : ISpanFormattable
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <inheritdoc/>
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    [ExcludeFromCodeCoverage]
+    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"({Width}, {Height})", out charsWritten);
+
+    /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
+    public readonly bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+        => Utf8.TryWrite(utf8Destination, provider, $"({Width}, {Height})", out bytesWritten);
 }
