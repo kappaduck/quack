@@ -63,7 +63,7 @@ public struct Vector2(float x, float y) :
     /// Gets the magnitude (length) of the vector.
     /// </summary>
     /// <remarks>
-    /// If you only need to compare vector lengths, consider using <see cref="MagnitudeSquared"/> instead
+    /// If you only need to compare vector lengths, consider using <see cref="MagnitudeSquared"/> instead.
     /// </remarks>
     public readonly float Magnitude => MathF.Sqrt(MagnitudeSquared);
 

@@ -67,9 +67,9 @@ public sealed class Vector2Tests
         Vector2 vector = new(3f, 4f);
         Vector2 normalized = vector.Normalized;
 
-        await Assert.That(normalized.Magnitude).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(normalized.X).IsEqualTo(0.6f).Within(0.0001f);
-        await Assert.That(normalized.Y).IsEqualTo(0.8f).Within(0.0001f);
+        await Assert.That(normalized.Magnitude).IsEqualTo(1f);
+        await Assert.That(normalized.X).IsEqualTo(0.6f);
+        await Assert.That(normalized.Y).IsEqualTo(0.8f);
     }
 
     [Test]
@@ -78,9 +78,9 @@ public sealed class Vector2Tests
         Vector2 vector = new(0f, 1f);
         Vector2 normalized = vector.Normalized;
 
-        await Assert.That(normalized.Magnitude).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(normalized.X).IsEqualTo(0f).Within(0.0001f);
-        await Assert.That(normalized.Y).IsEqualTo(1f).Within(0.0001f);
+        await Assert.That(normalized.Magnitude).IsEqualTo(1f);
+        await Assert.That(normalized.X).IsEqualTo(0f);
+        await Assert.That(normalized.Y).IsEqualTo(1f);
     }
 
     [Test]
@@ -89,8 +89,8 @@ public sealed class Vector2Tests
         Vector2 vector = new(3f, 4f);
         Vector2 leftPerpendicular = vector.LeftPerpendicular;
 
-        await Assert.That(leftPerpendicular.X).IsEqualTo(-4f).Within(0.0001f);
-        await Assert.That(leftPerpendicular.Y).IsEqualTo(3f).Within(0.0001f);
+        await Assert.That(leftPerpendicular.X).IsEqualTo(-4f);
+        await Assert.That(leftPerpendicular.Y).IsEqualTo(3f);
     }
 
     [Test]
@@ -99,8 +99,8 @@ public sealed class Vector2Tests
         Vector2 vector = new(3f, 4f);
         Vector2 rightPerpendicular = vector.RightPerpendicular;
 
-        await Assert.That(rightPerpendicular.X).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(rightPerpendicular.Y).IsEqualTo(-3f).Within(0.0001f);
+        await Assert.That(rightPerpendicular.X).IsEqualTo(4f);
+        await Assert.That(rightPerpendicular.Y).IsEqualTo(-3f);
     }
 
     [Test]
@@ -108,8 +108,8 @@ public sealed class Vector2Tests
     {
         Vector2 down = Vector2.Down;
 
-        await Assert.That(down.X).IsEqualTo(0f).Within(0.0001f);
-        await Assert.That(down.Y).IsEqualTo(1f).Within(0.0001f);
+        await Assert.That(down.X).IsEqualTo(0f);
+        await Assert.That(down.Y).IsEqualTo(1f);
     }
 
     [Test]
@@ -117,8 +117,8 @@ public sealed class Vector2Tests
     {
         Vector2 left = Vector2.Left;
 
-        await Assert.That(left.X).IsEqualTo(-1f).Within(0.0001f);
-        await Assert.That(left.Y).IsEqualTo(0f).Within(0.0001f);
+        await Assert.That(left.X).IsEqualTo(-1f);
+        await Assert.That(left.Y).IsEqualTo(0f);
     }
 
     [Test]
@@ -126,8 +126,8 @@ public sealed class Vector2Tests
     {
         Vector2 right = Vector2.Right;
 
-        await Assert.That(right.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(right.Y).IsEqualTo(0f).Within(0.0001f);
+        await Assert.That(right.X).IsEqualTo(1f);
+        await Assert.That(right.Y).IsEqualTo(0f);
     }
 
     [Test]
@@ -135,8 +135,8 @@ public sealed class Vector2Tests
     {
         Vector2 up = Vector2.Up;
 
-        await Assert.That(up.X).IsEqualTo(0f).Within(0.0001f);
-        await Assert.That(up.Y).IsEqualTo(-1f).Within(0.0001f);
+        await Assert.That(up.X).IsEqualTo(0f);
+        await Assert.That(up.Y).IsEqualTo(-1f);
     }
 
     [Test]
@@ -348,7 +348,7 @@ public sealed class Vector2Tests
         Vector2 to = new(0f, 1f);
 
         Angle angle = Vector2.Between(from, to);
-        await Assert.That(angle.Degrees).IsEqualTo(90f).Within(0.01f);
+        await Assert.That(angle.Degrees).IsEqualTo(90f);
     }
 
     [Test]
@@ -359,9 +359,9 @@ public sealed class Vector2Tests
 
         Vector2 clamped = Vector2.Clamp(vector, maxLength);
 
-        await Assert.That(clamped.Magnitude).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(clamped.X).IsEqualTo(2.4f).Within(0.0001f);
-        await Assert.That(clamped.Y).IsEqualTo(3.2f).Within(0.0001f);
+        await Assert.That(clamped.Magnitude).IsEqualTo(4f);
+        await Assert.That(clamped.X).IsEqualTo(2.4f);
+        await Assert.That(clamped.Y).IsEqualTo(3.2f);
     }
 
     [Test]
@@ -372,9 +372,9 @@ public sealed class Vector2Tests
 
         Vector2 clamped = Vector2.Clamp(vector, maxLength);
 
-        await Assert.That(clamped.Magnitude).IsEqualTo(5f).Within(0.0001f);
-        await Assert.That(clamped.X).IsEqualTo(3f).Within(0.0001f);
-        await Assert.That(clamped.Y).IsEqualTo(4f).Within(0.0001f);
+        await Assert.That(clamped.Magnitude).IsEqualTo(5f);
+        await Assert.That(clamped.X).IsEqualTo(3f);
+        await Assert.That(clamped.Y).IsEqualTo(4f);
     }
 
     [Test]
@@ -415,8 +415,8 @@ public sealed class Vector2Tests
         Vector2 to = new(3f, 4f);
 
         Vector2 result = Vector2.Lerp(from, to, t);
-        await Assert.That(result.X).IsEqualTo(2f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(3f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(2f);
+        await Assert.That(result.Y).IsEqualTo(3f);
     }
 
     [Test]
@@ -427,8 +427,8 @@ public sealed class Vector2Tests
         Vector2 to = new(3f, 4f);
 
         Vector2 result = Vector2.LerpUnclamped(from, to, t);
-        await Assert.That(result.X).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(5f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(4f);
+        await Assert.That(result.Y).IsEqualTo(5f);
     }
 
     [Test]
@@ -438,8 +438,8 @@ public sealed class Vector2Tests
         Vector2 right = new(3f, 4f);
 
         Vector2 result = Vector2.Max(left, right);
-        await Assert.That(result.X).IsEqualTo(3f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(5f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(3f);
+        await Assert.That(result.Y).IsEqualTo(5f);
     }
 
     [Test]
@@ -449,8 +449,8 @@ public sealed class Vector2Tests
         Vector2 right = new(3f, 4f);
 
         Vector2 result = Vector2.Min(left, right);
-        await Assert.That(result.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(4f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(1f);
+        await Assert.That(result.Y).IsEqualTo(4f);
     }
 
     [Test]
@@ -461,8 +461,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = Vector2.MoveTowards(current, target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(2.2f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(3.6f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(2.2f);
+        await Assert.That(result.Y).IsEqualTo(3.6f);
     }
 
     [Test]
@@ -473,8 +473,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = Vector2.MoveTowards(current, target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(6f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(4f);
+        await Assert.That(result.Y).IsEqualTo(6f);
     }
 
     [Test]
@@ -485,8 +485,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = Vector2.MoveTowards(current, target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(2f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(1f);
+        await Assert.That(result.Y).IsEqualTo(2f);
     }
 
     [Test]
@@ -496,8 +496,8 @@ public sealed class Vector2Tests
         Vector2 normal = new Vector2(0f, 1f).Normalized;
 
         Vector2 reflected = Vector2.Reflect(vector, normal);
-        await Assert.That(reflected.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(reflected.Y).IsEqualTo(1f).Within(0.0001f);
+        await Assert.That(reflected.X).IsEqualTo(1f);
+        await Assert.That(reflected.Y).IsEqualTo(1f);
     }
 
     [Test]
@@ -518,8 +518,8 @@ public sealed class Vector2Tests
         Vector2 scale = new(4f, 5f);
 
         Vector2 result = Vector2.Scale(vector, scale);
-        await Assert.That(result.X).IsEqualTo(8f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(15f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(8f);
+        await Assert.That(result.Y).IsEqualTo(15f);
     }
 
     [Test]
@@ -529,7 +529,7 @@ public sealed class Vector2Tests
         Vector2 to = new(0f, 1f);
 
         Angle angle = from.Angle(to);
-        await Assert.That(angle.Degrees).IsEqualTo(90f).Within(0.01f);
+        await Assert.That(angle.Degrees).IsEqualTo(90f);
     }
 
     [Test]
@@ -540,9 +540,9 @@ public sealed class Vector2Tests
 
         Vector2 clamped = vector.Clamp(maxLength);
 
-        await Assert.That(clamped.Magnitude).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(clamped.X).IsEqualTo(2.4f).Within(0.0001f);
-        await Assert.That(clamped.Y).IsEqualTo(3.2f).Within(0.0001f);
+        await Assert.That(clamped.Magnitude).IsEqualTo(4f);
+        await Assert.That(clamped.X).IsEqualTo(2.4f);
+        await Assert.That(clamped.Y).IsEqualTo(3.2f);
     }
 
     [Test]
@@ -553,9 +553,9 @@ public sealed class Vector2Tests
 
         Vector2 clamped = vector.Clamp(maxLength);
 
-        await Assert.That(clamped.Magnitude).IsEqualTo(5f).Within(0.0001f);
-        await Assert.That(clamped.X).IsEqualTo(3f).Within(0.0001f);
-        await Assert.That(clamped.Y).IsEqualTo(4f).Within(0.0001f);
+        await Assert.That(clamped.Magnitude).IsEqualTo(5f);
+        await Assert.That(clamped.X).IsEqualTo(3f);
+        await Assert.That(clamped.Y).IsEqualTo(4f);
     }
 
     [Test]
@@ -605,8 +605,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = current.MoveTowards(target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(2.2f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(3.6f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(2.2f);
+        await Assert.That(result.Y).IsEqualTo(3.6f);
     }
 
     [Test]
@@ -617,8 +617,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = current.MoveTowards(target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(4f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(6f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(4f);
+        await Assert.That(result.Y).IsEqualTo(6f);
     }
 
     [Test]
@@ -629,8 +629,8 @@ public sealed class Vector2Tests
         Vector2 target = new(4f, 6f);
 
         Vector2 result = current.MoveTowards(target, maxDistance);
-        await Assert.That(result.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(2f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(1f);
+        await Assert.That(result.Y).IsEqualTo(2f);
     }
 
     [Test]
@@ -640,8 +640,8 @@ public sealed class Vector2Tests
         Vector2 normal = new Vector2(0f, 1f).Normalized;
 
         Vector2 reflected = vector.Reflect(normal);
-        await Assert.That(reflected.X).IsEqualTo(1f).Within(0.0001f);
-        await Assert.That(reflected.Y).IsEqualTo(1f).Within(0.0001f);
+        await Assert.That(reflected.X).IsEqualTo(1f);
+        await Assert.That(reflected.Y).IsEqualTo(1f);
     }
 
     [Test]
@@ -662,7 +662,7 @@ public sealed class Vector2Tests
         Vector2 scale = new(4f, 5f);
 
         Vector2 result = vector.Scale(scale);
-        await Assert.That(result.X).IsEqualTo(8f).Within(0.0001f);
-        await Assert.That(result.Y).IsEqualTo(15f).Within(0.0001f);
+        await Assert.That(result.X).IsEqualTo(8f);
+        await Assert.That(result.Y).IsEqualTo(15f);
     }
 }
