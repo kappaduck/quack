@@ -1,5 +1,4 @@
-# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0%2C%2010.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=stable)][NuGet]
-
+# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0,%2010.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=stable)][NuGet]
 
 A modern .NET game framework built on SDL
 ---
@@ -90,6 +89,7 @@ You can build Quack! from source and running quick experiments by creating C# fi
 
 - [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- [.NET 11.0 SDK](https://dotnet.microsoft.com/download/dotnet/11.0)
 
 > The SDK includes everything needed to build and run .NET applications.
 
