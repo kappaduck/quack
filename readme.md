@@ -1,4 +1,4 @@
-# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0,%2010.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=stable)][NuGet]
+# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0,%2010.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
 
 A modern .NET game framework built on SDL
 ---
@@ -33,6 +33,36 @@ or via the `.csproj` file:
 ```
 
 You can also install via the NuGet Package Manager in Visual Studio or JetBrains Rider.
+
+> :warning: Quack! is still in early development, so expect breaking changes and frequent updates. It's recommended to use the latest version for the best experience.
+
+### Beta packages
+
+If you want to try the latest features and improvements, you can install the beta version using the nuget test feed:
+
+Add the following package source to your NuGet configuration file (`nuget.config`) at the root of your project
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="nuget" value="https://apiint.nugettest.org/v3/index.json" />
+  </packageSources>
+
+  <packageSourceMapping>
+    <packageSource key="nuget">
+      <package pattern="*" />
+    </packageSource>
+  </packageSourceMapping>
+</configuration>
+```
+
+Then, you can install the latest beta version
+
+```bash
+dotnet add package KappaDuck.Quack --prerelease
+```
 
 ## Usage
 
