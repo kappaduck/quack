@@ -14,7 +14,7 @@
 
   <PropertyGroup Label="Custom properties">
     <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
-    <DefaultNetVersion>net10.0</DefaultNetVersion>
+    <DefaultNetVersion>net11.0</DefaultNetVersion>
     <IncludeBinaries>false</IncludeBinaries>
   </PropertyGroup>
 
