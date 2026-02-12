@@ -26,6 +26,6 @@ internal static class MathExtensions
     {
         internal static bool ApproximatelyZero(float value) => MathF.Abs(value) < GeometryEpsilon;
 
-        internal static bool ApproximatelyEqual(float left, float right) => MathF.Abs(left - right) < GeometryEpsilon;
+        internal static bool ApproximatelyEquals(float left, float right) => MathF.Abs(left - right) < GeometryEpsilon;
     }
 }

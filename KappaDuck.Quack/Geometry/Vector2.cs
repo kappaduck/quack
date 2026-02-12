@@ -384,8 +384,8 @@ public struct Vector2(float x, float y) :
     /// <returns><see langword="true"/> if the vectors are equal; otherwise, <see langword="false"/>.</returns>
     public readonly bool Equals(Vector2 other)
     {
-        return MathF.ApproximatelyEqual(X, other.X)
-            && MathF.ApproximatelyEqual(Y, other.Y);
+        return MathF.ApproximatelyEquals(X, other.X)
+            && MathF.ApproximatelyEquals(Y, other.Y);
     }
 
     /// <inheritdoc/>

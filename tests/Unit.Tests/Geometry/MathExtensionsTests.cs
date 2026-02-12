@@ -37,7 +37,7 @@ public sealed class MathExtensionsTests
     [Arguments(42.0001, 42.0001)]
     public async Task ApproximatelyEqualsShouldReturnTrueWhenValueAreEqual(float left, float right)
     {
-        bool result = MathExtensions.ApproximatelyEqual(left, right);
+        bool result = MathExtensions.ApproximatelyEquals(left, right);
         await Assert.That(result).IsTrue();
     }
 
@@ -47,7 +47,7 @@ public sealed class MathExtensionsTests
     [Arguments(42.0001, 42.00001)]
     public async Task ApproximatelyEqualsShouldReturnFalseWhenValueAreNotEqual(float left, float right)
     {
-        bool result = MathExtensions.ApproximatelyEqual(left, right);
+        bool result = MathExtensions.ApproximatelyEquals(left, right);
         await Assert.That(result).IsFalse();
     }
 }

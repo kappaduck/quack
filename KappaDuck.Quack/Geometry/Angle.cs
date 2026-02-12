@@ -66,7 +66,7 @@ public readonly struct Angle :
     };
 
     /// <inheritdoc/>
-    public bool Equals(Angle other) => MathF.ApproximatelyEqual(Radians, other.Radians);
+    public bool Equals(Angle other) => MathF.ApproximatelyEquals(Radians, other.Radians);
 
     /// <inheritdoc/>
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is Angle angle && Equals(angle);

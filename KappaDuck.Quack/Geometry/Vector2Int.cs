@@ -121,8 +121,8 @@ public struct Vector2Int(int x, int y) :
     /// <returns><see langword="true"/> if the vectors are equal; otherwise, <see langword="false"/>.</returns>
     public readonly bool Equals(Vector2Int other)
     {
-        return MathF.ApproximatelyEqual(X, other.X)
-            && MathF.ApproximatelyEqual(Y, other.Y);
+        return MathF.ApproximatelyEquals(X, other.X)
+            && MathF.ApproximatelyEquals(Y, other.Y);
     }
 
     /// <inheritdoc/>

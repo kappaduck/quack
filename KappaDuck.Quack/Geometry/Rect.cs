@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Text.Unicode;
+
 namespace KappaDuck.Quack.Geometry;
 
 /// <summary>
@@ -33,7 +35,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// Gets or sets the x-coordinate of the top-left corner.
     /// </summary>
     /// <remarks>
-    /// Updating the x-coordinate will adjust <see cref="MaxX"/>.
+    /// Updating the x-coordinate will adjust <see cref="Right"/>.
     /// </remarks>
     public float X { get; set; } = x;
 
@@ -41,7 +43,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// Gets or sets the y-coordinate of the top-left corner.
     /// </summary>
     /// <remarks>
-    /// Updating the y-coordinate will adjust <see cref="MaxY"/>.
+    /// Updating the y-coordinate will adjust <see cref="Bottom"/>.
     /// </remarks>
     public float Y { get; set; } = y;
 
@@ -49,7 +51,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// Gets or sets the width measured from the x-coordinate.
     /// </summary>
     /// <remarks>
-    /// Updating the x-coordinate will adjust <see cref="MaxX"/>.
+    /// Updating the x-coordinate will adjust <see cref="Right"/>.
     /// </remarks>
     public float Width { get; set; } = width;
 
@@ -57,35 +59,363 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// Gets or sets the height measured from the y-coordinate.
     /// </summary>
     /// <remarks>
-    /// Updating the y-coordinate will adjust <see cref="MaxY"/>.
+    /// Updating the y-coordinate will adjust <see cref="Bottom"/>.
     /// </remarks>
     public float Height { get; set; } = height;
 
     /// <summary>
-    /// Gets the x-coordinate of the right side of the rectangle.
+    /// Gets the area of the rectangle.
     /// </summary>
-    public readonly float MaxX => X + Width;
+    public readonly float Area => Width * Height;
 
     /// <summary>
-    /// Gets the y-coordinate of the bottom side of the rectangle.
+    /// Gets or sets the position of the top-left corner.
     /// </summary>
-    public readonly float MaxY => Y + Height;
-
-    /// <summary>
-    /// Gets or sets the center point of the rectangle.
-    /// </summary>
-    public Vector2 Center
+    public Vector2 Position
     {
-        readonly get => new(X + (Width / 2f), Y + (Height / 2f));
+        readonly get => new(X, Y);
         set
         {
-            X = value.X - (Width / 2f);
-            Y = value.Y - (Height / 2f);
+            X = value.X;
+            Y = value.Y;
         }
     }
 
     /// <summary>
+    /// Gets or sets the size of the rectangle.
+    /// </summary>
+    public Size Size
+    {
+        readonly get => new(Width, Height);
+        set
+        {
+            Width = value.Width;
+            Height = value.Height;
+        }
+    }
+
+    /// <summary>
+    /// Gets the x-coordinate of the left side of the rectangle.
+    /// </summary>
+    /// <remarks>It's an alias for <see cref="X"/>.</remarks>
+    public readonly float Left => X;
+
+    /// <summary>
+    /// Gets the y-coordinate of the top side of the rectangle.
+    /// </summary>
+    /// <remarks>It's an alias for <see cref="Y"/>.</remarks>
+    public readonly float Top => Y;
+
+    /// <summary>
+    /// Gets the x-coordinate of the right side of the rectangle.
+    /// </summary>
+    public readonly float Right => X + Width;
+
+    /// <summary>
+    /// Gets the y-coordinate of the bottom side of the rectangle.
+    /// </summary>
+    public readonly float Bottom => Y + Height;
+
+    /// <summary>
+    /// Gets or sets the center point of the rectangle.
+    /// </summary>
+    public readonly Vector2 Center => new(X + (Width / 2f), Y + (Height / 2f));
+
+    /// <summary>
+    /// Gets the top-left corner of the rectangle.
+    /// </summary>
+    public readonly Vector2 TopLeft => new(Left, Top);
+
+    /// <summary>
+    /// Gets the top-right corner of the rectangle.
+    /// </summary>
+    public readonly Vector2 TopRight => new(Right, Top);
+
+    /// <summary>
+    /// Gets the bottom-left corner of the rectangle.
+    /// </summary>
+    public readonly Vector2 BottomLeft => new(Left, Bottom);
+
+    /// <summary>
+    /// Gets the bottom-right corner of the rectangle.
+    /// </summary>
+    public readonly Vector2 BottomRight => new(Right, Bottom);
+
+    /// <summary>
     /// Gets a value indicating whether the rectangle is empty.
     /// </summary>
-    public readonly bool IsEmpty => MathF.ApproximatelyZero(Width) && MathF.ApproximatelyZero(Height);
+    public readonly bool IsEmpty => MathF.ApproximatelyZero(Width) || MathF.ApproximatelyZero(Height);
+
+    /// <summary>
+    /// Gets a rectangle with all components set to zero.
+    /// </summary>
+    public static Rect Zero { get; } = new(0f, 0f, 0f, 0f);
+
+    /// <summary>
+    /// Determines whether the point is contained within the rectangle.
+    /// </summary>
+    /// <param name="point">The point to check.</param>
+    /// <returns><see langword="true"/> if the point is within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool Contains(Vector2 point)
+        => !IsEmpty && point.X >= X && point.X <= Right && point.Y >= Y && point.Y <= Bottom;
+
+    /// <summary>
+    /// Determines whether all points are contained within the rectangle.
+    /// </summary>
+    /// <param name="points">The points to check.</param>
+    /// <returns><see langword="true"/> if all points are within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool ContainsAll(ReadOnlySpan<Vector2> points)
+    {
+        if (IsEmpty || points.IsEmpty)
+            return false;
+
+        foreach (Vector2 point in points)
+        {
+            if (!Contains(point))
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Determines whether all points are contained within the rectangle.
+    /// </summary>
+    /// <param name="points">The points to check.</param>
+    /// <returns><see langword="true"/> if all points are within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool ContainsAll(IEnumerable<Vector2> points)
+    {
+        if (IsEmpty)
+            return false;
+
+        return points switch
+        {
+            Vector2[] array => ContainsAll(array),
+            List<Vector2> list => ContainsAll(CollectionsMarshal.AsSpan(list)),
+            _ => points.All(Contains)
+        };
+    }
+
+    /// <summary>
+    /// Determines whether any points are contained within the rectangle.
+    /// </summary>
+    /// <param name="points">The points to check.</param>
+    /// <returns><see langword="true"/> if any point is within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool ContainsAny(ReadOnlySpan<Vector2> points)
+    {
+        if (IsEmpty || points.IsEmpty)
+            return false;
+
+        foreach (Vector2 point in points)
+        {
+            if (Contains(point))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Determines whether any points are contained within the rectangle.
+    /// </summary>
+    /// <param name="points">The points to check.</param>
+    /// <returns><see langword="true"/> if any point is within the rectangle; otherwise, <see langword="false"/>.</returns>
+    public readonly bool ContainsAny(IEnumerable<Vector2> points)
+    {
+        if (IsEmpty)
+            return false;
+
+        return points switch
+        {
+            Vector2[] array => ContainsAny(array),
+            List<Vector2> list => ContainsAny(CollectionsMarshal.AsSpan(list)),
+            _ => points.Any(Contains)
+        };
+    }
+
+    /// <summary>
+    /// Deconstructs the rectangle into its components.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the top-left corner of the rectangle.</param>
+    /// <param name="y">The y-coordinate of the top-left corner of the rectangle.</param>
+    /// <param name="width">The width of the rectangle.</param>
+    /// <param name="height">The height of the rectangle.</param>
+    public readonly void Deconstruct(out float x, out float y, out float width, out float height)
+    {
+        x = X;
+        y = Y;
+        width = Width;
+        height = Height;
+    }
+
+    /// <summary>
+    /// Grows the rectangle to include the specified point.
+    /// </summary>
+    /// <remarks>
+    /// If the rectangle already contains the point, no changes are made.
+    /// </remarks>
+    /// <param name="point">The point to encapsulate.</param>
+    public void Encapsulate(Vector2 point)
+    {
+        if (Contains(point))
+            return;
+
+        if (IsEmpty)
+        {
+            X = point.X;
+            Y = point.Y;
+            Width = 0f;
+            Height = 0f;
+
+            return;
+        }
+
+        float left = MathF.Min(X, point.X);
+        float top = MathF.Min(Y, point.Y);
+        float right = MathF.Max(Right, point.X);
+        float bottom = MathF.Max(Bottom, point.Y);
+
+        X = left;
+        Y = top;
+        Width = right - left;
+        Height = bottom - top;
+    }
+
+    /// <summary>
+    /// Grows the rectangle to include the specified rectangle.
+    /// </summary>
+    /// <remarks>
+    /// If the rectangle already contains the specified rectangle, no changes are made.
+    /// </remarks>
+    /// <param name="rect">The rectangle to encapsulate.</param>
+    public void Encapsulate(Rect rect)
+    {
+        if (this == rect || rect.IsEmpty)
+            return;
+
+        if (IsEmpty)
+        {
+            this = rect;
+            return;
+        }
+
+        float left = MathF.Min(X, rect.X);
+        float top = MathF.Min(Y, rect.Y);
+        float right = MathF.Max(Right, rect.Right);
+        float bottom = MathF.Max(Bottom, rect.Bottom);
+
+        X = left;
+        Y = top;
+        Width = right - left;
+        Height = bottom - top;
+    }
+
+    /// <summary>
+    /// Determines whether this rectangle overlaps with another rectangle.
+    /// </summary>
+    /// <param name="rect">The rectangle to check for overlap.</param>
+    /// <returns><see langword="true"/> if the rectangles overlap; otherwise, <see langword="false"/>.</returns>
+    public readonly bool Overlaps(Rect rect)
+    {
+        if (IsEmpty || rect.IsEmpty)
+            return false;
+
+        return !(Left >= rect.Right || Right <= rect.Left || Top >= rect.Bottom || Bottom <= rect.Top);
+    }
+
+    /// <summary>
+    /// Calculates the intersecting rectangle of two rectangles.
+    /// </summary>
+    /// <param name="left">The first rectangle.</param>
+    /// <param name="right">The second rectangle.</param>
+    /// <returns>The intersecting rectangle, or <see cref="Zero"/> if there is no intersection.</returns>
+    public static Rect Intersect(Rect left, Rect right)
+    {
+        if (!left.Overlaps(right))
+            return Zero;
+
+        float x = MathF.Max(left.X, right.X);
+        float y = MathF.Max(left.Y, right.Y);
+        float width = MathF.Min(left.Right, right.Right) - x;
+        float height = MathF.Min(left.Bottom, right.Bottom) - y;
+
+        return new Rect(x, y, width, height);
+    }
+
+    /// <summary>
+    /// Calculates the smallest rectangle that contains both specified rectangles.
+    /// </summary>
+    /// <param name="left">The first rectangle.</param>
+    /// <param name="right">The second rectangle.</param>
+    /// <returns>The smallest rectangle that contains both rectangles.</returns>
+    public static Rect Union(Rect left, Rect right)
+    {
+        if (left.IsEmpty && right.IsEmpty)
+            return Zero;
+
+        if (left.IsEmpty)
+            return right;
+
+        if (right.IsEmpty)
+            return left;
+
+        float x = MathF.Min(left.X, right.X);
+        float y = MathF.Min(left.Y, right.Y);
+        float width = MathF.Max(left.Right, right.Right) - x;
+        float height = MathF.Max(left.Bottom, right.Bottom) - y;
+
+        return new Rect(x, y, width, height);
+    }
+
+    /// <inheritdoc/>
+    public readonly bool Equals(Rect other)
+    {
+        if (IsEmpty && other.IsEmpty)
+            return true;
+
+        return MathF.ApproximatelyEquals(X, other.X)
+            && MathF.ApproximatelyEquals(Y, other.Y)
+            && MathF.ApproximatelyEquals(Width, other.Width)
+            && MathF.ApproximatelyEquals(Height, other.Height);
+    }
+
+    /// <inheritdoc/>
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Rect other && Equals(other);
+
+    /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
+    public override readonly int GetHashCode() => HashCode.Combine(X, Y, Width, Height);
+
+    /// <inheritdoc/>
+    public override readonly string ToString() => $"{this}";
+
+    /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
+    public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
+
+    /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
+    public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+        => destination.TryWrite($"({X}, {Y}, {Width}, {Height})", out charsWritten);
+
+    /// <inheritdoc/>
+    [ExcludeFromCodeCoverage]
+    public readonly bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+        => Utf8.TryWrite(utf8Destination, provider, $"({X}, {Y}, {Width}, {Height})", out bytesWritten);
+
+    /// <summary>
+    /// Determines whether two rectangles are equal.
+    /// </summary>
+    /// <param name="left">The left rectangle.</param>
+    /// <param name="right">The right rectangle.</param>
+    /// <returns><see langword="true"/> if the rectangles are equal; otherwise, <see langword="false"/>.</returns>
+    public static bool operator ==(Rect left, Rect right) => left.Equals(right);
+
+    /// <summary>
+    /// Determines whether two rectangles are not equal.
+    /// </summary>
+    /// <param name="left">The left rectangle.</param>
+    /// <param name="right">The right rectangle.</param>
+    /// <returns><see langword="true"/> if the rectangles are not equal; otherwise, <see langword="false"/>.</returns>
+    public static bool operator !=(Rect left, Rect right) => !(left == right);
 }
