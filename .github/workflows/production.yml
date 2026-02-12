@@ -13,6 +13,8 @@ jobs:
   build:
     name: Build/Deploy
     runs-on: windows-latest
+    env:
+      QuackProject: KappaDuck.Quack\KappaDuck.Quack.csproj
 
     steps:
       - name: Checkout
@@ -23,24 +25,25 @@ jobs:
         with:
           global-json-file: ./global.json
 
-      - name: Get version
+      - name: Get version from tag
+        id: tag
         shell: pwsh
         run: |
           $tag = "${{ github.event.release.tag_name }}"
           $version = $tag -replace '^v', ''
-          echo "version=$version" >> $env:GITHUB_ENV
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Install SDL dependencies
         run: dotnet .\SDL3\setup.cs
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ${{ env.QuackProject }}
 
       - name: Build
-        run: dotnet build --configuration release --no-restore
+        run: dotnet build ${{ env.QuackProject }} --configuration release --no-restore
 
       - name: Package
-        run: dotnet pack --no-build --no-restore --output ./artifacts -p:PackageVersion=${{ env.version }}
+        run: dotnet pack ${{ env.QuackProject }} --no-build --no-restore --output ./artifacts -p:PackageVersion=${{ steps.tag.outputs.version }}
 
       - name: Publish to NuGet
         run: dotnet nuget push "**/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate

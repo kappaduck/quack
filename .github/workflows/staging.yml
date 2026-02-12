@@ -17,6 +17,8 @@ jobs:
   build:
     name: Build/Deploy
     runs-on: windows-latest
+    env:
+      QuackProject: KappaDuck.Quack\KappaDuck.Quack.csproj
 
     steps:
       - name: Checkout
@@ -27,23 +29,17 @@ jobs:
         with:
           global-json-file: ./global.json
 
-      - name: Get version
-        shell: pwsh
-        run: |
-          $date = Get-Date -Format "yyyyMMddHHmmss"
-          echo "date=$date" >> $env:GITHUB_ENV
-
       - name: Install SDL dependencies
         run: dotnet .\SDL3\deps.cs
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ${{ env.QuackProject }}
 
       - name: Build
-        run: dotnet build KappaDuck.Quack\KappaDuck.Quack.csproj --configuration release --no-restore
+        run: dotnet build ${{ env.QuackProject }} --configuration release --no-restore
 
       - name: Package
-        run: dotnet pack KappaDuck.Quack\KappaDuck.Quack.csproj --no-build --no-restore --output ./artifacts --version-suffix alpha.${{ env.date }}
+        run: dotnet pack ${{ env.QuackProject }} --no-build --no-restore --output ./artifacts --version-suffix beta.${{ github.run_number }}
 
       - name: Publish to NuGet
         run: dotnet nuget push "**/*.nupkg" --source https://apiint.nugettest.org/v3/index.json --api-key ${{ secrets.NUGET_STAGING_API_KEY }} --skip-duplicate
