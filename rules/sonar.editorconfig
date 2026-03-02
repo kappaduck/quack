@@ -15,10 +15,10 @@ dotnet_diagnostic.S1075.severity = none
 # https://rules.sonarsource.com/csharp/RSPEC-1481/
 dotnet_diagnostic.S1481.severity = none
 
-# S2325: Methods and properties that don't access instance data should be static
-# Some properties should not be static (Sonar seem confused with the new keyword field)
-# https://rules.sonarsource.com/csharp/RSPEC-2325/
-dotnet_diagnostic.S2325.severity = none
+# S2344: Rename this enumeration to remove the 'Flags' suffix
+# Is to keep the same name as SDL3 enums.
+# https://rules.sonarsource.com/csharp/RSPEC-2344/
+dotnet_diagnostic.S2344.severity = none
 
 # S3218: Rename this method to not shadow the outer class member with the same name
 # There is no issue with shadowing in some cases
