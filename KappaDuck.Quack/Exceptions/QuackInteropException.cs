@@ -27,7 +27,7 @@ public sealed class QuackInteropException : QuackException
     [DoesNotReturn]
     private static void Throw(string memberName)
     {
-        string error = SDL3.GetError();
+        string error = SDL3.GetError() ?? string.Empty;
         SDL3.ClearError();
 
         throw new QuackInteropException($"Interop call failed in [{memberName}]: {error}");
