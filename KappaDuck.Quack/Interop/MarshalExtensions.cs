@@ -8,7 +8,6 @@ internal static class MarshalExtensions
 {
     extension(Marshal)
     {
-        internal static unsafe string PtrToStringUTF8(byte* bytes)
-            => Marshal.PtrToStringUTF8((nint)bytes) ?? string.Empty;
+        internal static unsafe string? PtrToStringUTF8(byte* bytes) => Marshal.PtrToStringUTF8((nint)bytes);
     }
 }

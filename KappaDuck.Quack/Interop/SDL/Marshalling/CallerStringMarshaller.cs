@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(CallerStringMarshaller))]
 internal static unsafe class CallerStringMarshaller
 {
-    internal static string ConvertToManaged(byte* unmanaged) => Marshal.PtrToStringUTF8(unmanaged);
+    internal static string? ConvertToManaged(byte* unmanaged) => Marshal.PtrToStringUTF8(unmanaged);
 
     internal static void Free(byte* ptr) => SDL3.Memory.Free(ptr);
 }
