@@ -92,7 +92,7 @@ public sealed class Cursor : IDisposable
     /// Gets or sets a value indicating whether the cursor is visible.
     /// </summary>
     /// <exception cref="QuackInteropException">Thrown when failed to show or hide the cursor.</exception>
-    public bool Visile
+    public bool Visible
     {
         get;
         set

@@ -7,6 +7,11 @@ internal static partial class SDL3
 {
     internal static partial class Properties
     {
+        [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetBooleanProperty", StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        internal static partial bool GetBooleanProperty(uint propertiesId, string name, [MarshalAs(UnmanagedType.U1)] bool defaultValue);
+
         [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
         [return: MarshalAs(UnmanagedType.U1)]

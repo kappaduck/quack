@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using System.Numerics;
+
 namespace KappaDuck.Quack.Exceptions;
 
 /// <summary>
@@ -23,6 +25,15 @@ public sealed class QuackInteropException : QuackException
 
     internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
         => ThrowIf(handle.IsInvalid, memberName);
+
+    internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string memberName = "") where T : unmanaged
+    => ThrowIf(value is null, memberName);
+
+    internal static unsafe void ThrowIfNull<T>(T** value, [CallerMemberName] string memberName = "") where T : unmanaged
+        => ThrowIf(value is null, memberName);
+
+    internal static void ThrowIfZero<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsZero(value), memberName);
 
     [DoesNotReturn]
     private static void Throw(string memberName)
