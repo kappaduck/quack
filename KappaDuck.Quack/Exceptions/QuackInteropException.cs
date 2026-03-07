@@ -26,6 +26,9 @@ public sealed class QuackInteropException : QuackException
     internal static void ThrowIfHandleInvalid(SafeHandle handle, [CallerMemberName] string memberName = "")
         => ThrowIf(handle.IsInvalid, memberName);
 
+    internal static void ThrowIfNegative<T>(T value, [CallerMemberName] string memberName = "") where T : INumber<T>
+        => ThrowIf(T.IsNegative(value), memberName);
+
     internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string memberName = "") where T : unmanaged
     => ThrowIf(value is null, memberName);
 
