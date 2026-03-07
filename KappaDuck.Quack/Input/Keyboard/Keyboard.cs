@@ -1,6 +1,8 @@
 // Copyright (c) KappaDuck. All rights reserved.
 // The source code is licensed under MIT License.
 
+using KappaDuck.Quack.Events;
+
 namespace KappaDuck.Quack.Input.Keyboard;
 
 /// <summary>

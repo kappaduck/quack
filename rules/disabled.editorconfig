@@ -10,6 +10,11 @@ dotnet_diagnostic.CA1303.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1305
 dotnet_diagnostic.CA1305.severity = none
 
+# CA1708: Names of 'Members' and 'Types' should differ by more than case
+# Visual Studio is confused by extension blocks which we can have multiple of the same type with different cases
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1708
+dotnet_diagnostic.CA1708.severity = none
+
 # CA1716: Identifiers should not match keywords
 # Can use keywords as identifiers like event
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1716

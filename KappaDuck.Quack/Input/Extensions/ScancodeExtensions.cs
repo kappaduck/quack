@@ -10,7 +10,6 @@ namespace KappaDuck.Quack.Input.Extensions;
 /// <summary>
 /// Provides extension methods for <see cref="Scancode"/>.
 /// </summary>
-[SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case", Justification = "It is possible to have multiple extensions one for instance and other as static")]
 public static class ScancodeExtensions
 {
     extension(Scancode code)
