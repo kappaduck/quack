@@ -106,42 +106,36 @@ public static class EventExtensions
         }
 
         /// <summary>
-        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> or <see cref="EventType.WindowCloseRequested"/> event.
+        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> event.
         /// </summary>
         /// <remarks>
-        /// <para>By default, it checks if the <see cref="Scancode.Escape"/> key is pressed.</para>
-        /// <para>
-        /// The window close request is only considered if a <paramref name="windowId"/> is provided.
-        /// It helps to know which window is requesting to close in multi-window applications.
-        /// </para>
+        /// By default, it checks if the <see cref="Scancode.Escape"/> key is pressed.
         /// </remarks>
         /// <param name="code">The code to quit.</param>
-        /// <param name="windowId">The identifier of the window to monitor the close request.</param>
         /// <returns>true if a quit request is detected by the specified key or window close event; otherwise, false.</returns>
         [OverloadResolutionPriority(1)]
-        public bool QuitRequested(Scancode code = Scancode.Escape, uint? windowId = null)
-        {
-            bool quit = e.Type is EventType.Quit || (e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId);
-            return quit || IsKeyDown(e, code);
-        }
+        public bool QuitRequested(Scancode code = Scancode.Escape) => e.Type is EventType.Quit || IsKeyDown(e, code);
 
         /// <summary>
-        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> or <see cref="EventType.WindowCloseRequested"/> event.
+        /// Determines whether a quit request has been made, either by a specific key press or by a <see cref="EventType.Quit"/> event.
         /// </summary>
         /// <remarks>
-        /// <para>By default, it checks if the <see cref="Keycode.Escape"/> key is pressed.</para>
-        /// <para>
-        /// The window close request is only considered if a <paramref name="windowId"/> is provided.
-        /// It helps to know which window is requesting to close in multi-window applications.
-        /// </para>
+        /// By default, it checks if the <see cref="Keycode.Escape"/> key is pressed.
         /// </remarks>
         /// <param name="key">The key to quit.</param>
-        /// <param name="windowId">The identifier of the window to monitor the close request.</param>
         /// <returns>true if a quit request is detected by the specified key or window close event; otherwise, false.</returns>
-        public bool QuitRequested(Keycode key = Keycode.Escape, uint? windowId = null)
+        public bool QuitRequested(Keycode key = Keycode.Escape) => e.Type is EventType.Quit || IsKeyDown(e, key);
+
+        /// <summary>
+        /// Determines whether a window close request has been made, either by a specific window or any window if no window ID is provided.
+        /// </summary>
+        /// <param name="windowId">The ID of the window to check for a close request. If <see langword="null"/>, it checks for any window close request.</param>
+        /// <returns><see langword="true"/> if a window close request is detected for the specified window or any window; otherwise, <see langword="false"/>.</returns>
+        public bool WindowCloseRequested(uint? windowId = null)
         {
-            bool quit = e.Type is EventType.Quit || (e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId);
-            return quit || IsKeyDown(e, key);
+            return windowId.HasValue
+                ? e.Type is EventType.WindowCloseRequested && e.Window.Id == windowId
+                : e.Type is EventType.WindowCloseRequested;
         }
 
         /// <summary>
