@@ -10,6 +10,7 @@ using KappaDuck.Quack.Input.Mouse;
 using KappaDuck.Quack.Interop.Handles;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Displays;
+using KappaDuck.Quack.Windows.Progress;
 using System.Collections.Concurrent;
 using System.Text.Unicode;
 
@@ -680,6 +681,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <remarks>If the window is not open, it will return <see cref="PixelFormat.Unknown"/>.</remarks>
     public PixelFormat PixelFormat => !IsOpen ? PixelFormat.Unknown : SDL3.Windows.GetWindowPixelFormat(_handle);
+
+    /// <summary>
+    /// Gets the window's taskbar progress.
+    /// </summary>
+    public TaskbarProgress TaskbarProgress => field ??= new TaskbarProgress(this);
 
     /// <summary>
     /// Gets or sets a value indicating whether the window can be resized by the user.
