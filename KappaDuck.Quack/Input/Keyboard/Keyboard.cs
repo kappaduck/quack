@@ -2,6 +2,7 @@
 // The source code is licensed under MIT License.
 
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Input.Keyboard;
 

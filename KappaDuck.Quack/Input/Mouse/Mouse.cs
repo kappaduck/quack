@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Input.Mouse;
 

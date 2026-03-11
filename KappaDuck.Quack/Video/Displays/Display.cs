@@ -5,6 +5,7 @@ using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL.Primitives;
+using KappaDuck.Quack.Windows;
 using System.Text.Unicode;
 
 namespace KappaDuck.Quack.Video.Displays;
