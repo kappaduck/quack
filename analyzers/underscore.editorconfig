@@ -1,0 +1,26 @@
+is_global = true
+
+# Name style for underscore with camel case on private fields
+
+# Define the private fields symbols
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+# Define the private static fields symbols
+dotnet_naming_symbols.private_static_fields.applicable_kinds = field
+dotnet_naming_symbols.private_static_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_static_fields.required_modifiers = static
+
+# Define underscore style
+dotnet_naming_style.underscore.capitalization = camel_case
+dotnet_naming_style.underscore.required_prefix = _
+
+# Enforce underscore style on private fields
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore
+dotnet_naming_rule.private_fields_underscore.severity = warning
+
+# Disable underscore style on private static and const fields
+dotnet_naming_rule.private_static_fields_underscore.symbols = private_static_fields
+dotnet_naming_rule.private_static_fields_underscore.style = underscore
+dotnet_naming_rule.private_static_fields_underscore.severity = none
