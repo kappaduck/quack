@@ -1,7 +1,6 @@
-# Quack files
+# sandbox
 
-quack.sandbox.cs
-SDL3/runtimes/
+src/Quack.Sandbox/*.cs
 
 # build outputs
 
@@ -13,10 +12,14 @@ SDL3/runtimes/
 [Rr]eleases/
 [Bb]in/
 [Oo]bj/
+
+# test outputs
+
 [Tt]est[Rr]esults/
 
 # Visual Studio files
 
+*.lscache
 *.rsuser
 *.suo
 *.user

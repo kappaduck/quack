@@ -1,68 +1,25 @@
-# Quack! :duck: ![Static Badge](https://img.shields.io/badge/.NET-9.0,%2010.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/vpre/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
+# Quack! 🦆 ![Static Badge](https://img.shields.io/badge/.NET-10.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/v/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
 
-A modern .NET game framework built on SDL
+A modern .NET multimedia framework built on SDL3
+
 ---
 
 ## Overview
 
-Quack! is a modern, lightweight and fast game framework built on top of [SDL] and its extensions ([image], [mixer], [ttf]). It targets .NET 9+ desktop apps and games, providing a clean and flexible API that hides the complexity of SDL.
+Quack! is a modern, simple and fast multimedia framework built on top of [SDL3] and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
+It targets .NET 10+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.
 
 ## Features
 
-- 2D/3D rendering using the [GPU rendering API]
-- Cross-platform support (Windows, Linux)
+- 2D rendering via [Renderer API][SDL_Renderer] and 3D rendering via [GPU API][SDL_GPU]
+- Cross-platform support
 - Window and display management
-- Input handling (keyboard, mouse, gamepads, etc...)
+- Input handling
 - Audio management
 - Event system
-- System utilities (power management, clipboard, etc...)
-- Native UI integration (Context menus, dialogs, etc...)
-
-## Installation
-
-You can install Quack! via [NuGet]
-
-```bash
-dotnet add package KappaDuck.Quack -v 0.5.0
-```
-
-or via the `.csproj` file:
-
-```xml
-<PackageReference Include="KappaDuck.Quack" Version="0.5.0" />
-```
-
-You can also install via the NuGet Package Manager in Visual Studio or JetBrains Rider.
-
-> :warning: Quack! is still in early development, so expect breaking changes and frequent updates. It's recommended to use the latest version for the best experience.
-
-### Beta packages
-
-If you want to try the latest features and improvements, you can install the beta version using the nuget test feed:
-
-Add the following package source to your NuGet configuration file (`nuget.config`) at the root of your project
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <clear />
-    <add key="nuget" value="https://apiint.nugettest.org/v3/index.json" />
-  </packageSources>
-
-  <packageSourceMapping>
-    <packageSource key="nuget">
-      <package pattern="*" />
-    </packageSource>
-  </packageSourceMapping>
-</configuration>
-```
-
-Then, you can install the latest beta version
-
-```bash
-dotnet add package KappaDuck.Quack --prerelease
-```
+- System utilities
+- Native UI integration
+- Image and Font management
 
 ## Usage
 
@@ -70,13 +27,13 @@ dotnet add package KappaDuck.Quack --prerelease
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
 
-using Window window = new Window("Quack!", 1080, 720);
+using Window window = new("Quack!", 1280, 720);
 
 while (window.IsOpen)
 {
     while (window.Poll(out Event e))
     {
-        if (e.RequestQuit())
+        if (e is QuitEvent || e is KeyEvent { Key: Key.Escape })
         {
             window.Close();
             return;
@@ -85,99 +42,98 @@ while (window.IsOpen)
 }
 ```
 
-More examples can be found in the [examples] directory.
+More examples and documentation can be found at [Documentation](#documentation)
 
-## Cross-Platform Support
+## Installation
 
-Quack! currently supports Windows and Linux platforms thanks to SDL's abstraction layer, making porting to other platforms easier in the future.
+Install Quack! via [NuGet]:
 
-The framework may have platform-specific implementations or limitations depending on the underlying SDL support. Using theses platform-specific features will have a warning in the editors saying that the code may not be portable.
+```bash
+dotnet package add KappaDuck.Quack -v 0.5.0
+```
 
-> :information_source: Other platforms such as Android or WebAssembly may be supported in the future, but there are no immediate plans.
+or via your `.csproj`:
+
+```xml
+<PackageReference Include="KappaDuck.Quack" Version="0.5.0">
+```
+
+You can also install via the NuGet Package Manager in Visual Studio or JetBrains Rider.
+
+> [!WARNING]
+> Quack! is still in early development. Expect breaking changes and frequent updates. Always use the latest version for the best experience.
+
+### Beta packages
+
+Pre-release versions are published to NuGet.org alongside stable releases. To install the latest beta:
+
+```bash
+dotnet package add KappaDuck.Quack --prerelease
+```
+
+## Documentation
+
+Full API documentation and samples are available:
+
+- [Full API reference][quack.kappaduck.com]
+- **[`samples/`][samples]** for runnable code covering common uses cases
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](contributing.md) before opening a pull request.
+
+## Cross-platform support
+
+Quack! supports Windows and Linux thanks to SDL3's abstraction layer.
+
+The framework may have platform-specific implementations or limitations depending on the underlying SDL support. Using platform-specific features will surface a compiler warning indicating the code may not be portable across all targets.
+
+> [!NOTE]
+> Android and WebAssembly (WASM) support is planned for a future milestone. macOS and iOS are not in scope.
 
 ## SDL compatibility
 
-Quack! is shipped with precompiled SDL binaries for Windows and Linux which are built from [quack.runtimes].
+SDL3 native libraries are bundled via `KappaDuck.Quack.Runtimes`. The table below shows the SDL versions included in each release of both packages.
 
-Below is a compatibility table for the SDL libraries used in each Quack! release.
+During active development, `KappaDuck.Quack` references the **pre-release** version of `KappaDuck.Quack.Runtimes`. When a stable release of `KappaDuck.Quack` is published, it switches to the corresponding **production** version of `KappaDuck.Quack.Runtimes`.
 
-| Quack! version | SDL version | SDL_image version | SDL_ttf version | SDL_mixer version |
-| :------------: | :---------: | :---------------: | :-------------: | :---------------: |
-|    `source`    |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.4.0`     |   `3.4.0`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.3.0`     |  `3.2.30`   |      `3.2.6`      |     `3.2.2`     |       `N/A`       |
-|    `0.2.0`     |  `3.2.28`   |      `3.2.4`      |     `3.2.2`     |       `N/A`       |
-|    `0.1.0`     |  `3.2.18`   |       `N/A`       |      `N/A`      |       `N/A`       |
-
-> :warning: During active development, SDL dependencies may be updated frequently.
+|  Quack!  |    Runtimes    |  SDL3   | SDL_image | SDL_ttf | SDL_mixer |
+| :------: | :------------: | :-----: | :-------: | :-----: | :-------: |
+| `source` | `0.1.0-beta.1` | `3.4.8` |  `3.4.4`  | `3.2.2` |  `3.2.0`  |
 
 ## Development & Sandbox
 
-You can build Quack! from source and running quick experiments by creating C# file as sandbox or [examples] provided in the repository.
+You can build Quack! from source and experiment quickly using the included sandbox project.
 
 ### Prerequisites
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET 11.0 SDK](https://dotnet.microsoft.com/download/dotnet/11.0)
 
-> The SDK includes everything needed to build and run .NET applications.
-
 ### Setup
 
-1. Clone the repository
+**1. Clone the repository**
+
 ```bash
 git clone https://github.com/KappaDuck/quack.git
 cd quack
 ```
 
-2. Install SDL and its extensions
+**2. Create an entry point in the sandbox**
 
-#### Windows
-```bash
-dotnet ./SDL3/deps.cs
-```
-
-#### Linux
-```bash
-chmod +x ./SDL3/deps.cs
-./SDL3/deps.cs
-```
-
-> The file `deps.cs` installs SDL and all required extensions. On linux, you only need to make it executable once.
-
-### Build & Run
-
-Open the solution in your preferred IDE (e.g., Visual Studio, Rider, VS Code).
-> :warning: Most IDEs do not support running [single-file scripts] directly, so you'll need to run the sandbox file from the command line.
->
-> VS Code provides intellisense but cannot run the file directly.
-
-### Sandbox file (`quack.sandbox.cs`)
-
-The sandbox allows you to experiment with windows, input, rendering, and more without modifying the main source code.
-
-Create a file named `quack.sandbox.cs` at the root of the repository with the following content:
-> This file is ignored by git, so it's safe to use for your experiments.
+The sandbox project requires at least one `.cs` file to compile. All `.cs` files inside `src/Quack.Sandbox/` are listed in `.gitignore`, so create any file you like there. A simple starting point:
 
 ```csharp
-#!/usr/bin/env dotnet
-
-#:property TargetFramework=net10.0
-#:property IncludeBinaries=true
-#:property NoWarn=IDE0073
-#:project KappaDuck.Quack
-
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
 
-using Window window = new Window("Quack!", 1080, 720);
+using Window window = new("Quack! Sandbox", 1280, 720);
 
 while (window.IsOpen)
 {
     while (window.Poll(out Event e))
     {
-        if (e.RequestQuit())
+        if (e is QuitEvent || e is KeyEvent { Key: Key.Escape })
         {
             window.Close();
             return;
@@ -186,38 +142,55 @@ while (window.IsOpen)
 }
 ```
 
-### Run the sandbox
+**3. Build**
 
-#### Windows
 ```bash
-dotnet ./quack.sandbox.cs
+dotnet build
 ```
 
-#### Linux
+**4. Run the tests**
+
 ```bash
-chmod +x ./quack.sandbox.cs # only needed once
-./quack.sandbox.cs
+dotnet test
 ```
 
-## :raised_hands: Credits
+### Quack.Sandbox
+
+The repository includes a dedicated sandbox project at `src/Quack.Sandbox/` for experimenting without touching the main source. It references `KappaDuck.Quack` directly so changes are reflected immediately.
+
+To run your sandbox:
+
+```bash
+cd sandbox/Quack.Sandbox
+dotnet run
+```
+or simply run in your IDE
+
+## AI disclosure
+
+AI tools assisted with two things in this project: **documentation** (XML doc comments, README, CONTRIBUTING guidelines) and **design exploration** (prototyping API shapes, exploring implementation approaches, and thinking through architecture decisions).
+
+All code was written by the author from scratch. No AI-generated code was copied or adapted into `src/`.
+
+## Credits
 
 Built with inspiration from
 
-- [SDL]
-- [SDL_image][image]
-- [SDL_ttf][ttf]
-- [SDL_mixer][mixer]
+- [SDL3]
+- [SDL_image]
+- [SDL_ttf]
+- [SDL_mixer]
 - [SFML](https://www.sfml-dev.org/)
 - [LazyFoo](https://lazyfoo.net/index.php)
 - [Sayers.SDL2.Core](https://github.com/JeremySayers/Sayers.SDL2.Core)
 - [SDL3-CS](https://github.com/flibitijibibo/SDL3-CS)
 
-[examples]: examples
+[samples]: samples
 [NuGet]: https://www.nuget.org/packages/KappaDuck.Quack/
-[SDL]: https://www.libsdl.org/
-[GPU rendering API]: https://wiki.libsdl.org/CategoryGPU
-[image]: https://github.com/libsdl-org/SDL_image
-[mixer]: https://github.com/libsdl-org/SDL_mixer
-[ttf]: https://github.com/libsdl-org/SDL_ttf
-[quack.runtimes]: https://github.com/kappaduck/quack.runtimes
-[single-file scripts]: https://devblogs.microsoft.com/dotnet/announcing-dotnet-run-app/
+[SDL3]: https://www.libsdl.org/
+[SDL_Renderer]: https://wiki.libsdl.org/CategoryRender
+[SDL_GPU]: https://wiki.libsdl.org/CategoryGPU
+[SDL_image]: https://github.com/libsdl-org/SDL_image
+[SDL_mixer]: https://github.com/libsdl-org/SDL_mixer
+[SDL_ttf]: https://github.com/libsdl-org/SDL_ttf
+[quack.kappaduck.com]: https://quack.kappaduck.com

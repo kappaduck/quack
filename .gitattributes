@@ -1,34 +1,42 @@
 # Auto detect text files and perform LF normalization
 
-*           text=auto
+* text=auto
 
 # .Net files
 
-*.cs        text diff=csharp
-*.slnx      text eol=crlf
-*.csproj    text eol=crlf
+*.cs     text diff=csharp
+*.csproj text eol=crlf
+*.slnx   text eol=crlf
+
+# Cmake
+
+*.cmake text eol=lf
 
 # Documents
 
-*.md        text diff=markdown linguist-detectable
+*.md text diff=markdown linguist-detectable
 
 # Github files
 
-codeowners  text
+codeowners text
 
 # Graphics
 
-*.png       binary
-*.jpg       binary
-*.jpeg      binary
-*.gif       binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+
+# Bash
+
+*.sh text eol=lf
 
 # Serialisation
 
-*.json      text
-*.xml       text eol=lf
-*.yaml      text eol=lf
-*.yml       text eol=lf
+*.json text
+*.xml  text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
 
 # Exclude files form exporting
 
