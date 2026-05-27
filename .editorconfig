@@ -1,0 +1,43 @@
+# Common rules
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# .NET
+
+[*.{csproj,slnx}]
+indent_size = 2
+
+[*.cs]
+dotnet_analyzer_diagnostic.severity = warning
+dotnet_sort_system_directives_first = false
+file_header_template = Copyright (c) KappaDuck.\nLicensed under the MIT license.
+
+# Bash
+
+[*.sh]
+end_of_line = lf
+
+# Cmake
+
+[*.cmake]
+end_of_line = lf
+
+# Configuration files
+
+[*.{config,nuspec,props,targets,xml}]
+indent_size = 2
+
+# JSON files
+
+[*.json]
+indent_size = 2
+
+# YAML files
+
+[*.{yaml,yml}]
+indent_size = 2

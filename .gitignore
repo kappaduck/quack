@@ -1,0 +1,28 @@
+# sandbox
+
+src/Quack.Sandbox/*.cs
+
+# build outputs
+
+[Aa]rtifacts/
+[Bb]uild/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+[Bb]in/
+[Oo]bj/
+
+# test outputs
+
+[Tt]est[Rr]esults/
+
+# Visual Studio files
+
+*.lscache
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
