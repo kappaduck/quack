@@ -5,23 +5,35 @@ PACKAGE_ID="${1:?Usage: resolve-version.sh <package-id> <version> <branch>}"
 BASE_VERSION="${2:?Usage: resolve-version.sh <package-id> <version> <branch>}"
 BRANCH="${3:?Usage: resolve-version.sh <package-id> <version> <branch>}"
 
+if [[ "$BRANCH" != "develop" ]]; then
+    echo "Resolved version $BASE_VERSION"
+    echo "Version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
 
-if [[ "$BRANCH" == "develop" ]]; then
-    VERSIONS=$(curl -sf "https://api.nuget.org/v3-flatcontainer/${PACKAGE_ID}/index.json" | jq -r '.versions[]')
-
-    LATEST_BETA=$(echo "$VERSIONS" | grep -E "^${BASE_VERSION}-beta\.[0-9]+$" | sort -t. -k4 -V | tail -n1)
-
-    if [[ -z "$LATEST_BETA" ]]; then
-        NEXT_BETA=1
-    else
-        CURRENT_X=$(echo "$LATEST_BETA" | grep -oE '[0-9]+$')
-        NEXT_BETA=$((CURRENT_X + 1))
-    fi
-
-    RESOLVED_VERSION="${BASE_VERSION}-beta.${NEXT_BETA}"
-else
-    RESOLVED_VERSION="${BASE_VERSION}"
+    exit 0
 fi
+
+URL="https://api.nuget.org/v3-flatcontainer/${PACKAGE_ID}/index.json"
+
+echo "Querying NuGet: $URL"
+HTTP_CODE=$(curl -s -o /tmp/nuget.json -w "%{http_code}" "$URL" || true)
+
+if [[ "$HTTP_CODE" == "404" ]]; then
+    echo "Package not found on NUget, starting at beta.1"
+    LATEST_BETA=""
+elif [[ "$HTTP_CODE" != "200" ]]; then
+    echo "Error: unexpected HTTP $HTTP_CODE from NuGet. Aborting."
+    exit 1
+else
+    LATEST_BETA=$(jq -r --arg base "$BASE_VERSION" '.versions[] | select(test("^" + $base + "-beta\\.[0-9]+$"))' /tmp/nuget.json | sed "s/^${BASE_VERSION}-beta\.//" | sort -n | tail -n1 || true)
+fi
+
+if [[ -z "$LATEST_BETA" ]]; then
+    NEXT_BETA=1
+else
+    NEXT_BETA=$((LATEST_BETA + 1))
+fi
+
+RESOLVED_VERSION="${BASE_VERSION}-beta.${NEXT_BETA}"
 
 echo "Resolved version: $RESOLVED_VERSION"
 echo "Version=$RESOLVED_VERSION" >> "$GITHUB_OUTPUT"
