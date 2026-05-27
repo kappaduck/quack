@@ -27,9 +27,20 @@ end_of_line = lf
 [*.cmake]
 end_of_line = lf
 
+# Environment files
+
+[*.env]
+end_of_line = lf
+
+# Nuspec files
+
+[*.nuspec]
+indent_size = 2
+end_of_line = lf
+
 # Configuration files
 
-[*.{config,nuspec,props,targets,xml}]
+[*.{config,props,targets,xml}]
 indent_size = 2
 
 # JSON files
