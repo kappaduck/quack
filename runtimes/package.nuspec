@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>KappaDuck.Quack.Runtimes</id>
+    <version>$version$</version>
+    <authors>KappaDuck</authors>
+    <copyright>Copyright © KappaDuck</copyright>
+    <description>SDL3 runtimes for KappaDuck.Quack</description>
+    <tags>NET SDL SDL3 GameEngine Engine CSharp Game Multimedia GameFramework</tags>
+    <repository type="git" url="https://github.com/kappaduck/quack.git" />
+    <projectUrl>https://github.com/kappaduck/quack</projectUrl>
+    <readme>readme.md</readme>
+    <icon>icon.png</icon>
+    <license type="file">license.txt</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="..\readme.md" target="" />
+    <file src="..\license.txt" target="" />
+    <file src="..\icon.png" target="" />
+
+    <file src="runtimes\**\*" target="runtimes\" />
+
+    <file src="KappaDuck.Quack.Runtimes.targets" target="build\" />
+    <file src="KappaDuck.Quack.Runtimes.targets" target="buildTransitive\" />
+  </files>
+</package>
