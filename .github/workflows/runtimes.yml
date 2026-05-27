@@ -1,0 +1,84 @@
+name: Runtimes
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['runtimes/**']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: runtimes
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }} runtimes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        platform: [linux, windows]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Load versions
+        run: grep -v '^#' utils/versions.env >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          chmod +x scripts/dependencies.sh
+          scripts/dependencies.sh
+
+      - name: Build
+        run: |
+          chmod +x scripts/build-${{ matrix.platform }}.sh
+          scripts/build-${{ matrix.platform }}.sh
+
+      - name: Upload runtimes
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.platform }}-runtimes
+          path: runtimes/artifacts
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Load versions
+        run: grep -v '^#' utils/versions.env >> $GITHUB_ENV
+
+      - name: Resolve version
+        id: resolve
+        run: |
+          chmod +x ../utils/resolve-version.sh
+          ../utils/resolve-version.sh KappaDuck.Quack.Runtimes ${{ env.Quack }} ${{ github.ref_name }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: runtimes/artifacts
+
+      - name: Structure artifacts
+        run: |
+          mkdir -p runtimes/linux-x64/native runtimes/win-x64/native
+          cp -r artifacts/linux-runtimes/runtimes/linux-x64/native/* runtimes/linux-x64/native/
+          cp -r artifacts/windows-runtimes/runtimes/win-x64/native/* runtimes/win-x64/native/
+
+      - name: Package
+        run: dotnet pack package.nuspec --output . -p:version=${{ steps.resolve.outputs.Version }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push KappaDuck.Quack.Runtimes*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
