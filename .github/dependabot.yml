@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  - package-ecosystem: dotnet-sdk
+    target-branch: develop
+    directory: /
+    schedule:
+      interval: weekly
+      day: wednesday
+    commit-message:
+      prefix: .NET SDK
+    labels: [dependencies]
+    assignees: [beauchama]
+
+  - package-ecosystem: github-actions
+    target-branch: develop
+    directory: /
+    schedule:
+      interval: weekly
+      day: wednesday
+    commit-message:
+      prefix: GitHub Actions
+    labels: [dependencies]
+    assignees: [beauchama]
+    groups:
+      actions:
+        patterns:
+          - '*'
