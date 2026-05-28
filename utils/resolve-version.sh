@@ -12,15 +12,17 @@ if [[ "$BRANCH" != "develop" ]]; then
     exit 0
 fi
 
-URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID/index.json"
+PACKAGE_ID_LOWER=$(echo "$PACKAGE_ID" | tr '[:upper:]' '[:lower:]')
+URL="https://api.nuget.org/v3-flatcontainer/${PACKAGE_ID_LOWER}/index.json"
 
 echo "Querying NuGet: $URL"
 HTTP_CODE=$(curl -s -o /tmp/nuget.json -w "%{http_code}" "$URL" || true)
 
 cat /tmp/nuget.json
+echo
 
 if [[ "$HTTP_CODE" == "404" ]]; then
-    echo "Package not found on NUget, starting at beta.1"
+    echo "Package not found on Nuget, starting at beta.1"
     LATEST_BETA=""
 elif [[ "$HTTP_CODE" != "200" ]]; then
     echo "Error: unexpected HTTP $HTTP_CODE from NuGet. Aborting."
