@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/configuration/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+    <Folder Name="/configuration/analyzers/">
+    <File Path="analyzers/code.style.editorconfig" />
+    <File Path="analyzers/disabled.editorconfig" />
+    <File Path="analyzers/underscore.editorconfig" />
+  </Folder>
+  <Folder Name="/configuration/src/">
+    <File Path="src/Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/runtimes/">
+    <File Path="runtimes/KappaDuck.Quack.Runtimes.targets" />
+    <File Path="runtimes/package.nuspec" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/.editorconfig" />
+    <File Path="tests/Directory.Build.props" />
+    <File Path="tests/Directory.Packages.props" />
+    <Project Path="tests/Integration.Tests/Integration.Tests.csproj" />
+    <Project Path="tests/Unit.Tests/Unit.Tests.csproj" />
+  </Folder>
+  <Folder Name="/workflows/">
+    <File Path=".github/workflows/codeql.yml" />
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/workflows/pull-request.yml" />
+    <File Path=".github/workflows/runtimes.yml" />
+    <File Path=".github/workflows/quack.yml" />
+  </Folder>
+  <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
+  <Project Path="src/Quack.Sandbox/Quack.Sandbox.csproj" />
+</Solution>

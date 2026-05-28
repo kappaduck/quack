@@ -1,0 +1,25 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup Label="Configure .csproj">
+    <TargetFramework>$(DefaultNetVersion)</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Global usings">
+    <Using Include="TUnit" />
+    <Using Include="TUnit.Assertions" />
+    <Using Include="TUnit.Assertions.Should" />
+    <Using Include="TUnit.Assertions.Should.Extensions" />
+    <Using Include="TUnit.Core" />
+  </ItemGroup>
+
+  <ItemGroup Label="Common test NuGets">
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Assertions.Should" />
+  </ItemGroup>
+</Project>
