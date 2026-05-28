@@ -1,0 +1,31 @@
+name: Test Resolve
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [bugfix/resolve]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: runtimes
+
+jobs:
+  resolve:
+    name: Resolve
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Load versions
+        run: grep -v '^#' ../utils/versions.env >> $GITHUB_ENV
+
+      - name: Resolve version
+        id: resolved
+        run: |
+          chmod +x ../utils/resolve-version.sh
+          ../utils/resolve-version.sh KappaDuck.Quack.Runtimes ${{ env.Runtimes }} develop
