@@ -22,7 +22,7 @@ cat /tmp/nuget.json
 echo
 
 if [[ "$HTTP_CODE" == "404" ]]; then
-    echo "Package not found on NUget, starting at beta.1"
+    echo "Package not found on Nuget, starting at beta.1"
     LATEST_BETA=""
 elif [[ "$HTTP_CODE" != "200" ]]; then
     echo "Error: unexpected HTTP $HTTP_CODE from NuGet. Aborting."
