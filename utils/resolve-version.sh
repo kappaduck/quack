@@ -12,10 +12,12 @@ if [[ "$BRANCH" != "develop" ]]; then
     exit 0
 fi
 
-URL="https://api.nuget.org/v3-flatcontainer/${PACKAGE_ID}/index.json"
+URL="https://api.nuget.org/v3-flatcontainer/$PACKAGE_ID/index.json"
 
 echo "Querying NuGet: $URL"
 HTTP_CODE=$(curl -s -o /tmp/nuget.json -w "%{http_code}" "$URL" || true)
+
+cat /tmp/nuget.json
 
 if [[ "$HTTP_CODE" == "404" ]]; then
     echo "Package not found on NUget, starting at beta.1"
