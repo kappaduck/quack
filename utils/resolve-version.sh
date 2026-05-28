@@ -19,6 +19,7 @@ echo "Querying NuGet: $URL"
 HTTP_CODE=$(curl -s -o /tmp/nuget.json -w "%{http_code}" "$URL" || true)
 
 cat /tmp/nuget.json
+echo
 
 if [[ "$HTTP_CODE" == "404" ]]; then
     echo "Package not found on NUget, starting at beta.1"
