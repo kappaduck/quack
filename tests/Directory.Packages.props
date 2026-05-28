@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))" />
+  <ItemGroup Label="Test packages">
+    <PackageVersion Include="TUnit" Version="1.45.29" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+    <PackageVersion Include="TUnit.Assertions.Should" Version="1.45.29-beta" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Configure .csproj">
+    <TargetFramework>$(DefaultNetVersion)</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup Label="Packages">
+    <ProjectReference Include="..\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+  </ItemGroup>
+</Project>

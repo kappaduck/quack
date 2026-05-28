@@ -1,0 +1,48 @@
+name: Pull Request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, develop]
+    paths: ['src/KappaDuck.Quack/**', 'tests/**', '**.props', 'global.json', '.github/workflows/pull-request.yml']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      quack: ./src/KappaDuck.Quack/KappaDuck.Quack.csproj
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ./global.json
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.quack }}
+
+      - name: Build
+        run: dotnet build ${{ env.quack }} --configuration release --no-restore
+
+      - name: Run tests
+        continue-on-error: true
+        run: dotnet test --configuration release -- --report-trx
+
+      - name: Upload Test Results
+        if: (!cancelled())
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: '**/TestResults/*.trx'

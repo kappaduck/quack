@@ -1,0 +1,11 @@
+is_global = true
+
+# IDE0058: Remove unnecessary expression value
+# Can ignore unused expression values
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0058
+dotnet_diagnostic.IDE0058.severity = none
+
+# IDE0160: Convert to block scoped namespace
+# Always use file scoped namespace
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0160
+csharp_style_namespace_declarations = file_scoped

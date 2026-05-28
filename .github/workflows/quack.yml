@@ -1,0 +1,50 @@
+name: Quack!
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+  push:
+    branches: [develop]
+    paths: ['src/KappaDuck.Quack/**', '**.props', 'global.json', '.github/workflows/quack.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    env:
+      project: ./src/KappaDuck.Quack/KappaDuck.Quack.csproj
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ./global.json
+
+      - name: Load versions
+        id: versions
+        run: grep -v '^#' utils/versions.env >> $GITHUB_OUTPUT
+
+      - name: Resolve version
+        id: resolved
+        run: |
+          chmod +x utils/resolve-version.sh
+          utils/resolve-version.sh KappaDuck.Quack ${{ steps.versions.outputs.Quack }} ${{ github.event.release.target_commitish || github.ref_name }}
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.project }}
+
+      - name: Build
+        run: dotnet build ${{ env.project }} --configuration release --no-restore
+
+      - name: Package
+        run: dotnet pack ${{ env.project }} --no-build --no-restore --output . -p:PackageVersion=${{ steps.resolved.outputs.Version }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push KappaDuck.Quack*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate

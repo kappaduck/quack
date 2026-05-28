@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup Label="Configure all .csproj">
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+
+    <!-- Configure packages which are only Development dependency -->
+    <!-- https://github.com/NuGet/Home/wiki/DevelopmentDependency-support-for-PackageReference -->
+    <IncludedAssets>runtime;build;native;contentfiles;analyzers</IncludedAssets>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Custom properties">
+    <QuackRoot>$(MSBuildThisFileDirectory)</QuackRoot>
+    <DefaultNetVersion>net11.0</DefaultNetVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="Configure analyzer rules">
+    <GlobalAnalyzerConfigFiles Include="$(QuackRoot)\analyzers\*.editorconfig" />
+  </ItemGroup>
+</Project>
