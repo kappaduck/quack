@@ -22,7 +22,7 @@ internal static partial class SDL3
     }
 
     /// <summary>
-    /// Free the allocated memory
+    /// Free the allocated memory.
     /// </summary>
     /// <remarks>
     /// If <paramref name="memory"/> is <see langword="null"/>, this function does nothing.
