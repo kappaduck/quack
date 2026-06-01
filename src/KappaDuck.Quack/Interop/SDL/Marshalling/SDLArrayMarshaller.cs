@@ -6,8 +6,8 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 /// <summary>
 /// Custom marshaller for a pointer to an array owned by SDL.
 /// </summary>
-/// <typeparam name="T">The managed element type.</typeparam>
-/// <typeparam name="TUnmanaged">The unmanaged element type.</typeparam>
+/// <typeparam name="T">The managed element type</typeparam>
+/// <typeparam name="TUnmanaged">The unmanaged element type</typeparam>
 [ContiguousCollectionMarshaller]
 [CustomMarshaller(typeof(Span<>), MarshalMode.ManagedToUnmanagedOut, typeof(SDLArrayMarshaller<,>))]
 internal static class SDLArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged

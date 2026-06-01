@@ -9,8 +9,8 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 /// <remarks>
 /// It will free the allocated array.
 /// </remarks>
-/// <typeparam name="T">The managed element type.</typeparam>
-/// <typeparam name="TUnmanaged">The unmanaged element type.</typeparam>
+/// <typeparam name="T">The managed element type</typeparam>
+/// <typeparam name="TUnmanaged">The unmanaged element type</typeparam>
 [ContiguousCollectionMarshaller]
 [CustomMarshaller(typeof(Span<>), MarshalMode.ManagedToUnmanagedOut, typeof(CallerArrayMarshaller<,>))]
 internal static class CallerArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged

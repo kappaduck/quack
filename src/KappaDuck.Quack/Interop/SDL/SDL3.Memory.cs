@@ -11,7 +11,7 @@ internal static partial class SDL3
     /// <remarks>
     /// If <paramref name="memory"/> is <see langword="null"/>, this function does nothing.
     /// </remarks>
-    /// <typeparam name="TUnmanaged">The unmanaged element type.</typeparam>
+    /// <typeparam name="TUnmanaged">The unmanaged element type</typeparam>
     /// <param name="memory">A pointer to the allocated memory</param>
     internal static void Free<TUnmanaged>(TUnmanaged* memory) where TUnmanaged : unmanaged
     {
@@ -27,7 +27,7 @@ internal static partial class SDL3
     /// <remarks>
     /// If <paramref name="memory"/> is <see langword="null"/>, this function does nothing.
     /// </remarks>
-    /// <typeparam name="TUnmanaged">The unmanaged element type.</typeparam>
+    /// <typeparam name="TUnmanaged">The unmanaged element type</typeparam>
     /// <param name="memory">A pointer to the allocated memory</param>
     internal static void Free<TUnmanaged>(TUnmanaged** memory) where TUnmanaged : unmanaged
     {
