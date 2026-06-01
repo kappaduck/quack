@@ -3,7 +3,7 @@
 
 namespace KappaDuck.Quack.Interop.SDL;
 
-internal static partial class SDL3
+internal static unsafe partial class SDL3
 {
     /// <summary>
     /// Free the allocated memory.
