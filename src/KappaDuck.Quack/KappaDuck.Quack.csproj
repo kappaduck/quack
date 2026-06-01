@@ -13,6 +13,21 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup Label="Global usings">
+    <Using Include="KappaDuck.Quack.Interop" />
+    <Using Include="KappaDuck.Quack.Interop.SDL" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Runtime.InteropServices" />
+    <Using Include="System.Runtime.InteropServices.Marshalling" />
+  </ItemGroup>
+
+  <ItemGroup Label="Configure default search paths for DLL import">
+    <AssemblyAttribute Include="System.Runtime.InteropServices.DefaultDllImportSearchPathsAttribute">
+      <_Parameter1>SafeDirectories</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup Label="Packages">
     <PackageReference Include="DotNet.ReproducibleBuilds" />
     <PackageReference Include="KappaDuck.Quack.Runtimes" />

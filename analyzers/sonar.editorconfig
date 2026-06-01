@@ -1,0 +1,9 @@
+is_global = true
+
+# S101: Types should be named in PascalCase
+# Some types are named in all upper case like SDL
+dotnet_diagnostic.S101.severity = none
+
+# S4200: Make this wrapper for native method less trivial
+# Some method are trivial and should be kept as is
+dotnet_diagnostic.S4200.severity = none
