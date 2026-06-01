@@ -3,6 +3,7 @@
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path="utils/versions.env" />
   </Folder>
     <Folder Name="/configuration/analyzers/">
     <File Path="analyzers/code.style.editorconfig" />
@@ -16,6 +17,7 @@
   <Folder Name="/runtimes/">
     <File Path="runtimes/KappaDuck.Quack.Runtimes.targets" />
     <File Path="runtimes/package.nuspec" />
+    <File Path="runtimes/utils/sdl.env" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/.editorconfig" />

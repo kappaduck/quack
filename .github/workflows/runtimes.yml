@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Load versions
-        run: grep -v '^#' ../utils/versions.env >> $GITHUB_ENV
+        run: grep -v '^#' utils/sdl.env >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
@@ -58,13 +58,14 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Load versions
-        run: grep -v '^#' ../utils/versions.env >> $GITHUB_ENV
+        id: versions
+        run: grep -v '^#' ../utils/versions.env >> $GITHUB_OUTPUT
 
       - name: Resolve version
         id: resolved
         run: |
           chmod +x ../utils/resolve-version.sh
-          ../utils/resolve-version.sh KappaDuck.Quack.Runtimes ${{ env.Runtimes }} ${{ github.ref_name }}
+          ../utils/resolve-version.sh KappaDuck.Quack.Runtimes ${{ steps.versions.outputs.Runtimes }} ${{ github.ref_name }}
 
       - name: Download artifacts
         uses: actions/download-artifact@v8
