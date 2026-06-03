@@ -7,6 +7,8 @@ updates:
     schedule:
       interval: weekly
       day: wednesday
+      time: 11:00
+      timezone: Canada/Eastern
     commit-message:
       prefix: .NET SDK
     labels: [dependencies]
@@ -18,6 +20,8 @@ updates:
     schedule:
       interval: weekly
       day: wednesday
+      time: 11:00
+      timezone: Canada/Eastern
     commit-message:
       prefix: GitHub Actions
     labels: [dependencies]
@@ -33,6 +37,8 @@ updates:
     schedule:
       interval: weekly
       day: wednesday
+      time: 11:00
+      timezone: Canada/Eastern
     commit-message:
       prefix: NuGet
     labels: [dependencies]
