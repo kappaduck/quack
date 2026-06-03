@@ -4,3 +4,8 @@ is_global = true
 # Some string does not need to be localized
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1303
 dotnet_diagnostic.CA1303.severity = none
+
+# CA1716: Identifiers should not match keywords
+# Can use keywords as identifiers like event
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1716
+dotnet_diagnostic.CA1716.severity = none
