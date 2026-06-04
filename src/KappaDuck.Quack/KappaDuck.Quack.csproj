@@ -13,6 +13,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <ItemGroup Label="Make internals visible to test projects">
+    <InternalsVisibleTo Include="Unit.Tests" />
+    <InternalsVisibleTo Include="Integration.Tests" />
+  </ItemGroup>
+
   <ItemGroup Label="Global usings">
     <Using Include="KappaDuck.Quack.Interop" />
     <Using Include="KappaDuck.Quack.Interop.SDL" />
