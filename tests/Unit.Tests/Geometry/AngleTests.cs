@@ -14,8 +14,8 @@ internal sealed class AngleTests
         const float degrees = 45.0f;
         Angle angle = Angle.FromDegrees(degrees);
 
-        await Assert.That(angle.Degrees).IsEqualTo(degrees);
-        await Assert.That(angle.Radians).IsEqualTo(degrees * (MathF.PI / 180.0f));
+        await angle.Degrees.Should().BeEqualTo(degrees);
+        await angle.Radians.Should().BeEqualTo(degrees * (MathF.PI / 180.0f));
     }
 
     [Test]
@@ -24,29 +24,29 @@ internal sealed class AngleTests
         const float radians = MathF.PI / 4.0f;
         Angle angle = Angle.FromRadians(radians);
 
-        await Assert.That(angle.Radians).IsEqualTo(radians);
-        await Assert.That(angle.Degrees).IsEqualTo(45.0f);
+        await angle.Radians.Should().BeEqualTo(radians);
+        await angle.Degrees.Should().BeEqualTo(45.0f);
     }
 
     [Test]
     public async Task SinShouldReturnCorrectValue()
     {
         Angle angle = Angle.FromDegrees(30.0f);
-        await Assert.That(angle.Sin).IsEqualTo(0.5f).Within(0.0001f);
+        await angle.Sin.Should().BeCloseTo(0.5f, 0.0001f);
     }
 
     [Test]
     public async Task CosShouldReturnCorrectValue()
     {
         Angle angle = Angle.FromDegrees(60.0f);
-        await Assert.That(angle.Cos).IsEqualTo(0.5f).Within(0.0001f);
+        await angle.Cos.Should().BeCloseTo(0.5f, 0.0001f);
     }
 
     [Test]
     public async Task TanShouldReturnCorrectValue()
     {
         Angle angle = Angle.FromDegrees(45.0f);
-        await Assert.That(angle.Tan).IsEqualTo(1.0f).Within(0.0001f);
+        await angle.Tan.Should().BeCloseTo(1.0f, 0.0001f);
     }
 
     [Test]
@@ -54,8 +54,8 @@ internal sealed class AngleTests
     {
         Angle zeroAngle = Angle.Zero;
 
-        await Assert.That(zeroAngle.Radians).IsEqualTo(0.0f);
-        await Assert.That(zeroAngle.Degrees).IsEqualTo(0.0f);
+        await zeroAngle.Radians.Should().BeZero();
+        await zeroAngle.Degrees.Should().BeZero();
     }
 
     [Test]
@@ -67,7 +67,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(450.0f);
         Angle normalized = angle.Normalize(min, max);
 
-        await Assert.That(normalized.Degrees).IsEqualTo(expected);
+        await normalized.Degrees.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -88,7 +88,7 @@ internal sealed class AngleTests
         Angle angle2 = Angle.FromDegrees(right);
 
         int result = angle1.CompareTo(angle2);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -101,7 +101,7 @@ internal sealed class AngleTests
         Angle angle2 = Angle.FromDegrees(right);
 
         int result = angle1.CompareTo((object?)angle2);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -133,7 +133,7 @@ internal sealed class AngleTests
         Angle angle2 = Angle.FromDegrees(right);
 
         bool result = angle1.Equals(angle2);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -145,7 +145,7 @@ internal sealed class AngleTests
         Angle angle2 = Angle.FromDegrees(right);
 
         bool result = angle1.Equals((object?)angle2);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -155,7 +155,7 @@ internal sealed class AngleTests
         Size size = new(10, 10);
 
         bool result = left.Equals(size);
-        await Assert.That(result).IsFalse();
+        await result.Should().BeFalse();
     }
 
     [Test]
@@ -164,14 +164,14 @@ internal sealed class AngleTests
         Angle left = Angle.FromDegrees(45f);
 
         bool result = left.Equals(null);
-        await Assert.That(result).IsFalse();
+        await result.Should().BeFalse();
     }
 
     [Test]
     public async Task ToStringShouldReturnInDegreesFormatByDefault()
     {
         Angle angle = Angle.FromDegrees(90.0f);
-        await Assert.That(angle.ToString()).IsEqualTo("90°");
+        await angle.ToString().Should().BeEqualTo("90°");
     }
 
     [Test]
@@ -182,7 +182,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(180.0f);
 
         string result = angle.ToString(format, null);
-        await Assert.That(result).IsEqualTo($"{MathF.PI} rad");
+        await result.Should().BeEqualTo($"{MathF.PI} rad");
     }
 
     [Test]
@@ -191,7 +191,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(180.0f);
 
         string result = angle.ToString(null, null);
-        await Assert.That(result).IsEqualTo("180°");
+        await result.Should().BeEqualTo("180°");
     }
 
     [Test]
@@ -201,7 +201,7 @@ internal sealed class AngleTests
         Angle right = Angle.FromDegrees(45.0f);
 
         Angle result = left + right;
-        await Assert.That(result.Degrees).IsEqualTo(75.0f);
+        await result.Degrees.Should().BeEqualTo(75.0f);
     }
 
     [Test]
@@ -211,7 +211,7 @@ internal sealed class AngleTests
         Angle right = Angle.FromDegrees(45.0f);
 
         Angle result = left - right;
-        await Assert.That(result.Degrees).IsEqualTo(45.0f);
+        await result.Degrees.Should().BeEqualTo(45.0f);
     }
 
     [Test]
@@ -221,7 +221,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(30.0f);
 
         Angle result = angle * scalar;
-        await Assert.That(result.Degrees).IsEqualTo(60.0f);
+        await result.Degrees.Should().BeEqualTo(60.0f);
     }
 
     [Test]
@@ -231,7 +231,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(20.0f);
 
         Angle result = scalar * angle;
-        await Assert.That(result.Degrees).IsEqualTo(60.0f);
+        await result.Degrees.Should().BeEqualTo(60.0f);
     }
 
     [Test]
@@ -241,7 +241,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(90.0f);
 
         Angle result = angle / scalar;
-        await Assert.That(result.Degrees).IsEqualTo(45.0f);
+        await result.Degrees.Should().BeEqualTo(45.0f);
     }
 
     [Test]
@@ -259,7 +259,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(45.0f);
 
         Angle result = -angle;
-        await Assert.That(result.Degrees).IsEqualTo(-45.0f);
+        await result.Degrees.Should().BeEqualTo(-45.0f);
     }
 
     [Test]
@@ -268,7 +268,7 @@ internal sealed class AngleTests
     public async Task OperatorEqualsShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) == Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -277,7 +277,7 @@ internal sealed class AngleTests
     public async Task OperatorNotEqualsShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) != Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -287,7 +287,7 @@ internal sealed class AngleTests
     public async Task OperatorLessThanShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) < Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -297,7 +297,7 @@ internal sealed class AngleTests
     public async Task OperatorGreaterThanShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) > Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -307,7 +307,7 @@ internal sealed class AngleTests
     public async Task OperatorLessThanOrEqualShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) <= Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -317,7 +317,7 @@ internal sealed class AngleTests
     public async Task OperatorGreaterThanOrEqualShouldReturnTheGoodResult(float left, float right, bool expected)
     {
         bool result = Angle.FromDegrees(left) >= Angle.FromDegrees(right);
-        await Assert.That(result).IsEqualTo(expected);
+        await result.Should().BeEqualTo(expected);
     }
 
     [Test]
@@ -327,7 +327,7 @@ internal sealed class AngleTests
         Angle right = Angle.FromDegrees(45.0f);
 
         Angle result = Angle.Add(left, right);
-        await Assert.That(result.Degrees).IsEqualTo(75.0f);
+        await result.Degrees.Should().BeEqualTo(75.0f);
     }
 
     [Test]
@@ -337,7 +337,7 @@ internal sealed class AngleTests
         Angle right = Angle.FromDegrees(45.0f);
 
         Angle result = Angle.Subtract(left, right);
-        await Assert.That(result.Degrees).IsEqualTo(45.0f);
+        await result.Degrees.Should().BeEqualTo(45.0f);
     }
 
     [Test]
@@ -347,7 +347,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(30.0f);
 
         Angle result = Angle.Multiply(angle, scalar);
-        await Assert.That(result.Degrees).IsEqualTo(60.0f);
+        await result.Degrees.Should().BeEqualTo(60.0f);
     }
 
     [Test]
@@ -357,7 +357,7 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(90.0f);
 
         Angle result = Angle.Divide(angle, scalar);
-        await Assert.That(result.Degrees).IsEqualTo(45.0f);
+        await result.Degrees.Should().BeEqualTo(45.0f);
     }
 
     [Test]
@@ -375,6 +375,6 @@ internal sealed class AngleTests
         Angle angle = Angle.FromDegrees(45.0f);
 
         Angle result = Angle.Negate(angle);
-        await Assert.That(result.Degrees).IsEqualTo(-45.0f);
+        await result.Degrees.Should().BeEqualTo(-45.0f);
     }
 }
