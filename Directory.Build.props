@@ -3,7 +3,7 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <AnalysisLevel>latest-all</AnalysisLevel>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UseArtifactsOutput>true</UseArtifactsOutput>
 

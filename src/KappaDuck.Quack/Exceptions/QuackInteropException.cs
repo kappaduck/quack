@@ -15,4 +15,8 @@ public class QuackInteropException : QuackException
     internal QuackInteropException(string message) : base(message)
     {
     }
+
+    internal QuackInteropException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }
