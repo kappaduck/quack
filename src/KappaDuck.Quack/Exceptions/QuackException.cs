@@ -12,11 +12,11 @@ public class QuackException : Exception
     {
     }
 
-    internal QuackException(string? message, Exception? innerException) : base(message, innerException)
+    internal QuackException(string message) : base(message)
     {
     }
 
-    internal QuackException(string message) : base(message)
+    internal QuackException(string? message, Exception? innerException) : base(message, innerException)
     {
     }
 }
