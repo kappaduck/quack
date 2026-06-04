@@ -10,7 +10,17 @@ dotnet_diagnostic.CA1303.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1305
 dotnet_diagnostic.CA1305.severity = none
 
+# CA1307: A string comparison operation uses a method overload that does not set a StringComparison parameter.
+# Some operation does not need to set a StringComparison parameter
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1307
+dotnet_diagnostic.CA1307.severity = none
+
 # CA1716: Identifiers should not match keywords
 # Can use keywords as identifiers like event
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1716
 dotnet_diagnostic.CA1716.severity = none
+
+# CA1716: A value type does not override Equals or does not implement the equality operator (==).
+# Some value type does not need to override Equals
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1815
+dotnet_diagnostic.CA1815.severity = none
