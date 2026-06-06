@@ -100,50 +100,6 @@ public readonly struct Angle :
     }
 
     /// <summary>
-    /// Add two angles.
-    /// </summary>
-    /// <param name="left">The left angle.</param>
-    /// <param name="right">The right angle.</param>
-    /// <returns>The resulting angle.</returns>
-    public static Angle Add(Angle left, Angle right) => new(left.Radians + right.Radians);
-
-    /// <summary>
-    /// Subtracts one angle from another.
-    /// </summary>
-    /// <param name="left">The left angle.</param>
-    /// <param name="right">The right angle.</param>
-    /// <returns>The resulting angle.</returns>
-    public static Angle Subtract(Angle left, Angle right) => new(left.Radians - right.Radians);
-
-    /// <summary>
-    /// Multiplies an angle by a scalar.
-    /// </summary>
-    /// <param name="left">The angle.</param>
-    /// <param name="right">The scalar to multiply by.</param>
-    /// <returns>The resulting angle.</returns>
-    public static Angle Multiply(Angle left, float right) => new(left.Radians * right);
-
-    /// <summary>
-    /// Divides an angle by a scalar.
-    /// </summary>
-    /// <param name="left">The angle.</param>
-    /// <param name="right">The scalar to divide by.</param>
-    /// <returns>The resulting angle.</returns>
-    /// <exception cref="DivideByZeroException">Thrown when attempting to divide by zero.</exception>
-    public static Angle Divide(Angle left, float right)
-    {
-        Math.ThrowIfDividedByZero(right);
-        return new(left.Radians / right);
-    }
-
-    /// <summary>
-    /// Negates an angle.
-    /// </summary>
-    /// <param name="value">The angle to negate.</param>
-    /// <returns>The negated angle.</returns>
-    public static Angle Negate(Angle value) => new(-value.Radians);
-
-    /// <summary>
     /// Creates an angle from degrees.
     /// </summary>
     /// <param name="degrees">The angle in degrees.</param>
@@ -191,7 +147,7 @@ public readonly struct Angle :
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
     /// <returns>The resulting angle.</returns>
-    public static Angle operator +(Angle left, Angle right) => Add(left, right);
+    public static Angle operator +(Angle left, Angle right) => new(left.Radians + right.Radians);
 
     /// <summary>
     /// Subtracts one angle from another.
@@ -199,7 +155,7 @@ public readonly struct Angle :
     /// <param name="left">The left angle.</param>
     /// <param name="right">The right angle.</param>
     /// <returns>The resulting angle.</returns>
-    public static Angle operator -(Angle left, Angle right) => Subtract(left, right);
+    public static Angle operator -(Angle left, Angle right) => new(left.Radians - right.Radians);
 
     /// <summary>
     /// Multiplies an angle by a scalar.
@@ -207,7 +163,7 @@ public readonly struct Angle :
     /// <param name="left">The angle.</param>
     /// <param name="right">The scalar to multiply by.</param>
     /// <returns>The resulting angle.</returns>
-    public static Angle operator *(Angle left, float right) => Multiply(left, right);
+    public static Angle operator *(Angle left, float right) => new(left.Radians * right);
 
     /// <summary>
     /// Multiplies an angle by a scalar.
@@ -215,7 +171,7 @@ public readonly struct Angle :
     /// <param name="left">The scalar to multiply by.</param>
     /// <param name="right">The angle.</param>
     /// <returns>The resulting angle.</returns>
-    public static Angle operator *(float left, Angle right) => Multiply(right, left);
+    public static Angle operator *(float left, Angle right) => new(right.Radians * left);
 
     /// <summary>
     /// Divides an angle by a scalar.
@@ -224,14 +180,18 @@ public readonly struct Angle :
     /// <param name="right">The scalar to divide by.</param>
     /// <returns>The resulting angle.</returns>
     /// <exception cref="DivideByZeroException">Thrown when attempting to divide by zero.</exception>
-    public static Angle operator /(Angle left, float right) => Divide(left, right);
+    public static Angle operator /(Angle left, float right)
+    {
+        Math.ThrowIfDividedByZero(right);
+        return new(left.Radians / right);
+    }
 
     /// <summary>
     /// Negates an angle.
     /// </summary>
     /// <param name="value">The angle to negate.</param>
     /// <returns>The negated angle.</returns>
-    public static Angle operator -(Angle value) => Negate(value);
+    public static Angle operator -(Angle value) => new(-value.Radians);
 
     /// <summary>
     /// Determines whether two angles are equal.

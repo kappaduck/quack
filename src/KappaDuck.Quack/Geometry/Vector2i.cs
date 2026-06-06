@@ -247,58 +247,6 @@ public struct Vector2i(int x, int y) :
     }
 
     /// <summary>
-    /// Adds two vectors.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2i Add(Vector2i left, Vector2i right) => new(left.X + right.X, left.Y + right.Y);
-
-    /// <summary>
-    /// Subtracts one vector from another.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2i Subtract(Vector2i left, Vector2i right) => new(left.X - right.X, left.Y - right.Y);
-
-    /// <summary>
-    /// Multiplies two vectors component-wise.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2i Multiply(Vector2i left, Vector2i right) => new(left.X * right.X, left.Y * right.Y);
-
-    /// <summary>
-    /// Multiplies a vector by a scalar.
-    /// </summary>
-    /// <param name="left">The vector.</param>
-    /// <param name="right">The scalar to multiply by.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2i Multiply(Vector2i left, int right) => new(left.X * right, left.Y * right);
-
-    /// <summary>
-    /// Divides a vector by a scalar.
-    /// </summary>
-    /// <param name="left">The vector.</param>
-    /// <param name="right">The scalar to divide by.</param>
-    /// <returns>The resulting vector.</returns>
-    /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
-    public static Vector2i Divide(Vector2i left, int right)
-    {
-        Math.ThrowIfDividedByZero(right);
-        return new Vector2i(left.X / right, left.Y / right);
-    }
-
-    /// <summary>
-    /// Negates the vector.
-    /// </summary>
-    /// <param name="value">The vector to negate.</param>
-    /// <returns>The negated vector.</returns>
-    public static Vector2i Negate(Vector2i value) => new(-value.X, -value.Y);
-
-    /// <summary>
     /// Determines whether this vector is equal to another vector.
     /// </summary>
     /// <param name="other">The vector to compare with the current vector.</param>
@@ -343,7 +291,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator +(Vector2i left, Vector2i right) => Add(left, right);
+    public static Vector2i operator +(Vector2i left, Vector2i right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Subtracts one vector from another.
@@ -351,7 +299,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator -(Vector2i left, Vector2i right) => Subtract(left, right);
+    public static Vector2i operator -(Vector2i left, Vector2i right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Multiplies two vectors component-wise.
@@ -359,7 +307,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(Vector2i left, Vector2i right) => Multiply(left, right);
+    public static Vector2i operator *(Vector2i left, Vector2i right) => new(left.X * right.X, left.Y * right.Y);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -367,7 +315,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar to multiply by.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(Vector2i left, int right) => Multiply(left, right);
+    public static Vector2i operator *(Vector2i left, int right) => new(left.X * right, left.Y * right);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -375,7 +323,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The scalar to multiply by.</param>
     /// <param name="right">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(int left, Vector2i right) => Multiply(right, left);
+    public static Vector2i operator *(int left, Vector2i right) => right * left;
 
     /// <summary>
     /// Divides a vector by a scalar.
@@ -384,14 +332,18 @@ public struct Vector2i(int x, int y) :
     /// <param name="right">The scalar to divide by.</param>
     /// <returns>The resulting vector using integer division (truncates toward zero).</returns>
     /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
-    public static Vector2i operator /(Vector2i left, int right) => Divide(left, right);
+    public static Vector2i operator /(Vector2i left, int right)
+    {
+        Math.ThrowIfDividedByZero(right);
+        return new Vector2i(left.X / right, left.Y / right);
+    }
 
     /// <summary>
     /// Negates the vector.
     /// </summary>
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector2i operator -(Vector2i value) => Negate(value);
+    public static Vector2i operator -(Vector2i value) => new(-value.X, -value.Y);
 
     /// <summary>
     /// Determines whether two vectors are equal.

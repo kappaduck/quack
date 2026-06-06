@@ -149,86 +149,6 @@ internal sealed class Vector2Tests
     }
 
     [Test]
-    public async Task AddShouldAddTwoVectors()
-    {
-        Vector2 left = new(1f, 2f);
-        Vector2 right = new(3f, 4f);
-
-        Vector2 result = Vector2.Add(left, right);
-
-        await result.X.Should().BeEqualTo(4f);
-        await result.Y.Should().BeEqualTo(6f);
-    }
-
-    [Test]
-    public async Task SubstractShouldSubstractTwoVectors()
-    {
-        Vector2 left = new(5f, 7f);
-        Vector2 right = new(3f, 4f);
-
-        Vector2 result = Vector2.Subtract(left, right);
-
-        await result.X.Should().BeEqualTo(2f);
-        await result.Y.Should().BeEqualTo(3f);
-    }
-
-    [Test]
-    public async Task MultiplyShouldMultiplyTwoVectors()
-    {
-        Vector2 left = new(2f, 3f);
-        Vector2 right = new(4f, 5f);
-
-        Vector2 result = Vector2.Multiply(left, right);
-
-        await result.X.Should().BeEqualTo(8f);
-        await result.Y.Should().BeEqualTo(15f);
-    }
-
-    [Test]
-    public async Task MultiplyShouldMultiplyByScalar()
-    {
-        const float scalar = 4f;
-        Vector2 vector = new(2f, 3f);
-
-        Vector2 result = Vector2.Multiply(vector, scalar);
-
-        await result.X.Should().BeEqualTo(8f);
-        await result.Y.Should().BeEqualTo(12f);
-    }
-
-    [Test]
-    public async Task DivideShouldDivideByScalar()
-    {
-        const float scalar = 2f;
-        Vector2 vector = new(8f, 12f);
-
-        Vector2 result = Vector2.Divide(vector, scalar);
-
-        await result.X.Should().BeEqualTo(4f);
-        await result.Y.Should().BeEqualTo(6f);
-    }
-
-    [Test]
-    public async Task DivideShouldThrowsDivideByZeroExceptionWhenScalarIsZero()
-    {
-        const float scalar = 0f;
-        Vector2 vector = new(8f, 12f);
-
-        await Assert.That(() => Vector2.Divide(vector, scalar)).Throws<DivideByZeroException>();
-    }
-
-    [Test]
-    public async Task NegateShouldNegateVector()
-    {
-        Vector2 vector = new(3f, -4f);
-
-        Vector2 result = Vector2.Negate(vector);
-
-        await result.X.Should().BeEqualTo(-3f);
-        await result.Y.Should().BeEqualTo(4f);
-    }
-
-    [Test]
     public async Task OperatorAddShouldAddTwoVectors()
     {
         Vector2 left = new(1f, 2f);
@@ -743,5 +663,35 @@ internal sealed class Vector2Tests
 
         await rotated.X.Should().BeCloseTo(0f, 0.01f);
         await rotated.Y.Should().BeCloseTo(1f, 0.01f);
+    }
+
+    [Test]
+    public async Task FloorShouldConvertVector2ByFlooringEachComponent()
+    {
+        Vector2 vector = new(7.64f, -7.6f);
+
+        Vector2i result = vector.Floor();
+        await result.X.Should().BeEqualTo(7);
+        await result.Y.Should().BeEqualTo(-8);
+    }
+
+    [Test]
+    public async Task RoundShouldConvertVector2ByRoundingEachComponent()
+    {
+        Vector2 vector = new(7.64f, -7.6f);
+
+        Vector2i result = vector.Round();
+        await result.X.Should().BeEqualTo(8);
+        await result.Y.Should().BeEqualTo(-8);
+    }
+
+    [Test]
+    public async Task TruncateShouldConvertVector2ByTruncatingEachComponent()
+    {
+        Vector2 vector = new(7.64f, -7.6f);
+
+        Vector2i result = vector.Truncate();
+        await result.X.Should().BeEqualTo(7);
+        await result.Y.Should().BeEqualTo(-7);
     }
 }

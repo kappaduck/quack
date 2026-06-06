@@ -19,6 +19,7 @@ public struct Vector2(float x, float y) :
     IMultiplyOperators<Vector2, float, Vector2>,
     IDivisionOperators<Vector2, float, Vector2>,
     IUnaryNegationOperators<Vector2, Vector2>,
+    IEqualityOperators<Vector2, Vector2, bool>,
     IEquatable<Vector2>,
     ISpanFormattable,
     IUtf8SpanFormattable
@@ -216,6 +217,27 @@ public struct Vector2(float x, float y) :
     public readonly Vector2 Rotate(Angle angle) => Rotate(this, angle);
 
     /// <summary>
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by flooring each component.
+    /// </summary>
+    /// <remarks>
+    /// Useful for tile snapping, where you want the tile that contains the position.
+    /// </remarks>
+    /// <returns>The converted vector with each component floored.</returns>
+    public readonly Vector2i Floor() => new((int)MathF.Floor(X), (int)MathF.Floor(Y));
+
+    /// <summary>
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by rounding each component to the nearest integer.
+    /// </summary>
+    /// <returns>The converted vector with each component rounded.</returns>
+    public readonly Vector2i Round() => new((int)MathF.Round(X), (int)MathF.Round(Y));
+
+    /// <summary>
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by truncating each component toward zero.
+    /// </summary>
+    /// <returns>The converted vector with each component truncated.</returns>
+    public readonly Vector2i Truncate() => new((int)X, (int)Y);
+
+    /// <summary>
     /// Computes the angle between two vectors.
     /// </summary>
     /// <param name="from">The first vector.</param>
@@ -280,7 +302,11 @@ public struct Vector2(float x, float y) :
     public static Vector2 Lerp(Vector2 from, Vector2 to, float interpolationFactor)
     {
         interpolationFactor = Math.Clamp(interpolationFactor, 0f, 1f);
-        return from + ((to - from) * interpolationFactor);
+
+        float x = (to.X - from.X) * interpolationFactor;
+        float y = (to.Y - from.Y) * interpolationFactor;
+
+        return new Vector2(from.X + x, from.Y + y);
     }
 
     /// <summary>
@@ -291,7 +317,12 @@ public struct Vector2(float x, float y) :
     /// <param name="interpolationFactor">The interpolation factor.</param>
     /// <returns>The interpolated vector.</returns>
     public static Vector2 LerpUnclamped(Vector2 from, Vector2 to, float interpolationFactor)
-        => from + ((to - from) * interpolationFactor);
+    {
+        float x = (to.X - from.X) * interpolationFactor;
+        float y = (to.Y - from.Y) * interpolationFactor;
+
+        return new Vector2(from.X + x, from.Y + y);
+    }
 
     /// <summary>
     /// Determines the component-wise maximum of two vectors.
@@ -361,58 +392,6 @@ public struct Vector2(float x, float y) :
 
         return new Vector2(x, y);
     }
-
-    /// <summary>
-    /// Adds two vectors.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2 Add(Vector2 left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
-
-    /// <summary>
-    /// Subtracts one vector from another.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2 Subtract(Vector2 left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
-
-    /// <summary>
-    /// Multiplies two vectors component-wise.
-    /// </summary>
-    /// <param name="left">The left vector.</param>
-    /// <param name="right">The right vector.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2 Multiply(Vector2 left, Vector2 right) => new(left.X * right.X, left.Y * right.Y);
-
-    /// <summary>
-    /// Multiplies a vector by a scalar.
-    /// </summary>
-    /// <param name="left">The vector.</param>
-    /// <param name="right">The scalar to multiply by.</param>
-    /// <returns>The resulting vector.</returns>
-    public static Vector2 Multiply(Vector2 left, float right) => new(left.X * right, left.Y * right);
-
-    /// <summary>
-    /// Divides a vector by a scalar.
-    /// </summary>
-    /// <param name="left">The vector.</param>
-    /// <param name="right">The scalar to divide by.</param>
-    /// <returns>The resulting vector.</returns>
-    /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
-    public static Vector2 Divide(Vector2 left, float right)
-    {
-        Math.ThrowIfDividedByZero(right);
-        return new Vector2(left.X / right, left.Y / right);
-    }
-
-    /// <summary>
-    /// Negates the vector.
-    /// </summary>
-    /// <param name="value">The vector to negate.</param>
-    /// <returns>The negated vector.</returns>
-    public static Vector2 Negate(Vector2 value) => new(-value.X, -value.Y);
 
     /// <summary>
     /// Determines whether this vector is equal to another vector.
