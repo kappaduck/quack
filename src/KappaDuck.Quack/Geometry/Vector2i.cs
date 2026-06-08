@@ -280,12 +280,6 @@ public struct Vector2i(int x, int y) :
         => Utf8.TryWrite(utf8Destination, provider, $"({X}, {Y})", out bytesWritten);
 
     /// <summary>
-    /// Implicitly converts a <see cref="Vector2i"/> to a <see cref="Vector2"/>.
-    /// </summary>
-    /// <param name="value">The vector to convert.</param>
-    public static implicit operator Vector2(Vector2i value) => new(value.X, value.Y);
-
-    /// <summary>
     /// Adds two vectors.
     /// </summary>
     /// <param name="left">The left vector.</param>
