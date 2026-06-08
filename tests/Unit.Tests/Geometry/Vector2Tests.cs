@@ -304,9 +304,9 @@ internal sealed class Vector2Tests
     public async Task EqualsWithObjectShouldReturnTrueWhenVectorsAreEquals()
     {
         Vector2 left = new(3f, 4f);
-        Vector2 right = new(3f, 4f);
+        object right = new Vector2(3f, 4f);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeTrue();
     }
 
@@ -314,9 +314,9 @@ internal sealed class Vector2Tests
     public async Task EqualsWithObjectShouldReturnFalseWhenVectorsAreNotEquals()
     {
         Vector2 left = new(3f, 4f);
-        Vector2 right = new(4f, 4f);
+        object right = new Vector2(4f, 4f);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeFalse();
     }
 
@@ -671,6 +671,7 @@ internal sealed class Vector2Tests
         Vector2 vector = new(7.64f, -7.6f);
 
         Vector2i result = vector.Floor();
+
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-8);
     }
@@ -681,6 +682,7 @@ internal sealed class Vector2Tests
         Vector2 vector = new(7.64f, -7.6f);
 
         Vector2i result = vector.Round();
+
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(-8);
     }
@@ -691,6 +693,7 @@ internal sealed class Vector2Tests
         Vector2 vector = new(7.64f, -7.6f);
 
         Vector2i result = vector.Truncate();
+
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-7);
     }

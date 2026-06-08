@@ -134,9 +134,9 @@ internal sealed class PointTests
     public async Task EqualsWithObjectShouldReturnTrueWhenPointsAreEquals()
     {
         Point left = new(3, 4);
-        Point right = new(3, 4);
+        object right = new Point(3, 4);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeTrue();
     }
 
@@ -144,9 +144,9 @@ internal sealed class PointTests
     public async Task EqualsWithObjectShouldReturnFalseWhenPointsAreNotEquals()
     {
         Point left = new(3, 4);
-        Point right = new(4, 4);
+        object right = new Point(4, 4);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeFalse();
     }
 

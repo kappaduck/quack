@@ -177,9 +177,9 @@ internal sealed class PointfTests
     public async Task EqualsWithObjectShouldReturnTrueWhenPointsAreEquals()
     {
         Pointf left = new(3f, 4f);
-        Pointf right = new(3f, 4f);
+        object right = new Pointf(3f, 4f);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeTrue();
     }
 
@@ -187,9 +187,9 @@ internal sealed class PointfTests
     public async Task EqualsWithObjectShouldReturnFalseWhenPointsAreNotEquals()
     {
         Pointf left = new(3f, 4f);
-        Pointf right = new(4f, 4f);
+        object right = new Pointf(4f, 4f);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeFalse();
     }
 

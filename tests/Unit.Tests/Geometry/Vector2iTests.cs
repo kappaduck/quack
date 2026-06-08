@@ -256,9 +256,9 @@ internal sealed class Vector2iTests
     public async Task EqualsWithObjectShouldReturnTrueWhenVectorsAreEquals()
     {
         Vector2i left = new(3, 4);
-        Vector2i right = new(3, 4);
+        object right = new Vector2i(3, 4);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeTrue();
     }
 
@@ -266,9 +266,9 @@ internal sealed class Vector2iTests
     public async Task EqualsWithObjectShouldReturnFalseWhenVectorsAreNotEquals()
     {
         Vector2i left = new(3, 4);
-        Vector2i right = new(4, 4);
+        object right = new Vector2i(4, 4);
 
-        bool result = left.Equals((object)right);
+        bool result = left.Equals(right);
         await result.Should().BeFalse();
     }
 

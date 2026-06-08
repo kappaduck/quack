@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using System.Drawing;
 
 namespace Unit.Tests.Geometry;
 
@@ -98,9 +97,9 @@ internal sealed class AngleTests
     public async Task CompareToWithObjectShouldReturnCorrectValue(float left, float right, int expected)
     {
         Angle angle1 = Angle.FromDegrees(left);
-        Angle angle2 = Angle.FromDegrees(right);
+        object angle2 = Angle.FromDegrees(right);
 
-        int result = angle1.CompareTo((object?)angle2);
+        int result = angle1.CompareTo(angle2);
         await result.Should().BeEqualTo(expected);
     }
 
@@ -117,7 +116,7 @@ internal sealed class AngleTests
     public async Task CompareToWithAnyTypeExceptAngleShouldThrowArgumentException()
     {
         Angle left = Angle.FromDegrees(90f);
-        Size size = new(10, 10);
+        System.Drawing.Size size = new(10, 10);
 
         await Assert.That(() => left.CompareTo(size))
                     .Throws<ArgumentException>()
@@ -142,9 +141,9 @@ internal sealed class AngleTests
     public async Task EqualsWithObjectShouldReturnGoodResult(float left, float right, bool expected)
     {
         Angle angle1 = Angle.FromDegrees(left);
-        Angle angle2 = Angle.FromDegrees(right);
+        object angle2 = Angle.FromDegrees(right);
 
-        bool result = angle1.Equals((object?)angle2);
+        bool result = angle1.Equals(angle2);
         await result.Should().BeEqualTo(expected);
     }
 
@@ -152,9 +151,9 @@ internal sealed class AngleTests
     public async Task EqualsWithAnyTypeExceptAngleShouldReturnFalse()
     {
         Angle left = Angle.FromDegrees(45f);
-        Size size = new(10, 10);
+        const float right = 45f;
 
-        bool result = left.Equals(size);
+        bool result = left.Equals(right);
         await result.Should().BeFalse();
     }
 
