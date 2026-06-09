@@ -24,3 +24,8 @@ dotnet_diagnostic.CA1716.severity = none
 # Some value type does not need to override Equals
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1815
 dotnet_diagnostic.CA1815.severity = none
+
+# CA2225: An operator overload was detected and the expected named alternative method was not found.
+# it is not necessary to have a named alternative method
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2225
+dotnet_diagnostic.CA2225.severity = none

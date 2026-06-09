@@ -4,6 +4,8 @@
   <PropertyGroup Label="Configure .csproj">
     <TargetFramework>$(DefaultNetVersion)</TargetFramework>
     <OutputType>Exe</OutputType>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <ItemGroup>
