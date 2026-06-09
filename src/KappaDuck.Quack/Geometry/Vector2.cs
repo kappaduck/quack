@@ -217,25 +217,25 @@ public struct Vector2(float x, float y) :
     public readonly Vector2 Rotate(Angle angle) => Rotate(this, angle);
 
     /// <summary>
-    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by flooring each component.
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2I"/> by flooring each component.
     /// </summary>
     /// <remarks>
     /// Useful for tile snapping, where you want the tile that contains the position.
     /// </remarks>
     /// <returns>The converted vector with each component floored.</returns>
-    public readonly Vector2i Floor() => new((int)MathF.Floor(X), (int)MathF.Floor(Y));
+    public readonly Vector2I Floor() => new((int)MathF.Floor(X), (int)MathF.Floor(Y));
 
     /// <summary>
-    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by rounding each component to the nearest integer.
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2I"/> by rounding each component to the nearest integer.
     /// </summary>
     /// <returns>The converted vector with each component rounded.</returns>
-    public readonly Vector2i Round() => new((int)MathF.Round(X), (int)MathF.Round(Y));
+    public readonly Vector2I Round() => new((int)MathF.Round(X), (int)MathF.Round(Y));
 
     /// <summary>
-    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2i"/> by truncating each component toward zero.
+    /// Converts a <see cref="Vector2"/> to a <see cref="Vector2I"/> by truncating each component toward zero.
     /// </summary>
     /// <returns>The converted vector with each component truncated.</returns>
-    public readonly Vector2i Truncate() => new((int)X, (int)Y);
+    public readonly Vector2I Truncate() => new((int)X, (int)Y);
 
     /// <summary>
     /// Computes the angle between two vectors.

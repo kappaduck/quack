@@ -11,12 +11,12 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="width">The width component of the size.</param>
 /// <param name="height">The height component of the size.</param>
-public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOperators<Sizef, Sizef, bool>, ISpanFormattable, IUtf8SpanFormattable
+public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOperators<SizeF, SizeF, bool>, ISpanFormattable, IUtf8SpanFormattable
 {
     /// <summary>
     /// Creates a zero size (0, 0).
     /// </summary>
-    public Sizef() : this(0f, 0f)
+    public SizeF() : this(0f, 0f)
     {
     }
 
@@ -43,7 +43,7 @@ public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOpe
     /// <summary>
     /// Gets a size with all components set to zero.
     /// </summary>
-    public static Sizef Zero { get; } = new(0f, 0f);
+    public static SizeF Zero { get; } = new(0f, 0f);
 
     /// <summary>
     /// Returns the largest <see cref="Size"/> whose components are less than or equal to those of this size.
@@ -72,11 +72,11 @@ public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOpe
     /// </summary>
     /// <param name="other">The size to compare with the current size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(Sizef other)
+    public readonly bool Equals(SizeF other)
         => MathF.ApproximatelyEquals(Width, other.Width) && MathF.ApproximatelyEquals(Height, other.Height);
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Sizef other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is SizeF other && Equals(other);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(Width, Height);
@@ -96,13 +96,13 @@ public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOpe
         => Utf8.TryWrite(utf8Destination, provider, $"({Width}, {Height})", out bytesWritten);
 
     /// <summary>
-    /// Explicitly converts a <see cref="Sizef"/> to a <see cref="Size"/> by truncating components.
+    /// Explicitly converts a <see cref="SizeF"/> to a <see cref="Size"/> by truncating components.
     /// </summary>
     /// <remarks>
     /// Use <see cref="Floor"/>, <see cref="Round"/>, or <see cref="Truncate"/> for explicit rounding control.
     /// </remarks>
     /// <param name="value">The size to convert.</param>
-    public static explicit operator Size(Sizef value) => value.Truncate();
+    public static explicit operator Size(SizeF value) => value.Truncate();
 
     /// <summary>
     /// Determines whether two sizes are equal.
@@ -110,7 +110,7 @@ public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOpe
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Sizef left, Sizef right) => left.Equals(right);
+    public static bool operator ==(SizeF left, SizeF right) => left.Equals(right);
 
     /// <summary>
     /// Determines whether two sizes are not equal.
@@ -118,5 +118,5 @@ public struct Sizef(float width, float height) : IEquatable<Sizef>, IEqualityOpe
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Sizef left, Sizef right) => !(left == right);
+    public static bool operator !=(SizeF left, SizeF right) => !(left == right);
 }

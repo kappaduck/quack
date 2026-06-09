@@ -13,21 +13,21 @@ namespace KappaDuck.Quack.Geometry;
 /// <param name="y">The y-coordinate of the vector.</param>
 
 [StructLayout(LayoutKind.Auto)]
-public struct Vector2i(int x, int y) :
-    IAdditionOperators<Vector2i, Vector2i, Vector2i>,
-    ISubtractionOperators<Vector2i, Vector2i, Vector2i>,
-    IMultiplyOperators<Vector2i, Vector2i, Vector2i>,
-    IMultiplyOperators<Vector2i, int, Vector2i>,
-    IDivisionOperators<Vector2i, int, Vector2i>,
-    IUnaryNegationOperators<Vector2i, Vector2i>,
-    IEquatable<Vector2i>,
+public struct Vector2I(int x, int y) :
+    IAdditionOperators<Vector2I, Vector2I, Vector2I>,
+    ISubtractionOperators<Vector2I, Vector2I, Vector2I>,
+    IMultiplyOperators<Vector2I, Vector2I, Vector2I>,
+    IMultiplyOperators<Vector2I, int, Vector2I>,
+    IDivisionOperators<Vector2I, int, Vector2I>,
+    IUnaryNegationOperators<Vector2I, Vector2I>,
+    IEquatable<Vector2I>,
     ISpanFormattable,
     IUtf8SpanFormattable
 {
     /// <summary>
     /// Creates a zero vector (0, 0).
     /// </summary>
-    public Vector2i() : this(0, 0)
+    public Vector2I() : this(0, 0)
     {
     }
 
@@ -74,12 +74,12 @@ public struct Vector2i(int x, int y) :
     /// <summary>
     /// Gets the left perpendicular vector.
     /// </summary>
-    public readonly Vector2i LeftPerpendicular => new(-Y, X);
+    public readonly Vector2I LeftPerpendicular => new(-Y, X);
 
     /// <summary>
     /// Gets the right perpendicular vector.
     /// </summary>
-    public readonly Vector2i RightPerpendicular => new(Y, -X);
+    public readonly Vector2I RightPerpendicular => new(Y, -X);
 
     /// <summary>
     /// Unit vector pointing downwards in a 2D coordinate system.
@@ -87,7 +87,7 @@ public struct Vector2i(int x, int y) :
     /// <remarks>
     /// The origin is at the top-left corner.
     /// </remarks>
-    public static Vector2i Down { get; } = new(0, 1);
+    public static Vector2I Down { get; } = new(0, 1);
 
     /// <summary>
     /// Unit vector pointing to the left in a 2D coordinate system.
@@ -95,7 +95,7 @@ public struct Vector2i(int x, int y) :
     /// <remarks>
     /// The origin is at the top-left corner.
     /// </remarks>
-    public static Vector2i Left { get; } = new(-1, 0);
+    public static Vector2I Left { get; } = new(-1, 0);
 
     /// <summary>
     /// Unit vector pointing to the right in a 2D coordinate system.
@@ -103,7 +103,7 @@ public struct Vector2i(int x, int y) :
     /// <remarks>
     /// The origin is at the top-left corner.
     /// </remarks>
-    public static Vector2i Right { get; } = new(1, 0);
+    public static Vector2I Right { get; } = new(1, 0);
 
     /// <summary>
     /// Unit vector pointing upwards in a 2D coordinate system.
@@ -111,19 +111,19 @@ public struct Vector2i(int x, int y) :
     /// <remarks>
     /// The origin is at the top-left corner.
     /// </remarks>
-    public static Vector2i Up { get; } = new(0, -1);
+    public static Vector2I Up { get; } = new(0, -1);
 
     /// <summary>
     /// Gets the zero vector (0, 0).
     /// </summary>
-    public static Vector2i Zero { get; } = new(0, 0);
+    public static Vector2I Zero { get; } = new(0, 0);
 
     /// <summary>
     /// Clamps to a maximum length.
     /// </summary>
     /// <param name="maxLength">The maximum length to clamp the vector to.</param>
     /// <returns>The clamped vector.</returns>
-    public readonly Vector2i Clamp(int maxLength) => Clamp(this, maxLength);
+    public readonly Vector2I Clamp(int maxLength) => Clamp(this, maxLength);
 
     /// <summary>
     /// Computes the cross product of this vector and another vector.
@@ -134,7 +134,7 @@ public struct Vector2i(int x, int y) :
     /// </remarks>
     /// <param name="other">The other vector.</param>
     /// <returns>The cross product of the two vectors.</returns>
-    public readonly int Cross(Vector2i other) => Cross(this, other);
+    public readonly int Cross(Vector2I other) => Cross(this, other);
 
     /// <summary>
     /// Deconstructs the vector into its components.
@@ -148,14 +148,14 @@ public struct Vector2i(int x, int y) :
     /// </summary>
     /// <param name="to">The other vector.</param>
     /// <returns>The distance between the two vectors as a <see cref="float"/>.</returns>
-    public readonly float Distance(Vector2i to) => Distance(this, to);
+    public readonly float Distance(Vector2I to) => Distance(this, to);
 
     /// <summary>
     /// Computes the dot product of this vector and another vector.
     /// </summary>
     /// <param name="other">The other vector.</param>
     /// <returns>The dot product of the two vectors.</returns>
-    public readonly int Dot(Vector2i other) => Dot(this, other);
+    public readonly int Dot(Vector2I other) => Dot(this, other);
 
     /// <summary>
     /// Moves this vector towards a target vector by a maximum number of steps.
@@ -163,7 +163,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="target">The target vector.</param>
     /// <param name="maxDistanceDelta">The maximum number of steps to move.</param>
     /// <returns>The moved vector towards the target.</returns>
-    public readonly Vector2i MoveTowards(Vector2i target, int maxDistanceDelta) => MoveTowards(this, target, maxDistanceDelta);
+    public readonly Vector2I MoveTowards(Vector2I target, int maxDistanceDelta) => MoveTowards(this, target, maxDistanceDelta);
 
     /// <summary>
     /// Clamps the vector to a maximum length.
@@ -171,7 +171,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="vector">The vector to clamp.</param>
     /// <param name="maxLength">The maximum length to clamp the vector to.</param>
     /// <returns>The clamped vector.</returns>
-    public static Vector2i Clamp(Vector2i vector, int maxLength)
+    public static Vector2I Clamp(Vector2I vector, int maxLength)
     {
         return vector.MagnitudeSquared > maxLength * maxLength
             ? (vector.Normalized * maxLength).Truncate()
@@ -188,7 +188,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The cross product of the two vectors.</returns>
-    public static int Cross(Vector2i left, Vector2i right) => (left.X * right.Y) - (left.Y * right.X);
+    public static int Cross(Vector2I left, Vector2I right) => (left.X * right.Y) - (left.Y * right.X);
 
     /// <summary>
     /// Computes the distance between two vectors.
@@ -196,7 +196,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="from">The first vector to measure from.</param>
     /// <param name="to">The second vector to measure to.</param>
     /// <returns>The distance between the two vectors as a <see cref="float"/>.</returns>
-    public static float Distance(Vector2i from, Vector2i to) => (to - from).Magnitude;
+    public static float Distance(Vector2I from, Vector2I to) => (to - from).Magnitude;
 
     /// <summary>
     /// Computes the dot product of two vectors.
@@ -204,7 +204,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The dot product of the two vectors.</returns>
-    public static int Dot(Vector2i left, Vector2i right) => (left.X * right.X) + (left.Y * right.Y);
+    public static int Dot(Vector2I left, Vector2I right) => (left.X * right.X) + (left.Y * right.Y);
 
     /// <summary>
     /// Determines the component-wise maximum of two vectors.
@@ -212,7 +212,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The component-wise maximum vector.</returns>
-    public static Vector2i Max(Vector2i left, Vector2i right)
+    public static Vector2I Max(Vector2I left, Vector2I right)
         => new(Math.Max(left.X, right.X), Math.Max(left.Y, right.Y));
 
     /// <summary>
@@ -221,7 +221,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The component-wise minimum vector.</returns>
-    public static Vector2i Min(Vector2i left, Vector2i right)
+    public static Vector2I Min(Vector2I left, Vector2I right)
         => new(Math.Min(left.X, right.X), Math.Min(left.Y, right.Y));
 
     /// <summary>
@@ -234,9 +234,9 @@ public struct Vector2i(int x, int y) :
     /// <param name="target">The target vector.</param>
     /// <param name="maxDistanceDelta">The maximum number of steps to move.</param>
     /// <returns>The moved vector towards the target.</returns>
-    public static Vector2i MoveTowards(Vector2i current, Vector2i target, int maxDistanceDelta)
+    public static Vector2I MoveTowards(Vector2I current, Vector2I target, int maxDistanceDelta)
     {
-        Vector2i direction = target - current;
+        Vector2I direction = target - current;
         int distanceSquared = direction.MagnitudeSquared;
 
         if (distanceSquared == 0 || distanceSquared <= maxDistanceDelta * maxDistanceDelta)
@@ -251,10 +251,10 @@ public struct Vector2i(int x, int y) :
     /// </summary>
     /// <param name="other">The vector to compare with the current vector.</param>
     /// <returns><see langword="true"/> if the vectors are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(Vector2i other) => X == other.X && Y == other.Y;
+    public readonly bool Equals(Vector2I other) => X == other.X && Y == other.Y;
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2i other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Vector2I other && Equals(other);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(X, Y);
@@ -285,7 +285,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator +(Vector2i left, Vector2i right) => new(left.X + right.X, left.Y + right.Y);
+    public static Vector2I operator +(Vector2I left, Vector2I right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Subtracts one vector from another.
@@ -293,7 +293,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator -(Vector2i left, Vector2i right) => new(left.X - right.X, left.Y - right.Y);
+    public static Vector2I operator -(Vector2I left, Vector2I right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Multiplies two vectors component-wise.
@@ -301,7 +301,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(Vector2i left, Vector2i right) => new(left.X * right.X, left.Y * right.Y);
+    public static Vector2I operator *(Vector2I left, Vector2I right) => new(left.X * right.X, left.Y * right.Y);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -309,7 +309,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The vector.</param>
     /// <param name="right">The scalar to multiply by.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(Vector2i left, int right) => new(left.X * right, left.Y * right);
+    public static Vector2I operator *(Vector2I left, int right) => new(left.X * right, left.Y * right);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -317,7 +317,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The scalar to multiply by.</param>
     /// <param name="right">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2i operator *(int left, Vector2i right) => right * left;
+    public static Vector2I operator *(int left, Vector2I right) => right * left;
 
     /// <summary>
     /// Divides a vector by a scalar.
@@ -326,10 +326,10 @@ public struct Vector2i(int x, int y) :
     /// <param name="right">The scalar to divide by.</param>
     /// <returns>The resulting vector using integer division (truncates toward zero).</returns>
     /// <exception cref="DivideByZeroException">Thrown when the vector is divided by zero.</exception>
-    public static Vector2i operator /(Vector2i left, int right)
+    public static Vector2I operator /(Vector2I left, int right)
     {
         Math.ThrowIfDividedByZero(right);
-        return new Vector2i(left.X / right, left.Y / right);
+        return new Vector2I(left.X / right, left.Y / right);
     }
 
     /// <summary>
@@ -337,7 +337,7 @@ public struct Vector2i(int x, int y) :
     /// </summary>
     /// <param name="value">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector2i operator -(Vector2i value) => new(-value.X, -value.Y);
+    public static Vector2I operator -(Vector2I value) => new(-value.X, -value.Y);
 
     /// <summary>
     /// Determines whether two vectors are equal.
@@ -345,7 +345,7 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns><see langword="true"/> if the vectors are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Vector2i left, Vector2i right) => left.Equals(right);
+    public static bool operator ==(Vector2I left, Vector2I right) => left.Equals(right);
 
     /// <summary>
     /// Determines whether two vectors are not equal.
@@ -353,5 +353,5 @@ public struct Vector2i(int x, int y) :
     /// <param name="left">The left vector.</param>
     /// <param name="right">The right vector.</param>
     /// <returns><see langword="true"/> if the vectors are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Vector2i left, Vector2i right) => !(left == right);
+    public static bool operator !=(Vector2I left, Vector2I right) => !(left == right);
 }

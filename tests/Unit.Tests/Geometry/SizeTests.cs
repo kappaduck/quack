@@ -76,7 +76,7 @@ internal sealed class SizeTests
     {
         Size size = new(1920, 1080);
 
-        Sizef result = size.ToSizef();
+        SizeF result = size.ToSizef();
 
         await result.Width.Should().BeEqualTo(size.Width);
         await result.Height.Should().BeEqualTo(size.Height);

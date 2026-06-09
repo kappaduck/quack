@@ -670,7 +670,7 @@ internal sealed class Vector2Tests
     {
         Vector2 vector = new(7.64f, -7.6f);
 
-        Vector2i result = vector.Floor();
+        Vector2I result = vector.Floor();
 
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-8);
@@ -681,7 +681,7 @@ internal sealed class Vector2Tests
     {
         Vector2 vector = new(7.64f, -7.6f);
 
-        Vector2i result = vector.Round();
+        Vector2I result = vector.Round();
 
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(-8);
@@ -692,7 +692,7 @@ internal sealed class Vector2Tests
     {
         Vector2 vector = new(7.64f, -7.6f);
 
-        Vector2i result = vector.Truncate();
+        Vector2I result = vector.Truncate();
 
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-7);

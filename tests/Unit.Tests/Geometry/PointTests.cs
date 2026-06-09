@@ -22,7 +22,7 @@ internal sealed class PointTests
         Point from = new(3, 4);
         Point target = new(5, 4);
 
-        Vector2i displacement = from.To(target);
+        Vector2I displacement = from.To(target);
 
         await displacement.X.Should().BeEqualTo(2);
         await displacement.Y.Should().BeEqualTo(0);
@@ -55,7 +55,7 @@ internal sealed class PointTests
         Point from = new(1, 2);
         Point to = new(3, 4);
 
-        Pointf result = Point.Lerp(from, to, t);
+        PointF result = Point.Lerp(from, to, t);
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -183,7 +183,7 @@ internal sealed class PointTests
     {
         Point point = new(3, 4);
 
-        Pointf converted = point.ToPointf();
+        PointF converted = point.ToPointf();
 
         await converted.X.Should().BeEqualTo(point.X);
         await converted.Y.Should().BeEqualTo(point.Y);
@@ -205,7 +205,7 @@ internal sealed class PointTests
     {
         Point point = new(3, 4);
 
-        Vector2i vector = point.ToVector2i();
+        Vector2I vector = point.ToVector2i();
 
         await vector.X.Should().BeEqualTo(point.X);
         await vector.Y.Should().BeEqualTo(point.Y);
@@ -215,7 +215,7 @@ internal sealed class PointTests
     public async Task OperatorAddShouldTranslateAPointByDisplacementVector2i()
     {
         Point left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I right = new(3, 4);
 
         Point result = left + right;
 
@@ -229,7 +229,7 @@ internal sealed class PointTests
         Point left = new(1, 2);
         Vector2 right = new(3f, 4f);
 
-        Pointf result = left + right;
+        PointF result = left + right;
 
         await result.X.Should().BeEqualTo(4f);
         await result.Y.Should().BeEqualTo(6f);
@@ -239,7 +239,7 @@ internal sealed class PointTests
     public async Task OperatorSubstractShouldTranslateAPointBackwardsByDisplacementVector2i()
     {
         Point left = new(5, 7);
-        Vector2i right = new(3, 4);
+        Vector2I right = new(3, 4);
 
         Point result = left - right;
 
@@ -253,7 +253,7 @@ internal sealed class PointTests
         Point left = new(5, 7);
         Vector2 right = new(3f, 4f);
 
-        Pointf result = left - right;
+        PointF result = left - right;
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -265,7 +265,7 @@ internal sealed class PointTests
         Point left = new(5, 7);
         Point right = new(3, 4);
 
-        Vector2i result = left - right;
+        Vector2I result = left - right;
 
         await result.X.Should().BeEqualTo(2);
         await result.Y.Should().BeEqualTo(3);

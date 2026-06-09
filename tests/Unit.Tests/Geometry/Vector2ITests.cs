@@ -5,41 +5,41 @@ using KappaDuck.Quack.Geometry;
 
 namespace Unit.Tests.Geometry;
 
-internal sealed class Vector2iTests
+internal sealed class Vector2ITests
 {
     [Test]
     public async Task VectorShouldGiveTheMagnitudeSquared()
     {
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
         await vector.MagnitudeSquared.Should().BeEqualTo(25);
     }
 
     [Test]
     public async Task VectorShouldGiveTheMagnitude()
     {
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
         await vector.Magnitude.Should().BeEqualTo(5);
     }
 
     [Test]
     public async Task IsZeroShouldReturnTrueWhenVectorIsZero()
     {
-        Vector2i vector = new(0, 0);
+        Vector2I vector = new(0, 0);
         await vector.IsZero.Should().BeTrue();
     }
 
     [Test]
     public async Task IsZeroShouldReturnFalseWhenVectorIsNotZero()
     {
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
         await vector.IsZero.Should().BeFalse();
     }
 
     [Test]
     public async Task LeftPerpendicularShouldReturnTheLeftPerpendicularVector()
     {
-        Vector2i vector = new(3, 4);
-        Vector2i leftPerpendicular = vector.LeftPerpendicular;
+        Vector2I vector = new(3, 4);
+        Vector2I leftPerpendicular = vector.LeftPerpendicular;
 
         await leftPerpendicular.X.Should().BeEqualTo(-4);
         await leftPerpendicular.Y.Should().BeEqualTo(3);
@@ -48,8 +48,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task RightPerpendicularShouldReturnTheRightPerpendicularVector()
     {
-        Vector2i vector = new(3, 4);
-        Vector2i rightPerpendicular = vector.RightPerpendicular;
+        Vector2I vector = new(3, 4);
+        Vector2I rightPerpendicular = vector.RightPerpendicular;
 
         await rightPerpendicular.X.Should().BeEqualTo(4);
         await rightPerpendicular.Y.Should().BeEqualTo(-3);
@@ -58,7 +58,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task DownShouldReturnTheDownVector()
     {
-        Vector2i down = Vector2i.Down;
+        Vector2I down = Vector2I.Down;
 
         await down.X.Should().BeEqualTo(0);
         await down.Y.Should().BeEqualTo(1);
@@ -67,7 +67,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task LeftShouldReturnTheLeftVector()
     {
-        Vector2i left = Vector2i.Left;
+        Vector2I left = Vector2I.Left;
 
         await left.X.Should().BeEqualTo(-1);
         await left.Y.Should().BeEqualTo(0);
@@ -76,7 +76,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task RightShouldReturnTheRightVector()
     {
-        Vector2i right = Vector2i.Right;
+        Vector2I right = Vector2I.Right;
 
         await right.X.Should().BeEqualTo(1);
         await right.Y.Should().BeEqualTo(0);
@@ -85,7 +85,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task UpShouldReturnTheUpVector()
     {
-        Vector2i up = Vector2i.Up;
+        Vector2I up = Vector2I.Up;
 
         await up.X.Should().BeEqualTo(0);
         await up.Y.Should().BeEqualTo(-1);
@@ -94,7 +94,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task ZeroShouldReturnTheZeroVector()
     {
-        Vector2i zero = Vector2i.Zero;
+        Vector2I zero = Vector2I.Zero;
 
         await zero.X.Should().BeEqualTo(0);
         await zero.Y.Should().BeEqualTo(0);
@@ -103,10 +103,10 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorAddShouldAddTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(3, 4);
 
-        Vector2i result = left + right;
+        Vector2I result = left + right;
 
         await result.X.Should().BeEqualTo(4);
         await result.Y.Should().BeEqualTo(6);
@@ -115,10 +115,10 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorSubstractShouldSubstractTwoVectors()
     {
-        Vector2i left = new(5, 7);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(5, 7);
+        Vector2I right = new(3, 4);
 
-        Vector2i result = left - right;
+        Vector2I result = left - right;
 
         await result.X.Should().BeEqualTo(2);
         await result.Y.Should().BeEqualTo(3);
@@ -127,10 +127,10 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorMultiplyShouldMultiplyTwoVectors()
     {
-        Vector2i left = new(2, 3);
-        Vector2i right = new(4, 5);
+        Vector2I left = new(2, 3);
+        Vector2I right = new(4, 5);
 
-        Vector2i result = left * right;
+        Vector2I result = left * right;
 
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(15);
@@ -140,9 +140,9 @@ internal sealed class Vector2iTests
     public async Task OperatorMultiplyShouldMultiplyByScalar()
     {
         const int scalar = 4;
-        Vector2i vector = new(2, 3);
+        Vector2I vector = new(2, 3);
 
-        Vector2i result = vector * scalar;
+        Vector2I result = vector * scalar;
 
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(12);
@@ -152,9 +152,9 @@ internal sealed class Vector2iTests
     public async Task OperatorMultiplyShouldMultiplyByScalarReversed()
     {
         const int scalar = 4;
-        Vector2i vector = new(2, 3);
+        Vector2I vector = new(2, 3);
 
-        Vector2i result = scalar * vector;
+        Vector2I result = scalar * vector;
 
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(12);
@@ -164,9 +164,9 @@ internal sealed class Vector2iTests
     public async Task OperatorDivideShouldDivideByScalar()
     {
         const int scalar = 2;
-        Vector2i vector = new(8, 12);
+        Vector2I vector = new(8, 12);
 
-        Vector2i result = vector / scalar;
+        Vector2I result = vector / scalar;
 
         await result.X.Should().BeEqualTo(4);
         await result.Y.Should().BeEqualTo(6);
@@ -176,7 +176,7 @@ internal sealed class Vector2iTests
     public async Task OperatorDivideShouldThrowsDivideByZeroExceptionWhenScalarIsZero()
     {
         const int scalar = 0;
-        Vector2i vector = new(8, 12);
+        Vector2I vector = new(8, 12);
 
         await Assert.That(() => vector / scalar).Throws<DivideByZeroException>();
     }
@@ -184,9 +184,9 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorNegateShouldNegateVector()
     {
-        Vector2i vector = new(3, -4);
+        Vector2I vector = new(3, -4);
 
-        Vector2i result = -vector;
+        Vector2I result = -vector;
 
         await result.X.Should().BeEqualTo(-3);
         await result.Y.Should().BeEqualTo(4);
@@ -195,8 +195,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorEqualsShouldReturnTrueWhenVectorsAreEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(3, 4);
 
         bool result = left == right;
         await result.Should().BeTrue();
@@ -205,8 +205,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorEqualsShouldReturnFalseWhenVectorsAreNotEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(3, 5);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(3, 5);
 
         bool result = left == right;
         await result.Should().BeFalse();
@@ -215,8 +215,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnTrueWhenVectorsAreNotEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(3, 5);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(3, 5);
 
         bool result = left != right;
         await result.Should().BeTrue();
@@ -225,8 +225,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnFalseWhenVectorsAreEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(3, 4);
 
         bool result = left != right;
         await result.Should().BeFalse();
@@ -235,8 +235,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsShouldReturnTrueWhenVectorsAreEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(3, 4);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -245,8 +245,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsShouldReturnFalseWhenVectorsAreNotEquals()
     {
-        Vector2i left = new(3, 4);
-        Vector2i right = new(4, 4);
+        Vector2I left = new(3, 4);
+        Vector2I right = new(4, 4);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -255,8 +255,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsWithObjectShouldReturnTrueWhenVectorsAreEquals()
     {
-        Vector2i left = new(3, 4);
-        object right = new Vector2i(3, 4);
+        Vector2I left = new(3, 4);
+        object right = new Vector2I(3, 4);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -265,8 +265,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsWithObjectShouldReturnFalseWhenVectorsAreNotEquals()
     {
-        Vector2i left = new(3, 4);
-        object right = new Vector2i(4, 4);
+        Vector2I left = new(3, 4);
+        object right = new Vector2I(4, 4);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -275,7 +275,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsWithAnyTypeExceptVector2iShouldReturnFalse()
     {
-        Vector2i left = new(3, 4);
+        Vector2I left = new(3, 4);
         const float right = 3f;
 
         bool result = left.Equals(right);
@@ -285,7 +285,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task EqualsWithNullShouldReturnFalse()
     {
-        Vector2i left = new(3, 4);
+        Vector2I left = new(3, 4);
 
         bool result = left.Equals(null);
         await result.Should().BeFalse();
@@ -294,7 +294,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task ToStringShouldReturnTheCorrectFormat()
     {
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
         string result = vector.ToString();
         await result.Should().BeEqualTo("(3, 4)");
@@ -303,7 +303,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task ShouldDeconstructVector2iIntoItsComponents()
     {
-        (int x, int y) = new Vector2i(3, 4);
+        (int x, int y) = new Vector2I(3, 4);
 
         await x.Should().BeEqualTo(3);
         await y.Should().BeEqualTo(4);
@@ -312,7 +312,7 @@ internal sealed class Vector2iTests
     [Test]
     public async Task ToVector2ShouldConvertToVector2()
     {
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
         Vector2 result = vector.ToVector2();
 
@@ -324,9 +324,9 @@ internal sealed class Vector2iTests
     public async Task StaticClampShouldClampTheVectorToMaximumLength()
     {
         const int maxLength = 4;
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
-        Vector2i clamped = Vector2i.Clamp(vector, maxLength);
+        Vector2I clamped = Vector2I.Clamp(vector, maxLength);
 
         await clamped.Magnitude.Should().BeCloseTo(3.6f, 0.1f);
         await clamped.X.Should().BeEqualTo(2);
@@ -337,9 +337,9 @@ internal sealed class Vector2iTests
     public async Task StaticClampShouldReturnTheSameVectorWhenItsLengthIsLessThanMaxLength()
     {
         const int maxLength = 6;
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
-        Vector2i clamped = Vector2i.Clamp(vector, maxLength);
+        Vector2I clamped = Vector2I.Clamp(vector, maxLength);
 
         await clamped.Magnitude.Should().BeEqualTo(5);
         await clamped.X.Should().BeEqualTo(3);
@@ -349,40 +349,40 @@ internal sealed class Vector2iTests
     [Test]
     public async Task StaticCrossShouldComputeCrossProductBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(3, 4);
 
-        int cross = Vector2i.Cross(left, right);
+        int cross = Vector2I.Cross(left, right);
         await cross.Should().BeEqualTo(-2);
     }
 
     [Test]
     public async Task StaticDistanceShouldReturnTheDistanceBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(4, 6);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(4, 6);
 
-        float distance = Vector2i.Distance(left, right);
+        float distance = Vector2I.Distance(left, right);
         await distance.Should().BeCloseTo(5f, 0.0001f);
     }
 
     [Test]
     public async Task StaticDotShouldReturnTheCorrectDotProductBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(3, 4);
 
-        int dot = Vector2i.Dot(left, right);
+        int dot = Vector2I.Dot(left, right);
         await dot.Should().BeEqualTo(11);
     }
 
     [Test]
     public async Task MaxShouldReturnTheVectorWithMaximumComponents()
     {
-        Vector2i left = new(1, 5);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 5);
+        Vector2I right = new(3, 4);
 
-        Vector2i result = Vector2i.Max(left, right);
+        Vector2I result = Vector2I.Max(left, right);
 
         await result.X.Should().BeEqualTo(3);
         await result.Y.Should().BeEqualTo(5);
@@ -391,10 +391,10 @@ internal sealed class Vector2iTests
     [Test]
     public async Task MinShouldReturnTheVectorWithMinimumComponents()
     {
-        Vector2i left = new(1, 5);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 5);
+        Vector2I right = new(3, 4);
 
-        Vector2i result = Vector2i.Min(left, right);
+        Vector2I result = Vector2I.Min(left, right);
 
         await result.X.Should().BeEqualTo(1);
         await result.Y.Should().BeEqualTo(4);
@@ -404,10 +404,10 @@ internal sealed class Vector2iTests
     public async Task StaticMoveTowardsShouldMoveTheVectorTowardsTargetByMaxDistance()
     {
         const int maxDistance = 2;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = Vector2i.MoveTowards(current, target, maxDistance);
+        Vector2I result = Vector2I.MoveTowards(current, target, maxDistance);
 
         await result.X.Should().BeEqualTo(2);
         await result.Y.Should().BeEqualTo(3);
@@ -417,10 +417,10 @@ internal sealed class Vector2iTests
     public async Task StaticMoveTowardsShouldReturnTargetWhenWithinMaxDistance()
     {
         const int maxDistance = 10;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = Vector2i.MoveTowards(current, target, maxDistance);
+        Vector2I result = Vector2I.MoveTowards(current, target, maxDistance);
 
         await result.X.Should().BeEqualTo(4);
         await result.Y.Should().BeEqualTo(6);
@@ -430,10 +430,10 @@ internal sealed class Vector2iTests
     public async Task StaticMoveTowardsShouldReturnTargetWhenDistanceIsZero()
     {
         const int maxDistance = 0;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = Vector2i.MoveTowards(current, target, maxDistance);
+        Vector2I result = Vector2I.MoveTowards(current, target, maxDistance);
 
         await result.X.Should().BeEqualTo(1);
         await result.Y.Should().BeEqualTo(2);
@@ -443,9 +443,9 @@ internal sealed class Vector2iTests
     public async Task ClampShouldClampTheVectorToMaximumLength()
     {
         const int maxLength = 4;
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
-        Vector2i clamped = vector.Clamp(maxLength);
+        Vector2I clamped = vector.Clamp(maxLength);
 
         await clamped.Magnitude.Should().BeCloseTo(3.6f, 0.1f);
         await clamped.X.Should().BeEqualTo(2);
@@ -456,9 +456,9 @@ internal sealed class Vector2iTests
     public async Task ClampShouldReturnTheSameVectorWhenItsLengthIsLessThanMaxLength()
     {
         const int maxLength = 6;
-        Vector2i vector = new(3, 4);
+        Vector2I vector = new(3, 4);
 
-        Vector2i clamped = vector.Clamp(maxLength);
+        Vector2I clamped = vector.Clamp(maxLength);
 
         await clamped.Magnitude.Should().BeEqualTo(5);
         await clamped.X.Should().BeEqualTo(3);
@@ -468,8 +468,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task CrossShouldComputeCrossProductBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(3, 4);
 
         float cross = left.Cross(right);
         await cross.Should().BeEqualTo(-2);
@@ -478,8 +478,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task DistanceShouldReturnTheDistanceBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(4, 6);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(4, 6);
 
         float distance = left.Distance(right);
         await distance.Should().BeCloseTo(5f, 0.0001f);
@@ -488,8 +488,8 @@ internal sealed class Vector2iTests
     [Test]
     public async Task DotShouldReturnTheCorrectDotProductBetweenTwoVectors()
     {
-        Vector2i left = new(1, 2);
-        Vector2i right = new(3, 4);
+        Vector2I left = new(1, 2);
+        Vector2I right = new(3, 4);
 
         float dot = left.Dot(right);
         await dot.Should().BeEqualTo(11);
@@ -499,10 +499,10 @@ internal sealed class Vector2iTests
     public async Task MoveTowardsShouldMoveTheVectorTowardsTargetByMaxDistance()
     {
         const int maxDistance = 2;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = current.MoveTowards(target, maxDistance);
+        Vector2I result = current.MoveTowards(target, maxDistance);
 
         await result.X.Should().BeEqualTo(2);
         await result.Y.Should().BeEqualTo(3);
@@ -512,10 +512,10 @@ internal sealed class Vector2iTests
     public async Task MoveTowardsShouldReturnTargetWhenWithinMaxDistance()
     {
         const int maxDistance = 10;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = current.MoveTowards(target, maxDistance);
+        Vector2I result = current.MoveTowards(target, maxDistance);
 
         await result.X.Should().BeEqualTo(4);
         await result.Y.Should().BeEqualTo(6);
@@ -525,10 +525,10 @@ internal sealed class Vector2iTests
     public async Task MoveTowardsShouldReturnTargetWhenDistanceIsZero()
     {
         const int maxDistance = 0;
-        Vector2i current = new(1, 2);
-        Vector2i target = new(4, 6);
+        Vector2I current = new(1, 2);
+        Vector2I target = new(4, 6);
 
-        Vector2i result = current.MoveTowards(target, maxDistance);
+        Vector2I result = current.MoveTowards(target, maxDistance);
 
         await result.X.Should().BeEqualTo(1);
         await result.Y.Should().BeEqualTo(2);

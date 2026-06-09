@@ -13,9 +13,9 @@ namespace KappaDuck.Quack.Geometry;
 /// <param name = "y" > The y-coordinate of the point.</param>
 [StructLayout(LayoutKind.Sequential)]
 public struct Point(int x, int y) :
-    IAdditionOperators<Point, Vector2i, Point>,
-    ISubtractionOperators<Point, Vector2i, Point>,
-    ISubtractionOperators<Point, Point, Vector2i>,
+    IAdditionOperators<Point, Vector2I, Point>,
+    ISubtractionOperators<Point, Vector2I, Point>,
+    ISubtractionOperators<Point, Point, Vector2I>,
     IEqualityOperators<Point, Point, bool>,
     IEquatable<Point>,
     ISpanFormattable,
@@ -48,7 +48,7 @@ public struct Point(int x, int y) :
     /// </summary>
     /// <param name="target">The target point.</param>
     /// <returns>The displacement vector.</returns>
-    public readonly Vector2i To(Point target) => target - this;
+    public readonly Vector2I To(Point target) => target - this;
 
     /// <summary>
     /// Computes the distance between this point and another point.
@@ -72,14 +72,14 @@ public struct Point(int x, int y) :
     /// <param name="to">The ending point.</param>
     /// <param name="interpolationFactor">The interpolation factor between 0 and 1.</param>
     /// <returns>The interpolated point.</returns>
-    public static Pointf Lerp(Point from, Point to, float interpolationFactor)
+    public static PointF Lerp(Point from, Point to, float interpolationFactor)
     {
         interpolationFactor = Math.Clamp(interpolationFactor, 0f, 1f);
 
         float x = (to.X - from.X) * interpolationFactor;
         float y = (to.Y - from.Y) * interpolationFactor;
 
-        return new Pointf(from.X + x, from.Y + y);
+        return new PointF(from.X + x, from.Y + y);
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public struct Point(int x, int y) :
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <summary>
-    /// Converts the point to a <see cref="Pointf"/>.
+    /// Converts the point to a <see cref="PointF"/>.
     /// </summary>
     /// <returns>The converted point.</returns>
-    public readonly Pointf ToPointf() => new(X, Y);
+    public readonly PointF ToPointf() => new(X, Y);
 
     /// <summary>
     /// Converts the point to a <see cref="Vector2"/>.
@@ -121,10 +121,10 @@ public struct Point(int x, int y) :
     public readonly Vector2 ToVector2() => new(X, Y);
 
     /// <summary>
-    /// Converts the point to a <see cref="Vector2i"/>.
+    /// Converts the point to a <see cref="Vector2I"/>.
     /// </summary>
     /// <returns>The converted vector.</returns>
-    public readonly Vector2i ToVector2i() => new(X, Y);
+    public readonly Vector2I ToVector2i() => new(X, Y);
 
     /// <inheritdoc/>
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
@@ -140,7 +140,7 @@ public struct Point(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The displacement.</param>
     /// <returns>The translated point.</returns>
-    public static Point operator +(Point left, Vector2i right) => new(left.X + right.X, left.Y + right.Y);
+    public static Point operator +(Point left, Vector2I right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Translates a point by a float displacement vector.
@@ -148,7 +148,7 @@ public struct Point(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The float displacement.</param>
     /// <returns>The translated point.</returns>
-    public static Pointf operator +(Point left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
+    public static PointF operator +(Point left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Translates a point backwards by a displacement vector.
@@ -156,7 +156,7 @@ public struct Point(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The displacement.</param>
     /// <returns>The translated point.</returns>
-    public static Point operator -(Point left, Vector2i right) => new(left.X - right.X, left.Y - right.Y);
+    public static Point operator -(Point left, Vector2I right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Translates a point backwards by a float displacement vector.
@@ -164,7 +164,7 @@ public struct Point(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The float displacement.</param>
     /// <returns>The translated point.</returns>
-    public static Pointf operator -(Point left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
+    public static PointF operator -(Point left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Computes the displacement between two points.
@@ -172,7 +172,7 @@ public struct Point(int x, int y) :
     /// <param name="left">The end point.</param>
     /// <param name="right">The start point.</param>
     /// <returns>The displacement vector.</returns>
-    public static Vector2i operator -(Point left, Point right) => new(left.X - right.X, left.Y - right.Y);
+    public static Vector2I operator -(Point left, Point right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Determines whether two points are equal.
