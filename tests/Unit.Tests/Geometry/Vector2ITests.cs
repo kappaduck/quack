@@ -96,8 +96,8 @@ internal sealed class Vector2ITests
     {
         Vector2I zero = Vector2I.Zero;
 
-        await zero.X.Should().BeEqualTo(0);
-        await zero.Y.Should().BeEqualTo(0);
+        await zero.X.Should().BeZero();
+        await zero.Y.Should().BeZero();
     }
 
     [Test]

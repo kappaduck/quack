@@ -12,8 +12,8 @@ internal sealed class PointTests
     {
         Point origin = Point.Origin;
 
-        await origin.X.Should().BeEqualTo(0);
-        await origin.Y.Should().BeEqualTo(0);
+        await origin.X.Should().BeZero();
+        await origin.Y.Should().BeZero();
     }
 
     [Test]

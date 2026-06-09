@@ -49,8 +49,8 @@ internal sealed class SizeTests
     {
         Size zero = Size.Zero;
 
-        await zero.Width.Should().BeEqualTo(0);
-        await zero.Height.Should().BeEqualTo(0);
+        await zero.Width.Should().BeZero();
+        await zero.Height.Should().BeZero();
     }
 
     [Test]

@@ -144,8 +144,8 @@ internal sealed class Vector2Tests
     {
         Vector2 zero = Vector2.Zero;
 
-        await zero.X.Should().BeEqualTo(0f);
-        await zero.Y.Should().BeEqualTo(0f);
+        await zero.X.Should().BeZero();
+        await zero.Y.Should().BeZero();
     }
 
     [Test]
