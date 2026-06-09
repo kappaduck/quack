@@ -24,10 +24,10 @@ internal static class SDLThrowHelper
     internal static void ThrowIfNull<T>([NotNull] T? value, [CallerMemberName] string memberName = "") where T : class
         => ThrowIf(value is null, memberName);
 
-    internal static unsafe void ThrowIfNull<T>(T* value, [CallerMemberName] string member = "") where T : unmanaged
+    internal static void ThrowIfNull<T>(T* value, [CallerMemberName] string member = "") where T : unmanaged
         => ThrowIf(value is null, member);
 
-    internal static unsafe void ThrowIfNull<T>(T** value, [CallerMemberName] string member = "") where T : unmanaged
+    internal static void ThrowIfNull<T>(T** value, [CallerMemberName] string member = "") where T : unmanaged
         => ThrowIf(value is null, member);
 
     internal static void ThrowIfZero<T>(T value, [CallerMemberName] string member = "") where T : INumber<T>

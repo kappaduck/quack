@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 /// <typeparam name="TUnmanaged">The unmanaged element type</typeparam>
 [ContiguousCollectionMarshaller]
 [CustomMarshaller(typeof(Span<>), MarshalMode.ManagedToUnmanagedOut, typeof(SDLArrayMarshaller<,>))]
-internal static unsafe class SDLArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged
+internal static class SDLArrayMarshaller<T, TUnmanaged> where TUnmanaged : unmanaged
 {
     internal static Span<T> AllocateContainerForManagedElements(TUnmanaged* unmanaged, int length)
         => unmanaged is null ? [] : new T[length];

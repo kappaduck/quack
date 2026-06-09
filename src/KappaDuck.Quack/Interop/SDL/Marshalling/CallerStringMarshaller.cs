@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Interop.SDL.Marshalling;
 /// It will free the allocated UTF-8 encoded string.
 /// </remarks>
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(CallerStringMarshaller))]
-internal static unsafe class CallerStringMarshaller
+internal static class CallerStringMarshaller
 {
     internal static string? ConvertToManaged(byte* unmanaged) => Marshal.PtrToStringUTF8(unmanaged);
 
