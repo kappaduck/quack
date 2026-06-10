@@ -7,9 +7,23 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal static partial class SDL3
 {
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_DisableScreenSaver")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool DisableScreenSaver();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_EnableScreenSaver")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool EnableScreenSaver();
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetPowerInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial PowerState GetPowerInfo(out int seconds, out int percent);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSystemTheme")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial Theme GetSystemTheme();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_OpenURL", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
