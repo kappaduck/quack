@@ -11,6 +11,7 @@
     <File Path="analyzers/roslynator.editorconfig" />
     <File Path="analyzers/sonar.editorconfig" />
     <File Path="analyzers/underscore.editorconfig" />
+    <File Path="analyzers/vsthrd.editorconfig" />
   </Folder>
   <Folder Name="/configuration/src/">
     <File Path="src/Directory.Packages.props" />

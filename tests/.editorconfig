@@ -2,6 +2,11 @@
 
 # Disabled Microsoft.VisualStudio.Threading.Analyzers rules
 
+# VSTHRD111: Consider calling ConfigureAwait on the awaited task
+# Reason: don't need to configure the await context
+# https://github.com/Microsoft/vs-threading/blob/main/doc/analyzers/VSTHRD111.md
+dotnet_diagnostic.VSTHRD111.severity = none
+
 # VSTHRD200: Use "Async" suffix for async methods
 # Reason: Don't need to use Async suffix for test methods and give better clarity
 # https://github.com/Microsoft/vs-threading/blob/main/doc/analyzers/VSTHRD200.md

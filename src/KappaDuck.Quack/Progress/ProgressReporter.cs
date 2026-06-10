@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.Progress;
 
 /// <summary>
-/// Synchronous determinate progress reporter handed to <see cref="IProgressSink"/>.
+/// Synchronous determinate progress reporter handed to <see cref="ProgressBar.Start(Action{Progress}, int)"/>.
 /// </summary>
 public sealed class ProgressReporter
 {
@@ -32,7 +32,7 @@ public sealed class ProgressReporter
     /// Requests cancellation of the progress operation.
     /// </summary>
     /// <remarks>
-    /// Stops any further reporting, triggers <see cref="IProgressSink.Cancel"/>.
+    /// Stops any further reporting, triggers <see cref="ProgressBar.Cancelled"/> and resets the bar.
     /// </remarks>
     public void Cancel()
     {
@@ -61,7 +61,7 @@ public sealed class ProgressReporter
     /// Reports the absolute current progress.
     /// </summary>
     /// <remarks>
-    /// The total provided to <see cref="IProgressSink.Report(float)"/> is used as the maximum
+    /// The total provided to <see cref="ProgressBar.Start(Action{Progress}, int)"/> is used as the maximum
     /// limit if <paramref name="current"/> is greater than the total.
     /// </remarks>
     /// <param name="current">The current progress.</param>
