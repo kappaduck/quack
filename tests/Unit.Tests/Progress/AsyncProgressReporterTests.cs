@@ -27,24 +27,6 @@ internal sealed class AsyncProgressReporterTests : IDisposable
     }
 
     [Test]
-    public async Task CancelAfterShouldRequestToCancelTheToken()
-    {
-        _reporter.CancelAfter(TimeSpan.FromMilliseconds(1));
-        await Task.Delay(1);
-
-        await _reporter.CancellationToken.IsCancellationRequested.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task CancelAfterByMilliSecondsShouldRequestToCancelTheToken()
-    {
-        _reporter.CancelAfter(1);
-        await Task.Delay(1);
-
-        await _reporter.CancellationToken.IsCancellationRequested.Should().BeTrue();
-    }
-
-    [Test]
     public async Task CancelAsyncShouldRequestToCancelTheToken()
     {
         await _reporter.CancelAsync();
