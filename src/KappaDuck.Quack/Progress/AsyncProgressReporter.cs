@@ -5,9 +5,9 @@ namespace KappaDuck.Quack.Progress;
 
 /// <summary>
 /// Asynchronous determinate progress reporter handed to
-/// <see cref="ProgressBar.StartAsync(Func{AsyncProgress, ValueTask}, int)"/>.
+/// <see cref="ProgressBar.StartAsync(Func{AsyncProgressReporter, ValueTask}, int)"/>.
 /// </summary>
-internal sealed class AsyncProgressReporter : IDisposable
+public sealed class AsyncProgressReporter : IDisposable
 {
     private readonly IProgressOperation _operation;
     private readonly CancellationTokenSource _cts = new();
@@ -99,7 +99,7 @@ internal sealed class AsyncProgressReporter : IDisposable
     /// Reports the absolute current progress.
     /// </summary>
     /// <remarks>
-    /// The total provided to <see cref="ProgressBar.StartAsync(Func{AsyncProgress, ValueTask}, int)"/> is
+    /// The total provided to <see cref="ProgressBar.StartAsync(Func{AsyncProgressReporter, ValueTask}, int)"/> is
     /// used as the maximum limit if <paramref name="current"/> is greater than the total.
     /// </remarks>
     /// <param name="current">The current progress.</param>
