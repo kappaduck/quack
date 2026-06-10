@@ -1,5 +1,10 @@
 is_global = true
 
+# CA1031: Do not catch general exception types
+# Sometimes we don't know the exception.
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
+dotnet_diagnostic.CA1031.severity = none
+
 # CA1062: An externally visible method dereferences one of its reference arguments without verifying whether that argument is null
 # We enforce nullable reference
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062

@@ -14,6 +14,7 @@ public static class QuackEngine
 {
     private static readonly Lock _lock = new();
     private static readonly long _startTimestamp = Stopwatch.GetTimestamp();
+    private static readonly int _mainThreadId = Environment.CurrentManagedThreadId;
 
     private static int _refCount;
     private static Subsystem _subsystems;
@@ -22,6 +23,11 @@ public static class QuackEngine
     /// Gets the elapsed time since the engine started.
     /// </summary>
     public static TimeSpan ElapsedTime => Stopwatch.GetElapsedTime(_startTimestamp);
+
+    /// <summary>
+    /// Gets a value indicating whether the calling thread is the application's main thread.
+    /// </summary>
+    public static bool IsMainThread => Environment.CurrentManagedThreadId == _mainThreadId;
 
     /// <summary>
     /// Gets the application metatadata provided through <see cref="SetMetadata(ApplicationMetadata)"/>.
