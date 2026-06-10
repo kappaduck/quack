@@ -8,15 +8,15 @@ namespace KappaDuck.Quack.Progress;
 /// </summary>
 public sealed class ProgressReporter
 {
-    private readonly IProgressSink _sink;
+    private readonly IProgressOperation _operation;
     private readonly int _total;
 
     private bool _isCancelled;
     private int _current;
 
-    internal ProgressReporter(IProgressSink sink, int total)
+    internal ProgressReporter(IProgressOperation operation, int total)
     {
-        _sink = sink;
+        _operation = operation;
         _total = total;
     }
 
@@ -40,7 +40,7 @@ public sealed class ProgressReporter
             return;
 
         _isCancelled = true;
-        _sink.Cancel();
+        _operation.Cancel();
     }
 
     /// <summary>
@@ -74,6 +74,6 @@ public sealed class ProgressReporter
         ArgumentOutOfRangeException.ThrowIfNegative(current);
 
         _current = Math.Min(current, _total);
-        _sink.Report((float)_current / _total);
+        _operation.Report((float)_current / _total);
     }
 }

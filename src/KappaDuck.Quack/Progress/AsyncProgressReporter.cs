@@ -9,15 +9,15 @@ namespace KappaDuck.Quack.Progress;
 /// </summary>
 internal sealed class AsyncProgressReporter : IDisposable
 {
-    private readonly IProgressSink _sink;
+    private readonly IProgressOperation _operation;
     private readonly CancellationTokenSource _cts = new();
     private readonly int _total;
 
     private int _current;
 
-    internal AsyncProgressReporter(IProgressSink sink, int total)
+    internal AsyncProgressReporter(IProgressOperation operation, int total)
     {
-        _sink = sink;
+        _operation = operation;
         _total = total;
     }
 
@@ -112,6 +112,6 @@ internal sealed class AsyncProgressReporter : IDisposable
         ArgumentOutOfRangeException.ThrowIfNegative(current);
 
         _current = Math.Min(current, _total);
-        _sink.Report((float)_current / _total);
+        _operation.Report((float)_current / _total);
     }
 }

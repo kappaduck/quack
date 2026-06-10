@@ -6,7 +6,7 @@ namespace KappaDuck.Quack.Progress;
 /// <summary>
 /// Represents a progress operation that can be reported or cancelled.
 /// </summary>
-public interface IProgressSink
+public interface IProgressOperation
 {
     /// <summary>
     /// Reports a normalized progress value between <c>0</c> and <c>1</c>.

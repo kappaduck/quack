@@ -8,12 +8,12 @@ namespace Unit.Tests.Progress;
 
 internal sealed class AsyncProgressReporterTests : IDisposable
 {
-    private readonly Mock<IProgressSink> _sink = IProgressSink.Mock();
+    private readonly Mock<IProgressOperation> _operation = IProgressOperation.Mock();
     private readonly AsyncProgressReporter _reporter;
 
     public AsyncProgressReporterTests()
     {
-        _reporter = new AsyncProgressReporter(_sink.Object, 100);
+        _reporter = new AsyncProgressReporter(_operation.Object, 100);
     }
 
     public void Dispose() => _reporter.Dispose();
@@ -52,10 +52,10 @@ internal sealed class AsyncProgressReporterTests : IDisposable
     }
 
     [Test]
-    public void ReportShouldReportValueToProgressSink()
+    public void ReportShouldReportValueToOperation()
     {
         _reporter.Report(100);
-        _sink.Report(1).WasCalled(Times.Once);
+        _operation.Report(1).WasCalled(Times.Once);
     }
 
     [Test]
@@ -64,14 +64,14 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         await Assert.That(() => _reporter.Report(-100))
                     .ThrowsExactly<ArgumentOutOfRangeException>();
 
-        _sink.Report(Any()).WasNeverCalled();
+        _operation.Report(Any()).WasNeverCalled();
     }
 
     [Test]
     public void ReportShouldClampToTheTotalWhenValueIsGreaterThanTotal()
     {
         _reporter.Report(999);
-        _sink.Report(1).WasCalled(Times.Once);
+        _operation.Report(1).WasCalled(Times.Once);
     }
 
     [Test]
@@ -82,14 +82,14 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         await Assert.That(() => _reporter.Report(100))
                     .ThrowsExactly<OperationCanceledException>();
 
-        _sink.Report(Any()).WasNeverCalled();
+        _operation.Report(Any()).WasNeverCalled();
     }
 
     [Test]
     public void IncrementShouldIncrementByStep()
     {
         _reporter.Increment(25);
-        _sink.Report(0.25f).WasCalled(Times.Once);
+        _operation.Report(0.25f).WasCalled(Times.Once);
     }
 
     [Test]
@@ -98,7 +98,7 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         _reporter.Increment(25);
         _reporter.Increment(25);
 
-        _sink.Report(0.5f).WasCalled(Times.Once);
+        _operation.Report(0.5f).WasCalled(Times.Once);
     }
 
     [Test]
@@ -107,7 +107,7 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         await Assert.That(() => _reporter.Increment(-25))
                     .ThrowsExactly<ArgumentOutOfRangeException>();
 
-        _sink.Report(Any()).WasNeverCalled();
+        _operation.Report(Any()).WasNeverCalled();
     }
 
     [Test]
@@ -118,14 +118,14 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         await Assert.That(() => _reporter.Increment(-25))
                     .ThrowsExactly<OperationCanceledException>();
 
-        _sink.Report(Any()).WasNeverCalled();
+        _operation.Report(Any()).WasNeverCalled();
     }
 
     [Test]
     public void AdvanceShouldIncrementByOneStep()
     {
         _reporter.Advance();
-        _sink.Report(0.01f).WasCalled(Times.Once);
+        _operation.Report(0.01f).WasCalled(Times.Once);
     }
 
     [Test]
@@ -134,7 +134,7 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         _reporter.Advance();
         _reporter.Advance();
 
-        _sink.Report(0.02f).WasCalled(Times.Once);
+        _operation.Report(0.02f).WasCalled(Times.Once);
     }
 
     [Test]
@@ -145,6 +145,6 @@ internal sealed class AsyncProgressReporterTests : IDisposable
         await Assert.That(_reporter.Advance)
                     .ThrowsExactly<OperationCanceledException>();
 
-        _sink.Report(Any()).WasNeverCalled();
+        _operation.Report(Any()).WasNeverCalled();
     }
 }
