@@ -6,8 +6,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
-      day: wednesday
-      time: '11:00'
+      day: tuesday
+      time: '16:30'
       timezone: Canada/Eastern
     commit-message:
       prefix: .NET SDK
@@ -20,7 +20,7 @@ updates:
     schedule:
       interval: weekly
       day: wednesday
-      time: '11:00'
+      time: '14:00'
       timezone: Canada/Eastern
     commit-message:
       prefix: GitHub Actions
@@ -37,7 +37,7 @@ updates:
     schedule:
       interval: weekly
       day: wednesday
-      time: '11:00'
+      time: '14:00'
       timezone: Canada/Eastern
     commit-message:
       prefix: NuGet
