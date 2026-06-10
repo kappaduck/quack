@@ -1,0 +1,6 @@
+is_global = true
+
+# VSTHRD103: Call async methods when in an async method
+# Is a duplicate of CA1849: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1849
+# https://microsoft.github.io/vs-threading/analyzers/VSTHRD103.html
+dotnet_diagnostic.VSTHRD103.severity = none

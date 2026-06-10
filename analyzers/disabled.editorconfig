@@ -1,5 +1,10 @@
 is_global = true
 
+# CA1033: Interface methods should be callable by child types
+# Some childs should not have the parent methods
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1033
+dotnet_diagnostic.CA1033.severity = none
+
 # CA1031: Do not catch general exception types
 # Sometimes we don't know the exception.
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031

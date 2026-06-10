@@ -14,6 +14,7 @@
 
   <ItemGroup Label="Global usings">
     <Using Include="TUnit" />
+    <Using Include="TUnit.Mocks" />
     <Using Include="TUnit.Assertions" />
     <Using Include="TUnit.Assertions.Should" />
     <Using Include="TUnit.Assertions.Should.Extensions" />
@@ -22,6 +23,8 @@
 
   <ItemGroup Label="Common test NuGets">
     <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Mocks" />
+    <PackageReference Include="TUnit.Mocks.Assertions" />
     <PackageReference Include="TUnit.Assertions.Should" />
   </ItemGroup>
 </Project>
