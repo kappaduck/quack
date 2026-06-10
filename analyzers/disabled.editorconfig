@@ -1,5 +1,10 @@
 is_global = true
 
+# CA1062: An externally visible method dereferences one of its reference arguments without verifying whether that argument is null
+# We enforce nullable reference
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
+dotnet_diagnostic.CA1062.severity = none
+
 # CA1303: Do not pass literals as localized parameters
 # Some string does not need to be localized
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1303
