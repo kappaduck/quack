@@ -8,6 +8,7 @@
     <Folder Name="/configuration/analyzers/">
     <File Path="analyzers/code.style.editorconfig" />
     <File Path="analyzers/disabled.editorconfig" />
+    <File Path="analyzers/roslynator.editorconfig" />
     <File Path="analyzers/sonar.editorconfig" />
     <File Path="analyzers/underscore.editorconfig" />
   </Folder>

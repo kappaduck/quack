@@ -40,7 +40,7 @@ internal sealed class Properties : IDisposable
         return Enum.Parse<T>(value.ToString().AsSpan());
     }
 
-    internal static unsafe nint Get(uint propertiesId, string name, void* defaultValue) => SDL3.GetPointerProperty(propertiesId, name, defaultValue);
+    internal static nint Get(uint propertiesId, string name, void* defaultValue) => SDL3.GetPointerProperty(propertiesId, name, defaultValue);
 
     internal static string Get(uint propertiesId, string name, string defaultValue) => SDL3.GetStringProperty(propertiesId, name, defaultValue);
 
@@ -50,7 +50,7 @@ internal sealed class Properties : IDisposable
 
     internal void Set(string name, int value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetNumberProperty(_id, name, value));
 
-    internal unsafe void Set<T>(string name, T* value) where T : unmanaged
+    internal void Set<T>(string name, T* value) where T : unmanaged
         => SDLThrowHelper.ThrowIfFailed(SDL3.SetPointerProperty(_id, name, value));
 
     internal void Set(string name, string value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetStringProperty(_id, name, value));
