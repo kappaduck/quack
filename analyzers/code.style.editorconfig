@@ -82,6 +82,11 @@ csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0160
 csharp_style_namespace_declarations = file_scoped
 
+# CA1711: Identifiers should not have incorrect suffix
+# Some type have better name with the suffix even they didn't implement the reserved suffix
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1711
+dotnet_code_quality.ca1711.allowed_suffixes = Queue
+
 # CA5392: Use DefaultDllImportSearchPaths attribute for P/Invokes
 # Enable the warning to protect from malicious DLL in the default DLL search directories
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5392

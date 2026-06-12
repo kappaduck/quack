@@ -10,6 +10,11 @@ dotnet_diagnostic.CA1033.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
 dotnet_diagnostic.CA1031.severity = none
 
+# CA1040: Avoid empty interfaces
+# It is fine when used for compile time
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1040
+dotnet_diagnostic.CA1040.severity = none
+
 # CA1062: An externally visible method dereferences one of its reference arguments without verifying whether that argument is null
 # We enforce nullable reference
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
