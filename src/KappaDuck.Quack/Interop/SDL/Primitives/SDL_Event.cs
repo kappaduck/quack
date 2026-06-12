@@ -4,8 +4,11 @@
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 
 [StructLayout(LayoutKind.Explicit, Size = 128)]
-internal readonly struct SDL_Event
+internal struct SDL_Event
 {
     [field: FieldOffset(0)]
-    internal SDL_EventType Type { get; }
+    internal SDL_EventType Type { get; set; }
+
+    [field: FieldOffset(0)]
+    internal SDL_QuitEvent Quit { get; set; }
 }
