@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Common test NuGets">
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
     <PackageReference Include="TUnit" />
     <PackageReference Include="TUnit.Mocks" />
     <PackageReference Include="TUnit.Mocks.Assertions" />
