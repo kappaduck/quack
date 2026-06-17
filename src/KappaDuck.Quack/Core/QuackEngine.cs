@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL.Primitives;
 using System.Diagnostics;
 
 namespace KappaDuck.Quack.Core;
@@ -13,43 +12,90 @@ namespace KappaDuck.Quack.Core;
 public static class QuackEngine
 {
     private static readonly Lock _lock = new();
-    private static readonly long _startTimestamp = Stopwatch.GetTimestamp();
-    private static readonly int _mainThreadId = Environment.CurrentManagedThreadId;
 
-    private static int _refCount;
-    private static Subsystem _subsystems;
+    private static long _startTimestamp;
+    private static int? _mainThreadId;
+    private static Subsystem _subsystem;
 
     /// <summary>
-    /// Gets the elapsed time since the engine started.
+    /// Gets the elapsed time since the engine was initialized.
     /// </summary>
-    public static TimeSpan ElapsedTime => Stopwatch.GetElapsedTime(_startTimestamp);
+    /// <remarks>
+    /// Using <see cref="ElapsedTime"/> before the engine is initialized will return <see cref="TimeSpan.Zero"/>.
+    /// </remarks>
+    public static TimeSpan ElapsedTime => IsInitialized ? Stopwatch.GetElapsedTime(_startTimestamp) : TimeSpan.Zero;
+
+    /// <summary>
+    /// Gets a value indicating whether the engine has been initialized.
+    /// </summary>
+    public static bool IsInitialized { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the calling thread is the application's main thread.
     /// </summary>
-    public static bool IsMainThread => Environment.CurrentManagedThreadId == _mainThreadId;
+    public static bool IsMainThread => _mainThreadId == Environment.CurrentManagedThreadId;
 
     /// <summary>
-    /// Gets the application metatadata provided through <see cref="SetMetadata(ApplicationMetadata)"/>.
+    /// Gets the application metadata provided through <see cref="SetMetadata(ApplicationMetadata)"/>.
     /// </summary>
     public static ApplicationMetadata? Metadata { get; private set; }
+
+    /// <summary>
+    /// Initializes the engine and the given <paramref name="subsystem"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Call this once on the application's main thread before using any engine feature. It captures the
+    /// main thread, installs the synchronization context, and brings up the requested subsystems.
+    /// </para>
+    /// <para>
+    /// Dispose the returned <see cref="EngineScope"/> to shut the engine down and restore the previous
+    /// synchronization context.
+    /// </para>
+    /// </remarks>
+    /// <param name="subsystem">The subsystems to initialize.</param>
+    /// <returns>A scope that shuts the engine down when disposed.</returns>
+    /// <exception cref="QuackException">The engine is already initialized.</exception>
+    /// <exception cref="QuackInteropException">Failed to initialize a subsystem.</exception>
+    public static EngineScope Init(Subsystem subsystem)
+    {
+        lock (_lock)
+        {
+            ThrowHelper.ThrowIf(IsInitialized, "The engine is already initialized.");
+
+            _mainThreadId = Environment.CurrentManagedThreadId;
+            _startTimestamp = Stopwatch.GetTimestamp();
+
+            Initialize(subsystem);
+
+            _subsystem = subsystem | Subsystem.Events;
+            IsInitialized = true;
+        }
+
+        return new EngineScope();
+    }
+
+    /// <summary>
+    /// Determines whether the given <paramref name="subsystem"/> is currently initialized.
+    /// </summary>
+    /// <param name="subsystem">The subsystem(s) to check.</param>
+    /// <returns><see langword="true"/> if every requested subsystem is initialized; otherwise <see langword="false"/>.</returns>
+    public static bool HasSubsystem(Subsystem subsystem) => (_subsystem & subsystem) == subsystem;
 
     /// <summary>
     /// Sets the application metadata.
     /// </summary>
     /// <param name="metadata">The application metadata.</param>
     /// <remarks>
-    /// <para>
-    /// You can set it only once; every subsequent call is ignored. You must call it at the very
-    /// beginning of your application, before any module initialization.
-    /// </para>
+    /// You can set it only once and must do so before <see cref="Init(Subsystem)"/>; every subsequent
+    /// call is ignored.
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to set an application metadata property.</exception>
     public static void SetMetadata(ApplicationMetadata metadata)
     {
         lock (_lock)
         {
-            if (_refCount > 0 || Metadata is not null)
+            if (IsInitialized || Metadata is not null)
                 return;
 
             Metadata = metadata;
@@ -62,12 +108,11 @@ public static class QuackEngine
             SetMetadataProperty("SDL.app.metadata.url", metadata.Url?.ToString());
             SetMetadataProperty("SDL.app.metadata.type", metadata.Type switch
             {
+                ApplicationType.Application => nameof(ApplicationType.Application),
                 ApplicationType.Game => nameof(ApplicationType.Game),
                 ApplicationType.MediaPlayer => nameof(ApplicationType.MediaPlayer),
-                ApplicationType.Application => nameof(ApplicationType.Application),
                 _ => nameof(ApplicationType.Application)
             });
-
         }
 
         static void SetMetadataProperty(string name, string? value)
@@ -79,71 +124,30 @@ public static class QuackEngine
         }
     }
 
-    /// <summary>
-    /// Initializes the given <paramref name="subsystem"/> if needed and increments the reference count.
-    /// </summary>
-    /// <param name="subsystem">The subsystem(s) to initialize.</param>
-    /// <exception cref="QuackInteropException">Failed to initialize a subsystem.</exception>
-    internal static void AddRef(Subsystem subsystem)
-    {
-        lock (_lock)
-        {
-            _refCount++;
+    internal static void EnsureInitialized(Subsystem subsystem, [CallerMemberName] string member = "")
+        => ThrowHelper.ThrowIf(!HasSubsystem(subsystem), $"The {subsystem} subsystem is required. Call QuackEngine.Init({subsystem}) first.", member);
 
-            Subsystem missing = subsystem & ~_subsystems;
-            if (missing == Subsystem.None)
-                return;
-
-            Initialize(missing);
-            _subsystems |= missing;
-        }
-    }
-
-    /// <summary>
-    /// Initializes the given <paramref name="subsystem"/> without taking a reference on it.
-    /// </summary>
-    /// <param name="subsystem">The subsystem(s) to initialize.</param>
-    /// <remarks>
-    /// The subsystem is brought up but is not reference-counted, so it can be released by
-    /// <see cref="Release"/> once the last counted reference is gone. Only use this when another
-    /// owner guarantees the engine stays alive for the whole duration you need the subsystem.
-    /// </remarks>
-    /// <exception cref="QuackInteropException">Failed to initialize a subsystem.</exception>
-    internal static void DangerousAddRef(Subsystem subsystem)
-    {
-        lock (_lock)
-        {
-            Subsystem missing = subsystem & ~_subsystems;
-            if (missing == Subsystem.None)
-                return;
-
-            Initialize(missing);
-            _subsystems |= missing;
-        }
-    }
-
-    /// <summary>
-    /// Decrements the reference count and shuts down every subsystem once it reaches zero.
-    /// </summary>
     internal static void Release()
     {
         lock (_lock)
         {
-            if (_refCount == 0)
+            if (!IsInitialized)
                 return;
 
-            if (--_refCount > 0)
-                return;
-
-            if ((_subsystems & Subsystem.Mixer) == Subsystem.Mixer)
+            if ((_subsystem & Subsystem.Mixer) == Subsystem.Mixer)
                 SDL3_mixer.Quit();
 
-            if ((_subsystems & Subsystem.TTF) == Subsystem.TTF)
+            if ((_subsystem & Subsystem.TTF) == Subsystem.TTF)
                 SDL3_ttf.Quit();
 
+            Subsystem core = _subsystem & ~(Subsystem.TTF | Subsystem.Mixer);
+
+            SDL3.QuitSubSystem(core);
             SDL3.Quit();
 
-            _subsystems = Subsystem.None;
+            _subsystem = Subsystem.None;
+            _mainThreadId = null;
+            IsInitialized = false;
         }
     }
 

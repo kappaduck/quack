@@ -14,7 +14,7 @@ namespace KappaDuck.Quack.Events;
 /// </summary>
 public static class EventQueue
 {
-    static EventQueue() => QuackEngine.DangerousAddRef(Subsystem.Events);
+    static EventQueue() => QuackEngine.EnsureInitialized(Subsystem.Events);
 
     /// <summary>
     /// Run a specific filter function on the current event queue,
