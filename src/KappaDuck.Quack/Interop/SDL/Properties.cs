@@ -12,7 +12,7 @@ internal sealed class Properties : IDisposable
     internal Properties()
     {
         _id = SDL3.CreateProperties();
-        SDLThrowHelper.ThrowIfZero(0, nameof(SDL3.CreateProperties));
+        SDLThrowHelper.ThrowIfZero(_id, nameof(SDL3.CreateProperties));
     }
 
     internal Properties(Properties properties) : this()

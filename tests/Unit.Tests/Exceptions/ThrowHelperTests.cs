@@ -34,7 +34,23 @@ internal sealed class ThrowHelperTests
     public async Task ThrowInteropShouldThrowQuackInteropException()
     {
         await Assert.That(() => ThrowHelper.ThrowInterop("module", "message", "test"))
-                    .ThrowsExactly<QuackException>()
+                    .ThrowsExactly<QuackInteropException>()
                     .WithMessage("[module] message (test)");
+    }
+
+    [Test]
+    public async Task ThrowInvalidOperationShouldThrowInvalidOperationException()
+    {
+        await Assert.That(() => ThrowHelper.ThrowInvalidOperation("message"))
+                    .ThrowsExactly<InvalidOperationException>()
+                    .WithMessage("message");
+    }
+
+    [Test]
+    public async Task ThrowOperationCanceledShouldThrowOperationCanceledException()
+    {
+        await Assert.That(() => ThrowHelper.ThrowOperationCanceled("message"))
+                    .ThrowsExactly<OperationCanceledException>()
+                    .WithMessage("message");
     }
 }

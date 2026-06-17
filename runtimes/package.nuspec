@@ -6,7 +6,7 @@
     <authors>KappaDuck</authors>
     <copyright>Copyright © KappaDuck</copyright>
     <description>SDL3 runtimes for KappaDuck.Quack</description>
-    <tags>NET SDL SDL3 GameEngine Engine CSharp Game Multimedia GameFramework</tags>
+    <tags>NET SDL SDL3 GameEngine Engine CSharp Game Multimedia GameFramework MultimediaFramework Runtimes</tags>
     <repository type="git" url="https://github.com/kappaduck/quack.git" />
     <projectUrl>https://github.com/kappaduck/quack</projectUrl>
     <readme>readme.md</readme>

@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using KappaDuck.Quack.Exceptions;
 using System.Runtime.ExceptionServices;
 
 namespace KappaDuck.Quack.Core;
@@ -14,10 +15,6 @@ namespace KappaDuck.Quack.Core;
 /// so you can call SDL's main-thread-only APIs after an <see langword="await"/> without explicitly going
 /// through <see cref="MainThreadDispatcher"/>.
 /// </para>
-/// <para>
-/// Continuations are queued onto <see cref="MainThreadDispatcher"/> and run when the engine drains it,
-/// which happens while polling events. Install it for the lifetime of your loop with <see cref="Enter"/>.
-/// </para>
 /// </remarks>
 internal sealed class QuackSynchronizationContext : SynchronizationContext
 {
@@ -30,7 +27,7 @@ internal sealed class QuackSynchronizationContext : SynchronizationContext
     public static IDisposable Enter()
     {
         if (!QuackEngine.IsMainThread)
-            throw new InvalidOperationException("The Quack! synchronization context must be installed on the main thread.");
+            ThrowHelper.ThrowInvalidOperation("The Quack! synchronization context must be installed on the main thread.");
 
         return new Scope();
     }
