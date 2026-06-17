@@ -16,39 +16,6 @@ public readonly record struct PowerInfo
     }
 
     /// <summary>
-    /// Gets a snapshot of the current power supply.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// You should never take the power status for granted. Batteries (especially failing ones) can
-    /// report incorrect values, and the values reported here are best estimates based on what the
-    /// hardware reports. It's not uncommon for older batteries to lose stored power much faster than
-    /// reported, or completely drain when reporting it has 20% left, etc.
-    /// </para>
-    /// <para>
-    /// Battery status can change at any time, so if your application depends on accurate power status,
-    /// refresh the values by reading this property again, and perhaps ignore changes until they seem
-    /// stable for a few seconds. A platform may only report battery percentage or time left, not both.
-    /// </para>
-    /// <para>
-    /// On some platforms retrieving power details can be expensive; for continuous display, read it
-    /// about once a minute rather than every frame.
-    /// </para>
-    /// </remarks>
-    public static PowerInfo Current
-    {
-        get
-        {
-            PowerState state = SDL3.GetPowerInfo(out int seconds, out int percent);
-
-            int? percentage = percent < 0 ? null : percent;
-            TimeSpan? remaining = seconds < 0 ? null : TimeSpan.FromSeconds(seconds);
-
-            return new PowerInfo(state, percentage, remaining);
-        }
-    }
-
-    /// <summary>
     /// Gets the power state of the system.
     /// </summary>
     public PowerState State { get; }
@@ -83,4 +50,13 @@ public readonly record struct PowerInfo
     /// </summary>
     public bool HasBattery => State is PowerState.OnBattery or PowerState.Charging or PowerState.Charged;
 
+    internal static PowerInfo Capture()
+    {
+        PowerState state = SDL3.GetPowerInfo(out int seconds, out int percent);
+
+        int? percentage = percent < 0 ? null : percent;
+        TimeSpan? remaining = seconds < 0 ? null : TimeSpan.FromSeconds(seconds);
+
+        return new PowerInfo(state, percentage, remaining);
+    }
 }
