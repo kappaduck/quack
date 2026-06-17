@@ -1,32 +1,31 @@
 # Quack! 🦆 ![Static Badge](https://img.shields.io/badge/.NET-10.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/v/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
 
-A modern .NET multimedia framework built on SDL3
+A modern .NET multimedia framework for building games and interactive apps, built on SDL3
 
 ---
 
 ## Overview
 
-Quack! is a modern, simple and fast multimedia framework built on top of [SDL3] and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
+Quack! is a modern, simple and fast multimedia framework for building games and interactive applications, built on top of SDL3 and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
 It targets .NET 10+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.
 
 ## Features
 
-- 2D rendering via [Renderer API][SDL_Renderer] and 3D rendering via [GPU API][SDL_GPU]
-- Cross-platform support
+- 2D rendering via the Renderer API and 3D rendering via the GPU API
 - Window and display management
-- Input handling
 - Audio management
-- Event system
-- System utilities
-- Native UI integration
-- Image and Font management
+- Input & events
+- Image and font loading
+- Native UI integration, system utilities, and cross-platform support
 
 ## Usage
 
 ```csharp
+using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
 
+using EngineScope _ = QuackEngine.Init(Subsystem.Video);
 using Window window = new("Quack!", 1280, 720);
 
 while (window.IsOpen)
@@ -97,9 +96,9 @@ SDL3 native libraries are bundled via `KappaDuck.Quack.Runtimes`. The table belo
 
 During active development, `KappaDuck.Quack` references the **pre-release** version of `KappaDuck.Quack.Runtimes`. When a stable release of `KappaDuck.Quack` is published, it switches to the corresponding **production** version of `KappaDuck.Quack.Runtimes`.
 
-|  Quack!  |    Runtimes    |  SDL3   | SDL_image | SDL_ttf | SDL_mixer |
-| :------: | :------------: | :-----: | :-------: | :-----: | :-------: |
-| `source` | `0.1.0-beta.1` | `3.4.8` |  `3.4.4`  | `3.2.2` |  `3.2.0`  |
+|  Quack!  |    Runtimes    |   SDL3   | SDL_image | SDL_ttf | SDL_mixer |
+| :------: | :------------: | :------: | :-------: | :-----: | :-------: |
+| `source` | `0.1.0-beta.2` | `3.4.10` |  `3.4.4`  | `3.2.2` |  `3.2.2`  |
 
 ## Development & Sandbox
 
@@ -124,9 +123,11 @@ cd quack
 The sandbox project requires at least one `.cs` file to compile. All `.cs` files inside `src/Quack.Sandbox/` are listed in `.gitignore`, so create any file you like there. A simple starting point:
 
 ```csharp
+using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Windows;
 
+using EngineScope _ = QuackEngine.Init(Subsystem.Video);
 using Window window = new("Quack! Sandbox", 1280, 720);
 
 while (window.IsOpen)
@@ -170,8 +171,6 @@ or simply run in your IDE
 
 AI tools assisted with two things in this project: **documentation** (XML doc comments, README, CONTRIBUTING guidelines) and **design exploration** (prototyping API shapes, exploring implementation approaches, and thinking through architecture decisions).
 
-All code was written by the author from scratch. No AI-generated code was copied or adapted into `src/`.
-
 ## Credits
 
 Built with inspiration from
@@ -188,8 +187,6 @@ Built with inspiration from
 [samples]: samples
 [NuGet]: https://www.nuget.org/packages/KappaDuck.Quack/
 [SDL3]: https://www.libsdl.org/
-[SDL_Renderer]: https://wiki.libsdl.org/CategoryRender
-[SDL_GPU]: https://wiki.libsdl.org/CategoryGPU
 [SDL_image]: https://github.com/libsdl-org/SDL_image
 [SDL_mixer]: https://github.com/libsdl-org/SDL_mixer
 [SDL_ttf]: https://github.com/libsdl-org/SDL_ttf
