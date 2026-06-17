@@ -17,8 +17,6 @@ public readonly struct Angle :
     IMultiplyOperators<Angle, float, Angle>,
     IDivisionOperators<Angle, float, Angle>,
     IUnaryNegationOperators<Angle, Angle>,
-    IComparable,
-    IComparable<Angle>,
     IEquatable<Angle>,
     ISpanFormattable,
     IUtf8SpanFormattable
@@ -54,17 +52,6 @@ public readonly struct Angle :
     /// Gets an angle of zero radians (0 degrees).
     /// </summary>
     public static Angle Zero { get; } = new(0f);
-
-    /// <inheritdoc/>
-    public int CompareTo(Angle other) => Radians.CompareTo(other.Radians);
-
-    /// <inheritdoc/>
-    public int CompareTo(object? obj) => obj switch
-    {
-        null => 1,
-        Angle angle => CompareTo(angle),
-        _ => throw new ArgumentException("Object is not an Angle.", nameof(obj))
-    };
 
     /// <inheritdoc/>
     public bool Equals(Angle other) => MathF.ApproximatelyEquals(Radians, other.Radians);

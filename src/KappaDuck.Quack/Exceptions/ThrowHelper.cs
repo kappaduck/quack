@@ -22,4 +22,14 @@ internal static class ThrowHelper
     [StackTraceHidden]
     internal static void ThrowInterop(string module, string message, string member)
         => throw new QuackInteropException($"[{module}] {message} ({member})");
+
+    [DoesNotReturn]
+    [StackTraceHidden]
+    internal static void ThrowInvalidOperation(string message)
+        => throw new InvalidOperationException(message);
+
+    [DoesNotReturn]
+    [StackTraceHidden]
+    internal static void ThrowOperationCanceled(string message)
+        => throw new OperationCanceledException(message);
 }

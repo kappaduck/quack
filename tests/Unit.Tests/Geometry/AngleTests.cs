@@ -78,52 +78,6 @@ internal sealed class AngleTests
     }
 
     [Test]
-    [Arguments(45f, 90f, -1)]
-    [Arguments(90f, 45f, 1)]
-    [Arguments(60f, 60f, 0)]
-    public async Task CompareToShouldReturnCorrectValue(float left, float right, int expected)
-    {
-        Angle angle1 = Angle.FromDegrees(left);
-        Angle angle2 = Angle.FromDegrees(right);
-
-        int result = angle1.CompareTo(angle2);
-        await result.Should().BeEqualTo(expected);
-    }
-
-    [Test]
-    [Arguments(45f, 90f, -1)]
-    [Arguments(90f, 45f, 1)]
-    [Arguments(60f, 60f, 0)]
-    public async Task CompareToWithObjectShouldReturnCorrectValue(float left, float right, int expected)
-    {
-        Angle angle1 = Angle.FromDegrees(left);
-        object angle2 = Angle.FromDegrees(right);
-
-        int result = angle1.CompareTo(angle2);
-        await result.Should().BeEqualTo(expected);
-    }
-
-    [Test]
-    public async Task CompareToWithNullShouldReturnPositive()
-    {
-        Angle left = Angle.FromDegrees(90f);
-
-        int result = left.CompareTo(null);
-        await Assert.That(result).IsPositive();
-    }
-
-    [Test]
-    public async Task CompareToWithAnyTypeExceptAngleShouldThrowArgumentException()
-    {
-        Angle left = Angle.FromDegrees(90f);
-        System.Drawing.Size size = new(10, 10);
-
-        await Assert.That(() => left.CompareTo(size))
-                    .Throws<ArgumentException>()
-                    .WithMessage("Object is not an Angle. (Parameter 'obj')");
-    }
-
-    [Test]
     [Arguments(45f, 45f, true)]
     [Arguments(45f, 60f, false)]
     public async Task EqualsShouldReturnGoodResult(float left, float right, bool expected)
