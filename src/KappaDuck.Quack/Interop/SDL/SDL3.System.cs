@@ -10,12 +10,12 @@ internal static partial class SDL3
 {
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_DisableScreenSaver")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool DisableScreenSaver();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_EnableScreenSaver")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool EnableScreenSaver();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetPowerInfo")]
@@ -36,6 +36,6 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_OpenURL", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool OpenURL(string url);
 }

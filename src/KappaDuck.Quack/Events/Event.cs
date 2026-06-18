@@ -14,6 +14,8 @@ public readonly struct Event : IUnion
     private readonly QuitRequestedEvent _quitEvent;
     private readonly CultureChangedEvent _localeChangedEvent;
     private readonly ThemeChangedEvent _themeChangedEvent;
+    private readonly KeyboardAddedEvent _keyboardAddedEvent;
+    private readonly KeyboardRemovedEvent _keyboardRemovedEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -45,6 +47,26 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.SystemThemeChanged;
     }
 
+    /// <summary>
+    /// Initializes a keyboard added event.
+    /// </summary>
+    /// <param name="e">The keyboard added event.</param>
+    public Event(KeyboardAddedEvent e)
+    {
+        _keyboardAddedEvent = e;
+        Type = SDL_EventType.KeyboardAdded;
+    }
+
+    /// <summary>
+    /// Initializes a keyboard removed event.
+    /// </summary>
+    /// <param name="e">The keyboard removed event.</param>
+    public Event(KeyboardRemovedEvent e)
+    {
+        _keyboardRemovedEvent = e;
+        Type = SDL_EventType.KeyboardRemoved;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -61,6 +83,8 @@ public readonly struct Event : IUnion
         SDL_EventType.Quit => _quitEvent,
         SDL_EventType.LocaleChanged => _localeChangedEvent,
         SDL_EventType.SystemThemeChanged => _themeChangedEvent,
+        SDL_EventType.KeyboardAdded => _keyboardAddedEvent,
+        SDL_EventType.KeyboardRemoved => _keyboardRemovedEvent,
         _ => null
     };
 
@@ -103,6 +127,40 @@ public readonly struct Event : IUnion
             return false;
 
         e = _themeChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="KeyboardAddedEvent"/>.
+    /// </summary>
+    /// <param name="e">The keyboard added event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="KeyboardAddedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out KeyboardAddedEvent e)
+    {
+        if (Type != SDL_EventType.KeyboardAdded)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _keyboardAddedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="KeyboardRemovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The keyboard removed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="KeyboardRemovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out KeyboardRemovedEvent e)
+    {
+        if (Type != SDL_EventType.KeyboardRemoved)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _keyboardRemovedEvent;
         return true;
     }
 }

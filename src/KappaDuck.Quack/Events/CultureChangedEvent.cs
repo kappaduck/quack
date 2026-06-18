@@ -6,4 +6,4 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Represents an event where the user's culture preferences has been changed.
 /// </summary>
-public readonly record struct CultureChangedEvent : IEvent;
+public readonly struct CultureChangedEvent : IEvent;

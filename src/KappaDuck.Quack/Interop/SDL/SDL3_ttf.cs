@@ -7,7 +7,7 @@ internal static partial class SDL3_ttf
 {
     [LibraryImport(nameof(SDL3_ttf), EntryPoint = "TTF_Init")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool Init();
 
     [LibraryImport(nameof(SDL3_ttf), EntryPoint = "TTF_Quit")]

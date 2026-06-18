@@ -24,6 +24,12 @@ internal static class EventType
         if (type == typeof(ThemeChangedEvent))
             return SDL_EventType.SystemThemeChanged;
 
+        if (type == typeof(KeyboardAddedEvent))
+            return SDL_EventType.KeyboardAdded;
+
+        if (type == typeof(KeyboardRemovedEvent))
+            return SDL_EventType.KeyboardRemoved;
+
         return None;
     }
 
@@ -33,16 +39,30 @@ internal static class EventType
         SDL_EventType.Quit => new QuitRequestedEvent(),
         SDL_EventType.LocaleChanged => new CultureChangedEvent(),
         SDL_EventType.SystemThemeChanged => new ThemeChangedEvent(),
+        SDL_EventType.KeyboardAdded => new KeyboardAddedEvent(e.KeyboardDevice.Which),
+        SDL_EventType.KeyboardRemoved => new KeyboardAddedEvent(e.KeyboardDevice.Which),
         _ => default
     };
 
     internal static SDL_Event Convert(Event e)
     {
-        SDL_Event sdlEvent = new() { Type = e.Type };
+        SDL_Event native = new() { Type = e.Type };
 
         if (e.Type == SDL_EventType.Quit)
-            sdlEvent.Quit = new SDL_QuitEvent();
+            native.Quit = new SDL_QuitEvent();
 
-        return sdlEvent;
+        if (e.Type == SDL_EventType.KeyboardAdded)
+        {
+            e.TryGetValue(out KeyboardAddedEvent keyboardAddedEvent);
+            native.KeyboardDevice = new SDL_KeyboardDeviceEvent(keyboardAddedEvent.Device.Id, SDL_EventType.KeyboardAdded);
+        }
+
+        if (e.Type == SDL_EventType.KeyboardAdded)
+        {
+            e.TryGetValue(out KeyboardRemovedEvent keyboardRemovedEvent);
+            native.KeyboardDevice = new SDL_KeyboardDeviceEvent(keyboardRemovedEvent.Device.Id, SDL_EventType.KeyboardRemoved);
+        }
+
+        return native;
     }
 }

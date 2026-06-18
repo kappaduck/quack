@@ -11,4 +11,7 @@ internal struct SDL_Event
 
     [field: FieldOffset(0)]
     internal SDL_QuitEvent Quit { get; set; }
+
+    [field: FieldOffset(0)]
+    internal SDL_KeyboardDeviceEvent KeyboardDevice { get; set; }
 }
