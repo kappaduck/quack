@@ -18,6 +18,8 @@ public readonly struct Event : IUnion
     private readonly KeyboardRemovedEvent _keyboardRemovedEvent;
     private readonly MouseAddedEvent _mouseAddedEvent;
     private readonly MouseRemovedEvent _mouseRemovedEvent;
+    private readonly KeyPressedEvent _keyPressedEvent;
+    private readonly KeyReleasedEvent _keyReleasedEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -89,6 +91,26 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.MouseRemoved;
     }
 
+    /// <summary>
+    /// Initializes a key pressed event.
+    /// </summary>
+    /// <param name="e">The key pressed event.</param>
+    public Event(KeyPressedEvent e)
+    {
+        _keyPressedEvent = e;
+        Type = SDL_EventType.KeyDown;
+    }
+
+    /// <summary>
+    /// Initializes a key released event.
+    /// </summary>
+    /// <param name="e">The key released event.</param>
+    public Event(KeyReleasedEvent e)
+    {
+        _keyReleasedEvent = e;
+        Type = SDL_EventType.KeyUp;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -109,6 +131,8 @@ public readonly struct Event : IUnion
         SDL_EventType.KeyboardRemoved => _keyboardRemovedEvent,
         SDL_EventType.MouseAdded => _mouseAddedEvent,
         SDL_EventType.MouseRemoved => _mouseRemovedEvent,
+        SDL_EventType.KeyDown => _keyPressedEvent,
+        SDL_EventType.KeyUp => _keyReleasedEvent,
         _ => null
     };
 
@@ -219,6 +243,40 @@ public readonly struct Event : IUnion
         }
 
         e = _mouseRemovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="KeyPressedEvent"/>.
+    /// </summary>
+    /// <param name="e">The key pressed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="KeyPressedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out KeyPressedEvent e)
+    {
+        if (Type != SDL_EventType.KeyDown)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _keyPressedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="KeyReleasedEvent"/>.
+    /// </summary>
+    /// <param name="e">The key released event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="KeyReleasedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out KeyReleasedEvent e)
+    {
+        if (Type != SDL_EventType.KeyUp)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _keyReleasedEvent;
         return true;
     }
 }

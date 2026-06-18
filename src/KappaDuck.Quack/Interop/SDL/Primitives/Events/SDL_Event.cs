@@ -17,4 +17,7 @@ internal struct SDL_Event
 
     [field: FieldOffset(0)]
     internal SDL_MouseDeviceEvent MouseDevice { get; set; }
+
+    [field: FieldOffset(0)]
+    internal SDL_KeyboardEvent Keyboard { get; set; }
 }
