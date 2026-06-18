@@ -21,7 +21,6 @@ public static class KeyboardDevices
         get
         {
             ReadOnlySpan<uint> ids = SDL3.GetKeyboards(out _);
-            Console.WriteLine(ids.Length);
 
             if (ids.IsEmpty)
                 return [];
