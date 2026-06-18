@@ -30,6 +30,12 @@ internal static class EventType
         if (type == typeof(KeyboardRemovedEvent))
             return SDL_EventType.KeyboardRemoved;
 
+        if (type == typeof(MouseAddedEvent))
+            return SDL_EventType.MouseAdded;
+
+        if (type == typeof(MouseRemovedEvent))
+            return SDL_EventType.MouseRemoved;
+
         return None;
     }
 
@@ -41,6 +47,8 @@ internal static class EventType
         SDL_EventType.SystemThemeChanged => new ThemeChangedEvent(),
         SDL_EventType.KeyboardAdded => new KeyboardAddedEvent(e.KeyboardDevice.Which),
         SDL_EventType.KeyboardRemoved => new KeyboardAddedEvent(e.KeyboardDevice.Which),
+        SDL_EventType.MouseAdded => new MouseAddedEvent(e.MouseDevice.Which),
+        SDL_EventType.MouseRemoved => new MouseRemovedEvent(e.MouseDevice.Which),
         _ => default
     };
 
@@ -49,18 +57,41 @@ internal static class EventType
         SDL_Event native = new() { Type = e.Type };
 
         if (e.Type == SDL_EventType.Quit)
+        {
             native.Quit = new SDL_QuitEvent();
+            return native;
+        }
 
         if (e.Type == SDL_EventType.KeyboardAdded)
         {
             e.TryGetValue(out KeyboardAddedEvent keyboardAddedEvent);
             native.KeyboardDevice = new SDL_KeyboardDeviceEvent(keyboardAddedEvent.Device.Id, SDL_EventType.KeyboardAdded);
+
+            return native;
         }
 
         if (e.Type == SDL_EventType.KeyboardAdded)
         {
             e.TryGetValue(out KeyboardRemovedEvent keyboardRemovedEvent);
             native.KeyboardDevice = new SDL_KeyboardDeviceEvent(keyboardRemovedEvent.Device.Id, SDL_EventType.KeyboardRemoved);
+
+            return native;
+        }
+
+        if (e.Type == SDL_EventType.MouseAdded)
+        {
+            e.TryGetValue(out MouseAddedEvent mouseAddedEvent);
+            native.MouseDevice = new SDL_MouseDeviceEvent(mouseAddedEvent.Device.Id, SDL_EventType.MouseAdded);
+
+            return native;
+        }
+
+        if (e.Type == SDL_EventType.KeyboardAdded)
+        {
+            e.TryGetValue(out MouseRemovedEvent mouseRemovedEvent);
+            native.MouseDevice = new SDL_MouseDeviceEvent(mouseRemovedEvent.Device.Id, SDL_EventType.MouseRemoved);
+
+            return native;
         }
 
         return native;

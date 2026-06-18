@@ -31,6 +31,16 @@ internal static partial class SDL3
     [return: MarshalUsing(typeof(CallerArrayMarshaller<,>), CountElementName = "length")]
     internal static partial Span<uint> GetKeyboards(out int length);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMice")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CallerArrayMarshaller<,>), CountElementName = "length")]
+    internal static partial Span<uint> GetMice(out int length);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMouseNameForID")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(SDLStringMarshaller))]
+    internal static partial string GetMouseNameById(uint id);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromKey")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial Scancode GetScancodeFromKey(Key key, Keymod* keymod);
@@ -48,6 +58,11 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool HasKeyboard();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HasMouse")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.U1)]
+    internal static partial bool HasMouse();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HasScreenKeyboardSupport")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

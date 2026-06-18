@@ -16,6 +16,8 @@ public readonly struct Event : IUnion
     private readonly ThemeChangedEvent _themeChangedEvent;
     private readonly KeyboardAddedEvent _keyboardAddedEvent;
     private readonly KeyboardRemovedEvent _keyboardRemovedEvent;
+    private readonly MouseAddedEvent _mouseAddedEvent;
+    private readonly MouseRemovedEvent _mouseRemovedEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -67,6 +69,26 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.KeyboardRemoved;
     }
 
+    /// <summary>
+    /// Initializes a mouse added event.
+    /// </summary>
+    /// <param name="e">The mouse added event.</param>
+    public Event(MouseAddedEvent e)
+    {
+        _mouseAddedEvent = e;
+        Type = SDL_EventType.MouseAdded;
+    }
+
+    /// <summary>
+    /// Initializes a mouse removed event.
+    /// </summary>
+    /// <param name="e">The mouse removed event.</param>
+    public Event(MouseRemovedEvent e)
+    {
+        _mouseRemovedEvent = e;
+        Type = SDL_EventType.MouseRemoved;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -85,6 +107,8 @@ public readonly struct Event : IUnion
         SDL_EventType.SystemThemeChanged => _themeChangedEvent,
         SDL_EventType.KeyboardAdded => _keyboardAddedEvent,
         SDL_EventType.KeyboardRemoved => _keyboardRemovedEvent,
+        SDL_EventType.MouseAdded => _mouseAddedEvent,
+        SDL_EventType.MouseRemoved => _mouseRemovedEvent,
         _ => null
     };
 
@@ -161,6 +185,40 @@ public readonly struct Event : IUnion
         }
 
         e = _keyboardRemovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseAddedEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse added event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseAddedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseAddedEvent e)
+    {
+        if (Type != SDL_EventType.MouseAdded)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _mouseAddedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseRemovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse removed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseRemovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseRemovedEvent e)
+    {
+        if (Type != SDL_EventType.MouseRemoved)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _mouseRemovedEvent;
         return true;
     }
 }
