@@ -3,8 +3,9 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.UI.Progress.Reporters;
 
-namespace KappaDuck.Quack.Progress;
+namespace KappaDuck.Quack.UI.Progress;
 #pragma warning disable SYSLIB5007, CA2252
 
 /// <summary>

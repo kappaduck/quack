@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Progress;
+namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Asynchronous determinate progress reporter handed to

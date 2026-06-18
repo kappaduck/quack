@@ -3,7 +3,7 @@
 
 using KappaDuck.Quack.Exceptions;
 
-namespace KappaDuck.Quack.Progress;
+namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Synchronous indeterminate progress reporter handed to

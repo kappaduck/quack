@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using System.Globalization;
@@ -23,7 +24,7 @@ public static class DeviceInfo
     /// <remarks>
     /// This might be a "slow" call that has to query the operating system. It's best to ask for this once and save
     /// the results. However, this list can change, usually because the user has changed a system preference outside
-    /// of your application; Quack! will send an event so you can update by calling this method again.
+    /// of your application; Quack! will send a <see cref="CultureChangedEvent"/> so you can update by calling this method again.
     /// </remarks>
     public static IReadOnlyList<CultureInfo> Cultures
     {

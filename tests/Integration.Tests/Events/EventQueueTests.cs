@@ -29,8 +29,30 @@ internal sealed class EventQueueTests
     {
         Span<Event> events = new Event[3];
 
-        EventQueue.Push(new QuitEvent());
-        EventQueue.Push(new QuitEvent());
+        EventQueue.Push(new QuitRequestedEvent());
+        EventQueue.Push(new QuitRequestedEvent());
+
+        int count = EventQueue.Peek(events);
+
+        await count.Should().BeEqualTo(2);
+    }
+
+    [Test]
+    public async Task PeekOfTypeShouldReturnZeroWhenDestinationIsEmpty()
+    {
+        Span<QuitRequestedEvent> events = [];
+
+        int count = EventQueue.Peek(events);
+        await count.Should().BeZero();
+    }
+
+    [Test]
+    public async Task PeekOfTypeShouldFillDestination()
+    {
+        Span<QuitRequestedEvent> events = new QuitRequestedEvent[3];
+
+        EventQueue.Push(new QuitRequestedEvent());
+        EventQueue.Push(new QuitRequestedEvent());
 
         int count = EventQueue.Peek(events);
 
@@ -49,7 +71,7 @@ internal sealed class EventQueueTests
     [Test]
     public async Task PushShouldPopulateTheQueue()
     {
-        Span<Event> events = [new QuitEvent()];
+        Span<Event> events = [new QuitRequestedEvent()];
 
         int count = EventQueue.Push(events);
         await count.Should().BeEqualTo(1);
@@ -69,8 +91,29 @@ internal sealed class EventQueueTests
     {
         Span<Event> events = new Event[3];
 
-        EventQueue.Push(new QuitEvent());
-        EventQueue.Push(new QuitEvent());
+        EventQueue.Push(new QuitRequestedEvent());
+        EventQueue.Push(new QuitRequestedEvent());
+
+        int count = EventQueue.Retrieve(events);
+        await count.Should().BeEqualTo(2);
+    }
+
+    [Test]
+    public async Task RetrieveOfTypeShouldReturnZeroWhenDestinationIsEmpty()
+    {
+        Span<QuitRequestedEvent> events = [];
+
+        int count = EventQueue.Retrieve(events);
+        await count.Should().BeZero();
+    }
+
+    [Test]
+    public async Task RetrieveOfTypeShouldPopulateTheQueue()
+    {
+        Span<QuitRequestedEvent> events = new QuitRequestedEvent[3];
+
+        EventQueue.Push(new QuitRequestedEvent());
+        EventQueue.Push(new QuitRequestedEvent());
 
         int count = EventQueue.Retrieve(events);
         await count.Should().BeEqualTo(2);
