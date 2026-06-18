@@ -5,6 +5,11 @@ is_global = true
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1033
 dotnet_diagnostic.CA1033.severity = none
 
+# CA1028: Enum storage should be Int32
+# Some enum are used for interop and need to respect the underlying type.
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1028
+dotnet_diagnostic.CA1028.severity = none
+
 # CA1031: Do not catch general exception types
 # Sometimes we don't know the exception.
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
