@@ -3,62 +3,39 @@
 
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
-using KappaDuck.Quack.Interop.SDL.Marshalling;
-using KappaDuck.Quack.Interop.SDL.Primitives;
+using KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Provides access to the application's event queue: pumping, polling, waiting,
-/// pushing, flushing, inspecting and filtering events.
+/// Provides event queue functionalities to manage the application's event queue.
 /// </summary>
 public static class EventQueue
 {
     static EventQueue() => QuackEngine.EnsureInitialized(Subsystem.Events);
 
     /// <summary>
-    /// Run a specific filter function on the current event queue,
-    /// removing any events for which the filter returns <see langword="false"/>.
+    /// Determines whether the <typeparamref name="TEvent"/> is in the event queue.
     /// </summary>
-    /// <param name="filter">The predicate to filter events.</param>
-    public static void Filter(Predicate<Event> filter)
-    {
-        SDL3.FilterEvents((_, e) =>
-        {
-            unsafe
-            {
-                return filter(EventMarshaller.Convert(*e));
-            }
-        });
-    }
+    /// <typeparam name="TEvent">The event type.</typeparam>
+    /// <returns><see langword="true"/> if the event type is in the event queue otherwise <see langword="false"/></returns>
+    public static bool Contains<TEvent>() where TEvent : IEvent
+        => SDL3.HasEvent(EventType.Of<TEvent>());
 
     /// <summary>
-    /// Removes all queued <typeparamref name="T"/>.
+    /// Removes all queued <typeparamref name="TEvent"/>.
     /// </summary>
-    /// <typeparam name="T">The <see cref="Event"/> type.</typeparam>
-    public static void Flush<T>() where T : IEvent
-    {
-        (SDL_EventType min, SDL_EventType max) = EventRange.Of<T>();
-        SDL3.FlushEvents(min, max);
-    }
+    /// <typeparam name="TEvent">The event type.</typeparam>
+    public static void Flush<TEvent>() where TEvent : IEvent
+        => SDL3.FlushEvent(EventType.Of<TEvent>());
 
     /// <summary>
     /// Removes all events from the queue.
     /// </summary>
-    public static void Flush() => SDL3.FlushEvents(SDL_EventType.SDL_EVENT_FIRST, SDL_EventType.SDL_EVENT_LAST);
+    public static void Flush() => SDL3.FlushEvents(EventType.None, EventType.End);
 
     /// <summary>
-    /// Returns whether any <typeparamref name="T"/> is currently queued.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="Event"/> type.</typeparam>
-    public static bool Has<T>() where T : IEvent
-    {
-        (SDL_EventType min, SDL_EventType max) = EventRange.Of<T>();
-        return SDL3.HasEvents(min, max);
-    }
-
-    /// <summary>
-    /// Peeks at events in the event queue without removing them.
+    /// Peeks events in the event queue without removing them.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -80,11 +57,46 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, SDL_EventType.SDL_EVENT_FIRST, SDL_EventType.SDL_EVENT_LAST);
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, EventType.None, EventType.End);
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = EventMarshaller.Convert(buffer[i]);
+            events[i] = EventType.Convert(buffer[i]);
+
+        return count;
+    }
+
+    /// <summary>
+    /// Peeks events based on an event type in the event queue without removing them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// If <paramref name="events"/> is empty, it will return 0.
+    /// </para>
+    /// <para>
+    /// You may have to call <see cref="Pump"/> before peeking to ensure that the events are ready to be filtered.
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="TEvent">The event type to peek.</typeparam>
+    /// <param name="events">The buffer to store the peeked events at the front of event queue.</param>
+    /// <returns>The number of events peeked.</returns>
+    /// <exception cref="QuackInteropException">Thrown when failing to peek events.</exception>
+    public static int Peek<TEvent>(Span<TEvent> events) where TEvent : IEvent
+    {
+        if (events.IsEmpty)
+            return 0;
+
+        Span<SDL_Event> buffer = events.Length <= 32
+            ? stackalloc SDL_Event[events.Length]
+            : new SDL_Event[events.Length];
+
+        SDL_EventType type = EventType.Of<TEvent>();
+
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, type, type);
+        SDLThrowHelper.ThrowIfNegative(count);
+
+        for (int i = 0; i < count; i++)
+            events[i] = (TEvent)EventType.Convert(buffer[i]).Value!;
 
         return count;
     }
@@ -96,13 +108,15 @@ public static class EventQueue
     /// <returns><see langword="true"/> if an event was fetched; otherwise, <see langword="false"/>.</returns>
     public static bool Poll(out Event e)
     {
-        if (!SDL3.PollEvent(out SDL_Event sdlEvent))
+        if (!SDL3.PollEvent(out SDL_Event native))
         {
+            MainThreadDispatcher.Drain();
+
             e = default;
             return false;
         }
 
-        e = EventMarshaller.Convert(sdlEvent);
+        e = EventType.Convert(native);
         return true;
     }
 
@@ -126,14 +140,12 @@ public static class EventQueue
     /// <returns><see langword="true"/> if the event was pushed; otherwise, <see langword="false"/> if the event was filtered or the event queue being full.</returns>
     public static bool Push(Event e)
     {
-        if (!EventMarshaller.TryConvert(e, out SDL_Event sdlEvent))
-            return false;
-
-        return SDL3.PushEvent(&sdlEvent);
+        SDL_Event native = EventType.Convert(e);
+        return SDL3.PushEvent(&native);
     }
 
     /// <summary>
-    /// Adds the specified events to the event queue.
+    /// Adds the events to the event queue.
     /// </summary>
     /// <remarks>
     /// If <paramref name="events"/> is empty, it will return 0.
@@ -150,10 +162,36 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Add, SDL_EventType.SDL_EVENT_FIRST, SDL_EventType.SDL_EVENT_LAST);
+        for (int i = 0; i < buffer.Length; i++)
+            buffer[i] = EventType.Convert(events[i]);
+
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Add, EventType.None, EventType.End);
         SDLThrowHelper.ThrowIfNegative(count);
 
         return count;
+    }
+
+    /// <summary>
+    /// Runs <paramref name="match"/> over the events currently in the queue, keeping those for
+    /// which it returns <see langword="true"/> and removing the rest.
+    /// </summary>
+    /// <param name="match">
+    /// A predicate evaluated once for each queued event. Return <see langword="true"/> to keep the
+    /// event or <see langword="false"/> to remove it from the queue.
+    /// </param>
+    /// <remarks>
+    /// This is a single pass over the events already in the queue; it has no effect on events that
+    /// arrive afterward. Use <see cref="EventManager.SetGlobalFilter"/> to filter events as they arrive.
+    /// </remarks>
+    public static void Retain(Predicate<Event> match)
+    {
+        SDL3.FilterEvents((_, e) =>
+        {
+            unsafe
+            {
+                return match(EventType.Convert(*e));
+            }
+        });
     }
 
     /// <summary>
@@ -179,8 +217,46 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, SDL_EventType.SDL_EVENT_FIRST, SDL_EventType.SDL_EVENT_LAST);
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, EventType.None, EventType.End);
         SDLThrowHelper.ThrowIfNegative(count);
+
+        for (int i = 0; i < count; i++)
+            events[i] = EventType.Convert(buffer[i]);
+
+        return count;
+    }
+
+    /// <summary>
+    /// Retrieves events based on an event type from the event queue and removes them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// If <paramref name="events"/> is empty, it will return 0.
+    /// </para>
+    /// <para>
+    /// You may have to call <see cref="Pump"/> before retrieving to ensure that the events are ready to be filtered.
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="TEvent">The event type to peek.</typeparam>
+    /// <param name="events">The buffer to store the retrieved events from the front of event queue.</param>
+    /// <returns>The number of events retrieved.</returns>
+    /// <exception cref="QuackInteropException">Thrown when failing to retrieve events.</exception>
+    public static int Retrieve<TEvent>(Span<TEvent> events) where TEvent : IEvent
+    {
+        if (events.IsEmpty)
+            return 0;
+
+        Span<SDL_Event> buffer = events.Length <= 32
+            ? stackalloc SDL_Event[events.Length]
+            : new SDL_Event[events.Length];
+
+        SDL_EventType type = EventType.Of<TEvent>();
+
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, type, type);
+        SDLThrowHelper.ThrowIfNegative(count);
+
+        for (int i = 0; i < count; i++)
+            events[i] = (TEvent)EventType.Convert(buffer[i]).Value!;
 
         return count;
     }
@@ -196,18 +272,18 @@ public static class EventQueue
     /// <returns><see langword="true"/> if an event was fetched; otherwise, <see langword="false"/> if the timeout elapsed without any events available.</returns>
     public static bool Wait(out Event e, TimeSpan? timeout = null)
     {
-        SDL_Event sdlEvent;
+        SDL_Event native;
 
         if (!timeout.HasValue || timeout == Timeout.InfiniteTimeSpan)
         {
-            SDL3.WaitEvent(out sdlEvent);
-            e = EventMarshaller.Convert(sdlEvent);
+            SDL3.WaitEvent(out native);
+            e = EventType.Convert(native);
 
             return e.HasValue;
         }
 
-        SDL3.WaitEventTimeout(out sdlEvent, (int)timeout.Value.TotalMilliseconds);
-        e = EventMarshaller.Convert(sdlEvent);
+        SDL3.WaitEventTimeout(out native, (int)timeout.Value.TotalMilliseconds);
+        e = EventType.Convert(native);
 
         return e.HasValue;
     }

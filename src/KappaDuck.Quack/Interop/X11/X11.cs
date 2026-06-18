@@ -9,5 +9,5 @@ namespace KappaDuck.Quack.Interop.X11;
 [SupportedOSPlatform(nameof(OSPlatform.Linux))]
 internal static class X11
 {
-    internal delegate bool EventCallback(in XEvent xEvent);
+    internal delegate bool EventCallback(XEvent xEvent);
 }

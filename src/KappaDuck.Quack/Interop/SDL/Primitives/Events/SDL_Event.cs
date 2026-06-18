@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Interop.SDL.Primitives;
+namespace KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 [StructLayout(LayoutKind.Explicit, Size = 128)]
 internal struct SDL_Event

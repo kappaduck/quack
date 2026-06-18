@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Interop.SDL.Primitives;
+namespace KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 internal enum SDL_EventAction
 {
