@@ -36,6 +36,12 @@ internal static class EventType
         if (type == typeof(MouseRemovedEvent))
             return SDL_EventType.MouseRemoved;
 
+        if (type == typeof(KeyPressedEvent))
+            return SDL_EventType.KeyDown;
+
+        if (type == typeof(KeyReleasedEvent))
+            return SDL_EventType.KeyUp;
+
         return None;
     }
 
@@ -49,6 +55,8 @@ internal static class EventType
         SDL_EventType.KeyboardRemoved => new KeyboardAddedEvent(e.KeyboardDevice.Which),
         SDL_EventType.MouseAdded => new MouseAddedEvent(e.MouseDevice.Which),
         SDL_EventType.MouseRemoved => new MouseRemovedEvent(e.MouseDevice.Which),
+        SDL_EventType.KeyDown => new KeyPressedEvent(e),
+        SDL_EventType.KeyUp => new KeyReleasedEvent(e),
         _ => default
     };
 
@@ -90,6 +98,37 @@ internal static class EventType
         {
             e.TryGetValue(out MouseRemovedEvent mouseRemovedEvent);
             native.MouseDevice = new SDL_MouseDeviceEvent(mouseRemovedEvent.Device.Id, SDL_EventType.MouseRemoved);
+
+            return native;
+        }
+
+        if (e.Type == SDL_EventType.KeyDown)
+        {
+            e.TryGetValue(out KeyPressedEvent keyPressedEvent);
+            native.Keyboard = new SDL_KeyboardEvent()
+            {
+                Type = SDL_EventType.KeyDown,
+                Which = keyPressedEvent.Which,
+                Scancode = keyPressedEvent.Code,
+                Key = keyPressedEvent.Key,
+                Mod = keyPressedEvent.Modifier,
+                Repeat = keyPressedEvent.Repeat ? (byte)1 : (byte)0
+            };
+
+            return native;
+        }
+
+        if (e.Type == SDL_EventType.KeyUp)
+        {
+            e.TryGetValue(out KeyReleasedEvent keyReleasedEvent);
+            native.Keyboard = new SDL_KeyboardEvent()
+            {
+                Type = SDL_EventType.KeyUp,
+                Which = keyReleasedEvent.Which,
+                Scancode = keyReleasedEvent.Code,
+                Key = keyReleasedEvent.Key,
+                Mod = keyReleasedEvent.Modifier
+            };
 
             return native;
         }
