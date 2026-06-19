@@ -16,7 +16,7 @@ public readonly struct KeyReleasedEvent
         Which = e.Keyboard.Which;
         Code = e.Keyboard.Scancode;
         Key = e.Keyboard.Key;
-        Keymod = e.Keyboard.Keymod;
+        Modifier = e.Keyboard.Mod;
     }
 
     /// <summary>
@@ -37,5 +37,5 @@ public readonly struct KeyReleasedEvent
     /// <summary>
     /// Gets the current modifiers.
     /// </summary>
-    public Keymod Keymod { get; init; }
+    public Keymod Modifier { get; init; }
 }

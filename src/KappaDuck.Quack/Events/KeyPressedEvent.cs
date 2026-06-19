@@ -16,7 +16,7 @@ public readonly struct KeyPressedEvent
         Which = e.Keyboard.Which;
         Code = e.Keyboard.Scancode;
         Key = e.Keyboard.Key;
-        Keymod = e.Keyboard.Keymod;
+        Modifier = e.Keyboard.Mod;
         Repeat = e.Keyboard.Repeat != 0;
     }
 
@@ -38,7 +38,7 @@ public readonly struct KeyPressedEvent
     /// <summary>
     /// Gets the current modifiers.
     /// </summary>
-    public Keymod Keymod { get; init; }
+    public Keymod Modifier { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether is a key repeat.

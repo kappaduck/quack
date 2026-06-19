@@ -41,14 +41,14 @@ public static class KeyExtensions
         /// Converts a <see cref="Key"/> to its corresponding <see cref="Scancode"/> and optional <see cref="Keymod"/> according to the current keyboard layout.
         /// </summary>
         /// <returns>The corresponding code and modifier or <see cref="Scancode.Unknown"/> and <see langword="null"/> if the key does not have a corresponding code.</returns>
-        public (Scancode Code, Keymod? Keymod) ToScancode()
+        public (Scancode Code, Keymod? Modifier) ToScancode()
         {
-            Keymod* keymod = null;
-            Scancode scancode = SDL3.GetScancodeFromKey(key, keymod);
+            Keymod* modifier = null;
+            Scancode scancode = SDL3.GetScancodeFromKey(key, modifier);
 
             unsafe
             {
-                return (scancode, *keymod);
+                return (scancode, *modifier);
             }
         }
     }

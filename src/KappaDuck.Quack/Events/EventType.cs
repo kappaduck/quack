@@ -111,7 +111,7 @@ internal static class EventType
                 Which = keyPressedEvent.Which,
                 Scancode = keyPressedEvent.Code,
                 Key = keyPressedEvent.Key,
-                Keymod = keyPressedEvent.Keymod,
+                Mod = keyPressedEvent.Modifier,
                 Repeat = keyPressedEvent.Repeat ? (byte)1 : (byte)0
             };
 
@@ -127,7 +127,7 @@ internal static class EventType
                 Which = keyReleasedEvent.Which,
                 Scancode = keyReleasedEvent.Code,
                 Key = keyReleasedEvent.Key,
-                Keymod = keyReleasedEvent.Keymod
+                Mod = keyReleasedEvent.Modifier
             };
 
             return native;

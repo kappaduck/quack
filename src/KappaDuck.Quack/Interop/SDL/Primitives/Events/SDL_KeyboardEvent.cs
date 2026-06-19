@@ -20,7 +20,7 @@ internal readonly struct SDL_KeyboardEvent
 
     internal Key Key { get; init; }
 
-    internal Keymod Keymod { get; init; }
+    internal Keymod Mod { get; init; }
 
     private readonly ushort _raw;
     private readonly byte _down;

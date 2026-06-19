@@ -10,7 +10,7 @@ internal static partial class SDL3
 {
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetKeyFromScancode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial Key GetKeyFromScancode(Scancode code, Keymod keymod, [MarshalAs(UnmanagedType.I1)] bool keyEvents);
+    internal static partial Key GetKeyFromScancode(Scancode code, Keymod mod, [MarshalAs(UnmanagedType.I1)] bool keyEvents);
 
     [LibraryImport(nameof(SDL3), StringMarshalling = StringMarshalling.Utf8, EntryPoint = "SDL_GetKeyFromName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -31,10 +31,19 @@ internal static partial class SDL3
     [return: MarshalUsing(typeof(CallerArrayMarshaller<,>), CountElementName = "length")]
     internal static partial Span<uint> GetKeyboards(out int length);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetKeyboardState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(SDLArrayMarshaller<,>), CountElementName = "length")]
+    internal static partial Span<byte> GetKeyboardState(out int length);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMice")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CallerArrayMarshaller<,>), CountElementName = "length")]
     internal static partial Span<uint> GetMice(out int length);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetModState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial Keymod GetModState();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMouseNameForID")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -43,7 +52,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromKey")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial Scancode GetScancodeFromKey(Key key, Keymod* keymod);
+    internal static partial Scancode GetScancodeFromKey(Key key, Keymod* mod);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromName", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -68,6 +77,14 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool HasScreenKeyboardSupport();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ResetKeyboard")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void ResetKeyboard();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetModState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void SetModState(Keymod modifier);
 
     /// <summary>
     /// The string is not copied, so it must be valid for the lifetime of the application.
