@@ -13,6 +13,11 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool CaptureMouse([MarshalAs(UnmanagedType.I1)] bool enabled);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CursorVisible")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool CursorVisible();
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetGlobalMouseState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial MouseButtonState GetGlobalMouseState(out float x, out float y);
@@ -90,6 +95,11 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool HasMouse();
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HideCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool HideCursor();
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HasScreenKeyboardSupport")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -111,6 +121,11 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SetScancodeName(Scancode code, Span<byte> name);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ShowCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool ShowCursor();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_WarpMouseGlobal")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
