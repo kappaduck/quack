@@ -58,8 +58,8 @@ public static class EventManager
     /// updates the window's recorded size. This lets you selectively drop events as they arrive.
     /// </para>
     /// <para>
-    /// Only events that would enter the queue are filtered. Events you <see cref="EventQueue.Push(Event)"/>
-    /// pass through the filter; events disabled with <see cref="Disable{T}"/> never reach it.
+    /// Only events that would enter the queue are filtered;
+    /// events disabled with <see cref="Disable{T}"/> never reach it.
     /// </para>
     /// <para>
     /// The filter may run on a background thread, so keep it fast and thread-safe. The exception is
@@ -83,7 +83,7 @@ public static class EventManager
         {
             unsafe
             {
-                callback(EventType.Convert(*e));
+                callback(EventType.Convert(in *e));
             }
 
             return true;
@@ -100,7 +100,7 @@ public static class EventManager
         unsafe
         {
             SDL_Event native = *e;
-            Event evt = EventType.Convert(native);
+            Event evt = EventType.Convert(in native);
             return filter(evt) ? (byte)1 : (byte)0;
         }
     }

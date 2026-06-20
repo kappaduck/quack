@@ -6,7 +6,7 @@ using KappaDuck.Quack.Input;
 namespace KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 [StructLayout(LayoutKind.Sequential)]
-internal readonly struct SDL_KeyboardEvent
+internal readonly struct SDL_MouseMotionEvent
 {
     private readonly SDL_EventType _type;
     private readonly uint _reserved;
@@ -14,16 +14,15 @@ internal readonly struct SDL_KeyboardEvent
 
     internal uint WindowId { get; }
 
-    internal uint Which { get; init; }
+    internal uint Which { get; }
 
-    internal Scancode Scancode { get; init; }
+    internal MouseButtonState State { get; }
 
-    internal Key Key { get; init; }
+    internal float X { get; }
 
-    internal Keymod Mod { get; init; }
+    internal float Y { get; }
 
-    private readonly ushort _raw;
-    private readonly byte _down;
+    internal float Xrel { get; }
 
-    internal byte Repeat { get; init; }
+    internal float Yrel { get; }
 }

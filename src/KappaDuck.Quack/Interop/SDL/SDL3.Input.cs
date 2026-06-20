@@ -8,6 +8,20 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal static partial class SDL3
 {
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CaptureMouse")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool CaptureMouse([MarshalAs(UnmanagedType.I1)] bool enabled);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CursorVisible")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool CursorVisible();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetGlobalMouseState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial MouseButtonState GetGlobalMouseState(out float x, out float y);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetKeyFromScancode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial Key GetKeyFromScancode(Scancode code, Keymod mod, [MarshalAs(UnmanagedType.I1)] bool keyEvents);
@@ -50,6 +64,14 @@ internal static partial class SDL3
     [return: MarshalUsing(typeof(SDLStringMarshaller))]
     internal static partial string GetMouseNameById(uint id);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMouseState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial MouseButtonState GetMouseState(out float x, out float y);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetRelativeMouseState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial MouseButtonState GetRelativeMouseState(out float x, out float y);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromKey")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial Scancode GetScancodeFromKey(Key key, Keymod* mod);
@@ -70,8 +92,13 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HasMouse")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U1)]
+    [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool HasMouse();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HideCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool HideCursor();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HasScreenKeyboardSupport")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -94,4 +121,14 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SetScancodeName(Scancode code, Span<byte> name);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ShowCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool ShowCursor();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_WarpMouseGlobal")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool WarpMouseGlobal(float x, float y);
 }

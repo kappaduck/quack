@@ -20,6 +20,10 @@ public readonly struct Event : IUnion
     private readonly MouseRemovedEvent _mouseRemovedEvent;
     private readonly KeyPressedEvent _keyPressedEvent;
     private readonly KeyReleasedEvent _keyReleasedEvent;
+    private readonly MouseButtonPressedEvent _buttonPressedEvent;
+    private readonly MouseButtonReleasedEvent _buttonReleasedEvent;
+    private readonly MouseMovedEvent _mouseMovedEvent;
+    private readonly MouseWheelEvent _wheelEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -111,6 +115,46 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.KeyUp;
     }
 
+    /// <summary>
+    /// Initializes a mouse button pressed event.
+    /// </summary>
+    /// <param name="e">The mouse button pressed event.</param>
+    public Event(MouseButtonPressedEvent e)
+    {
+        _buttonPressedEvent = e;
+        Type = SDL_EventType.MouseButtonDown;
+    }
+
+    /// <summary>
+    /// Initializes a mouse button released event.
+    /// </summary>
+    /// <param name="e">The mouse button released event.</param>
+    public Event(MouseButtonReleasedEvent e)
+    {
+        _buttonReleasedEvent = e;
+        Type = SDL_EventType.MouseButtonUp;
+    }
+
+    /// <summary>
+    /// Initializes a mouse moved event.
+    /// </summary>
+    /// <param name="e">The mouse moved event.</param>
+    public Event(MouseMovedEvent e)
+    {
+        _mouseMovedEvent = e;
+        Type = SDL_EventType.MouseMotion;
+    }
+
+    /// <summary>
+    /// Initializes a mouse wheel event.
+    /// </summary>
+    /// <param name="e">The mouse wheel event.</param>
+    public Event(MouseWheelEvent e)
+    {
+        _wheelEvent = e;
+        Type = SDL_EventType.MouseWheel;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -133,6 +177,10 @@ public readonly struct Event : IUnion
         SDL_EventType.MouseRemoved => _mouseRemovedEvent,
         SDL_EventType.KeyDown => _keyPressedEvent,
         SDL_EventType.KeyUp => _keyReleasedEvent,
+        SDL_EventType.MouseButtonDown => _buttonPressedEvent,
+        SDL_EventType.MouseButtonUp => _buttonReleasedEvent,
+        SDL_EventType.MouseMotion => _mouseMovedEvent,
+        SDL_EventType.MouseWheel => _wheelEvent,
         _ => null
     };
 
@@ -277,6 +325,74 @@ public readonly struct Event : IUnion
         }
 
         e = _keyReleasedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseButtonPressedEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse button pressed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseButtonPressedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseButtonPressedEvent e)
+    {
+        if (Type != SDL_EventType.MouseButtonDown)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _buttonPressedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseButtonReleasedEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse button released event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseButtonReleasedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseButtonReleasedEvent e)
+    {
+        if (Type != SDL_EventType.MouseButtonUp)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _buttonReleasedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseMovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse moved event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseMovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseMovedEvent e)
+    {
+        if (Type != SDL_EventType.MouseMotion)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _mouseMovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="MouseWheelEvent"/>.
+    /// </summary>
+    /// <param name="e">The mouse wheel event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="MouseWheelEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out MouseWheelEvent e)
+    {
+        if (Type != SDL_EventType.KeyUp)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _wheelEvent;
         return true;
     }
 }
