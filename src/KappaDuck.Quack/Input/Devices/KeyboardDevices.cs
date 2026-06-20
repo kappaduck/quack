@@ -16,7 +16,7 @@ public static class KeyboardDevices
     /// including some mice, KVM switches, motherboard power buttons, etc. You should wait
     /// for input from a device before you consider it actively in use.
     /// </remarks>
-    public static IEnumerable<KeyboardDevice> All
+    public static IReadOnlyList<KeyboardDevice> All
     {
         get
         {

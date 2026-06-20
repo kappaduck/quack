@@ -15,7 +15,7 @@ public static class VideoDrivers
     /// <summary>
     /// Gets all built-in video drivers
     /// </summary>
-    public static IReadOnlyList<string> All => _drivers.Value;
+    public static IReadOnlyCollection<string> All => _drivers.Value;
 
     /// <summary>
     /// Gets the name of the currently initialized video driver
