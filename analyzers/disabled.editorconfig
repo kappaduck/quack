@@ -1,5 +1,10 @@
 is_global = true
 
+# CA1008: Enums should have zero value
+# Some enum doesn't need a zero value
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1008
+dotnet_diagnostic.CA1008.severity = none
+
 # CA1033: Interface methods should be callable by child types
 # Some childs should not have the parent methods
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1033

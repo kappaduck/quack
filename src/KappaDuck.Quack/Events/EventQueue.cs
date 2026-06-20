@@ -61,7 +61,7 @@ public static class EventQueue
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = EventType.Convert(buffer[i]);
+            events[i] = EventType.Convert(in buffer[i]);
 
         return count;
     }
@@ -96,7 +96,7 @@ public static class EventQueue
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = (TEvent)EventType.Convert(buffer[i]).Value!;
+            events[i] = (TEvent)EventType.Convert(in buffer[i]).Value!;
 
         return count;
     }
@@ -116,7 +116,7 @@ public static class EventQueue
             return false;
         }
 
-        e = EventType.Convert(native);
+        e = EventType.Convert(in native);
         return true;
     }
 
@@ -132,44 +132,6 @@ public static class EventQueue
     /// then you must call <see cref="Pump"/> to force an event queue update.
     /// </remarks>
     public static void Pump() => SDL3.PumpEvents();
-
-    /// <summary>
-    /// Adds the specified event to the event queue.
-    /// </summary>
-    /// <param name="e">The event to push onto the queue.</param>
-    /// <returns><see langword="true"/> if the event was pushed; otherwise, <see langword="false"/> if the event was filtered or the event queue being full.</returns>
-    public static bool Push(Event e)
-    {
-        SDL_Event native = EventType.Convert(e);
-        return SDL3.PushEvent(&native);
-    }
-
-    /// <summary>
-    /// Adds the events to the event queue.
-    /// </summary>
-    /// <remarks>
-    /// If <paramref name="events"/> is empty, it will return 0.
-    /// </remarks>
-    /// <param name="events">The events to push onto the queue.</param>
-    /// <returns>The number of events successfully pushed onto the queue.</returns>
-    /// <exception cref="QuackInteropException">Thrown when failing to push events.</exception>
-    public static int Push(ReadOnlySpan<Event> events)
-    {
-        if (events.IsEmpty)
-            return 0;
-
-        Span<SDL_Event> buffer = events.Length <= 32
-            ? stackalloc SDL_Event[events.Length]
-            : new SDL_Event[events.Length];
-
-        for (int i = 0; i < buffer.Length; i++)
-            buffer[i] = EventType.Convert(events[i]);
-
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Add, EventType.None, EventType.End);
-        SDLThrowHelper.ThrowIfNegative(count);
-
-        return count;
-    }
 
     /// <summary>
     /// Runs <paramref name="match"/> over the events currently in the queue, keeping those for
@@ -189,7 +151,7 @@ public static class EventQueue
         {
             unsafe
             {
-                return match(EventType.Convert(*e));
+                return match(EventType.Convert(in *e));
             }
         });
     }
@@ -221,7 +183,7 @@ public static class EventQueue
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = EventType.Convert(buffer[i]);
+            events[i] = EventType.Convert(in buffer[i]);
 
         return count;
     }
@@ -256,7 +218,7 @@ public static class EventQueue
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = (TEvent)EventType.Convert(buffer[i]).Value!;
+            events[i] = (TEvent)EventType.Convert(in buffer[i]).Value!;
 
         return count;
     }
@@ -277,13 +239,13 @@ public static class EventQueue
         if (!timeout.HasValue || timeout == Timeout.InfiniteTimeSpan)
         {
             SDL3.WaitEvent(out native);
-            e = EventType.Convert(native);
+            e = EventType.Convert(in native);
 
             return e.HasValue;
         }
 
         SDL3.WaitEventTimeout(out native, (int)timeout.Value.TotalMilliseconds);
-        e = EventType.Convert(native);
+        e = EventType.Convert(in native);
 
         return e.HasValue;
     }

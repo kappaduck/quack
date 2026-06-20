@@ -2,17 +2,24 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Input.Devices;
+using KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Represents an event which a new mouse device was connected.
+/// Raised when a new mouse device was connected.
 /// </summary>
-/// <param name="mouseId">The mouse id which was added.</param>
-public readonly struct MouseAddedEvent(uint mouseId)
+public readonly struct MouseAddedEvent
 {
+    internal MouseAddedEvent(SDL_MouseDeviceEvent e) => Which = e.Which;
+
+    /// <summary>
+    /// Gets the mouse device id which was added.
+    /// </summary>
+    public uint Which { get; }
+
     /// <summary>
     /// Gets the mouse device which was added.
     /// </summary>
-    public MouseDevice Device => MouseDevices.FromId(mouseId);
+    public MouseDevice Device => MouseDevices.FromId(Which);
 }

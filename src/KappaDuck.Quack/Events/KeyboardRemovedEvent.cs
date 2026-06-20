@@ -2,17 +2,24 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Input.Devices;
+using KappaDuck.Quack.Interop.SDL.Primitives.Events;
 
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Represents an event which a keyboard device was disconnected.
+/// Raised when a keyboard device was disconnected.
 /// </summary>
-/// <param name="keyboardId">The keyboard id which was removed.</param>
-public readonly struct KeyboardRemovedEvent(uint keyboardId)
+public readonly struct KeyboardRemovedEvent
 {
+    internal KeyboardRemovedEvent(SDL_KeyboardDeviceEvent e) => Which = e.Which;
+
+    /// <summary>
+    /// Gets the keyboard device id which was removed.
+    /// </summary>
+    public uint Which { get; }
+
     /// <summary>
     /// Gets the keyboard device which was removed.
     /// </summary>
-    public KeyboardDevice Device => KeyboardDevices.FromId(keyboardId);
+    public KeyboardDevice Device => KeyboardDevices.FromId(Which);
 }
