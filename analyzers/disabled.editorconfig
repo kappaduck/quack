@@ -50,7 +50,12 @@ dotnet_diagnostic.CA1307.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1716
 dotnet_diagnostic.CA1716.severity = none
 
-# CA1716: A value type does not override Equals or does not implement the equality operator (==).
+# CA1724: A type name matches a referenced namespace name that has one or more externally visible types. The name comparison is case-insensitive.
+# Some names are needed even there is a matches with a referenced namespace.
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1724
+dotnet_diagnostic.CA1724.severity = none
+
+# CA1815: A value type does not override Equals or does not implement the equality operator (==).
 # Some value type does not need to override Equals
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1815
 dotnet_diagnostic.CA1815.severity = none

@@ -16,7 +16,7 @@ public static class MouseDevices
     /// including some game controllers, KVM switches, etc. You should wait for input from
     /// a device before you consider it actively in use.
     /// </remarks>
-    public static IEnumerable<MouseDevice> All
+    public static IReadOnlyList<MouseDevice> All
     {
         get
         {

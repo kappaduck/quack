@@ -53,4 +53,12 @@ internal sealed class ThrowHelperTests
                     .ThrowsExactly<OperationCanceledException>()
                     .WithMessage("message");
     }
+
+    [Test]
+    public async Task ThrowFormatShouldThrowFormatException()
+    {
+        await Assert.That(() => ThrowHelper.ThrowFormat("message"))
+                    .ThrowsExactly<FormatException>()
+                    .WithMessage("message");
+    }
 }

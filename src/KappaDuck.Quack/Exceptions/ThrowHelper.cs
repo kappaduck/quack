@@ -20,6 +20,10 @@ internal static class ThrowHelper
 
     [DoesNotReturn]
     [StackTraceHidden]
+    internal static void ThrowFormat(string message) => throw new FormatException(message);
+
+    [DoesNotReturn]
+    [StackTraceHidden]
     internal static void ThrowInterop(string module, string message, string member)
         => throw new QuackInteropException($"[{module}] {message} ({member})");
 

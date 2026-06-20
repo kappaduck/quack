@@ -19,7 +19,7 @@ public static class RenderDrivers
     /// <summary>
     /// Gets all built-in rendering driver names.
     /// </summary>
-    public static IReadOnlyList<string> All => _drivers.Value;
+    public static IReadOnlyCollection<string> All => _drivers.Value;
 
     private static ImmutableArray<string> GetAll()
     {
