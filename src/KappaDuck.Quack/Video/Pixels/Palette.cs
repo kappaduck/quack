@@ -11,8 +11,6 @@ namespace KappaDuck.Quack.Video.Pixels;
 /// </summary>
 public sealed class Palette : IDisposable
 {
-    private SDL_Palette* _palette;
-
     /// <summary>
     /// Creates a palette with the given number of entries, all initialized to opaque white.
     /// </summary>
@@ -23,8 +21,8 @@ public sealed class Palette : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
 
-        _palette = SDL3.CreatePalette(count);
-        SDLThrowHelper.ThrowIfNull(_palette);
+        Handle = SDL3.CreatePalette(count);
+        SDLThrowHelper.ThrowIfNull(Handle);
     }
 
     /// <summary>
@@ -51,8 +49,8 @@ public sealed class Palette : IDisposable
 
             unsafe
             {
-                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _palette->Count);
-                return _palette->Colors[index];
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Handle->Count);
+                return Handle->Colors[index];
             }
         }
 
@@ -63,8 +61,8 @@ public sealed class Palette : IDisposable
 
             unsafe
             {
-                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _palette->Count);
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetPaletteColors(_palette, [value], index, 1));
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Handle->Count);
+                SDLThrowHelper.ThrowIfFailed(SDL3.SetPaletteColors(Handle, [value], index, 1));
             }
         }
     }
@@ -85,7 +83,7 @@ public sealed class Palette : IDisposable
 
             unsafe
             {
-                return new ReadOnlySpan<Color>(_palette->Colors, _palette->Count);
+                return new ReadOnlySpan<Color>(Handle->Colors, Handle->Count);
             }
         }
     }
@@ -102,19 +100,21 @@ public sealed class Palette : IDisposable
 
             unsafe
             {
-                return _palette->Count;
+                return Handle->Count;
             }
         }
     }
 
+    internal SDL_Palette* Handle { get; private set; }
+
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_palette is null)
+        if (Handle is null)
             return;
 
-        SDL3.DestroyPalette(_palette);
-        _palette = null;
+        SDL3.DestroyPalette(Handle);
+        Handle = null;
     }
 
     /// <summary>
@@ -133,10 +133,10 @@ public sealed class Palette : IDisposable
 
         unsafe
         {
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(startIndex + colors.Length, _palette->Count);
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetPaletteColors(_palette, colors, startIndex, colors.Length));
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(startIndex + colors.Length, Handle->Count);
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetPaletteColors(Handle, colors, startIndex, colors.Length));
         }
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_palette is null, typeof(Palette));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Palette));
 }
