@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.Video;
+using KappaDuck.Quack.Video.Pixels;
 
 namespace KappaDuck.Quack.Interop.SDL.Primitives;
 

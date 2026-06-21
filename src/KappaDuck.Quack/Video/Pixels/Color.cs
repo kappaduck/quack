@@ -5,7 +5,7 @@ using KappaDuck.Quack.Exceptions;
 using System.Numerics;
 using System.Text.Unicode;
 
-namespace KappaDuck.Quack.Video;
+namespace KappaDuck.Quack.Video.Pixels;
 
 /// <summary>
 /// Represents a 32-bit RGBA color, with one byte (0-255) per channel.
