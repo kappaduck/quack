@@ -15,7 +15,7 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// </remarks>
 public readonly struct BlendMode : IEquatable<BlendMode>, IEqualityOperators<BlendMode, BlendMode, bool>
 {
-    private BlendMode(uint value) => Value = value;
+    internal BlendMode(uint value) => Value = value;
 
     internal uint Value { get; }
 

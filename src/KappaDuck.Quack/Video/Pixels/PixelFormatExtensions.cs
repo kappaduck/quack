@@ -150,9 +150,9 @@ public static class PixelFormatExtensions
         public uint MapRGBA(ColorF color, Palette? palette = null)
             => MapRGBA(format, color.ToColor(), palette);
 
-        private bool IsFourCharacterCode => format != PixelFormat.Unknown && (((uint)format >> 28) & 0x0F) != 1;
+        internal SDL_PixelFormatDetails* Details => SDL3.GetPixelFormatDetails(format);
 
-        private SDL_PixelFormatDetails* Details => SDL3.GetPixelFormatDetails(format);
+        private bool IsFourCharacterCode => format != PixelFormat.Unknown && (((uint)format >> 28) & 0x0F) != 1;
     }
 
     extension(PixelFormat)
