@@ -9,5 +9,5 @@ internal static partial class SDL3
 {
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ComposeCustomBlendMode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial uint ComposeCustomBlendMode(BlendFactor source, BlendFactor destination, BlendOperation operation, BlendFactor sourceAlpha, BlendFactor destinationAlpha, BlendOperation alphaOperation);
+    internal static partial BlendMode ComposeCustomBlendMode(BlendFactor source, BlendFactor destination, BlendOperation operation, BlendFactor sourceAlpha, BlendFactor destinationAlpha, BlendOperation alphaOperation);
 }
