@@ -11,6 +11,8 @@ namespace KappaDuck.Quack.Video.Pixels;
 /// </summary>
 public sealed class Palette : IDisposable
 {
+    private readonly bool _owned;
+
     /// <summary>
     /// Creates a palette with the given number of entries, all initialized to opaque white.
     /// </summary>
@@ -23,6 +25,8 @@ public sealed class Palette : IDisposable
 
         Handle = SDL3.CreatePalette(count);
         SDLThrowHelper.ThrowIfNull(Handle);
+
+        _owned = true;
     }
 
     /// <summary>
@@ -32,6 +36,12 @@ public sealed class Palette : IDisposable
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="colors"/> is empty.</exception>
     public Palette(ReadOnlySpan<Color> colors) : this(colors.Length)
         => SetColors(colors);
+
+    internal Palette(SDL_Palette* palette)
+    {
+        Handle = palette;
+        _owned = false;
+    }
 
     /// <summary>
     /// Gets or sets the color at the given index.
@@ -113,7 +123,9 @@ public sealed class Palette : IDisposable
         if (Handle is null)
             return;
 
-        SDL3.DestroyPalette(Handle);
+        if (_owned)
+            SDL3.DestroyPalette(Handle);
+
         Handle = null;
     }
 

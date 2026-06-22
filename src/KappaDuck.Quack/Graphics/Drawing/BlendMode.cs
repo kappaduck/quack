@@ -13,11 +13,12 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// The predefined modes are supported on every backend. Additional modes can be built with
 /// <see cref="Compose"/>, though a backend may not support every combination.
 /// </remarks>
+[StructLayout(LayoutKind.Sequential)]
 public readonly struct BlendMode : IEquatable<BlendMode>, IEqualityOperators<BlendMode, BlendMode, bool>
 {
-    internal BlendMode(uint value) => Value = value;
+    private readonly uint _value;
 
-    internal uint Value { get; }
+    private BlendMode(uint value) => _value = value;
 
     /// <summary>
     /// Gets the mode that performs no blending; the source replaces the destination.
@@ -69,26 +70,23 @@ public readonly struct BlendMode : IEquatable<BlendMode>, IEqualityOperators<Ble
     /// <param name="alphaOperation">The operation combining the weighted alpha channels.</param>
     /// <returns>The composed blend mode.</returns>
     public static BlendMode Compose(BlendFactor sourceColorFactor, BlendFactor destinationColorFactor, BlendOperation colorOperation, BlendFactor sourceAlphaFactor, BlendFactor destinationAlphaFactor, BlendOperation alphaOperation)
-    {
-        uint value = SDL3.ComposeCustomBlendMode(sourceColorFactor, destinationColorFactor, colorOperation, sourceAlphaFactor, destinationAlphaFactor, alphaOperation);
-        return new BlendMode(value);
-    }
+        => SDL3.ComposeCustomBlendMode(sourceColorFactor, destinationColorFactor, colorOperation, sourceAlphaFactor, destinationAlphaFactor, alphaOperation);
 
     /// <summary>
     /// Determines whether this blend mode is equal to another blend mode.
     /// </summary>
     /// <param name="other">The blend mode to compare with the current blend mode.</param>
     /// <returns><see langword="true"/> if the blend modes are equal; otherwise, <see langword="false"/>.</returns>
-    public bool Equals(BlendMode other) => Value == other.Value;
+    public bool Equals(BlendMode other) => _value == other._value;
 
     /// <inheritdoc/>
     public override bool Equals([NotNullWhen(true)] object? obj) => obj is BlendMode other && Equals(other);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => Value.GetHashCode();
+    public override int GetHashCode() => _value.GetHashCode();
 
     /// <inheritdoc/>
-    public override string ToString() => Value switch
+    public override string ToString() => _value switch
     {
         0x00000000u => nameof(None),
         0x00000001u => nameof(Blend),
@@ -97,7 +95,7 @@ public readonly struct BlendMode : IEquatable<BlendMode>, IEqualityOperators<Ble
         0x00000020u => nameof(AddPremultiplied),
         0x00000004u => nameof(Mod),
         0x00000008u => nameof(Mul),
-        _ => $"Custom(0x{Value:X8})"
+        _ => $"Custom(0x{_value:X8})"
     };
 
     /// <summary>

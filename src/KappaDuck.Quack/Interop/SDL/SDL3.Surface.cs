@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Pixels;
 
@@ -57,7 +58,7 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ConvertPixels")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool ConvertPixels(int width, int height, PixelFormat sourceFormat, void* source, int sourcePitch, PixelFormat destinationFormat, void* destination, int destinationPitch);
+    internal static partial bool ConvertPixels(int width, int height, PixelFormat sourceFormat, ReadOnlySpan<byte> source, int sourcePitch, PixelFormat destinationFormat, Span<byte> destination, int destinationPitch);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ConvertPixelsAndColorspace")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -70,8 +71,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ConvertSurfaceAndColorspace")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool ConvertSurfaceAndColorspace(SDL_Surface* surface, PixelFormat format, SDL_Palette* palette, Colorspace colorspace, uint properties);
+    internal static partial SDL_Surface* ConvertSurfaceAndColorspace(SDL_Surface* surface, PixelFormat format, SDL_Palette* palette, Colorspace colorspace, uint properties);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateSurface")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -116,7 +116,12 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfaceBlendMode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetSurfaceBlendMode(SDL_Surface* surface, uint* blendMode);
+    internal static partial bool GetSurfaceBlendMode(SDL_Surface* surface, BlendMode* blendMode);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfaceColorKey")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool GetSurfaceColorKey(SDL_Surface* surface, uint* key);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfaceColorMod")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -133,7 +138,11 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfacePalette")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial uint SDL_GetSurfaceProperties(SDL_Surface* surface);
+    internal static partial SDL_Palette* GetSurfacePalette(SDL_Surface* surface);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfacePalette")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial uint GetSurfaceProperties(SDL_Surface* surface);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_LockSurface")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -186,7 +195,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetSurfaceBlendMode")]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool SetSurfaceBlendMode(SDL_Surface* surface, uint blendMode);
+    internal static partial bool SetSurfaceBlendMode(SDL_Surface* surface, BlendMode blendMode);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetSurfaceClipRect")]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -219,6 +228,16 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasAlternateImages")]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SurfaceHasAlternateImages(SDL_Surface* surface);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasColorKey")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SurfaceHasColorKey(SDL_Surface* surface);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasRLE")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SurfaceHasRLE(SDL_Surface* surface);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_UnlockSurface")]
     internal static partial void UnlockSurface(SDL_Surface* surface);

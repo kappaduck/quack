@@ -46,12 +46,18 @@ internal sealed class Properties : IDisposable
 
     internal void Set(string name, bool value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetBooleanProperty(_id, name, value));
 
-    internal void Set(string name, float value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetFloatProperty(_id, name, value));
+    internal void Set(string name, float value) => Set(_id, name, value);
 
-    internal void Set(string name, int value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetNumberProperty(_id, name, value));
+    internal void Set(string name, int value) => Set(_id, name, value);
 
     internal void Set<T>(string name, T* value) where T : unmanaged
         => SDLThrowHelper.ThrowIfFailed(SDL3.SetPointerProperty(_id, name, value));
 
-    internal void Set(string name, string value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetStringProperty(_id, name, value));
+    internal void Set(string name, string value) => Set(_id, name, value);
+
+    internal static void Set(uint propertiesId, string name, float value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetFloatProperty(propertiesId, name, value));
+
+    internal static void Set(uint propertiesId, string name, int value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetNumberProperty(propertiesId, name, value));
+
+    internal static void Set(uint propertiesId, string name, string value) => SDLThrowHelper.ThrowIfFailed(SDL3.SetStringProperty(propertiesId, name, value));
 }
