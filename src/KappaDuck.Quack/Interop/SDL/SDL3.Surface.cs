@@ -63,7 +63,7 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ConvertPixelsAndColorspace")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool ConvertPixelsAndColorspace(int width, int height, PixelFormat sourceFormat, Colorspace sourceColorSpace, uint sourceProperties, void* source, int sourcePitch, PixelFormat destinationFormat, Colorspace destinationColorSpace, uint destinationProperties, void* destination, int destinationPitch);
+    internal static partial bool ConvertPixelsAndColorspace(int width, int height, PixelFormat sourceFormat, Colorspace sourceColorSpace, uint sourceProperties, ReadOnlySpan<byte> source, int sourcePitch, PixelFormat destinationFormat, Colorspace destinationColorSpace, uint destinationProperties, Span<byte> destination, int destinationPitch);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ConvertSurface")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -118,11 +118,6 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool GetSurfaceBlendMode(SDL_Surface* surface, BlendMode* blendMode);
 
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfaceColorKey")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetSurfaceColorKey(SDL_Surface* surface, uint* key);
-
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetSurfaceColorMod")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -160,7 +155,7 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_PremultiplyAlpha")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool PremultiplyAlpha(int width, int height, PixelFormat sourceFormat, void* source, int sourcePitch, PixelFormat destinationFormat, void* destination, int destinationPitch, [MarshalAs(UnmanagedType.I1)] bool linear);
+    internal static partial bool PremultiplyAlpha(int width, int height, PixelFormat sourceFormat, ReadOnlySpan<byte> source, int sourcePitch, PixelFormat destinationFormat, Span<byte> destination, int destinationPitch, [MarshalAs(UnmanagedType.I1)] bool linear);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_PremultiplySurfaceAlpha")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -224,15 +219,6 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_StretchSurface")]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool StretchSurface(SDL_Surface* source, RectI* sourceRect, SDL_Surface* destination, RectI* destinationRect, ScaleMode mode);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasAlternateImages")]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool SurfaceHasAlternateImages(SDL_Surface* surface);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasColorKey")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool SurfaceHasColorKey(SDL_Surface* surface);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SurfaceHasRLE")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
