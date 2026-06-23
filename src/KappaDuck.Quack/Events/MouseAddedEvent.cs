@@ -9,7 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a new mouse device was connected.
 /// </summary>
-public readonly struct MouseAddedEvent
+public readonly struct MouseAddedEvent : IEvent
 {
     internal MouseAddedEvent(SDL_MouseDeviceEvent e) => Which = e.Which;
 

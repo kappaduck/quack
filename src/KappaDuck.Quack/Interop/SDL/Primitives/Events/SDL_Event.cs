@@ -26,4 +26,7 @@ internal readonly struct SDL_Event
 
     [field: FieldOffset(0)]
     internal SDL_MouseWheelEvent Wheel { get; }
+
+    [field: FieldOffset(0)]
+    internal SDL_DisplayEvent Display { get; }
 }

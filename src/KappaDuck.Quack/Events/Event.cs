@@ -24,6 +24,14 @@ public readonly struct Event : IUnion
     private readonly MouseButtonReleasedEvent _buttonReleasedEvent;
     private readonly MouseMovedEvent _mouseMovedEvent;
     private readonly MouseWheelEvent _wheelEvent;
+    private readonly DisplayAddedEvent _displayAddedEvent;
+    private readonly DisplayRemovedEvent _displayRemovedEvent;
+    private readonly DisplayMovedEvent _displayMovedEvent;
+    private readonly DisplayContentScaleChangedEvent _displayContentScaleChangedEvent;
+    private readonly DisplayCurrentModeChangedEvent _displayCurrentModeChangedEvent;
+    private readonly DisplayDesktopModeChangedEvent _displayDesktopModeChangedEvent;
+    private readonly DisplayOrientationChangedEvent _displayOrientationChangedEvent;
+    private readonly DisplayUsableBoundsChangedEvent _displayUsableBoundsChangedEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -155,6 +163,86 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.MouseWheel;
     }
 
+    /// <summary>
+    /// Initializes a display added event.
+    /// </summary>
+    /// <param name="e">The display added event.</param>
+    public Event(DisplayAddedEvent e)
+    {
+        _displayAddedEvent = e;
+        Type = SDL_EventType.DisplayAdded;
+    }
+
+    /// <summary>
+    /// Initializes a display removed event.
+    /// </summary>
+    /// <param name="e">The display removed event.</param>
+    public Event(DisplayRemovedEvent e)
+    {
+        _displayRemovedEvent = e;
+        Type = SDL_EventType.DisplayRemoved;
+    }
+
+    /// <summary>
+    /// Initializes a display moved event.
+    /// </summary>
+    /// <param name="e">The display moved event.</param>
+    public Event(DisplayMovedEvent e)
+    {
+        _displayMovedEvent = e;
+        Type = SDL_EventType.DisplayMoved;
+    }
+
+    /// <summary>
+    /// Initializes a display content scale changed event.
+    /// </summary>
+    /// <param name="e">The display content scale changed event.</param>
+    public Event(DisplayContentScaleChangedEvent e)
+    {
+        _displayContentScaleChangedEvent = e;
+        Type = SDL_EventType.DisplayContentScaleChanged;
+    }
+
+    /// <summary>
+    /// Initializes a display current mode changed event.
+    /// </summary>
+    /// <param name="e">The display current mode changed event.</param>
+    public Event(DisplayCurrentModeChangedEvent e)
+    {
+        _displayCurrentModeChangedEvent = e;
+        Type = SDL_EventType.DisplayCurrentModeChanged;
+    }
+
+    /// <summary>
+    /// Initializes a display desktop mode changed event.
+    /// </summary>
+    /// <param name="e">The display desktop mode changed event.</param>
+    public Event(DisplayDesktopModeChangedEvent e)
+    {
+        _displayDesktopModeChangedEvent = e;
+        Type = SDL_EventType.DisplayDesktopModeChanged;
+    }
+
+    /// <summary>
+    /// Initializes a display orientation changed event.
+    /// </summary>
+    /// <param name="e">The display orientation changed event.</param>
+    public Event(DisplayOrientationChangedEvent e)
+    {
+        _displayOrientationChangedEvent = e;
+        Type = SDL_EventType.DisplayOrientation;
+    }
+
+    /// <summary>
+    /// Initializes a display usable bounds changed event.
+    /// </summary>
+    /// <param name="e">The display usable bounds changed event.</param>
+    public Event(DisplayUsableBoundsChangedEvent e)
+    {
+        _displayUsableBoundsChangedEvent = e;
+        Type = SDL_EventType.DisplayUsableBoundsChanged;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -181,6 +269,14 @@ public readonly struct Event : IUnion
         SDL_EventType.MouseButtonUp => _buttonReleasedEvent,
         SDL_EventType.MouseMotion => _mouseMovedEvent,
         SDL_EventType.MouseWheel => _wheelEvent,
+        SDL_EventType.DisplayAdded => _displayAddedEvent,
+        SDL_EventType.DisplayRemoved => _displayRemovedEvent,
+        SDL_EventType.DisplayMoved => _displayMovedEvent,
+        SDL_EventType.DisplayContentScaleChanged => _displayContentScaleChangedEvent,
+        SDL_EventType.DisplayCurrentModeChanged => _displayCurrentModeChangedEvent,
+        SDL_EventType.DisplayDesktopModeChanged => _displayDesktopModeChangedEvent,
+        SDL_EventType.DisplayOrientation => _displayOrientationChangedEvent,
+        SDL_EventType.DisplayUsableBoundsChanged => _displayUsableBoundsChangedEvent,
         _ => null
     };
 
@@ -393,6 +489,142 @@ public readonly struct Event : IUnion
         }
 
         e = _wheelEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayAddedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display added event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayAddedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayAddedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayAdded)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayAddedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayRemovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display removed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayRemovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayRemovedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayRemoved)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayRemovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayMovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display moved event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayMovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayMovedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayMoved)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayMovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayContentScaleChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display content scale changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayContentScaleChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayContentScaleChangedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayContentScaleChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayContentScaleChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayCurrentModeChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display current mode changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayCurrentModeChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayCurrentModeChangedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayCurrentModeChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayCurrentModeChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayDesktopModeChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display desktop mode changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayDesktopModeChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayDesktopModeChangedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayDesktopModeChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayDesktopModeChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayOrientationChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display orientation changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayOrientationChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayOrientationChangedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayOrientation)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayOrientationChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="DisplayUsableBoundsChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The display usable bounds changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="DisplayUsableBoundsChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out DisplayUsableBoundsChangedEvent e)
+    {
+        if (Type != SDL_EventType.DisplayUsableBoundsChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _displayUsableBoundsChangedEvent;
         return true;
     }
 }

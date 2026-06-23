@@ -9,7 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a new keyboard device was connected.
 /// </summary>
-public readonly struct KeyboardAddedEvent
+public readonly struct KeyboardAddedEvent : IEvent
 {
     internal KeyboardAddedEvent(SDL_KeyboardDeviceEvent e) => Which = e.Which;
 

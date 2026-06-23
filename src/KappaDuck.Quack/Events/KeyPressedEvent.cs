@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a key has been pressed.
 /// </summary>
-public readonly struct KeyPressedEvent
+public readonly struct KeyPressedEvent : IEvent
 {
     internal KeyPressedEvent(SDL_KeyboardEvent e)
     {

@@ -9,7 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a mouse device was disconnected.
 /// </summary>
-public readonly struct MouseRemovedEvent
+public readonly struct MouseRemovedEvent : IEvent
 {
     internal MouseRemovedEvent(SDL_MouseDeviceEvent e) => Which = e.Which;
 
