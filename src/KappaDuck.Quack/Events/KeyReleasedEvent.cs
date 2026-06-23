@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a key has been released.
 /// </summary>
-public readonly struct KeyReleasedEvent
+public readonly struct KeyReleasedEvent : IEvent
 {
     internal KeyReleasedEvent(SDL_KeyboardEvent e)
     {
