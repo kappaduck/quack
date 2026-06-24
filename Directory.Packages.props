@@ -7,7 +7,7 @@
 
   <ItemGroup Label="Global analyzers">
     <GlobalPackageReference Include="AsyncFixer" Version="2.1.0" />
-    <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15" />
+    <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.7.23" />
     <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.15.0" />
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.27.0.140913" />
   </ItemGroup>
