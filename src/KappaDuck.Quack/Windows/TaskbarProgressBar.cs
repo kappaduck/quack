@@ -23,19 +23,22 @@ public sealed class TaskbarProgressBar : ProgressBar
 
     /// <inheritdoc/>
     protected override void SetState(ProgressState state)
-        => SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowProgressState(_window.NativeHandle, Map(state)));
+        => MainThreadDispatcher.Invoke(() => SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowProgressState(_window.NativeHandle, Map(state))));
 
     /// <inheritdoc/>
     protected override void SetValue(float value)
     {
-        double now = QuackEngine.ElapsedTime.TotalMilliseconds;
+        MainThreadDispatcher.Invoke(() =>
+        {
+            double now = QuackEngine.ElapsedTime.TotalMilliseconds;
 
-        if (value < 1f && now - _lastAppliedMilliseconds < ThrottleInMilliseconds)
-            return;
+            if (value < 1f && now - _lastAppliedMilliseconds < ThrottleInMilliseconds)
+                return;
 
-        _lastAppliedMilliseconds = now;
+            _lastAppliedMilliseconds = now;
 
-        SDL3.SetWindowProgressValue(_window.NativeHandle, value);
+            SDL3.SetWindowProgressValue(_window.NativeHandle, value);
+        });
     }
 
     private static SDL_ProgressState Map(ProgressState state) => state switch

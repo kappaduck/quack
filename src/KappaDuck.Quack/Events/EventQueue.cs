@@ -234,6 +234,8 @@ public static class EventQueue
     /// <returns><see langword="true"/> if an event was fetched; otherwise, <see langword="false"/> if the timeout elapsed without any events available.</returns>
     public static bool Wait(out Event e, TimeSpan? timeout = null)
     {
+        MainThreadDispatcher.Drain();
+
         SDL_Event native;
 
         if (!timeout.HasValue || timeout == Timeout.InfiniteTimeSpan)
