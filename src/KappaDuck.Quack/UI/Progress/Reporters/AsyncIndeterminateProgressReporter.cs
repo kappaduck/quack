@@ -5,7 +5,7 @@ namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Asynchronous indeterminate progress reporter handed to
-/// <see cref="ProgressBar.StartIndeterminateAsync(Func{AsyncIndeterminateProgressReporter, ValueTask})"/>.
+/// <see cref="ProgressBar.StartIndeterminateAsync(Func{AsyncIndeterminateProgressReporter, Task})"/>.
 /// </summary>
 public sealed class AsyncIndeterminateProgressReporter : IDisposable
 {

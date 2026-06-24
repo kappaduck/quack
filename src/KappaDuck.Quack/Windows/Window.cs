@@ -628,6 +628,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     public Size SizeInPixels => new(WidthInPixels, HeightInPixels);
 
     /// <summary>
+    /// Gets the controller for this window's taskbar progress indicator.
+    /// </summary>
+    public TaskbarProgressBar TaskbarProgressBar => field ??= new TaskbarProgressBar(this);
+
+    /// <summary>
     /// Gets or sets the title of the window.
     /// </summary>
     /// <exception cref="QuackInteropException">Failed to set the window title.</exception>

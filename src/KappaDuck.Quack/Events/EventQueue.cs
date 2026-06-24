@@ -108,10 +108,10 @@ public static class EventQueue
     /// <returns><see langword="true"/> if an event was fetched; otherwise, <see langword="false"/>.</returns>
     public static bool Poll(out Event e)
     {
+        MainThreadDispatcher.Drain();
+
         if (!SDL3.PollEvent(out SDL_Event native))
         {
-            MainThreadDispatcher.Drain();
-
             e = default;
             return false;
         }
