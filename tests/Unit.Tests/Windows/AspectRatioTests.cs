@@ -50,7 +50,7 @@ internal sealed class AspectRatioTests
     public async Task ConstructorWithMinimumGreaterThanMaximumThrows(float minimum, float maximum)
     {
         await Assert.That(() => new AspectRatio(minimum, maximum))
-                    .ThrowsExactly<ArgumentException>();
+                    .ThrowsExactly<ArgumentOutOfRangeException>();
     }
 
     [Test]

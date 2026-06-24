@@ -14,18 +14,24 @@ public readonly record struct AspectRatio
     /// </summary>
     /// <param name="minimum">The narrowest permitted ratio, or <c>0</c> to leave it unconstrained.</param>
     /// <param name="maximum">The widest permitted ratio, or <c>0</c> to leave it unconstrained.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="minimum"/> or <paramref name="maximum"/> is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="minimum"/> or <paramref name="maximum"/> is negative or not a finite number.</exception>
     /// <exception cref="ArgumentException">Both bounds are constrained and <paramref name="minimum"/> is greater than <paramref name="maximum"/>.</exception>
     public AspectRatio(float minimum, float maximum)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(minimum);
-        ArgumentOutOfRangeException.ThrowIfNegative(maximum);
+        ThrowIfInvalid(minimum);
+        ThrowIfInvalid(maximum);
 
         if (minimum > 0f && maximum > 0f)
             ArgumentOutOfRangeException.ThrowIfGreaterThan(minimum, maximum);
 
         Minimum = minimum;
         Maximum = maximum;
+
+        static void ThrowIfInvalid(float value, [CallerArgumentExpression(nameof(value))] string? paramName = null)
+        {
+            if (!float.IsFinite(value) || value < 0f)
+                throw new ArgumentOutOfRangeException(paramName, value, "The aspect ratio must be a finite, non-negative number.");
+        }
     }
 
     /// <summary>

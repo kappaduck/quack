@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Interop.SDL.Marshalling;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Pixels;
 using KappaDuck.Quack.Windows;
@@ -54,11 +53,6 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial SDL_Window* GetMouseFocus();
 
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowAspectRatio")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowAspectRatio(SDL_Window* window, out float minAspect, out float maxAspect);
-
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowBordersSize")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -76,41 +70,9 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial SDL_Window* GetWindowFromID(uint id);
 
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowFullscreenMode")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SDL_DisplayMode* GetWindowFullscreenMode(SDL_Window* window);
-
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowID")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial uint GetWindowID(SDL_Window* window);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowKeyboardGrab")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowKeyboardGrab(SDL_Window* window);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowMaximumSize")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowMaximumSize(SDL_Window* window, out int width, out int height);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowMinimumSize")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowMinimumSize(SDL_Window* window, out int width, out int height);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowMouseGrab")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowMouseGrab(SDL_Window* window);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowMouseRect")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial RectI* GetWindowMouseRect(SDL_Window* window);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowOpacity")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial float GetWindowOpacity(SDL_Window* window);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowParent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -133,30 +95,15 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial uint GetWindowProperties(SDL_Window* window);
 
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowRelativeMouseMode")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowRelativeMouseMode(SDL_Window* window);
-
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowSafeArea")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool GetWindowSafeArea(SDL_Window* window, out RectI rect);
 
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowSize")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool GetWindowSize(SDL_Window* window, out int width, out int height);
-
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowSizeInPixels")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool GetWindowSizeInPixels(SDL_Window* window, out int width, out int height);
-
-    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowTitle")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(SDLStringMarshaller))]
-    internal static partial string GetWindowTitle(SDL_Window* window);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HideWindow")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
