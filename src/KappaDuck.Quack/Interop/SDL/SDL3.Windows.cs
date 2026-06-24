@@ -210,6 +210,16 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SetWindowPosition(SDL_Window* window, int x, int y);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowProgressState")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SetWindowProgressState(SDL_Window* window, SDL_ProgressState state);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowProgressValue")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SetWindowProgressValue(SDL_Window* window, float value);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowRelativeMouseMode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]

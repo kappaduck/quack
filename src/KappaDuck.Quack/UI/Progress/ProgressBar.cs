@@ -20,7 +20,7 @@ namespace KappaDuck.Quack.UI.Progress;
 /// <para>
 /// The base is intentionally thread-agnostic: reporting and event raising run on whichever thread calls into
 /// it. Any thread affinity (e.g. marshalling onto a UI/main thread) is a backend concern and belongs in the
-/// overrides. See <see cref="OnProgressChanged(float)"/> and friends for the event hooks.
+/// overrides. See <see cref="OnProgressChanged(ProgressValueEventArgs)"/> and friends for the event hooks.
 /// </para>
 /// </remarks>
 public abstract class ProgressBar : IProgressOperation
@@ -28,6 +28,9 @@ public abstract class ProgressBar : IProgressOperation
     private float _lastValue = -1f;
     private bool _isReporting;
     private bool _isCompleted;
+
+    private bool _isPaused;
+    private ProgressState _activeState = ProgressState.None;
 
     /// <summary>
     /// Occurs when the reporting is cancelled.
@@ -52,24 +55,26 @@ public abstract class ProgressBar : IProgressOperation
     /// <summary>
     /// Raises <see cref="ProgressChanged"/>. Override to control the thread it runs on.
     /// </summary>
-    /// <param name="value">The normalized value.</param>
-    protected virtual void OnProgressChanged(float value) => ProgressChanged?.Invoke(this, new ProgressValueEventArgs(value));
+    /// <param name="e">The event data carrying the normalized value.</param>
+    protected virtual void OnProgressChanged(ProgressValueEventArgs e) => ProgressChanged?.Invoke(this, e);
 
     /// <summary>
     /// Raises <see cref="Completed"/>. Override to control the thread it runs on.
     /// </summary>
-    protected virtual void OnCompleted() => Completed?.Invoke(this, EventArgs.Empty);
+    /// <param name="e">The event data.</param>
+    protected virtual void OnCompleted(EventArgs e) => Completed?.Invoke(this, e);
 
     /// <summary>
     /// Raises <see cref="Cancelled"/>. Override to control the thread it runs on.
     /// </summary>
-    protected virtual void OnCancelled() => Cancelled?.Invoke(this, EventArgs.Empty);
+    /// <param name="e">The event data.</param>
+    protected virtual void OnCancelled(EventArgs e) => Cancelled?.Invoke(this, e);
 
     /// <summary>
     /// Raises <see cref="ErrorOccurred"/>. Override to control the thread it runs on.
     /// </summary>
-    /// <param name="exception">The exception that was caught.</param>
-    protected virtual void OnErrorOccurred(Exception exception) => ErrorOccurred?.Invoke(this, new ProgressErrorEventArgs(exception));
+    /// <param name="e">The event data carrying the caught exception.</param>
+    protected virtual void OnErrorOccurred(ProgressErrorEventArgs e) => ErrorOccurred?.Invoke(this, e);
 
     /// <summary>
     /// Applies a <paramref name="state"/> to the backend.
@@ -123,7 +128,7 @@ public abstract class ProgressBar : IProgressOperation
     /// <param name="total">The value representing 100% of the progress.</param>
     /// <returns>The task representing the asynchronous operation.</returns>
     /// <inheritdoc cref="Start(Action{ProgressReporter}, int)" path="/exception"/>
-    public async ValueTask StartAsync(Func<AsyncProgressReporter, ValueTask> action, int total = 100)
+    public async Task StartAsync(Func<AsyncProgressReporter, Task> action, int total = 100)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(total);
         ThrowHelper.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
@@ -182,7 +187,7 @@ public abstract class ProgressBar : IProgressOperation
     /// <param name="action">The action that performs the progress operation.</param>
     /// <returns>The task representing the asynchronous operation.</returns>
     /// <exception cref="QuackException">A progress report is already in progress.</exception>
-    public async ValueTask StartIndeterminateAsync(Func<AsyncIndeterminateProgressReporter, ValueTask> action)
+    public async Task StartIndeterminateAsync(Func<AsyncIndeterminateProgressReporter, Task> action)
     {
         ThrowHelper.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
 
@@ -216,6 +221,7 @@ public abstract class ProgressBar : IProgressOperation
     {
         _isReporting = false;
         _isCompleted = false;
+        _isPaused = false;
         _lastValue = -1f;
 
         SetValue(0f);
@@ -224,7 +230,7 @@ public abstract class ProgressBar : IProgressOperation
 
     void IProgressOperation.Report(float value)
     {
-        if (_isCompleted)
+        if (_isCompleted || _isPaused)
             return;
 
         float progress = Math.Clamp(value, 0f, 1f);
@@ -235,7 +241,7 @@ public abstract class ProgressBar : IProgressOperation
         _lastValue = progress;
 
         SetValue(progress);
-        OnProgressChanged(progress);
+        OnProgressChanged(new ProgressValueEventArgs(progress));
 
         if (progress >= 1f)
             Complete();
@@ -243,18 +249,38 @@ public abstract class ProgressBar : IProgressOperation
 
     void IProgressOperation.Cancel() => Cancel();
 
+    void IProgressOperation.Pause()
+    {
+        if (!_isReporting || _isCompleted || _isPaused)
+            return;
+
+        _isPaused = true;
+        SetState(ProgressState.Paused);
+    }
+
+    void IProgressOperation.Resume()
+    {
+        if (!_isReporting || _isCompleted || !_isPaused)
+            return;
+
+        _isPaused = false;
+        SetState(_activeState);
+    }
+
     private void BeginReport(ProgressState state)
     {
         _isCompleted = false;
         _isReporting = true;
+        _isPaused = false;
         _lastValue = -1f;
+        _activeState = state;
 
         SetState(state);
     }
 
     private void Cancel()
     {
-        OnCancelled();
+        OnCancelled(EventArgs.Empty);
         Reset();
     }
 
@@ -266,7 +292,7 @@ public abstract class ProgressBar : IProgressOperation
         _isCompleted = true;
         _isReporting = false;
 
-        OnCompleted();
+        OnCompleted(EventArgs.Empty);
         Reset();
     }
 
@@ -275,7 +301,7 @@ public abstract class ProgressBar : IProgressOperation
         _isCompleted = false;
         _isReporting = false;
 
-        OnErrorOccurred(exception);
+        OnErrorOccurred(new ProgressErrorEventArgs(exception));
         SetState(ProgressState.Error);
     }
 }

@@ -58,6 +58,21 @@ public sealed class ProgressReporter
     }
 
     /// <summary>
+    /// Pauses the progress operation, holding the bar at its current value.
+    /// </summary>
+    /// <remarks>
+    /// Switches the bar to <see cref="ProgressState.Paused"/>. Further reporting is ignored until
+    /// <see cref="Resume"/> is called.
+    /// </remarks>
+    public void Pause()
+    {
+        if (_isCancelled)
+            return;
+
+        _operation.Pause();
+    }
+
+    /// <summary>
     /// Reports the absolute current progress.
     /// </summary>
     /// <remarks>
@@ -75,5 +90,16 @@ public sealed class ProgressReporter
 
         _current = Math.Min(current, _total);
         _operation.Report((float)_current / _total);
+    }
+
+    /// <summary>
+    /// Resumes a paused progress operation, returning the bar to its normal state.
+    /// </summary>
+    public void Resume()
+    {
+        if (_isCancelled)
+            return;
+
+        _operation.Resume();
     }
 }

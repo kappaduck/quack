@@ -26,5 +26,10 @@ public enum ProgressState
     /// <summary>
     /// An error state is shown.
     /// </summary>
-    Error = 3
+    Error = 3,
+
+    /// <summary>
+    /// A paused progress value is shown.
+    /// </summary>
+    Paused = 4
 }
