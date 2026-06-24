@@ -80,4 +80,7 @@ public readonly struct DisplayMode
 
     /// <inheritdoc/>
     public override string ToString() => $"{Width}x{Height} {Format} @ {RefreshRate}Hz";
+
+    internal SDL_DisplayMode ToNative()
+        => new(Display.Id, Format, Width, Height, PixelDensity, RefreshRate, RefreshRateNumerator, RefreshRateDenominator);
 }

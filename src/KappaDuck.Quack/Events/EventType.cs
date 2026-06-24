@@ -75,6 +75,78 @@ internal static class EventType
         if (type == typeof(DisplayUsableBoundsChangedEvent))
             return SDL_EventType.DisplayUsableBoundsChanged;
 
+        if (type == typeof(WindowShownEvent))
+            return SDL_EventType.WindowShown;
+
+        if (type == typeof(WindowHiddenEvent))
+            return SDL_EventType.WindowHidden;
+
+        if (type == typeof(WindowExposedEvent))
+            return SDL_EventType.WindowExposed;
+
+        if (type == typeof(WindowMovedEvent))
+            return SDL_EventType.WindowMoved;
+
+        if (type == typeof(WindowResizedEvent))
+            return SDL_EventType.WindowResized;
+
+        if (type == typeof(WindowPixelSizeChangedEvent))
+            return SDL_EventType.WindowPixelSizeChanged;
+
+        if (type == typeof(WindowMinimizedEvent))
+            return SDL_EventType.WindowMinimized;
+
+        if (type == typeof(WindowMaximizedEvent))
+            return SDL_EventType.WindowMaximized;
+
+        if (type == typeof(WindowRestoredEvent))
+            return SDL_EventType.WindowRestored;
+
+        if (type == typeof(WindowMouseEnteredEvent))
+            return SDL_EventType.WindowMouseEnter;
+
+        if (type == typeof(WindowMouseLeftEvent))
+            return SDL_EventType.WindowMouseLeave;
+
+        if (type == typeof(WindowFocusGainedEvent))
+            return SDL_EventType.WindowFocusGained;
+
+        if (type == typeof(WindowFocusLostEvent))
+            return SDL_EventType.WindowFocusLost;
+
+        if (type == typeof(WindowCloseRequestedEvent))
+            return SDL_EventType.WindowCloseRequested;
+
+        if (type == typeof(WindowHitTestEvent))
+            return SDL_EventType.WindowHitTest;
+
+        if (type == typeof(WindowIccProfileChangedEvent))
+            return SDL_EventType.WindowIccProfileChanged;
+
+        if (type == typeof(WindowDisplayChangedEvent))
+            return SDL_EventType.WindowDisplayChanged;
+
+        if (type == typeof(WindowDisplayScaleChangedEvent))
+            return SDL_EventType.WindowDisplayScaleChanged;
+
+        if (type == typeof(WindowSafeAreaChangedEvent))
+            return SDL_EventType.WindowSafeAreaChanged;
+
+        if (type == typeof(WindowOccludedEvent))
+            return SDL_EventType.WindowOccluded;
+
+        if (type == typeof(WindowEnteredFullscreenEvent))
+            return SDL_EventType.WindowEnterFullscreen;
+
+        if (type == typeof(WindowLeftFullscreenEvent))
+            return SDL_EventType.WindowLeaveFullscreen;
+
+        if (type == typeof(WindowDestroyedEvent))
+            return SDL_EventType.WindowDestroyed;
+
+        if (type == typeof(WindowHdrStateChangedEvent))
+            return SDL_EventType.WindowHdrStateChanged;
+
         return None;
     }
 
@@ -102,6 +174,30 @@ internal static class EventType
         SDL_EventType.DisplayDesktopModeChanged => new DisplayDesktopModeChangedEvent(e.Display),
         SDL_EventType.DisplayOrientation => new DisplayOrientationChangedEvent(e.Display),
         SDL_EventType.DisplayUsableBoundsChanged => new DisplayUsableBoundsChangedEvent(e.Display),
+        SDL_EventType.WindowShown => new WindowShownEvent(e.Window),
+        SDL_EventType.WindowHidden => new WindowHiddenEvent(e.Window),
+        SDL_EventType.WindowExposed => new WindowExposedEvent(e.Window),
+        SDL_EventType.WindowMoved => new WindowMovedEvent(e.Window),
+        SDL_EventType.WindowResized => new WindowResizedEvent(e.Window),
+        SDL_EventType.WindowPixelSizeChanged => new WindowPixelSizeChangedEvent(e.Window),
+        SDL_EventType.WindowMinimized => new WindowMinimizedEvent(e.Window),
+        SDL_EventType.WindowMaximized => new WindowMaximizedEvent(e.Window),
+        SDL_EventType.WindowRestored => new WindowRestoredEvent(e.Window),
+        SDL_EventType.WindowMouseEnter => new WindowMouseEnteredEvent(e.Window),
+        SDL_EventType.WindowMouseLeave => new WindowMouseLeftEvent(e.Window),
+        SDL_EventType.WindowFocusGained => new WindowFocusGainedEvent(e.Window),
+        SDL_EventType.WindowFocusLost => new WindowFocusLostEvent(e.Window),
+        SDL_EventType.WindowCloseRequested => new WindowCloseRequestedEvent(e.Window),
+        SDL_EventType.WindowHitTest => new WindowHitTestEvent(e.Window),
+        SDL_EventType.WindowIccProfileChanged => new WindowIccProfileChangedEvent(e.Window),
+        SDL_EventType.WindowDisplayChanged => new WindowDisplayChangedEvent(e.Window),
+        SDL_EventType.WindowDisplayScaleChanged => new WindowDisplayScaleChangedEvent(e.Window),
+        SDL_EventType.WindowSafeAreaChanged => new WindowSafeAreaChangedEvent(e.Window),
+        SDL_EventType.WindowOccluded => new WindowOccludedEvent(e.Window),
+        SDL_EventType.WindowEnterFullscreen => new WindowEnteredFullscreenEvent(e.Window),
+        SDL_EventType.WindowLeaveFullscreen => new WindowLeftFullscreenEvent(e.Window),
+        SDL_EventType.WindowDestroyed => new WindowDestroyedEvent(e.Window),
+        SDL_EventType.WindowHdrStateChanged => new WindowHdrStateChangedEvent(e.Window),
         _ => default
     };
 }

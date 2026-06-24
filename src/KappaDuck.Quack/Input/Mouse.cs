@@ -4,6 +4,8 @@
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Interop.SDL.Primitives;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Input;
 
@@ -12,6 +14,8 @@ namespace KappaDuck.Quack.Input;
 /// </summary>
 public static class Mouse
 {
+    private static MouseMotionTransform? _transform;
+
     /// <summary>
     /// Gets the asynchronous mouse button state and the desktop-relative platform-cursor position of the mouse.
     /// </summary>
@@ -30,6 +34,37 @@ public static class Mouse
         {
             MouseButtonState buttons = SDL3.GetGlobalMouseState(out float x, out float y);
             return new MouseState(buttons, new PointF(x, y));
+        }
+    }
+
+    /// <summary>
+    /// Gets the window-relative position of the cursor, from <see cref="State"/>.
+    /// </summary>
+    public static PointF Position => State.Position;
+
+    /// <summary>
+    /// Gets the mouse movement accumulated since the previous call.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The movement comes from the engine cache, based on the last pump of the event queue.
+    /// To query the platform for immediate mouse state, use <see cref="GlobalState"/>.
+    /// </para>
+    /// <para>
+    /// Each call consumes the accumulator, so an immediate second call returns near-zero. Read it once per frame.
+    /// </para>
+    /// <para>
+    /// It is useful for reducing overhead by processing relative mouse inputs in one go per-frame
+    /// instead of individually per-event, at the expense of losing the order between events within the frame
+    /// (e.g. quickly pressing and releasing a button within the same frame).
+    /// </para>
+    /// </remarks>
+    public static Vector2 RelativeMotion
+    {
+        get
+        {
+            _ = SDL3.GetRelativeMouseState(out float x, out float y);
+            return new Vector2(x, y);
         }
     }
 
@@ -56,11 +91,6 @@ public static class Mouse
     }
 
     /// <summary>
-    /// Gets the window-relative position of the cursor, from <see cref="State"/>.
-    /// </summary>
-    public static PointF Position => State.Position;
-
-    /// <summary>
     /// Gets or sets a value indicating whether the cursor is visible.
     /// </summary>
     /// <exception cref="QuackInteropException">Thrown when failed to change the cursor visibility.</exception>
@@ -68,30 +98,6 @@ public static class Mouse
     {
         get => SDL3.CursorVisible();
         set => SDLThrowHelper.ThrowIfFailed(value ? SDL3.ShowCursor() : SDL3.HideCursor());
-    }
-
-    /// <summary>
-    /// Reads the mouse movement accumulated since the previous call.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// The movement comes from the engine cache, based on the last pump of the event queue.
-    /// To query the platform for immediate mouse state, use <see cref="GlobalState"/>.
-    /// </para>
-    /// <para>
-    /// Each call consumes the accumulator, so an immediate second call returns near-zero. Read it once per frame.
-    /// </para>
-    /// <para>
-    /// It is useful for reducing overhead by processing relative mouse inputs in one go per-frame
-    /// instead of individually per-event, at the expense of losing the order between events within the frame
-    /// (e.g. quickly pressing and releasing a button within the same frame).
-    /// </para>
-    /// </remarks>
-    /// <returns>The movement accumulated since the last call.</returns>
-    public static Vector2 GetRelativeMotion()
-    {
-        _ = SDL3.GetRelativeMouseState(out float x, out float y);
-        return new Vector2(x, y);
     }
 
     /// <summary>
@@ -145,6 +151,31 @@ public static class Mouse
     public static bool IsUp(MouseButton button) => State.IsUp(button);
 
     /// <summary>
+    /// Installs a transform applied to all relative mouse motion, replacing any previous transform.
+    /// </summary>
+    /// <remarks>
+    /// <para>The transform applies process-wide, not to a single window; the window each motion targets is passed to the delegate.</para>
+    /// <para>
+    /// The transform may be invoked on a separate, high-priority thread, so keep it fast and avoid heavy work or
+    /// long-held locks; stalling it can affect the whole system. Pass <see langword="null"/> to remove the current transform.
+    /// </para>
+    /// </remarks>
+    /// <param name="transform">The transform to apply, or <see langword="null"/> to clear it.</param>
+    /// <exception cref="QuackInteropException">Failed to install the transform.</exception>
+    public static void SetRelativeMotionTransform(MouseMotionTransform? transform)
+    {
+        _transform = transform;
+
+        if (transform is null)
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRelativeMouseTransform(null, null));
+            return;
+        }
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRelativeMouseTransform(&OnTransform, null));
+    }
+
+    /// <summary>
     /// Moves the mouse cursor to the given position in global screen space.
     /// </summary>
     /// <remarks>
@@ -167,4 +198,24 @@ public static class Mouse
     /// <param name="position">The position in global screen space.</param>
     /// <exception cref="QuackInteropException">Thrown when failed to warp the mouse.</exception>
     public static void Warp(PointF position) => Warp(position.X, position.Y);
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    private static void OnTransform(void* data, ulong timestamp, SDL_Window* window, uint mouseId, float* x, float* y)
+    {
+        MouseMotionTransform? transform = _transform;
+
+        if (transform is null)
+            return;
+
+        unsafe
+        {
+            float dx = *x;
+            float dy = *y;
+
+            transform(WindowManager.FromHandle(window), mouseId, ref dx, ref dy);
+
+            *x = dx;
+            *y = dy;
+        }
+    }
 }

@@ -35,7 +35,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetPointerProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial nint GetPointerProperty(uint propertiesId, string name, void* defaultValue);
+    internal static partial nint GetPointerProperty(uint propertiesId, string name, nint defaultValue);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetStringProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

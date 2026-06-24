@@ -32,6 +32,30 @@ public readonly struct Event : IUnion
     private readonly DisplayDesktopModeChangedEvent _displayDesktopModeChangedEvent;
     private readonly DisplayOrientationChangedEvent _displayOrientationChangedEvent;
     private readonly DisplayUsableBoundsChangedEvent _displayUsableBoundsChangedEvent;
+    private readonly WindowShownEvent _windowShownEvent;
+    private readonly WindowHiddenEvent _windowHiddenEvent;
+    private readonly WindowExposedEvent _windowExposedEvent;
+    private readonly WindowMovedEvent _windowMovedEvent;
+    private readonly WindowResizedEvent _windowResizedEvent;
+    private readonly WindowPixelSizeChangedEvent _windowPixelSizeChangedEvent;
+    private readonly WindowMinimizedEvent _windowMinimizedEvent;
+    private readonly WindowMaximizedEvent _windowMaximizedEvent;
+    private readonly WindowRestoredEvent _windowRestoredEvent;
+    private readonly WindowMouseEnteredEvent _windowMouseEnteredEvent;
+    private readonly WindowMouseLeftEvent _windowMouseLeftEvent;
+    private readonly WindowFocusGainedEvent _windowFocusGainedEvent;
+    private readonly WindowFocusLostEvent _windowFocusLostEvent;
+    private readonly WindowCloseRequestedEvent _windowCloseRequestedEvent;
+    private readonly WindowHitTestEvent _windowHitTestEvent;
+    private readonly WindowIccProfileChangedEvent _windowIccProfileChangedEvent;
+    private readonly WindowDisplayChangedEvent _windowDisplayChangedEvent;
+    private readonly WindowDisplayScaleChangedEvent _windowDisplayScaleChangedEvent;
+    private readonly WindowSafeAreaChangedEvent _windowSafeAreaChangedEvent;
+    private readonly WindowOccludedEvent _windowOccludedEvent;
+    private readonly WindowEnteredFullscreenEvent _windowEnteredFullscreenEvent;
+    private readonly WindowLeftFullscreenEvent _windowLeftFullscreenEvent;
+    private readonly WindowDestroyedEvent _windowDestroyedEvent;
+    private readonly WindowHdrStateChangedEvent _windowHdrStateChangedEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -243,6 +267,246 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.DisplayUsableBoundsChanged;
     }
 
+    /// <summary>
+    /// Initializes a window shown event.
+    /// </summary>
+    /// <param name="e">The window shown event.</param>
+    public Event(WindowShownEvent e)
+    {
+        _windowShownEvent = e;
+        Type = SDL_EventType.WindowShown;
+    }
+
+    /// <summary>
+    /// Initializes a window hidden event.
+    /// </summary>
+    /// <param name="e">The window hidden event.</param>
+    public Event(WindowHiddenEvent e)
+    {
+        _windowHiddenEvent = e;
+        Type = SDL_EventType.WindowHidden;
+    }
+
+    /// <summary>
+    /// Initializes a window exposed event.
+    /// </summary>
+    /// <param name="e">The window exposed event.</param>
+    public Event(WindowExposedEvent e)
+    {
+        _windowExposedEvent = e;
+        Type = SDL_EventType.WindowExposed;
+    }
+
+    /// <summary>
+    /// Initializes a window moved event.
+    /// </summary>
+    /// <param name="e">The window moved event.</param>
+    public Event(WindowMovedEvent e)
+    {
+        _windowMovedEvent = e;
+        Type = SDL_EventType.WindowMoved;
+    }
+
+    /// <summary>
+    /// Initializes a window resized event.
+    /// </summary>
+    /// <param name="e">The window resized event.</param>
+    public Event(WindowResizedEvent e)
+    {
+        _windowResizedEvent = e;
+        Type = SDL_EventType.WindowResized;
+    }
+
+    /// <summary>
+    /// Initializes a window pixel size changed event.
+    /// </summary>
+    /// <param name="e">The window pixel size changed event.</param>
+    public Event(WindowPixelSizeChangedEvent e)
+    {
+        _windowPixelSizeChangedEvent = e;
+        Type = SDL_EventType.WindowPixelSizeChanged;
+    }
+
+    /// <summary>
+    /// Initializes a window minimized event.
+    /// </summary>
+    /// <param name="e">The window minimized event.</param>
+    public Event(WindowMinimizedEvent e)
+    {
+        _windowMinimizedEvent = e;
+        Type = SDL_EventType.WindowMinimized;
+    }
+
+    /// <summary>
+    /// Initializes a window maximized event.
+    /// </summary>
+    /// <param name="e">The window maximized event.</param>
+    public Event(WindowMaximizedEvent e)
+    {
+        _windowMaximizedEvent = e;
+        Type = SDL_EventType.WindowMaximized;
+    }
+
+    /// <summary>
+    /// Initializes a window restored event.
+    /// </summary>
+    /// <param name="e">The window restored event.</param>
+    public Event(WindowRestoredEvent e)
+    {
+        _windowRestoredEvent = e;
+        Type = SDL_EventType.WindowRestored;
+    }
+
+    /// <summary>
+    /// Initializes a window mouse entered event.
+    /// </summary>
+    /// <param name="e">The window mouse entered event.</param>
+    public Event(WindowMouseEnteredEvent e)
+    {
+        _windowMouseEnteredEvent = e;
+        Type = SDL_EventType.WindowMouseEnter;
+    }
+
+    /// <summary>
+    /// Initializes a window mouse left event.
+    /// </summary>
+    /// <param name="e">The window mouse left event.</param>
+    public Event(WindowMouseLeftEvent e)
+    {
+        _windowMouseLeftEvent = e;
+        Type = SDL_EventType.WindowMouseLeave;
+    }
+
+    /// <summary>
+    /// Initializes a window focus gained event.
+    /// </summary>
+    /// <param name="e">The window focus gained event.</param>
+    public Event(WindowFocusGainedEvent e)
+    {
+        _windowFocusGainedEvent = e;
+        Type = SDL_EventType.WindowFocusGained;
+    }
+
+    /// <summary>
+    /// Initializes a window focus lost event.
+    /// </summary>
+    /// <param name="e">The window focus lost event.</param>
+    public Event(WindowFocusLostEvent e)
+    {
+        _windowFocusLostEvent = e;
+        Type = SDL_EventType.WindowFocusLost;
+    }
+
+    /// <summary>
+    /// Initializes a window close requested event.
+    /// </summary>
+    /// <param name="e">The window close requested event.</param>
+    public Event(WindowCloseRequestedEvent e)
+    {
+        _windowCloseRequestedEvent = e;
+        Type = SDL_EventType.WindowCloseRequested;
+    }
+
+    /// <summary>
+    /// Initializes a window hit test event.
+    /// </summary>
+    /// <param name="e">The window hit test event.</param>
+    public Event(WindowHitTestEvent e)
+    {
+        _windowHitTestEvent = e;
+        Type = SDL_EventType.WindowHitTest;
+    }
+
+    /// <summary>
+    /// Initializes a window icc profile changed event.
+    /// </summary>
+    /// <param name="e">The window icc profile changed event.</param>
+    public Event(WindowIccProfileChangedEvent e)
+    {
+        _windowIccProfileChangedEvent = e;
+        Type = SDL_EventType.WindowIccProfileChanged;
+    }
+
+    /// <summary>
+    /// Initializes a window display changed event.
+    /// </summary>
+    /// <param name="e">The window display changed event.</param>
+    public Event(WindowDisplayChangedEvent e)
+    {
+        _windowDisplayChangedEvent = e;
+        Type = SDL_EventType.WindowDisplayChanged;
+    }
+
+    /// <summary>
+    /// Initializes a window display scale changed event.
+    /// </summary>
+    /// <param name="e">The window display scale changed event.</param>
+    public Event(WindowDisplayScaleChangedEvent e)
+    {
+        _windowDisplayScaleChangedEvent = e;
+        Type = SDL_EventType.WindowDisplayScaleChanged;
+    }
+
+    /// <summary>
+    /// Initializes a window safe area changed event.
+    /// </summary>
+    /// <param name="e">The window safe area changed event.</param>
+    public Event(WindowSafeAreaChangedEvent e)
+    {
+        _windowSafeAreaChangedEvent = e;
+        Type = SDL_EventType.WindowSafeAreaChanged;
+    }
+
+    /// <summary>
+    /// Initializes a window occluded event.
+    /// </summary>
+    /// <param name="e">The window occluded event.</param>
+    public Event(WindowOccludedEvent e)
+    {
+        _windowOccludedEvent = e;
+        Type = SDL_EventType.WindowOccluded;
+    }
+
+    /// <summary>
+    /// Initializes a window entered fullscreen event.
+    /// </summary>
+    /// <param name="e">The window entered fullscreen event.</param>
+    public Event(WindowEnteredFullscreenEvent e)
+    {
+        _windowEnteredFullscreenEvent = e;
+        Type = SDL_EventType.WindowEnterFullscreen;
+    }
+
+    /// <summary>
+    /// Initializes a window left fullscreen event.
+    /// </summary>
+    /// <param name="e">The window left fullscreen event.</param>
+    public Event(WindowLeftFullscreenEvent e)
+    {
+        _windowLeftFullscreenEvent = e;
+        Type = SDL_EventType.WindowLeaveFullscreen;
+    }
+
+    /// <summary>
+    /// Initializes a window destroyed event.
+    /// </summary>
+    /// <param name="e">The window destroyed event.</param>
+    public Event(WindowDestroyedEvent e)
+    {
+        _windowDestroyedEvent = e;
+        Type = SDL_EventType.WindowDestroyed;
+    }
+
+    /// <summary>
+    /// Initializes a window hdr state changed event.
+    /// </summary>
+    /// <param name="e">The window hdr state changed event.</param>
+    public Event(WindowHdrStateChangedEvent e)
+    {
+        _windowHdrStateChangedEvent = e;
+        Type = SDL_EventType.WindowHdrStateChanged;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -277,6 +541,30 @@ public readonly struct Event : IUnion
         SDL_EventType.DisplayDesktopModeChanged => _displayDesktopModeChangedEvent,
         SDL_EventType.DisplayOrientation => _displayOrientationChangedEvent,
         SDL_EventType.DisplayUsableBoundsChanged => _displayUsableBoundsChangedEvent,
+        SDL_EventType.WindowShown => _windowShownEvent,
+        SDL_EventType.WindowHidden => _windowHiddenEvent,
+        SDL_EventType.WindowExposed => _windowExposedEvent,
+        SDL_EventType.WindowMoved => _windowMovedEvent,
+        SDL_EventType.WindowResized => _windowResizedEvent,
+        SDL_EventType.WindowPixelSizeChanged => _windowPixelSizeChangedEvent,
+        SDL_EventType.WindowMinimized => _windowMinimizedEvent,
+        SDL_EventType.WindowMaximized => _windowMaximizedEvent,
+        SDL_EventType.WindowRestored => _windowRestoredEvent,
+        SDL_EventType.WindowMouseEnter => _windowMouseEnteredEvent,
+        SDL_EventType.WindowMouseLeave => _windowMouseLeftEvent,
+        SDL_EventType.WindowFocusGained => _windowFocusGainedEvent,
+        SDL_EventType.WindowFocusLost => _windowFocusLostEvent,
+        SDL_EventType.WindowCloseRequested => _windowCloseRequestedEvent,
+        SDL_EventType.WindowHitTest => _windowHitTestEvent,
+        SDL_EventType.WindowIccProfileChanged => _windowIccProfileChangedEvent,
+        SDL_EventType.WindowDisplayChanged => _windowDisplayChangedEvent,
+        SDL_EventType.WindowDisplayScaleChanged => _windowDisplayScaleChangedEvent,
+        SDL_EventType.WindowSafeAreaChanged => _windowSafeAreaChangedEvent,
+        SDL_EventType.WindowOccluded => _windowOccludedEvent,
+        SDL_EventType.WindowEnterFullscreen => _windowEnteredFullscreenEvent,
+        SDL_EventType.WindowLeaveFullscreen => _windowLeftFullscreenEvent,
+        SDL_EventType.WindowDestroyed => _windowDestroyedEvent,
+        SDL_EventType.WindowHdrStateChanged => _windowHdrStateChangedEvent,
         _ => null
     };
 
@@ -625,6 +913,414 @@ public readonly struct Event : IUnion
         }
 
         e = _displayUsableBoundsChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowShownEvent"/>.
+    /// </summary>
+    /// <param name="e">The window shown event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowShownEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowShownEvent e)
+    {
+        if (Type != SDL_EventType.WindowShown)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowShownEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowHiddenEvent"/>.
+    /// </summary>
+    /// <param name="e">The window hidden event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowHiddenEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowHiddenEvent e)
+    {
+        if (Type != SDL_EventType.WindowHidden)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowHiddenEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowExposedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window exposed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowExposedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowExposedEvent e)
+    {
+        if (Type != SDL_EventType.WindowExposed)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowExposedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowMovedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window moved event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowMovedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowMovedEvent e)
+    {
+        if (Type != SDL_EventType.WindowMoved)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowMovedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowResizedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window resized event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowResizedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowResizedEvent e)
+    {
+        if (Type != SDL_EventType.WindowResized)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowResizedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowPixelSizeChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window pixel size changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowPixelSizeChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowPixelSizeChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowPixelSizeChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowPixelSizeChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowMinimizedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window minimized event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowMinimizedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowMinimizedEvent e)
+    {
+        if (Type != SDL_EventType.WindowMinimized)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowMinimizedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowMaximizedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window maximized event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowMaximizedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowMaximizedEvent e)
+    {
+        if (Type != SDL_EventType.WindowMaximized)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowMaximizedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowRestoredEvent"/>.
+    /// </summary>
+    /// <param name="e">The window restored event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowRestoredEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowRestoredEvent e)
+    {
+        if (Type != SDL_EventType.WindowRestored)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowRestoredEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowMouseEnteredEvent"/>.
+    /// </summary>
+    /// <param name="e">The window mouse entered event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowMouseEnteredEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowMouseEnteredEvent e)
+    {
+        if (Type != SDL_EventType.WindowMouseEnter)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowMouseEnteredEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowMouseLeftEvent"/>.
+    /// </summary>
+    /// <param name="e">The window mouse left event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowMouseLeftEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowMouseLeftEvent e)
+    {
+        if (Type != SDL_EventType.WindowMouseLeave)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowMouseLeftEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowFocusGainedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window focus gained event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowFocusGainedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowFocusGainedEvent e)
+    {
+        if (Type != SDL_EventType.WindowFocusGained)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowFocusGainedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowFocusLostEvent"/>.
+    /// </summary>
+    /// <param name="e">The window focus lost event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowFocusLostEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowFocusLostEvent e)
+    {
+        if (Type != SDL_EventType.WindowFocusLost)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowFocusLostEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowCloseRequestedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window close requested event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowCloseRequestedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowCloseRequestedEvent e)
+    {
+        if (Type != SDL_EventType.WindowCloseRequested)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowCloseRequestedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowHitTestEvent"/>.
+    /// </summary>
+    /// <param name="e">The window hit test event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowHitTestEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowHitTestEvent e)
+    {
+        if (Type != SDL_EventType.WindowHitTest)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowHitTestEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowIccProfileChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window icc profile changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowIccProfileChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowIccProfileChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowIccProfileChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowIccProfileChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowDisplayChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window display changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowDisplayChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowDisplayChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowDisplayChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowDisplayChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowDisplayScaleChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window display scale changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowDisplayScaleChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowDisplayScaleChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowDisplayScaleChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowDisplayScaleChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowSafeAreaChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window safe area changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowSafeAreaChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowSafeAreaChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowSafeAreaChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowSafeAreaChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowOccludedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window occluded event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowOccludedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowOccludedEvent e)
+    {
+        if (Type != SDL_EventType.WindowOccluded)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowOccludedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowEnteredFullscreenEvent"/>.
+    /// </summary>
+    /// <param name="e">The window entered fullscreen event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowEnteredFullscreenEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowEnteredFullscreenEvent e)
+    {
+        if (Type != SDL_EventType.WindowEnterFullscreen)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowEnteredFullscreenEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowLeftFullscreenEvent"/>.
+    /// </summary>
+    /// <param name="e">The window left fullscreen event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowLeftFullscreenEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowLeftFullscreenEvent e)
+    {
+        if (Type != SDL_EventType.WindowLeaveFullscreen)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowLeftFullscreenEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowDestroyedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window destroyed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowDestroyedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowDestroyedEvent e)
+    {
+        if (Type != SDL_EventType.WindowDestroyed)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowDestroyedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="WindowHdrStateChangedEvent"/>.
+    /// </summary>
+    /// <param name="e">The window hdr state changed event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="WindowHdrStateChangedEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out WindowHdrStateChangedEvent e)
+    {
+        if (Type != SDL_EventType.WindowHdrStateChanged)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _windowHdrStateChangedEvent;
         return true;
     }
 }

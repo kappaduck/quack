@@ -29,4 +29,7 @@ internal readonly struct SDL_Event
 
     [field: FieldOffset(0)]
     internal SDL_DisplayEvent Display { get; }
+
+    [field: FieldOffset(0)]
+    internal SDL_WindowEvent Window { get; }
 }
