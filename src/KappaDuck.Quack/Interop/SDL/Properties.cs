@@ -40,7 +40,7 @@ internal sealed class Properties : IDisposable
         return Enum.Parse<T>(value.ToString().AsSpan());
     }
 
-    internal static nint Get(uint propertiesId, string name, void* defaultValue) => SDL3.GetPointerProperty(propertiesId, name, defaultValue);
+    internal static nint Get(uint propertiesId, string name, nint defaultValue) => SDL3.GetPointerProperty(propertiesId, name, defaultValue);
 
     internal static string Get(uint propertiesId, string name, string defaultValue) => SDL3.GetStringProperty(propertiesId, name, defaultValue);
 

@@ -23,18 +23,22 @@ It targets .NET 10+ desktop and web apps, providing a clean and flexible API tha
 ```csharp
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Windows;
 
 using EngineScope _ = QuackEngine.Init(Subsystem.Video);
-using Window window = new("Quack!", 1280, 720);
+
+using Window window = new("Quack!", 1920, 1080)
+{
+    Resizable = true
+};
 
 while (window.IsOpen)
 {
     while (window.Poll(out Event e))
     {
-        if (e is QuitEvent || e is KeyEvent { Key: Key.Escape })
+        if (e is QuitRequestedEvent or KeyPressedEvent { Key: Key.Escape })
         {
-            window.Close();
             return;
         }
     }

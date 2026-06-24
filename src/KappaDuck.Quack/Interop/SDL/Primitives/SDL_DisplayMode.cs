@@ -8,6 +8,18 @@ namespace KappaDuck.Quack.Interop.SDL.Primitives;
 [StructLayout(LayoutKind.Sequential)]
 internal readonly struct SDL_DisplayMode
 {
+    internal SDL_DisplayMode(uint displayId, PixelFormat format, int width, int height, float pixelDensity, float refreshRate, int refreshRateNumerator, int refreshRateDenominator)
+    {
+        DisplayId = displayId;
+        Format = format;
+        Width = width;
+        Height = height;
+        PixelDensity = pixelDensity;
+        RefreshRate = refreshRate;
+        RefreshRateNumerator = refreshRateNumerator;
+        RefreshRateDenominator = refreshRateDenominator;
+    }
+
     internal uint DisplayId { get; }
 
     internal PixelFormat Format { get; }

@@ -15,6 +15,11 @@ dotnet_diagnostic.CA1033.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1028
 dotnet_diagnostic.CA1028.severity = none
 
+# CA1030: Use events where appropriate
+# The warning is a false positive because the method is just named Raise
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1030
+dotnet_diagnostic.CA1030.severity = none
+
 # CA1031: Do not catch general exception types
 # Sometimes we don't know the exception.
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
