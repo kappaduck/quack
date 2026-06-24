@@ -98,7 +98,7 @@ internal sealed class AsyncProgressReporterTests : IDisposable
     {
         await _reporter.CancelAsync();
 
-        await Assert.That(() => _reporter.Increment(-25))
+        await Assert.That(() => _reporter.Increment(25))
                     .ThrowsExactly<OperationCanceledException>();
 
         _operation.Report(Any()).WasNeverCalled();
