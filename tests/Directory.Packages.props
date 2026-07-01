@@ -2,9 +2,9 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))" />
   <ItemGroup Label="Test packages">
     <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.7.0" />
-    <PackageVersion Include="TUnit" Version="1.53.0" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
-    <PackageVersion Include="TUnit.Mocks" Version="1.53.0" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
-    <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.53.0" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+    <PackageVersion Include="TUnit" Version="1.57.17" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+    <PackageVersion Include="TUnit.Mocks" Version="1.57.17" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+    <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.57.17" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
     <PackageVersion Include="TUnit.Assertions.Should" Version="1.53.0-beta" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
   </ItemGroup>
 </Project>
