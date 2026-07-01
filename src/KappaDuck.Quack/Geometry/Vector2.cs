@@ -145,6 +145,11 @@ public struct Vector2(float x, float y) :
     public static Vector2 Zero { get; } = new(0f, 0f);
 
     /// <summary>
+    /// Gets the zero vector (1, 1).
+    /// </summary>
+    public static Vector2 One { get; } = new(1f, 1f);
+
+    /// <summary>
     /// Computes the angle between this vector and another vector.
     /// </summary>
     /// <param name="to">The other vector.</param>
