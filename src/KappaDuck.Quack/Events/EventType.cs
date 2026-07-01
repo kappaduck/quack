@@ -147,6 +147,15 @@ internal static class EventType
         if (type == typeof(WindowHdrStateChangedEvent))
             return SDL_EventType.WindowHdrStateChanged;
 
+        if (type == typeof(RenderTargetsResetEvent))
+            return SDL_EventType.RenderTargetsReset;
+
+        if (type == typeof(RenderDeviceResetEvent))
+            return SDL_EventType.RenderDeviceReset;
+
+        if (type == typeof(RenderDeviceLostEvent))
+            return SDL_EventType.RenderDeviceLost;
+
         return None;
     }
 
@@ -198,6 +207,9 @@ internal static class EventType
         SDL_EventType.WindowLeaveFullscreen => new WindowLeftFullscreenEvent(e.Window),
         SDL_EventType.WindowDestroyed => new WindowDestroyedEvent(e.Window),
         SDL_EventType.WindowHdrStateChanged => new WindowHdrStateChangedEvent(e.Window),
+        SDL_EventType.RenderTargetsReset => new RenderTargetsResetEvent(e.Render),
+        SDL_EventType.RenderDeviceReset => new RenderDeviceResetEvent(e.Render),
+        SDL_EventType.RenderDeviceLost => new RenderDeviceLostEvent(e.Render),
         _ => default
     };
 }
