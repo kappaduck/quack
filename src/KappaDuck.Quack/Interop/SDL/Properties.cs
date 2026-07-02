@@ -50,6 +50,12 @@ internal sealed class Properties : IDisposable
 
     internal void Set(string name, int value) => Set(_id, name, value);
 
+    internal void Set<T>(string name, T value) where T : struct, Enum
+    {
+        object obj = Convert.ChangeType(value, value.GetTypeCode());
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetNumberProperty(_id, name, Convert.ToInt64(obj)));
+    }
+
     internal void Set<T>(string name, T* value) where T : unmanaged
         => SDLThrowHelper.ThrowIfFailed(SDL3.SetPointerProperty(_id, name, value));
 

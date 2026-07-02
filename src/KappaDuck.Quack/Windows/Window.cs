@@ -5,6 +5,7 @@ using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
@@ -561,6 +562,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     }
 
     /// <summary>
+    /// Gets the associated renderer.
+    /// </summary>
+    public Renderer? Renderer { get; private set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the window can be resized by the user.
     /// </summary>
     /// <exception cref="QuackInteropException">Failed to set the resizable state.</exception>
@@ -715,7 +721,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     }
 
     /// <summary>
-    /// Closes the window, releasing its native resources.
+    /// Closes the window.
     /// </summary>
     /// <remarks>The window can be recreated with <see cref="Create(string, int, int)"/>. Has no effect if already closed.</remarks>
     public void Close()
@@ -724,11 +730,9 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             return;
 
         WindowManager.Unregister(this);
-        SDL3.DestroyWindow(NativeHandle);
 
-        NativeHandle = null;
-        _state = State.None;
         Id = 0;
+        _state = State.None;
     }
 
     /// <summary>
@@ -750,7 +754,14 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     }
 
     /// <inheritdoc/>
-    public void Dispose() => Close();
+    public void Dispose()
+    {
+        if (NativeHandle is null)
+            return;
+
+        SDL3.DestroyWindow(NativeHandle);
+        NativeHandle = null;
+    }
 
     /// <summary>
     /// Requests the window to flash to get the user's attention.
@@ -948,6 +959,22 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <inheritdoc/>
     public bool TryFormat(Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => Utf8.TryWrite(utf8Destination, provider, $"Window[{Id}] \"{Title}\" ({_width}x{_height})", out bytesWritten);
+
+    internal void Bind(Renderer renderer)
+    {
+        if (Renderer is not null && !ReferenceEquals(Renderer, renderer))
+            ThrowHelper.ThrowInvalidOperation("This window is already bound to a renderer. Dispose the existing one before creating another.");
+
+        Renderer = renderer;
+    }
+
+    internal void Unbind(Renderer renderer)
+    {
+        if (!ReferenceEquals(Renderer, renderer))
+            return;
+
+        Renderer = null;
+    }
 
     private void ApplyDeferredSettings()
     {
