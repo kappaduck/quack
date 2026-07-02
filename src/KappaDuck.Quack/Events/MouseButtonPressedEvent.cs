@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Input.Devices;
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
+using KappaDuck.Quack.Windows;
 using System.Drawing;
 
 namespace KappaDuck.Quack.Events;
@@ -51,4 +52,9 @@ public readonly struct MouseButtonPressedEvent : IEvent
     /// Gets the mouse device which the button was pressed.
     /// </summary>
     public MouseDevice Device => MouseDevices.FromId(Which);
+
+    /// <summary>
+    /// Gets the window the event is for, or <see langword="null"/> if it cannot be resolved.
+    /// </summary>
+    public Window? Window => WindowManager.FromId(WindowId);
 }

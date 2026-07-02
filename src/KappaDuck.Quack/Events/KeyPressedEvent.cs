@@ -4,6 +4,7 @@
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Input.Devices;
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
+using KappaDuck.Quack.Windows;
 
 namespace KappaDuck.Quack.Events;
 
@@ -56,4 +57,9 @@ public readonly struct KeyPressedEvent : IEvent
     /// Gets the keyboard device which the key is pressed.
     /// </summary>
     public KeyboardDevice Device => KeyboardDevices.FromId(Which);
+
+    /// <summary>
+    /// Gets the window the event is for, or <see langword="null"/> if it cannot be resolved.
+    /// </summary>
+    public Window? Window => WindowManager.FromId(WindowId);
 }

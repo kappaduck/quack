@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Video;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// Constants values for vertical synchronization (VSync) settings.

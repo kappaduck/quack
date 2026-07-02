@@ -56,6 +56,9 @@ public readonly struct Event : IUnion
     private readonly WindowLeftFullscreenEvent _windowLeftFullscreenEvent;
     private readonly WindowDestroyedEvent _windowDestroyedEvent;
     private readonly WindowHdrStateChangedEvent _windowHdrStateChangedEvent;
+    private readonly RenderTargetsResetEvent _renderTargetsResetEvent;
+    private readonly RenderDeviceResetEvent _renderDeviceResetEvent;
+    private readonly RenderDeviceLostEvent _renderDeviceLostEvent;
 
     /// <summary>
     /// Initializes a quit requested event.
@@ -507,6 +510,36 @@ public readonly struct Event : IUnion
         Type = SDL_EventType.WindowHdrStateChanged;
     }
 
+    /// <summary>
+    /// Initializes a render targets reset event.
+    /// </summary>
+    /// <param name="e">The render targets reset event.</param>
+    public Event(RenderTargetsResetEvent e)
+    {
+        _renderTargetsResetEvent = e;
+        Type = SDL_EventType.RenderTargetsReset;
+    }
+
+    /// <summary>
+    /// Initializes a render device reset event.
+    /// </summary>
+    /// <param name="e">The render device reset event.</param>
+    public Event(RenderDeviceResetEvent e)
+    {
+        _renderDeviceResetEvent = e;
+        Type = SDL_EventType.RenderDeviceReset;
+    }
+
+    /// <summary>
+    /// Initializes a render device lost event.
+    /// </summary>
+    /// <param name="e">The render device lost event.</param>
+    public Event(RenderDeviceLostEvent e)
+    {
+        _renderDeviceLostEvent = e;
+        Type = SDL_EventType.RenderDeviceLost;
+    }
+
     internal SDL_EventType Type { get; }
 
     /// <summary>
@@ -565,6 +598,9 @@ public readonly struct Event : IUnion
         SDL_EventType.WindowLeaveFullscreen => _windowLeftFullscreenEvent,
         SDL_EventType.WindowDestroyed => _windowDestroyedEvent,
         SDL_EventType.WindowHdrStateChanged => _windowHdrStateChangedEvent,
+        SDL_EventType.RenderTargetsReset => _renderTargetsResetEvent,
+        SDL_EventType.RenderDeviceReset => _renderDeviceResetEvent,
+        SDL_EventType.RenderDeviceLost => _renderDeviceLostEvent,
         _ => null
     };
 
@@ -1321,6 +1357,57 @@ public readonly struct Event : IUnion
         }
 
         e = _windowHdrStateChangedEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="RenderTargetsResetEvent"/>.
+    /// </summary>
+    /// <param name="e">The render targets reset event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="RenderTargetsResetEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out RenderTargetsResetEvent e)
+    {
+        if (Type != SDL_EventType.RenderTargetsReset)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _renderTargetsResetEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="RenderDeviceResetEvent"/>.
+    /// </summary>
+    /// <param name="e">The render device reset event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="RenderDeviceResetEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out RenderDeviceResetEvent e)
+    {
+        if (Type != SDL_EventType.RenderDeviceReset)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _renderDeviceResetEvent;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve this event as a <see cref="RenderDeviceLostEvent"/>.
+    /// </summary>
+    /// <param name="e">The render device lost event.</param>
+    /// <returns><see langword="true"/> if this event holds a <see cref="RenderDeviceLostEvent"/>; otherwise <see langword="false"/></returns>
+    public bool TryGetValue(out RenderDeviceLostEvent e)
+    {
+        if (Type != SDL_EventType.RenderDeviceLost)
+        {
+            e = default;
+            return false;
+        }
+
+        e = _renderDeviceLostEvent;
         return true;
     }
 }

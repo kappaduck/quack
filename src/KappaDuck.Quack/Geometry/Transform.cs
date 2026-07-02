@@ -97,10 +97,12 @@ public readonly struct Transform : IEquatable<Transform>
         PointF b = TransformPoint(new(rect.X + rect.Width, rect.Y));
         PointF c = TransformPoint(new(rect.X, rect.Y + rect.Height));
         PointF d = TransformPoint(new(rect.X + rect.Width, rect.Y + rect.Height));
+
         float minX = MathF.Min(MathF.Min(a.X, b.X), MathF.Min(c.X, d.X));
         float minY = MathF.Min(MathF.Min(a.Y, b.Y), MathF.Min(c.Y, d.Y));
         float maxX = MathF.Max(MathF.Max(a.X, b.X), MathF.Max(c.X, d.X));
         float maxY = MathF.Max(MathF.Max(a.Y, b.Y), MathF.Max(c.Y, d.Y));
+
         return new(minX, minY, maxX - minX, maxY - minY);
     }
 
@@ -168,13 +170,13 @@ public readonly struct Transform : IEquatable<Transform>
     /// <param name="left">The first transform.</param>
     /// <param name="right">The second transform.</param>
     /// <returns><see langword="true"/> if the transforms are exactly equal; otherwise <see langword="false"/>.</returns>
-    public static bool operator ==(in Transform left, in Transform right) => left.Equals(right);
+    public static bool operator ==(Transform left, Transform right) => left.Equals(right);
 
     /// <summary>Determines whether two transforms differ.</summary>
     /// <param name="left">The first transform.</param>
     /// <param name="right">The second transform.</param>
     /// <returns><see langword="true"/> if the transforms differ; otherwise <see langword="false"/>.</returns>
-    public static bool operator !=(in Transform left, in Transform right) => !left.Equals(right);
+    public static bool operator !=(Transform left, Transform right) => !(left == right);
 
     private static Numerics.Vector2 ToNumerics(PointF point) => new(point.X, point.Y);
 

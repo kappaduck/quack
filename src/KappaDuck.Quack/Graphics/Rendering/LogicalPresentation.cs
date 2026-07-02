@@ -1,10 +1,10 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Video;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
-/// Types of logical presentations for display content.
+/// How the logical size is mapped to the output.
 /// </summary>
 public enum LogicalPresentation
 {
