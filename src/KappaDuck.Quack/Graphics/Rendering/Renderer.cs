@@ -534,6 +534,27 @@ public sealed class Renderer : IDisposable
         SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(_handle));
     }
 
+    /// <summary>
+    /// Creates an empty texture of the given size.
+    /// </summary>
+    /// <param name="size">The size of the texture in pixels.</param>
+    /// <param name="format">The pixel format of the texture.</param>
+    /// <param name="access">How the texture's pixels may be accessed after creation.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
+    public Texture CreateTexture(Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
+    {
+        ThrowIfDisposed();
+
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);
+
+        SDL_Texture* texture = SDL3.CreateTexture(_handle, format, access, size.Width, size.Height);
+        SDLThrowHelper.ThrowIfNull(texture);
+
+        return new(texture);
+    }
+
     /// <inheritdoc/>
     public void Dispose()
     {
@@ -645,6 +666,141 @@ public sealed class Renderer : IDisposable
     }
 
     /// <summary>
+    /// Draws a texture, or a region of it, onto the current target.
+    /// </summary>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="destination">The rectangle to draw into, in render coordinates, or <see langword="null"/> to fill the entire target.</param>
+    /// <param name="source">The region of the texture to draw, or <see langword="null"/> to draw the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public void Draw(Texture texture, Rect? destination = null, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        Rect dst = destination.GetValueOrDefault();
+
+        Rect* sourceRect = source.HasValue ? &src : null;
+        Rect* destinationRect = destination.HasValue ? &dst : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture(_handle, texture.Handle, sourceRect, destinationRect));
+    }
+
+    /// <summary>
+    /// Draws a texture into a destination rectangle with rotation and optional flipping.
+    /// </summary>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="destination">The rectangle to draw into, in render coordinates.</param>
+    /// <param name="angle">The clockwise rotation, applied around <paramref name="center"/>.</param>
+    /// <param name="center">The point to rotate around, relative to the top-left of <paramref name="destination"/>, or <see langword="null"/> to rotate around its center.</param>
+    /// <param name="flip">The axes to flip the texture along before drawing.</param>
+    /// <param name="source">The region of the texture to draw, or <see langword="null"/> to draw the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public void Draw(Texture texture, Rect destination, Angle angle, PointF? center = null, FlipMode flip = FlipMode.None, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        PointF pivot = center.GetValueOrDefault();
+
+        Rect* sourceRect = source.HasValue ? &src : null;
+        PointF* centerPoint = center.HasValue ? &pivot : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureRotated(_handle, texture.Handle, sourceRect, &destination, angle.Degrees, centerPoint, flip));
+    }
+
+    /// <summary>
+    /// Draws a texture repeated to fill a destination rectangle.
+    /// </summary>
+    /// <param name="texture">The texture to tile.</param>
+    /// <param name="destination">The rectangle to fill, in render coordinates.</param>
+    /// <param name="scale">The scale applied to the texture before tiling; 1 tiles it at its natural size.</param>
+    /// <param name="source">The region of the texture to tile, or <see langword="null"/> to tile the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public void DrawTiled(Texture texture, Rect destination, float scale = 1.0f, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        Rect* sourceRect = source.HasValue ? &src : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureTiled(_handle, texture.Handle, sourceRect, scale, &destination));
+    }
+
+    /// <summary>
+    /// Draws a texture transformed by an affine mapping defined by three corners.
+    /// </summary>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="origin">Where the top-left corner of the texture is mapped to, in render coordinates.</param>
+    /// <param name="right">Where the top-right corner of the texture is mapped to, in render coordinates.</param>
+    /// <param name="down">Where the bottom-left corner of the texture is mapped to, in render coordinates.</param>
+    /// <param name="source">The region of the texture to draw, or <see langword="null"/> to draw the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public void DrawAffine(Texture texture, PointF origin, PointF right, PointF down, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        Rect* sourceRect = source.HasValue ? &src : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureAffine(_handle, texture.Handle, sourceRect, &origin, &right, &down));
+    }
+
+    /// <summary>
+    /// Draws a texture as a nine-patch, keeping its corners unscaled while the edges and center stretch to fill a destination rectangle.
+    /// </summary>
+    /// <remarks>Useful for resizable UI panels and buttons that should keep crisp corners.</remarks>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="destination">The rectangle to fill, in render coordinates.</param>
+    /// <param name="leftWidth">The width of the left corners, in texture pixels.</param>
+    /// <param name="rightWidth">The width of the right corners, in texture pixels.</param>
+    /// <param name="topHeight">The height of the top corners, in texture pixels.</param>
+    /// <param name="bottomHeight">The height of the bottom corners, in texture pixels.</param>
+    /// <param name="scale">The scale applied to the corner sizes, or 0 to copy them unscaled.</param>
+    /// <param name="source">The region of the texture to use, or <see langword="null"/> to use the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public void DrawNineGrid(Texture texture, Rect destination, float leftWidth, float rightWidth, float topHeight, float bottomHeight, float scale = 0.0f, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        Rect* sourceRect = source.HasValue ? &src : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9Grid(_handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination));
+    }
+
+    /// <summary>
+    /// Draws a texture as a nine-patch whose edges and center are tiled rather than stretched to fill a destination rectangle.
+    /// </summary>
+    /// <param name="texture">The texture to draw.</param>
+    /// <param name="destination">The rectangle to fill, in render coordinates.</param>
+    /// <param name="leftWidth">The width of the left corners, in texture pixels.</param>
+    /// <param name="rightWidth">The width of the right corners, in texture pixels.</param>
+    /// <param name="topHeight">The height of the top corners, in texture pixels.</param>
+    /// <param name="bottomHeight">The height of the bottom corners, in texture pixels.</param>
+    /// <param name="scale">The scale applied to the corner sizes, or 0 to copy them unscaled.</param>
+    /// <param name="tileScale">The scale applied to the tiled edges and center; 1 tiles them at their natural size.</param>
+    /// <param name="source">The region of the texture to use, or <see langword="null"/> to use the whole texture.</param>
+    /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public void DrawNineGridTiled(Texture texture, Rect destination, float leftWidth, float rightWidth, float topHeight, float bottomHeight, float scale = 0.0f, float tileScale = 1.0f, Rect? source = null)
+    {
+        ThrowIfDisposed();
+
+        Rect src = source.GetValueOrDefault();
+        Rect* sourceRect = source.HasValue ? &src : null;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9GridTiled(_handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination, tileScale));
+    }
+
+    /// <summary>
     /// Draws a single line of debug text using the built-in 8x8 font.
     /// </summary>
     /// <remarks>
@@ -675,6 +831,50 @@ public sealed class Renderer : IDisposable
     {
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(SDL3.FlushRenderer(_handle));
+    }
+
+    /// <summary>
+    /// Creates a texture from an existing surface.
+    /// </summary>
+    /// <param name="surface">The source pixels. The surface is copied and may be disposed afterward.</param>
+    /// <returns>The created texture.</returns>
+    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
+    public Texture FromSurface(Surface surface)
+    {
+        SDL_Texture* texture = SDL3.CreateTextureFromSurface(_handle, surface.Handle);
+        SDLThrowHelper.ThrowIfNull(texture);
+
+        return new(texture);
+    }
+
+    /// <summary>
+    /// Loads an image file into a texture. The format is detected from the file contents.
+    /// </summary>
+    /// <param name="path">The path to the image file.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public Texture Load(string path)
+    {
+        SDL_Texture* texture = SDL3_image.LoadTexture(_handle, path);
+        SDLThrowHelper.ThrowIfNull(texture);
+
+        return new Texture(texture);
+    }
+
+    /// <summary>
+    /// Loads an image from a stream into a texture.
+    /// </summary>
+    /// <param name="stream">The stream to read the image from.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public Texture Load(Stream stream)
+    {
+        using IOStream source = IOStream.FromStream(stream);
+
+        SDL_Texture* texture = SDL3_image.LoadTexture(_handle, source.Handle, false);
+        SDLThrowHelper.ThrowIfNull(texture);
+
+        return new Texture(texture);
     }
 
     /// <summary>
@@ -754,6 +954,23 @@ public sealed class Renderer : IDisposable
 
         SDLThrowHelper.ThrowIfNull(surface);
         return new Surface(surface);
+    }
+
+    /// <summary>
+    /// Redirects drawing into <paramref name="texture"/> until the returned scope is disposed.
+    /// </summary>
+    /// <remarks>
+    /// The texture must have been created with <see cref="TextureAccess.Target"/>. Drawing commands issued while the
+    /// scope is alive render into the texture instead of the window; dispose the scope to restore the previous target.
+    /// </remarks>
+    /// <param name="texture">The texture to draw into.</param>
+    /// <returns>A scope that restores the previous render target when disposed.</returns>
+    /// <exception cref="QuackInteropException">Failed to set the render target.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public RenderTargetScope Target(Texture texture)
+    {
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTarget(_handle, texture.Handle));
+        return new RenderTargetScope(_handle);
     }
 
     /// <summary>

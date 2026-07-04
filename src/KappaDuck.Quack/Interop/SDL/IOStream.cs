@@ -8,21 +8,20 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
 {
-    private SDL_IOStream* _stream = stream;
+    public SDL_IOStream* Handle { get; private set; } = stream;
 
     public void Dispose()
     {
-        if (_stream is null)
+        if (Handle is null)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.CloseIO(_stream));
-        _stream = null;
+        SDLThrowHelper.ThrowIfFailed(SDL3.CloseIO(Handle));
+        Handle = null;
     }
 
-    internal static IOStream FromStream(Stream stream, bool leaveOpen = true)
+    internal static IOStream FromStream(Stream stream)
     {
-        StreamState state = new(stream, leaveOpen);
-        GCHandle handle = GCHandle.Alloc(state);
+        GCHandle handle = GCHandle.Alloc(stream);
 
         SDL_IOStreamInterface callbacks = new()
         {
@@ -142,30 +141,10 @@ internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
     private static byte CloseCallback(void* data)
     {
         GCHandle handle = GCHandle.FromIntPtr((nint)data);
+        handle.Free();
 
-        try
-        {
-            if (handle.Target is StreamState { LeaveOpen: false, Stream: Stream stream })
-                stream.Dispose();
-
-            return 1;
-        }
-        catch
-        {
-            return 0;
-        }
-        finally
-        {
-            handle.Free();
-        }
+        return 1;
     }
 
-    private static Stream GetStream(void* data) => ((StreamState)GCHandle.FromIntPtr((nint)data).Target!).Stream;
-
-    private sealed class StreamState(Stream stream, bool leaveOpen)
-    {
-        internal Stream Stream { get; } = stream;
-
-        internal bool LeaveOpen { get; } = leaveOpen;
-    }
+    private static Stream GetStream(void* data) => (Stream)GCHandle.FromIntPtr((nint)data).Target!;
 }
