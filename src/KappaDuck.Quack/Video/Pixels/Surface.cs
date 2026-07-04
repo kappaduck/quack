@@ -66,6 +66,8 @@ public sealed class Surface : IDisposable
 
         Handle = surface;
         _owned = owned;
+
+        _properties = SDL3.GetSurfaceProperties(Handle);
     }
 
     private Surface(SDL_Surface* surface, MemoryHandle handle)
@@ -73,6 +75,8 @@ public sealed class Surface : IDisposable
         Handle = surface;
         _owned = true;
         _pixels = handle;
+
+        _properties = SDL3.GetSurfaceProperties(Handle);
     }
 
     /// <summary>
