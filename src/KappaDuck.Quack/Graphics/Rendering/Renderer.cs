@@ -9,6 +9,7 @@ using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
 using KappaDuck.Quack.Video.Pixels;
 using KappaDuck.Quack.Windows;
+using System.Buffers;
 using System.ComponentModel;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
@@ -20,8 +21,10 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// A window can host only one renderer or surface at a time; creating a renderer binds the
 /// window until the renderer is disposed.
 /// </remarks>
-public sealed class Renderer : IDisposable
+public sealed class Renderer : IRenderTarget, IDisposable
 {
+    private const int MaxStackVertices = 64;
+
     private SDL_Renderer* _handle;
     private Window? _window;
 
@@ -377,7 +380,7 @@ public sealed class Renderer : IDisposable
     }
 
     /// <summary>
-    /// Gets or sets the texture addressing mode used in <see cref="Draw(ReadOnlySpan{Vertex})"/> or <see cref="Draw(ReadOnlySpan{Vertex}, ReadOnlySpan{int})"/>.
+    /// Gets or sets the texture addressing mode used in <see cref="Draw(ReadOnlySpan{Vertex}, RenderState)"/> or <see cref="Draw(ReadOnlySpan{Vertex}, ReadOnlySpan{int}, RenderState)"/>.
     /// </summary>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
     public (TextureAddressMode Horizontal, TextureAddressMode Vertical) TextureAddressMode
@@ -568,26 +571,21 @@ public sealed class Renderer : IDisposable
         _handle = null;
     }
 
-    /// <summary>
-    /// Draws the vertices to the render target.
-    /// </summary>
-    /// <param name="vertices">The vertices to draw to the render target.</param>
-    public void Draw(ReadOnlySpan<Vertex> vertices)
+    /// <inheritdoc/>
+    public void Draw(IDrawable drawable) => Draw(drawable, RenderState.Default);
+
+    /// <inheritdoc/>
+    public void Draw(IDrawable drawable, RenderState state)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.UnsafeRenderGeometry(_handle, null, vertices, vertices.Length, null, 0));
+        drawable.Draw(this, state);
     }
 
-    /// <summary>
-    /// Draws the vertices to the render target.
-    /// </summary>
-    /// <param name="vertices">The vertices to draw to the render target.</param>
-    /// <param name="indices">The indices to draw the vertices in the correct order.</param>
-    public void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
-    {
-        ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderGeometry(_handle, null, vertices, vertices.Length, indices, indices.Length));
-    }
+    /// <inheritdoc/>
+    public void Draw(ReadOnlySpan<Vertex> vertices, RenderState state) => DrawGeometry(vertices, [], state);
+
+    /// <inheritdoc/>
+    public void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices, RenderState state) => DrawGeometry(vertices, indices, state);
 
     /// <summary>
     /// Draws a single point.
@@ -991,6 +989,49 @@ public sealed class Renderer : IDisposable
     {
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(_handle, color.R, color.G, color.B, color.A));
+    }
+
+    private void DrawGeometry(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices, RenderState state)
+    {
+        ThrowIfDisposed();
+
+        BlendMode = state.BlendMode;
+        SDL_Texture* texture = state.Texture?.Handle;
+
+        if (state.Transform == Transform.Identity || state.Transform == default)
+        {
+            Submit(texture, vertices, indices);
+            return;
+        }
+
+        int count = vertices.Length;
+
+        Vertex[]? rented = count > MaxStackVertices ? ArrayPool<Vertex>.Shared.Rent(count) : null;
+        Span<Vertex> transformed = rented ?? stackalloc Vertex[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            Vertex vertex = vertices[i];
+            vertex.Position = state.Transform.TransformPoint(vertex.Position);
+
+            transformed[i] = vertex;
+        }
+
+        Submit(texture, transformed, indices);
+
+        if (rented is not null)
+            ArrayPool<Vertex>.Shared.Return(rented);
+    }
+
+    private void Submit(SDL_Texture* texture, ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
+    {
+        if (indices.IsEmpty)
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3.UnsafeRenderGeometry(_handle, texture, vertices, vertices.Length, null, 0));
+            return;
+        }
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderGeometry(_handle, texture, vertices, vertices.Length, indices, indices.Length));
     }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_handle is null, typeof(Renderer));
