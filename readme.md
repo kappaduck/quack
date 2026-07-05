@@ -23,25 +23,26 @@ It targets .NET 10+ desktop and web apps, providing a clean and flexible API tha
 ```csharp
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Input;
+using KappaDuck.Quack.Video.Pixels;
 using KappaDuck.Quack.Windows;
 
 using EngineScope _ = QuackEngine.Init(Subsystem.Video);
 
-using Window window = new("Quack!", 1920, 1080)
-{
-    Resizable = true
-};
+using Window window = new("Quack!", 1920, 1080) { Resizable = true };
+using Renderer renderer = new(window);
 
 while (window.IsOpen)
 {
     while (window.Poll(out Event e))
     {
         if (e is QuitRequestedEvent or KeyPressedEvent { Key: Key.Escape })
-        {
             return;
-        }
     }
+
+    renderer.Clear(Colors.Black);
+    renderer.Present();
 }
 ```
 
@@ -102,7 +103,7 @@ During active development, `KappaDuck.Quack` references the **pre-release** vers
 
 |  Quack!  |    Runtimes    |   SDL3   | SDL_image | SDL_ttf | SDL_mixer |
 | :------: | :------------: | :------: | :-------: | :-----: | :-------: |
-| `source` | `0.1.0-beta.2` | `3.4.10` |  `3.4.4`  | `3.2.2` |  `3.2.2`  |
+| `source` | `0.1.0-beta.4` | `3.4.12` |  `3.4.4`  | `3.2.2` |  `3.2.4`  |
 
 ## Development & Sandbox
 
@@ -129,20 +130,19 @@ The sandbox project requires at least one `.cs` file to compile. All `.cs` files
 ```csharp
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
+using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Windows;
 
 using EngineScope _ = QuackEngine.Init(Subsystem.Video);
-using Window window = new("Quack! Sandbox", 1280, 720);
+
+using Window window = new("Quack!", 1920, 1080) { Resizable = true };
 
 while (window.IsOpen)
 {
     while (window.Poll(out Event e))
     {
-        if (e is QuitEvent || e is KeyEvent { Key: Key.Escape })
-        {
-            window.Close();
+        if (e is QuitRequestedEvent or KeyPressedEvent { Key: Key.Escape })
             return;
-        }
     }
 }
 ```
