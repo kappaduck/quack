@@ -91,16 +91,6 @@ public static class Mouse
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the cursor is visible.
-    /// </summary>
-    /// <exception cref="QuackInteropException">Thrown when failed to change the cursor visibility.</exception>
-    public static bool Visible
-    {
-        get => SDL3.CursorVisible();
-        set => SDLThrowHelper.ThrowIfFailed(value ? SDL3.ShowCursor() : SDL3.HideCursor());
-    }
-
-    /// <summary>
     /// Capture the mouse and to track input outside the window.
     /// </summary>
     /// <remarks>
@@ -151,6 +141,12 @@ public static class Mouse
     public static bool IsUp(MouseButton button) => State.IsUp(button);
 
     /// <summary>
+    /// Changes the active cursor.
+    /// </summary>
+    /// <param name="cursor">The new active cursor to set</param>
+    public static void SetCursor(Cursor cursor) => SDL3.SetCursor(cursor.Handle);
+
+    /// <summary>
     /// Installs a transform applied to all relative mouse motion, replacing any previous transform.
     /// </summary>
     /// <remarks>
@@ -174,6 +170,11 @@ public static class Mouse
 
         SDLThrowHelper.ThrowIfFailed(SDL3.SetRelativeMouseTransform(&OnTransform, null));
     }
+
+    /// <summary>
+    /// Reset the active cursor to <see cref="Cursor.Default"/>
+    /// </summary>
+    public static void ResetCursor() => SetCursor(Cursor.Default);
 
     /// <summary>
     /// Moves the mouse cursor to the given position in global screen space.
