@@ -61,4 +61,13 @@ internal sealed class ThrowHelperTests
                     .ThrowsExactly<FormatException>()
                     .WithMessage("message");
     }
+
+    [Test]
+    public async Task ThrowFileNotFoundShouldThrowFormatException()
+    {
+        await Assert.That(() => ThrowHelper.ThrowFileNotFound("message", "path"))
+                    .ThrowsExactly<FileNotFoundException>()
+                    .WithMessage("message")
+                    .And.HasProperty(c => c.FileName, "path");
+    }
 }

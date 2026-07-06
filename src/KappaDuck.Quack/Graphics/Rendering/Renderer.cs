@@ -25,7 +25,6 @@ public sealed class Renderer : IRenderTarget, IDisposable
 {
     private const int MaxStackVertices = 64;
 
-    private SDL_Renderer* _handle;
     private Window? _window;
 
     /// <summary>
@@ -45,8 +44,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
         try
         {
-            _handle = SDL3.CreateRenderer(window.NativeHandle, driver);
-            SDLThrowHelper.ThrowIfNull(_handle);
+            Handle = SDL3.CreateRenderer(window.NativeHandle, driver);
+            SDLThrowHelper.ThrowIfNull(Handle);
         }
         catch
         {
@@ -79,8 +78,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
             properties.Set("SDL.renderer.create.present_vsync", options.VSync);
             properties.Set("SDL.renderer.create.output_colorspace", options.Colorspace);
 
-            _handle = SDL3.CreateRendererWithProperties(properties);
-            SDLThrowHelper.ThrowIfNull(_handle);
+            Handle = SDL3.CreateRendererWithProperties(properties);
+            SDLThrowHelper.ThrowIfNull(Handle);
         }
         catch
         {
@@ -106,7 +105,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawBlendMode(_handle, value));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawBlendMode(Handle, value));
 
             field = value;
         }
@@ -129,7 +128,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             Rect rect;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderLogicalPresentationRect(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderLogicalPresentationRect(Handle, &rect));
 
             return rect;
         }
@@ -154,12 +153,12 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
             if (value is null)
             {
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderClipRect(_handle, null));
+                SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderClipRect(Handle, null));
                 return;
             }
 
             RectI rect = value.Value;
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderClipRect(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderClipRect(Handle, &rect));
 
             field = value;
         }
@@ -187,14 +186,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             float scale;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderColorScale(_handle, &scale));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderColorScale(Handle, &scale));
 
             return scale;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderColorScale(_handle, value));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderColorScale(Handle, value));
         }
     }
 
@@ -210,7 +209,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             int width, height;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetCurrentRenderOutputSize(_handle, &width, &height));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetCurrentRenderOutputSize(Handle, &width, &height));
 
             return new Size(width, height);
         }
@@ -228,14 +227,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             ScaleMode mode;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetDefaultTextureScaleMode(_handle, &mode));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetDefaultTextureScaleMode(Handle, &mode));
 
             return mode;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetDefaultTextureScaleMode(_handle, value));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetDefaultTextureScaleMode(Handle, value));
         }
     }
 
@@ -250,7 +249,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         {
             ThrowIfDisposed();
 
-            string? driver = SDL3.GetRendererName(_handle);
+            string? driver = SDL3.GetRendererName(Handle);
             SDLThrowHelper.ThrowIfNull(driver);
 
             return driver;
@@ -284,7 +283,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             int width, height;
             LogicalPresentation mode;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderLogicalPresentation(_handle, &width, &height, &mode));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderLogicalPresentation(Handle, &width, &height, &mode));
             return (width, height, mode);
         }
         set
@@ -294,7 +293,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ArgumentOutOfRangeException.ThrowIfNegative(value.Width);
             ArgumentOutOfRangeException.ThrowIfNegative(value.Height);
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderLogicalPresentation(_handle, value.Width, value.Height, value.Mode));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderLogicalPresentation(Handle, value.Width, value.Height, value.Mode));
         }
     }
 
@@ -313,7 +312,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             int width, height;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderOutputSize(_handle, &width, &height));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderOutputSize(Handle, &width, &height));
 
             return new Size(width, height);
         }
@@ -336,7 +335,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             RectI rect;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderSafeArea(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderSafeArea(Handle, &rect));
 
             return rect;
         }
@@ -368,14 +367,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             float x, y;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderScale(_handle, &x, &y));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderScale(Handle, &x, &y));
 
             return new Vector2(x, y);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderScale(_handle, value.X, value.Y));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderScale(Handle, value.X, value.Y));
         }
     }
 
@@ -390,14 +389,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             TextureAddressMode horizontal, vertical;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderTextureAddressMode(_handle, &horizontal, &vertical));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderTextureAddressMode(Handle, &horizontal, &vertical));
 
             return (horizontal, vertical);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTextureAddressMode(_handle, value.Horizontal, value.Vertical));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTextureAddressMode(Handle, value.Horizontal, value.Vertical));
         }
     }
 
@@ -429,7 +428,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
             if (!value.HasValue)
             {
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderViewport(_handle, null));
+                SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderViewport(Handle, null));
                 return;
             }
 
@@ -438,7 +437,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(rect.Width);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(rect.Height);
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderViewport(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderViewport(Handle, &rect));
 
             field = value;
         }
@@ -460,14 +459,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
             ThrowIfDisposed();
 
             int vsync;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderVSync(_handle, &vsync));
+            SDLThrowHelper.ThrowIfFailed(SDL3.GetRenderVSync(Handle, &vsync));
 
             return vsync;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderVSync(_handle, value));
+            SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderVSync(Handle, value));
         }
     }
 
@@ -487,6 +486,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
         }
     }
 
+    internal SDL_Renderer* Handle { get; private set; }
+
     /// <summary>
     /// Clear the current rendering target with black color.
     /// </summary>
@@ -499,8 +500,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(_handle, 0, 0, 0, 1));
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(_handle));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(Handle, 0, 0, 0, 1));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(Handle));
     }
 
     /// <summary>
@@ -516,8 +517,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(_handle, color.R, color.G, color.B, color.A));
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(_handle));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(Handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(Handle));
     }
 
     /// <summary>
@@ -533,42 +534,21 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(_handle, color.R, color.G, color.B, color.A));
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(_handle));
-    }
-
-    /// <summary>
-    /// Creates an empty texture of the given size.
-    /// </summary>
-    /// <param name="size">The size of the texture in pixels.</param>
-    /// <param name="format">The pixel format of the texture.</param>
-    /// <param name="access">How the texture's pixels may be accessed after creation.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
-    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
-    public Texture CreateTexture(Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
-    {
-        ThrowIfDisposed();
-
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);
-
-        SDL_Texture* texture = SDL3.CreateTexture(_handle, format, access, size.Width, size.Height);
-        SDLThrowHelper.ThrowIfNull(texture);
-
-        return new(texture);
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(Handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(Handle));
     }
 
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_handle is null)
+        if (Handle is null)
             return;
 
         _window?.Unbind(this);
         _window = null;
 
-        SDL3.DestroyRenderer(_handle);
-        _handle = null;
+        SDL3.DestroyRenderer(Handle);
+        Handle = null;
     }
 
     /// <inheritdoc/>
@@ -596,7 +576,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void Draw(PointF point)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderPoint(_handle, point.X, point.Y));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderPoint(Handle, point.X, point.Y));
     }
 
     /// <summary>
@@ -611,9 +591,9 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
 
         if (connected)
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderLines(_handle, points, points.Length));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderLines(Handle, points, points.Length));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderPoints(_handle, points, points.Length));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderPoints(Handle, points, points.Length));
     }
 
     /// <summary>
@@ -626,7 +606,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void Draw(PointF from, PointF to)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderLine(_handle, from.X, from.Y, to.X, to.Y));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderLine(Handle, from.X, from.Y, to.X, to.Y));
     }
 
     /// <summary>
@@ -641,9 +621,9 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
 
         if (filled)
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderFillRect(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderFillRect(Handle, &rect));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderRect(_handle, &rect));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderRect(Handle, &rect));
     }
 
     /// <summary>
@@ -658,9 +638,9 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
 
         if (filled)
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderFillRects(_handle, rects, rects.Length));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderFillRects(Handle, rects, rects.Length));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.RenderRects(_handle, rects, rects.Length));
+            SDLThrowHelper.ThrowIfFailed(SDL3.RenderRects(Handle, rects, rects.Length));
     }
 
     /// <summary>
@@ -681,7 +661,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect* sourceRect = source.HasValue ? &src : null;
         Rect* destinationRect = destination.HasValue ? &dst : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture(_handle, texture.Handle, sourceRect, destinationRect));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture(Handle, texture.Handle, sourceRect, destinationRect));
     }
 
     /// <summary>
@@ -705,7 +685,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect* sourceRect = source.HasValue ? &src : null;
         PointF* centerPoint = center.HasValue ? &pivot : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureRotated(_handle, texture.Handle, sourceRect, &destination, angle.Degrees, centerPoint, flip));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureRotated(Handle, texture.Handle, sourceRect, &destination, angle.Degrees, centerPoint, flip));
     }
 
     /// <summary>
@@ -724,7 +704,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect src = source.GetValueOrDefault();
         Rect* sourceRect = source.HasValue ? &src : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureTiled(_handle, texture.Handle, sourceRect, scale, &destination));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureTiled(Handle, texture.Handle, sourceRect, scale, &destination));
     }
 
     /// <summary>
@@ -745,7 +725,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect src = source.GetValueOrDefault();
         Rect* sourceRect = source.HasValue ? &src : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureAffine(_handle, texture.Handle, sourceRect, &origin, &right, &down));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTextureAffine(Handle, texture.Handle, sourceRect, &origin, &right, &down));
     }
 
     /// <summary>
@@ -770,7 +750,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect src = source.GetValueOrDefault();
         Rect* sourceRect = source.HasValue ? &src : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9Grid(_handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9Grid(Handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination));
     }
 
     /// <summary>
@@ -795,7 +775,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         Rect src = source.GetValueOrDefault();
         Rect* sourceRect = source.HasValue ? &src : null;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9GridTiled(_handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination, tileScale));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderTexture9GridTiled(Handle, texture.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, &destination, tileScale));
     }
 
     /// <summary>
@@ -814,8 +794,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(_handle, color.R, color.G, color.B, color.A));
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderDebugText(_handle, position.X, position.Y, text));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(Handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderDebugText(Handle, position.X, position.Y, text));
     }
 
     /// <summary>
@@ -828,51 +808,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void Flush()
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.FlushRenderer(_handle));
-    }
-
-    /// <summary>
-    /// Creates a texture from an existing surface.
-    /// </summary>
-    /// <param name="surface">The source pixels. The surface is copied and may be disposed afterward.</param>
-    /// <returns>The created texture.</returns>
-    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
-    public Texture FromSurface(Surface surface)
-    {
-        SDL_Texture* texture = SDL3.CreateTextureFromSurface(_handle, surface.Handle);
-        SDLThrowHelper.ThrowIfNull(texture);
-
-        return new(texture);
-    }
-
-    /// <summary>
-    /// Loads an image file into a texture. The format is detected from the file contents.
-    /// </summary>
-    /// <param name="path">The path to the image file.</param>
-    /// <returns>The loaded texture.</returns>
-    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
-    public Texture Load(string path)
-    {
-        SDL_Texture* texture = SDL3_image.LoadTexture(_handle, path);
-        SDLThrowHelper.ThrowIfNull(texture);
-
-        return new Texture(texture);
-    }
-
-    /// <summary>
-    /// Loads an image from a stream into a texture.
-    /// </summary>
-    /// <param name="stream">The stream to read the image from.</param>
-    /// <returns>The loaded texture.</returns>
-    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
-    public Texture Load(Stream stream)
-    {
-        using IOStream source = IOStream.FromStream(stream);
-
-        SDL_Texture* texture = SDL3_image.LoadTexture(_handle, source.Handle, false);
-        SDLThrowHelper.ThrowIfNull(texture);
-
-        return new Texture(texture);
+        SDLThrowHelper.ThrowIfFailed(SDL3.FlushRenderer(Handle));
     }
 
     /// <summary>
@@ -888,7 +824,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
 
         float x, y;
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderCoordinatesFromWindow(_handle, point.X, point.Y, &x, &y));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderCoordinatesFromWindow(Handle, point.X, point.Y, &x, &y));
 
         return new PointF(x, y);
     }
@@ -906,7 +842,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
 
         float x, y;
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderCoordinatesToWindow(_handle, point.X, point.Y, &x, &y));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderCoordinatesToWindow(Handle, point.X, point.Y, &x, &y));
 
         return new PointF(x, y);
     }
@@ -920,7 +856,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void Present()
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderPresent(_handle));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderPresent(Handle));
     }
 
     /// <summary>
@@ -942,12 +878,12 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
         if (area is null)
         {
-            surface = SDL3.RenderReadPixels(_handle, null);
+            surface = SDL3.RenderReadPixels(Handle, null);
         }
         else
         {
             RectI rect = area.Value;
-            surface = SDL3.RenderReadPixels(_handle, &rect);
+            surface = SDL3.RenderReadPixels(Handle, &rect);
         }
 
         SDLThrowHelper.ThrowIfNull(surface);
@@ -967,8 +903,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
     public RenderTargetScope Target(Texture texture)
     {
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTarget(_handle, texture.Handle));
-        return new RenderTargetScope(_handle);
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTarget(Handle, texture.Handle));
+        return new RenderTargetScope(Handle);
     }
 
     /// <summary>
@@ -978,7 +914,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void SetDrawingColor(Color color)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(_handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColor(Handle, color.R, color.G, color.B, color.A));
     }
 
     /// <summary>
@@ -988,7 +924,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     public void SetDrawingColor(ColorF color)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(_handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(Handle, color.R, color.G, color.B, color.A));
     }
 
     private void DrawGeometry(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices, RenderState state)
@@ -1027,12 +963,12 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         if (indices.IsEmpty)
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3.UnsafeRenderGeometry(_handle, texture, vertices, vertices.Length, null, 0));
+            SDLThrowHelper.ThrowIfFailed(SDL3.UnsafeRenderGeometry(Handle, texture, vertices, vertices.Length, null, 0));
             return;
         }
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RenderGeometry(_handle, texture, vertices, vertices.Length, indices, indices.Length));
+        SDLThrowHelper.ThrowIfFailed(SDL3.RenderGeometry(Handle, texture, vertices, vertices.Length, indices, indices.Length));
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_handle is null, typeof(Renderer));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Renderer));
 }
