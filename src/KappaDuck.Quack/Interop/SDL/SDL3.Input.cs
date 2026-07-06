@@ -3,6 +3,7 @@
 
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
+using KappaDuck.Quack.Interop.SDL.Primitives;
 
 namespace KappaDuck.Quack.Interop.SDL;
 
@@ -13,10 +14,38 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool CaptureMouse([MarshalAs(UnmanagedType.I1)] bool enabled);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateAnimatedCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* CreateAnimatedCursor(ReadOnlySpan<SDL_CursorFrameInfo> frames, int frameCount, int hotX, int hotY);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateColorCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* CreateColorCursor(SDL_Surface* surface, int hotX, int hotY);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* CreateCursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, int hotX, int hotY);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateSystemCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* CreateSystemCursor(CursorType type);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CursorVisible")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool CursorVisible();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_DestroyCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void DestroyCursor(SDL_Cursor* cursor);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* GetCursor();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetDefaultCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Cursor* GetDefaultCursor();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetGlobalMouseState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -108,6 +137,11 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ResetKeyboard")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ResetKeyboard();
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetCursor")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SetCursor(SDL_Cursor* cursor);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetModState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
