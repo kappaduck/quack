@@ -57,6 +57,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: ./global.json
+
       - name: Load versions
         id: versions
         run: grep -v '^#' ../utils/versions.env >> $GITHUB_OUTPUT
