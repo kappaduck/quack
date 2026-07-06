@@ -675,7 +675,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface that aliases the supplied memory.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface CreateFrom(Memory<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => CreateFrom(pixels, dimension.Width, dimension.Height, format, pitch);
+    public static Surface Create(Memory<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
 
     /// <summary>
     /// Creates a surface of an existing block of pixel memory without copying it.
@@ -693,7 +693,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface that aliases the supplied memory.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface CreateFrom(Memory<byte> pixels, int width, int height, PixelFormat format, int pitch = 0)
+    public static Surface Create(Memory<byte> pixels, int width, int height, PixelFormat format, int pitch = 0)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(width);
         ArgumentOutOfRangeException.ThrowIfNegative(height);
@@ -735,7 +735,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface containing a copy of the pixel data.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface CreateFrom(ReadOnlySpan<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => CreateFrom(pixels, dimension.Width, dimension.Height, format, pitch);
+    public static Surface Create(ReadOnlySpan<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
 
     /// <summary>
     /// Creates a surface of the given size and format, copying the supplied pixel data into it.
@@ -752,7 +752,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface containing a copy of the pixel data.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface CreateFrom(ReadOnlySpan<byte> pixels, int width, int height, PixelFormat format, int pitch = 0)
+    public static Surface Create(ReadOnlySpan<byte> pixels, int width, int height, PixelFormat format, int pitch = 0)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(width);
         ArgumentOutOfRangeException.ThrowIfNegative(height);
@@ -881,6 +881,36 @@ public sealed class Surface : IDisposable
     }
 
     /// <summary>
+    /// Loads an image from a file.
+    /// </summary>
+    /// <param name="path">The path to the image file.</param>
+    /// <returns>The loaded image.</returns>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="QuackInteropException">Thrown when failed to load the image.</exception>
+    public static Surface FromFile(string path)
+    {
+        if (!File.Exists(path))
+            ThrowHelper.ThrowFileNotFound("The file path does not exist.", path);
+
+        SDL_Surface* handle = SDL3_image.FromFile(path);
+        return new Surface(handle, true);
+    }
+
+    /// <summary>
+    /// Loads an image from a stream.
+    /// </summary>
+    /// <param name="stream">The stream to read the image from.</param>
+    /// <returns>The loaded image.</returns>
+    /// <exception cref="QuackInteropException">Thrown when failed to load the image.</exception>
+    public static Surface FromStream(Stream stream)
+    {
+        using IOStream source = IOStream.FromStream(stream);
+
+        SDL_Surface* handle = SDL3_image.FromStream(source.Handle, false);
+        return new Surface(handle, true);
+    }
+
+    /// <summary>
     /// Locks the surface and returns a scope that exposes its pixel buffer for direct access.
     /// </summary>
     /// <remarks>
@@ -1000,6 +1030,129 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
         return new Surface(SDL3.RotateSurface(Handle, angle.Degrees));
+    }
+
+    /// <summary>
+    /// Save the current surface into an image file.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// If the file already exists, it will be overwritten.
+    /// </para>
+    /// <para>
+    /// For formats (avif, jpg, webp) that accept a quality, a default quality of 90 will be used.
+    /// </para>
+    /// </remarks>
+    /// <param name="path">Path on the filesystem to write new file to.</param>
+    /// <param name="quality">The desired quality ranging between 0 and 100.</param>
+    public void Save(string path, int quality = 90) => Save(this, path, quality);
+
+    /// <summary>
+    /// Save the current surface into an image via a stream.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For formats (avif, jpg, webp) that accept a quality, a default quality of 90 will be used.
+    /// </para>
+    /// </remarks>
+    /// <param name="stream">The stream to save the image to.</param>
+    /// <param name="format">The image format to save as.</param>
+    /// <param name="quality">The desired quality ranging between 0 and 100.</param>
+    public void Save(Stream stream, ImageFormat format, int quality = 90) => Save(this, stream, format, quality);
+
+    /// <summary>
+    /// Save a surface into an image file.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// If the file already exists, it will be overwritten.
+    /// </para>
+    /// <para>
+    /// For formats (avif, jpg, webp) that accept a quality, a default quality of 90 will be used.
+    /// </para>
+    /// </remarks>
+    /// <param name="surface">The surface to save.</param>
+    /// <param name="path">Path on the filesystem to write new file to.</param>
+    /// <param name="quality">The desired quality ranging between 0 and 100.</param>
+    public static void Save(Surface surface, string path, int quality = 90)
+    {
+        surface.ThrowIfDisposed();
+
+        ReadOnlySpan<char> ext = Path.GetExtension(path);
+
+        if (ext.Contains("avif", StringComparison.OrdinalIgnoreCase))
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, path, quality));
+            return;
+        }
+
+        if (ext.Contains("jpg", StringComparison.OrdinalIgnoreCase) || ext.Contains("jpeg", StringComparison.OrdinalIgnoreCase))
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, path, quality));
+            return;
+        }
+
+        if (ext.Contains("webp", StringComparison.OrdinalIgnoreCase))
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveWEBP(surface.Handle, path, quality));
+            return;
+        }
+
+        SDLThrowHelper.ThrowIfFailed(SDL3_image.Save(surface.Handle, path));
+    }
+
+    /// <summary>
+    /// Save a surface into an image via a stream.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For formats (avif, jpg, webp) that accept a quality, a default quality of 90 will be used.
+    /// </para>
+    /// </remarks>
+    /// <param name="surface">The surface to save.</param>
+    /// <param name="stream">The stream to save the image to.</param>
+    /// <param name="format">The image format to save as.</param>
+    /// <param name="quality">The desired quality ranging between 0 and 100.</param>
+    /// <exception cref="NotSupportedException">The image format is not supported.</exception>
+    public static void Save(Surface surface, Stream stream, ImageFormat format, int quality = 90)
+    {
+        surface.ThrowIfDisposed();
+
+        using IOStream source = IOStream.FromStream(stream);
+
+        if (format is ImageFormat.AVIF)
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, source.Handle, quality));
+            return;
+        }
+
+        if (format is ImageFormat.JPG)
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveJPG(surface.Handle, source.Handle, quality));
+            return;
+        }
+
+        if (format is ImageFormat.WEBP)
+        {
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveWEBP(surface.Handle, source.Handle, quality));
+            return;
+        }
+
+        SDLThrowHelper.ThrowIfFailed(SDL3_image.Save(surface.Handle, source.Handle, GetFormatName(format)));
+
+        static string GetFormatName(ImageFormat format) => format switch
+        {
+            ImageFormat.AVIF => nameof(ImageFormat.AVIF),
+            ImageFormat.BMP => nameof(ImageFormat.BMP),
+            ImageFormat.CUR => nameof(ImageFormat.CUR),
+            ImageFormat.GIF => nameof(ImageFormat.GIF),
+            ImageFormat.ICO => nameof(ImageFormat.ICO),
+            ImageFormat.JPG => nameof(ImageFormat.JPG),
+            ImageFormat.PNG => nameof(ImageFormat.PNG),
+            ImageFormat.TGA => nameof(ImageFormat.TGA),
+            ImageFormat.WEBP => nameof(ImageFormat.WEBP),
+            _ => throw new NotSupportedException()
+        };
     }
 
     /// <summary>

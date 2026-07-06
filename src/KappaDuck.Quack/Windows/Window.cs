@@ -25,6 +25,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     private int _width;
     private int _height;
     private float? _opacity;
+    private Surface? _icon;
 
     /// <summary>
     /// Creates an empty window.
@@ -759,6 +760,9 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (NativeHandle is null)
             return;
 
+        _icon?.Dispose();
+        _icon = null;
+
         SDL3.DestroyWindow(NativeHandle);
         NativeHandle = null;
     }
@@ -876,15 +880,46 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Sets the icon of the window.
     /// </summary>
+    /// <remarks>
+    /// It will dispose the previous icon before to set the new icon.
+    /// </remarks>
     /// <param name="icon">The surface to use as the icon.</param>
     /// <exception cref="QuackInteropException">Failed to set the icon.</exception>
-    /// <exception cref="ObjectDisposedException">The icon surface is disposed.</exception>
     public void SetIcon(Surface icon)
     {
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowIcon(NativeHandle, icon.Handle));
+        UpdateIcon(icon);
+    }
+
+    /// <summary>
+    /// Sets the icon of the window from a file.
+    /// </summary>
+    /// <remarks>
+    /// It will dispose the previous icon before to set the new icon.
+    /// </remarks>
+    /// <param name="path">The path to the image file.</param>
+    /// <exception cref="QuackInteropException">Failed to set the icon.</exception>
+    public void SetIcon(string path)
+    {
+        if (!IsOpen)
+            return;
+
+        UpdateIcon(Surface.FromFile(path));
+    }
+
+    /// <summary>
+    /// Sets the icon of the window from a stream.
+    /// </summary>
+    /// <param name="stream">The stream to read the image from.</param>
+    /// <exception cref="QuackInteropException">Failed to set the icon.</exception>
+    public void SetIcon(Stream stream)
+    {
+        if (!IsOpen)
+            return;
+
+        UpdateIcon(Surface.FromStream(stream));
     }
 
     /// <summary>
@@ -1202,9 +1237,17 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     private bool HasState(State state) => (_state & state) == state;
 
+    private void RemoveState(State state) => _state &= ~state;
+
     private void SetState(State state, bool apply = true) => _state = apply ? _state | state : _state & ~state;
 
-    private void RemoveState(State state) => _state &= ~state;
+    private void UpdateIcon(Surface icon)
+    {
+        _icon?.Dispose();
+        _icon = icon;
+
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowIcon(NativeHandle, _icon.Handle));
+    }
 
     [Flags]
     internal enum State : ulong

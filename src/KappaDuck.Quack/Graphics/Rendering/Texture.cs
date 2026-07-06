@@ -16,6 +16,8 @@ public sealed class Texture : IDisposable
 {
     internal Texture(SDL_Texture* handle)
     {
+        SDLThrowHelper.ThrowIfNull(handle);
+
         Handle = handle;
 
         uint properties = SDL3.GetTextureProperties(Handle);
@@ -276,6 +278,69 @@ public sealed class Texture : IDisposable
             SDLThrowHelper.ThrowIfFailed(SDL3.UpdateNVTexture(Handle, &area, y, yPitch, uv, uvPitch));
         else
             SDLThrowHelper.ThrowIfFailed(SDL3.UpdateNVTexture(Handle, null, y, yPitch, uv, uvPitch));
+    }
+
+    /// <summary>
+    /// Creates an empty texture of the given size.
+    /// </summary>
+    /// <param name="renderer">The renderer to use to create the texture</param>
+    /// <param name="size">The size of the texture in pixels.</param>
+    /// <param name="format">The pixel format of the texture.</param>
+    /// <param name="access">How the texture's pixels may be accessed after creation.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
+    public static Texture Create(Renderer renderer, Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);
+
+        SDL_Texture* texture = SDL3.CreateTexture(renderer.Handle, format, access, size.Width, size.Height);
+        return new(texture);
+    }
+
+    /// <summary>
+    /// Loads an image from a file into a texture.
+    /// </summary>
+    /// <param name="renderer">The renderer to use to create the texture</param>
+    /// <param name="path">The path to the image file.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="QuackInteropException">Thrown when failed to load the image.</exception>
+    public static Texture FromFile(Renderer renderer, string path)
+    {
+        if (!File.Exists(path))
+            ThrowHelper.ThrowFileNotFound("The file path does not exist.", path);
+
+        SDL_Texture* handle = SDL3_image.FromFile(renderer.Handle, path);
+        return new Texture(handle);
+    }
+
+    /// <summary>
+    /// Loads an image from a stream into a texture.
+    /// </summary>
+    /// <param name="renderer">The renderer to use to create the texture</param>
+    /// <param name="stream">The stream to read the image from.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public static Texture FromStream(Renderer renderer, Stream stream)
+    {
+        using IOStream source = IOStream.FromStream(stream);
+
+        SDL_Texture* texture = SDL3_image.FromStream(renderer.Handle, source.Handle, false);
+        return new Texture(texture);
+    }
+
+    /// <summary>
+    /// Creates a texture from an existing surface.
+    /// </summary>
+    /// <param name="renderer">The renderer to use to create the texture</param>
+    /// <param name="surface">The source pixels. The surface is copied and may be disposed afterward.</param>
+    /// <returns>The created texture.</returns>
+    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
+    public static Texture FromSurface(Renderer renderer, Surface surface)
+    {
+        SDL_Texture* texture = SDL3.CreateTextureFromSurface(renderer.Handle, surface.Handle);
+        return new(texture);
     }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Texture));

@@ -7,13 +7,61 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal static partial class SDL3_image
 {
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_Load", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Surface* FromFile(string file);
+
     [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_LoadTexture", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SDL_Texture* LoadTexture(SDL_Renderer* renderer, string file);
+    internal static partial SDL_Texture* FromFile(SDL_Renderer* renderer, string file);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_Load_IO")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Surface* FromStream(SDL_IOStream* stream, [MarshalAs(UnmanagedType.I1)] bool closeIO);
 
     [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_LoadTexture_IO")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SDL_Texture* LoadTexture(SDL_Renderer* renderer, SDL_IOStream* source, [MarshalAs(UnmanagedType.I1)] bool closeIO);
+    internal static partial SDL_Texture* FromStream(SDL_Renderer* renderer, SDL_IOStream* stream, [MarshalAs(UnmanagedType.I1)] bool closeIO);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_Save", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool Save(SDL_Surface* surface, string file);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveTyped_IO", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool Save(SDL_Surface* surface, SDL_IOStream* stream, string type);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveAVIF", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveAVIF(SDL_Surface* surface, string file, int quality);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveAVIF_IO")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveAVIF(SDL_Surface* surface, SDL_IOStream* stream, int quality);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveJPG", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveJPG(SDL_Surface* surface, string file, int quality);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveJPG_IO")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveJPG(SDL_Surface* surface, SDL_IOStream* stream, int quality);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveWEBP", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveWEBP(SDL_Surface* surface, string file, float quality);
+
+    [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_SaveWEBP_IO")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SaveWEBP(SDL_Surface* surface, SDL_IOStream* stream, float quality);
 
     [LibraryImport(nameof(SDL3_image), EntryPoint = "IMG_Version")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
