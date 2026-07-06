@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <TargetFramework>$(DefaultNetVersion)</TargetFramework>
+    <Configuration>release</Configuration>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(QuackRoot)\src\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+  </ItemGroup>
+</Project>
