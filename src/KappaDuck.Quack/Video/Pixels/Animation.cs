@@ -103,7 +103,7 @@ public sealed class Animation : IDisposable
     {
         using IOStream source = IOStream.FromStream(stream);
 
-        IMG_Animation* handle = SDL3_image.LoadAnimation(source.Handle, closeIO: false);
+        IMG_Animation* handle = SDL3_image.LoadAnimation(source.Handle, false);
         SDLThrowHelper.ThrowIfNull(handle);
 
         return Create(handle);
@@ -133,7 +133,7 @@ public sealed class Animation : IDisposable
         ThrowIfDisposed();
 
         using IOStream destination = IOStream.FromStream(stream);
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAnimation(Handle, destination.Handle, closeIO: false, format.Type));
+        SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAnimation(Handle, destination.Handle, false, format.Type));
     }
 
     private static unsafe Animation Create(IMG_Animation* handle)

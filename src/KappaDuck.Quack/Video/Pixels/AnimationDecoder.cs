@@ -21,18 +21,35 @@ public sealed class AnimationDecoder : IDisposable
     private IMG_AnimationDecoder* _decoder;
     private IOStream? _stream;
 
+    private AnimationDecoder(IMG_AnimationDecoder* decoder, IOStream? stream)
+    {
+        _decoder = decoder;
+        _stream = stream;
+
+        uint properties = SDL3_image.GetAnimationDecoderProperties(decoder);
+
+        FrameCount = (int)SDL3.GetNumberProperty(properties, "SDL_image.metadata.frame_count", 0);
+        LoopCount = (int)SDL3.GetNumberProperty(properties, "SDL_image.metadata.loop_count", 0);
+
+        Title = SDL3.GetStringProperty(properties, "SDL_image.metadata.title", string.Empty);
+        Author = SDL3.GetStringProperty(properties, "SDL_image.metadata.author", string.Empty);
+        Description = SDL3.GetStringProperty(properties, "SDL_image.metadata.description", string.Empty);
+        Copyright = SDL3.GetStringProperty(properties, "SDL_image.metadata.copyright", string.Empty);
+        CreationTime = SDL3.GetStringProperty(properties, "SDL_image.metadata.creation_time", string.Empty);
+    }
+
     /// <summary>
     /// Opens an animated image file for decoding. The format is detected from the file contents.
     /// </summary>
     /// <param name="path">The path to the animated image file.</param>
     /// <returns>A decoder positioned before the first frame.</returns>
     /// <exception cref="QuackInteropException">The file could not be opened for decoding.</exception>
-    public AnimationDecoder(string path)
+    public static AnimationDecoder Open(string path)
     {
-        _decoder = SDL3_image.CreateAnimationDecoder(path);
-        SDLThrowHelper.ThrowIfNull(_decoder);
+        IMG_AnimationDecoder* decoder = SDL3_image.CreateAnimationDecoder(path);
+        SDLThrowHelper.ThrowIfNull(decoder);
 
-        UpdateProperties();
+        return new AnimationDecoder(decoder, null);
     }
 
     /// <summary>
@@ -43,22 +60,23 @@ public sealed class AnimationDecoder : IDisposable
     /// <param name="format">The animation format to decode as.</param>
     /// <returns>A decoder positioned before the first frame.</returns>
     /// <exception cref="QuackInteropException">The stream could not be opened for decoding.</exception>
-    public AnimationDecoder(Stream stream, AnimationFormat format)
+    public static AnimationDecoder Open(Stream stream, AnimationFormat format)
     {
-        _stream = IOStream.FromStream(stream);
+        IOStream source = IOStream.FromStream(stream);
 
+        IMG_AnimationDecoder* decoder;
         try
         {
-            _decoder = SDL3_image.CreateAnimationDecoder(_stream.Handle, false, format.Type);
-            SDLThrowHelper.ThrowIfNull(_decoder);
-
-            UpdateProperties();
+            decoder = SDL3_image.CreateAnimationDecoder(source.Handle, false, format.Type);
+            SDLThrowHelper.ThrowIfNull(decoder);
         }
         catch
         {
-            _stream.Dispose();
+            source.Dispose();
             throw;
         }
+
+        return new AnimationDecoder(decoder, source);
     }
 
     /// <summary>
@@ -69,37 +87,37 @@ public sealed class AnimationDecoder : IDisposable
     /// <summary>
     /// Gets the number of frames in the animation, or 0 if the format does not report it.
     /// </summary>
-    public int FrameCount { get; private set; }
+    public int FrameCount { get; }
 
     /// <summary>
     /// Gets the number of times the animation is intended to play, or 0 to loop forever.
     /// </summary>
-    public int LoopCount { get; private set; }
+    public int LoopCount { get; }
 
     /// <summary>
     /// Gets the animation's title, or an empty string if the format does not report one.
     /// </summary>
-    public string Title { get; private set; }
+    public string Title { get; }
 
     /// <summary>
     /// Gets the animation's author, or an empty string if the format does not report one.
     /// </summary>
-    public string Author { get; private set; }
+    public string Author { get; }
 
     /// <summary>
     /// Gets the animation's description, or an empty string if the format does not report one.
     /// </summary>
-    public string Description { get; private set; }
+    public string Description { get; }
 
     /// <summary>
     /// Gets the animation's copyright notice, or an empty string if the format does not report one.
     /// </summary>
-    public string Copyright { get; private set; }
+    public string Copyright { get; }
 
     /// <summary>
     /// Gets the animation's creation time, or an empty string if the format does not report one.
     /// </summary>
-    public string CreationTime { get; private set; }
+    public string CreationTime { get; }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -195,20 +213,5 @@ public sealed class AnimationDecoder : IDisposable
 
         SDLThrowHelper.ThrowIf(Status == AnimationDecoderStatus.Failed);
         return false;
-    }
-
-    [MemberNotNull(nameof(Title), nameof(Author), nameof(Description), nameof(Copyright), nameof(CreationTime))]
-    private void UpdateProperties()
-    {
-        uint properties = SDL3_image.GetAnimationDecoderProperties(_decoder);
-
-        FrameCount = (int)SDL3.GetNumberProperty(properties, "SDL_image.metadata.frame_count", 0);
-        LoopCount = (int)SDL3.GetNumberProperty(properties, "SDL_image.metadata.loop_count", 0);
-
-        Title = SDL3.GetStringProperty(properties, "SDL_image.metadata.title", string.Empty);
-        Author = SDL3.GetStringProperty(properties, "SDL_image.metadata.author", string.Empty);
-        Description = SDL3.GetStringProperty(properties, "SDL_image.metadata.description", string.Empty);
-        Copyright = SDL3.GetStringProperty(properties, "SDL_image.metadata.copyright", string.Empty);
-        CreationTime = SDL3.GetStringProperty(properties, "SDL_image.metadata.creation_time", string.Empty);
     }
 }
