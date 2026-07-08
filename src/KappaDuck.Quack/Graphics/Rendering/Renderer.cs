@@ -9,7 +9,6 @@ using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
 using KappaDuck.Quack.Video.Pixels;
 using KappaDuck.Quack.Windows;
-using System.Buffers;
 using System.ComponentModel;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
@@ -23,7 +22,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// </remarks>
 public sealed class Renderer : IRenderTarget, IDisposable
 {
-    private const int MaxStackVertices = 64;
+    private const int MaxStackVertices = 256;
 
     private Window? _window;
 
@@ -891,23 +890,6 @@ public sealed class Renderer : IRenderTarget, IDisposable
     }
 
     /// <summary>
-    /// Redirects drawing into <paramref name="texture"/> until the returned scope is disposed.
-    /// </summary>
-    /// <remarks>
-    /// The texture must have been created with <see cref="TextureAccess.Target"/>. Drawing commands issued while the
-    /// scope is alive render into the texture instead of the window; dispose the scope to restore the previous target.
-    /// </remarks>
-    /// <param name="texture">The texture to draw into.</param>
-    /// <returns>A scope that restores the previous render target when disposed.</returns>
-    /// <exception cref="QuackInteropException">Failed to set the render target.</exception>
-    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public RenderTargetScope Target(Texture texture)
-    {
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTarget(Handle, texture.Handle));
-        return new RenderTargetScope(Handle);
-    }
-
-    /// <summary>
     /// Set the color used for drawing operations.
     /// </summary>
     /// <param name="color">The color to use for drawing operations.</param>
@@ -927,6 +909,51 @@ public sealed class Renderer : IRenderTarget, IDisposable
         SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderDrawColorFloat(Handle, color.R, color.G, color.B, color.A));
     }
 
+    /// <summary>
+    /// Redirects drawing into <paramref name="texture"/> until the returned scope is disposed.
+    /// </summary>
+    /// <remarks>
+    /// The texture must have been created with <see cref="TextureAccess.Target"/>. Drawing commands issued while the
+    /// scope is alive render into the texture instead of the window; dispose the scope to restore the previous target.
+    /// </remarks>
+    /// <param name="texture">The texture to draw into.</param>
+    /// <returns>A scope that restores the previous render target when disposed.</returns>
+    /// <exception cref="QuackInteropException">Failed to set the render target.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public RenderTargetScope Target(Texture texture)
+    {
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetRenderTarget(Handle, texture.Handle));
+        return new RenderTargetScope(Handle);
+    }
+
+    /// <summary>
+    /// Redirects drawing to the given view: sets <see cref="Viewport"/> from <see cref="View.Viewport"/> and returns a
+    /// scope carrying the view's transform, until the scope is disposed.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Pass <see cref="ViewScope.State"/> to <see cref="Draw(IDrawable, RenderState)"/> for everything drawn through this view.
+    /// </para>
+    /// <para>
+    /// Uses <see cref="CurrentOutputSize"/>, which accounts for logical <see cref="Presentation"/>, so the view's
+    /// normalized <see cref="View.Viewport"/> stays correct whether or not logical presentation is in effect.
+    /// </para>
+    /// </remarks>
+    /// <param name="view">The view to draw through.</param>
+    /// <returns>A scope carrying the view's render state that restores the full-target viewport when disposed.</returns>
+    /// <exception cref="QuackInteropException">Failed to set the viewport.</exception>
+    /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
+    public ViewScope View(View view)
+    {
+        ThrowIfDisposed();
+
+        RectI pixelViewport = view.ComputeViewport(CurrentOutputSize);
+        Viewport = pixelViewport;
+
+        RenderState state = RenderState.Default with { Transform = view.GetTransform(pixelViewport.Size) };
+        return new ViewScope(this, state);
+    }
+
     private void DrawGeometry(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices, RenderState state)
     {
         ThrowIfDisposed();
@@ -942,8 +969,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
         int count = vertices.Length;
 
-        Vertex[]? rented = count > MaxStackVertices ? ArrayPool<Vertex>.Shared.Rent(count) : null;
-        Span<Vertex> transformed = rented ?? stackalloc Vertex[count];
+        Span<Vertex> transformed = count > MaxStackVertices ? new Vertex[count] : stackalloc Vertex[count];
 
         for (int i = 0; i < count; i++)
         {
@@ -954,9 +980,6 @@ public sealed class Renderer : IRenderTarget, IDisposable
         }
 
         Submit(texture, transformed, indices);
-
-        if (rented is not null)
-            ArrayPool<Vertex>.Shared.Return(rented);
     }
 
     private void Submit(SDL_Texture* texture, ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
