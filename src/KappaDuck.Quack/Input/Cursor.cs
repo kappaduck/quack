@@ -88,8 +88,7 @@ public sealed class Cursor : IDisposable
     /// exactly <paramref name="width"/> / 8 * <paramref name="height"/> bytes long.
     /// </exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot)
-        : this(CreateMonochrome(data, mask, width, height, hotspot), true)
+    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot) : this(CreateMonochrome(data, mask, width, height, hotspot), true)
     {
     }
 
@@ -112,6 +111,25 @@ public sealed class Cursor : IDisposable
     /// <exception cref="ArgumentException"><paramref name="frames"/> is empty.</exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
     public Cursor(ReadOnlySpan<CursorFrame> frames, Point hotspot) : this(CreateAnimated(frames, hotspot), true)
+    {
+    }
+
+    /// <summary>
+    /// Creates an animated cursor from an already loaded or built animation.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The hotspot applies to every frame, and every frame in <paramref name="animation"/> shares the same dimensions.
+    /// </para>
+    /// <para>
+    /// Useful when the frames come from a file like a GIF, APNG, or Windows .ani cursor loaded with <see cref="Animation.Load(string)"/>.
+    /// For building one from scratch out of individual frames, <see cref="Cursor(ReadOnlySpan{CursorFrame}, Point)"/> is more direct.
+    /// </para>
+    /// </remarks>
+    /// <param name="animation">The animation to cycle through.</param>
+    /// <param name="hotspot">The cursor hotspot, shared by every frame.</param>
+    /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
+    public Cursor(Animation animation, Point hotspot) : this(SDL3_image.CreateAnimatedCursor(animation.Handle, hotspot.X, hotspot.Y), true)
     {
     }
 
@@ -213,7 +231,7 @@ public sealed class Cursor : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfZero(frames.Length);
 
-        SDL_CursorFrameInfo[] info = new SDL_CursorFrameInfo[frames.Length];
+        Span<SDL_CursorFrameInfo> info = new SDL_CursorFrameInfo[frames.Length];
 
         for (int i = 0; i < frames.Length; i++)
         {
