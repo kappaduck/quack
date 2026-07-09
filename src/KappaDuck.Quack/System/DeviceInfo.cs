@@ -35,25 +35,30 @@ public static class DeviceInfo
             if (locales is null || count == 0)
                 return [];
 
-            List<CultureInfo> cultures = [with(count)];
-
-            unsafe
+            try
             {
-                for (int i = 0; i < count; i++)
+                List<CultureInfo> cultures = [with(count)];
+
+                unsafe
                 {
-                    SDL_Locale* locale = locales[i];
+                    for (int i = 0; i < count; i++)
+                    {
+                        SDL_Locale* locale = locales[i];
 
-                    string language = SDLStringMarshaller.ConvertToManaged(locale->Language)!;
-                    string? country = SDLStringMarshaller.ConvertToManaged(locale->Country);
+                        string language = SDLStringMarshaller.ConvertToManaged(locale->Language)!;
+                        string? country = SDLStringMarshaller.ConvertToManaged(locale->Country);
 
-                    if (TryGetCulture(language, country, out CultureInfo? culture))
-                        cultures.Add(culture);
+                        if (TryGetCulture(language, country, out CultureInfo? culture))
+                            cultures.Add(culture);
+                    }
                 }
+
+                return [.. cultures];
             }
-
-            SDL3.Free(locales);
-
-            return cultures;
+            finally
+            {
+                SDL3.Free(locales);
+            }
         }
     }
 

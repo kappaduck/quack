@@ -289,16 +289,22 @@ public sealed class Surface : IDisposable
             SDL_Surface** images = SDL3.GetSurfaceImages(Handle, &count);
             SDLThrowHelper.ThrowIfNull(images);
 
-            Surface[] result = new Surface[count];
-
-            unsafe
+            try
             {
-                for (int i = 0; i < count; i++)
-                    result[i] = new Surface(images[i], owned: false);
-            }
+                Surface[] result = new Surface[count];
 
-            SDL3.Free(images);
-            return result;
+                unsafe
+                {
+                    for (int i = 0; i < count; i++)
+                        result[i] = new Surface(images[i], owned: false);
+                }
+
+                return result;
+            }
+            finally
+            {
+                SDL3.Free(images);
+            }
         }
     }
 

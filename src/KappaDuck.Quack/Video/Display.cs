@@ -104,16 +104,21 @@ public readonly struct Display : IEquatable<Display>
             unsafe
             {
                 SDL_DisplayMode** modes = SDL3.GetFullscreenDisplayModes(Id, out int count);
-
                 SDLThrowHelper.ThrowIfNull(modes);
 
-                DisplayMode[] result = new DisplayMode[count];
+                try
+                {
+                    DisplayMode[] result = new DisplayMode[count];
 
-                for (int i = 0; i < count; i++)
-                    result[i] = new DisplayMode(*modes[i]);
+                    for (int i = 0; i < count; i++)
+                        result[i] = new DisplayMode(*modes[i]);
 
-                SDL3.Free(modes);
-                return result;
+                    return result;
+                }
+                finally
+                {
+                    SDL3.Free(modes);
+                }
             }
         }
     }

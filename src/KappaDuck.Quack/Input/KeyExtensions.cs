@@ -43,13 +43,10 @@ public static class KeyExtensions
         /// <returns>The corresponding code and modifier or <see cref="Scancode.Unknown"/> and <see langword="null"/> if the key does not have a corresponding code.</returns>
         public (Scancode Code, Keymod? Modifier) ToScancode()
         {
-            Keymod* modifier = null;
-            Scancode scancode = SDL3.GetScancodeFromKey(key, modifier);
+            Keymod modifier;
 
-            unsafe
-            {
-                return (scancode, *modifier);
-            }
+            Scancode scancode = SDL3.GetScancodeFromKey(key, &modifier);
+            return (scancode, modifier);
         }
     }
 }
