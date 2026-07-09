@@ -25,6 +25,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     private const int MaxStackVertices = 256;
 
     private Window? _window;
+    private WindowSurface? _windowSurface;
+    private Surface? _surface;
 
     /// <summary>
     /// Creates a renderer that presents to <paramref name="window"/>.
@@ -88,6 +90,45 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
         _window = window;
     }
+
+    /// <summary>
+    /// Creates a software renderer that draws into <paramref name="surface"/>.
+    /// </summary>
+    /// <remarks>
+    /// Software rendering runs entirely on the CPU: it has no GPU dependency but is slower than
+    /// <see cref="Renderer(Window, string?)"/>. Nothing is displayed automatically — <see cref="Present"/> only
+    /// finalizes pending draw commands into <paramref name="surface"/>; read its pixels or save it yourself.
+    /// The surface's lifetime is owned by the caller and is never disposed by this renderer.
+    /// </remarks>
+    /// <param name="surface">The surface to draw into.</param>
+    /// <exception cref="QuackInteropException">The renderer could not be created.</exception>
+    public Renderer(Surface surface)
+    {
+        Handle = SDL3.CreateSoftwareRenderer(surface.Handle);
+        SDLThrowHelper.ThrowIfNull(Handle);
+
+        _surface = surface;
+    }
+
+    /// <summary>
+    /// Creates a software renderer that draws directly into <paramref name="window"/>'s own pixel buffer, bypassing the GPU.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Unlike <see cref="Renderer(Window, string?)"/>, this draws into system memory and blits the result onto the
+    /// window when <see cref="Present"/> is called. Useful when a GPU is unavailable, or for simple content where
+    /// a hardware-accelerated renderer's setup cost isn't worth paying.
+    /// </para>
+    /// <para>
+    /// The window's pixel buffer is reacquired automatically the next time this renderer is used after the window is resized.
+    /// </para>
+    /// </remarks>
+    /// <param name="window">The window to draw into.</param>
+    /// <returns>A software renderer bound to the window.</returns>
+    /// <exception cref="InvalidOperationException">The window is already bound to a renderer.</exception>
+    /// <exception cref="QuackInteropException">The renderer could not be created.</exception>
+    public Renderer(WindowSurface window) : this(window.Surface)
+        => _windowSurface = window;
 
     /// <summary>
     /// Gets or sets the blend mode used for drawing operations.
@@ -236,6 +277,12 @@ public sealed class Renderer : IRenderTarget, IDisposable
             SDLThrowHelper.ThrowIfFailed(SDL3.SetDefaultTextureScaleMode(Handle, value));
         }
     }
+
+    /// <summary>
+    /// Gets whether this renderer draws on the CPU (<see cref="Renderer(Surface)"/> or <see cref="Renderer(WindowSurface)"/>)
+    /// rather than using the GPU.
+    /// </summary>
+    public bool IsSoftware => _surface is not null || _windowSurface is not null;
 
     /// <summary>
     /// Gets the rendering driver name.
@@ -545,6 +592,9 @@ public sealed class Renderer : IRenderTarget, IDisposable
 
         _window?.Unbind(this);
         _window = null;
+
+        _windowSurface = null;
+        _surface = null;
 
         SDL3.DestroyRenderer(Handle);
         Handle = null;
@@ -856,6 +906,8 @@ public sealed class Renderer : IRenderTarget, IDisposable
     {
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(SDL3.RenderPresent(Handle));
+
+        _windowSurface?.Update();
     }
 
     /// <summary>
@@ -993,5 +1045,27 @@ public sealed class Renderer : IRenderTarget, IDisposable
         SDLThrowHelper.ThrowIfFailed(SDL3.RenderGeometry(Handle, texture, vertices, vertices.Length, indices, indices.Length));
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Renderer));
+    private void ThrowIfDisposed()
+    {
+        ObjectDisposedException.ThrowIf(Handle is null, typeof(Renderer));
+        EnsureCurrentSurface();
+    }
+
+    private void EnsureCurrentSurface()
+    {
+        if (_windowSurface is null)
+            return;
+
+        Surface current = _windowSurface.Surface;
+
+        if (ReferenceEquals(current, _surface))
+            return;
+
+        SDL3.DestroyRenderer(Handle);
+
+        Handle = SDL3.CreateSoftwareRenderer(current.Handle);
+        SDLThrowHelper.ThrowIfNull(Handle);
+
+        _surface = current;
+    }
 }
