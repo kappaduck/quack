@@ -105,6 +105,15 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool GetWindowSizeInPixels(SDL_Window* window, out int width, out int height);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowSurface")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Surface* GetWindowSurface(SDL_Window* window);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetWindowSurfaceVSync")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool GetWindowSurfaceVSync(SDL_Window* window, out int vsync);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_HideWindow")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -235,6 +244,16 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SetWindowSize(SDL_Window* window, int width, int height);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowShape")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SetWindowShape(SDL_Window* window, SDL_Surface* shape);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowSurfaceVSync")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool SetWindowSurfaceVSync(SDL_Window* window, int vsync);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetWindowTitle", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
@@ -255,7 +274,22 @@ internal static partial class SDL3
     [return: MarshalAs(UnmanagedType.I1)]
     internal static partial bool SyncWindow(SDL_Window* window);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_UpdateWindowSurface")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool UpdateWindowSurface(SDL_Window* window);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_UpdateWindowSurfaceRects")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool UpdateWindowSurfaceRects(SDL_Window* window, ReadOnlySpan<RectI> rects, int numrects);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_WarpMouseInWindow")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void WarpMouseInWindow(SDL_Window* window, float x, float y);
+
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_WindowHasSurface")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I1)]
+    internal static partial bool WindowHasSurface(SDL_Window* window);
 }

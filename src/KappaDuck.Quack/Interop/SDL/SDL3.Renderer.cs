@@ -27,6 +27,10 @@ internal static partial class SDL3
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial SDL_Renderer* CreateRendererWithProperties(uint properties);
 
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CreateSoftwareRenderer")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial SDL_Renderer* CreateSoftwareRenderer(SDL_Surface* surface);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_DestroyRenderer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void DestroyRenderer(SDL_Renderer* renderer);

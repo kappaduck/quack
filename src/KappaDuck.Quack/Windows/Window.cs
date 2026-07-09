@@ -707,6 +707,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     public int WidthInPixels { get; private set; }
 
+    /// <summary>
+    /// Gets the CPU-accessible pixel surface currently acquired for this window, or <see langword="null"/> if none.
+    /// </summary>
+    public WindowSurface? WindowSurface { get; private set; }
+
     internal SDL_Window* NativeHandle { get; private set; }
 
     /// <summary>
@@ -923,6 +928,20 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     }
 
     /// <summary>
+    /// Sets the shape of this window from the alpha channel of <paramref name="shape"/>, making transparent areas
+    /// click-through, or removes any existing shape when <paramref name="shape"/> is <see langword="null"/>.
+    /// </summary>
+    /// <remarks>The window must have been created with <see cref="UseTransparentBuffer"/> set to <see langword="true"/>.</remarks>
+    /// <param name="shape">The surface whose alpha channel defines the window's shape, or <see langword="null"/> to clear it.</param>
+    /// <exception cref="QuackInteropException">Failed to set the window's shape.</exception>
+    /// <exception cref="ObjectDisposedException">The window is not open.</exception>
+    public void SetShape(Surface? shape)
+    {
+        ObjectDisposedException.ThrowIf(NativeHandle is null, typeof(Window));
+        SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowShape(NativeHandle, shape?.Handle));
+    }
+
+    /// <summary>
     /// Shows the window if it is hidden.
     /// </summary>
     /// <remarks>If the window is minimized or maximized, use <see cref="Restore"/> instead.</remarks>
@@ -997,10 +1016,24 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     internal void Bind(Renderer renderer)
     {
+        if (WindowSurface is not null)
+            ThrowHelper.ThrowInvalidOperation("This window already has a surface. Dispose it before creating a renderer.");
+
         if (Renderer is not null && !ReferenceEquals(Renderer, renderer))
             ThrowHelper.ThrowInvalidOperation("This window is already bound to a renderer. Dispose the existing one before creating another.");
 
         Renderer = renderer;
+    }
+
+    internal void Bind(WindowSurface surface)
+    {
+        if (Renderer is not null)
+            ThrowHelper.ThrowInvalidOperation("This window already has a renderer. Dispose it before acquiring its surface.");
+
+        if (WindowSurface is not null && !ReferenceEquals(WindowSurface, surface))
+            ThrowHelper.ThrowInvalidOperation("This window already has a surface. Dispose the existing one before creating another.");
+
+        WindowSurface = surface;
     }
 
     internal void Unbind(Renderer renderer)
@@ -1009,6 +1042,14 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             return;
 
         Renderer = null;
+    }
+
+    internal void Unbind(WindowSurface surface)
+    {
+        if (!ReferenceEquals(WindowSurface, surface))
+            return;
+
+        WindowSurface = null;
     }
 
     private void ApplyDeferredSettings()
