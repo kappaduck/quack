@@ -41,10 +41,10 @@ internal class EventGenerator : IIncrementalGenerator
         if (context.TargetSymbol is not INamedTypeSymbol @event)
             return null;
 
-        if (context.Attributes is not [AttributeData attribute, ..])
+        if (context.Attributes is not [{ ConstructorArguments: [TypedConstant eventType, ..] } attribute, ..])
             return null;
 
-        string? nativeEventType = GetNativeEventType(attribute);
+        string? nativeEventType = GetNativeEventType(eventType);
 
         if (nativeEventType is null)
             return null;
@@ -61,33 +61,18 @@ internal class EventGenerator : IIncrementalGenerator
         };
     }
 
-    private static string? GetNativeEventType(AttributeData attribute)
+    private static string? GetNativeEventType(TypedConstant constant)
     {
-        if (attribute.ApplicationSyntaxReference?.GetSyntax() is AttributeSyntax { ArgumentList.Arguments: [{ Expression: MemberAccessExpressionSyntax memberAccess }, ..] })
-            return memberAccess.Name.Identifier.ValueText;
-
-        if (attribute.ConstructorArguments is not [{ Type: INamedTypeSymbol type, Value: { } value }, ..])
+        if (constant is not { Type: INamedTypeSymbol type, Value: not null })
             return null;
 
         foreach (ISymbol member in type.GetMembers())
         {
-            if (member is IFieldSymbol { HasConstantValue: true, ConstantValue: { } memberValue } field && EnumValuesEqual(memberValue, value))
+            if (member is IFieldSymbol { HasConstantValue: true } field && Equals(field.ConstantValue, constant.Value))
                 return field.Name;
         }
 
         return null;
-    }
-
-    private static bool EnumValuesEqual(object left, object right)
-    {
-        try
-        {
-            return Convert.ToInt64(left) == Convert.ToInt64(right);
-        }
-        catch (OverflowException)
-        {
-            return left.Equals(right);
-        }
     }
 
     private static void Execute(EquatableArray<EventInfo> events, SourceProductionContext context)
