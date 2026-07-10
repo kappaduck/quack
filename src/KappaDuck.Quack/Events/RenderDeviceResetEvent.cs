@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a renderer's device has been reset and all textures need to be recreated.
 /// </summary>
+[QuackEvent(SDL_EventType.RenderDeviceReset, NativeField = nameof(SDL_Event.Render))]
 public readonly struct RenderDeviceResetEvent : IEvent
 {
     internal RenderDeviceResetEvent(SDL_RenderEvent e) => WindowId = e.WindowId;

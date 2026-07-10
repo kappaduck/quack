@@ -1,0 +1,17 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: : (6,23)-(6,41),
+      Message: 'QuitRequestedEvent' is decorated with [QuackEvent] but does not implement IEvent,
+      Severity: Error,
+      Descriptor: {
+        Id: QUACK001,
+        Title: Event type must implement IEvent,
+        MessageFormat: '{0}' is decorated with [QuackEvent] but does not implement IEvent,
+        Category: Events,
+        DefaultSeverity: Error,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: : (11,27)-(11,37),
+      Message: 'WeirdEvent' has a payload constructor, so [QuackEvent] must set NativeField to the SDL_Event field to read,
+      Severity: Error,
+      Descriptor: {
+        Id: QUACK003,
+        Title: Payload event must specify a native field,
+        MessageFormat: '{0}' has a payload constructor, so [QuackEvent] must set NativeField to the SDL_Event field to read,
+        Category: Events,
+        DefaultSeverity: Error,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

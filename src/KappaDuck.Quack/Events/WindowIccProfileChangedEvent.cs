@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the ICC profile of a window's display changes.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowIccProfileChanged, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowIccProfileChangedEvent : IEvent
 {
     internal WindowIccProfileChangedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

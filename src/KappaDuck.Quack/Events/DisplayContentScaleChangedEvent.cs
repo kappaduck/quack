@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the content scale of a display changes.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayContentScaleChanged, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayContentScaleChangedEvent : IEvent
 {
     internal DisplayContentScaleChangedEvent(SDL_DisplayEvent e) => DisplayId = e.DisplayId;

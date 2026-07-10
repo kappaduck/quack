@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the desktop mode of a display changes.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayDesktopModeChanged, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayDesktopModeChangedEvent : IEvent
 {
     internal DisplayDesktopModeChangedEvent(SDL_DisplayEvent e)

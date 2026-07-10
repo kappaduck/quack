@@ -18,6 +18,10 @@
     <InternalsVisibleTo Include="Integration.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\KappaDuck.Quack.SourceGenerator\KappaDuck.Quack.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
   <ItemGroup Label="Global usings">
     <Using Include="KappaDuck.Quack.Interop" />
     <Using Include="KappaDuck.Quack.Interop.SDL" />

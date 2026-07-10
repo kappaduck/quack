@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a renderer's render targets have been reset and their contents need to be updated.
 /// </summary>
+[QuackEvent(SDL_EventType.RenderTargetsReset, NativeField = nameof(SDL_Event.Render))]
 public readonly struct RenderTargetsResetEvent : IEvent
 {
     internal RenderTargetsResetEvent(SDL_RenderEvent e) => WindowId = e.WindowId;

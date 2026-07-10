@@ -52,3 +52,12 @@ indent_size = 2
 
 [*.{yaml,yml}]
 indent_size = 2
+
+[*.{received,verified}.{txt,cs,json,xml}]
+charset = utf-8-bom
+end_of_line = lf
+insert_final_newline = false
+trim_trailing_whitespace = false
+indent_size = unset
+indent_style = unset
+tab_width = unset

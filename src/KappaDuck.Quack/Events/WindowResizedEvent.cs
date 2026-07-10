@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is resized.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowResized, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowResizedEvent : IEvent
 {
     internal WindowResizedEvent(SDL_WindowEvent e)

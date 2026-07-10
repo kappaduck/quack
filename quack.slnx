@@ -26,6 +26,7 @@
     <File Path="tests/Directory.Build.props" />
     <File Path="tests/Directory.Packages.props" />
     <Project Path="tests/Integration.Tests/Integration.Tests.csproj" />
+    <Project Path="tests/SourceGenerator.Tests/SourceGenerator.Tests.csproj" />
     <Project Path="tests/Unit.Tests/Unit.Tests.csproj" />
   </Folder>
   <Folder Name="/workflows/">
@@ -35,6 +36,7 @@
     <File Path=".github/workflows/runtimes.yml" />
     <File Path=".github/workflows/quack.yml" />
   </Folder>
+  <Project Path="src/KappaDuck.Quack.SourceGenerator/KappaDuck.Quack.SourceGenerator.csproj" />
   <Project Path="src/KappaDuck.Quack/KappaDuck.Quack.csproj" />
   <Project Path="src/Quack.Sandbox/Quack.Sandbox.csproj" />
 </Solution>

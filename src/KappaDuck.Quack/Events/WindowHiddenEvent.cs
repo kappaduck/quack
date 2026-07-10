@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is hidden.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowHidden, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowHiddenEvent : IEvent
 {
     internal WindowHiddenEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

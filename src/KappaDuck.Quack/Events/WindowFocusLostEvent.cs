@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window loses keyboard focus.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowFocusLost, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowFocusLostEvent : IEvent
 {
     internal WindowFocusLostEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

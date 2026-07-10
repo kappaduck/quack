@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is shown.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowShown, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowShownEvent : IEvent
 {
     internal WindowShownEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

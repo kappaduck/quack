@@ -29,14 +29,14 @@ public static class EventManager
     /// </summary>
     /// <typeparam name="TEvent">The event type to disable.</typeparam>
     public static void Disable<TEvent>() where TEvent : IEvent
-        => SDL3.SetEventEnabled(EventType.Of<TEvent>(), enabled: false);
+        => SDL3.SetEventEnabled(EventMapper.Of<TEvent>(), enabled: false);
 
     /// <summary>
     /// Enables <typeparamref name="TEvent"/>
     /// </summary>
     /// <typeparam name="TEvent">The event type to enable.</typeparam>
     public static void Enable<TEvent>() where TEvent : IEvent
-        => SDL3.SetEventEnabled(EventType.Of<TEvent>(), enabled: true);
+        => SDL3.SetEventEnabled(EventMapper.Of<TEvent>(), enabled: true);
 
     /// <summary>
     /// Installs a global filter invoked for every event before it is added to the queue. Returning
@@ -83,7 +83,7 @@ public static class EventManager
         {
             unsafe
             {
-                callback(EventType.Convert(in *e));
+                callback(EventMapper.Convert(in *e));
             }
 
             return true;
@@ -100,7 +100,7 @@ public static class EventManager
         unsafe
         {
             SDL_Event native = *e;
-            Event evt = EventType.Convert(in native);
+            Event evt = EventMapper.Convert(in native);
             return filter(evt) ? (byte)1 : (byte)0;
         }
     }

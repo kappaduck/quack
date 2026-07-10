@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window had a hit test that was not handled.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowHitTest, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowHitTestEvent : IEvent
 {
     internal WindowHitTestEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

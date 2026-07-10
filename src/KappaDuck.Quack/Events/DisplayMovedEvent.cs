@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a display changes position within the desktop layout.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayMoved, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayMovedEvent : IEvent
 {
     internal DisplayMovedEvent(SDL_DisplayEvent e) => DisplayId = e.DisplayId;

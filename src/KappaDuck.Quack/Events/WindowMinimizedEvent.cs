@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is minimized.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowMinimized, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowMinimizedEvent : IEvent
 {
     internal WindowMinimizedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

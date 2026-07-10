@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the current mode of a display changes.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayCurrentModeChanged, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayCurrentModeChangedEvent : IEvent
 {
     internal DisplayCurrentModeChangedEvent(SDL_DisplayEvent e)

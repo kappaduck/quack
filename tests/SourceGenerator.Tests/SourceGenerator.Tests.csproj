@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Remove="..\..\src\KappaDuck.Quack\KappaDuck.Quack.csproj" />
+    <ProjectReference Include="..\..\src\KappaDuck.Quack.SourceGenerator\KappaDuck.Quack.SourceGenerator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Basic.Reference.Assemblies.Net100" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="Verify.SourceGenerators" />
+  </ItemGroup>
+
+</Project>

@@ -13,6 +13,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the mouse moves.
 /// </summary>
+[QuackEvent(SDL_EventType.MouseMotion, NativeField = nameof(SDL_Event.Motion))]
 public readonly struct MouseMovedEvent : IEvent
 {
     internal MouseMovedEvent(SDL_MouseMotionEvent e)

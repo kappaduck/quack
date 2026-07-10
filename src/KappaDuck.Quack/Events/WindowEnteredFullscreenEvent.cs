@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window enters fullscreen.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowEnterFullscreen, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowEnteredFullscreenEvent : IEvent
 {
     internal WindowEnteredFullscreenEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

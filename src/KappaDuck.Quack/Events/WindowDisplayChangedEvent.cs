@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is moved to a different display.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowDisplayChanged, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowDisplayChangedEvent : IEvent
 {
     internal WindowDisplayChangedEvent(SDL_WindowEvent e)

@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the usable bounds of a display change, for example when the taskbar is resized.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayUsableBoundsChanged, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayUsableBoundsChangedEvent : IEvent
 {
     internal DisplayUsableBoundsChangedEvent(SDL_DisplayEvent e) => DisplayId = e.DisplayId;

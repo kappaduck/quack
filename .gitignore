@@ -13,6 +13,10 @@ src/Quack.Sandbox/*.cs
 [Bb]in/
 [Oo]bj/
 
+# Verify files
+
+**/snapshots/*.received.*
+
 # test outputs
 
 [Tt]est[Rr]esults/
