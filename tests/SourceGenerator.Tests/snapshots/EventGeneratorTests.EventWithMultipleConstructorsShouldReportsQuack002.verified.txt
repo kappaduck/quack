@@ -1,0 +1,17 @@
+﻿{
+  Diagnostics: [
+    {
+      Location: : (6,23)-(6,38),
+      Message: 'KeyPressedEvent' must declare zero constructors (marker event), or exactly one constructor with a single native payload parameter,
+      Severity: Error,
+      Descriptor: {
+        Id: QUACK002,
+        Title: Invalid event constructor,
+        MessageFormat: '{0}' must declare zero constructors (marker event), or exactly one constructor with a single native payload parameter,
+        Category: Events,
+        DefaultSeverity: Error,
+        IsEnabledByDefault: true
+      }
+    }
+  ]
+}

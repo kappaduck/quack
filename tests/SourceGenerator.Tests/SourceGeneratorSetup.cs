@@ -11,6 +11,6 @@ internal static class SourceGeneratorSetup
     public static void Init()
     {
         VerifySourceGenerators.Initialize();
-        UseSourceFileRelativeDirectory("snapshots");
+        UseSourceFileRelativeDirectory("../snapshots");
     }
 }
