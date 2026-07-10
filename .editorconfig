@@ -52,3 +52,6 @@ indent_size = 2
 
 [*.{yaml,yml}]
 indent_size = 2
+
+[*.{verified,received}.{cs,txt}]
+end_of_line = lf

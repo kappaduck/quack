@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+    <PackageReference Include="Verify.TUnit" />
+    <PackageReference Include="Verify.SourceGenerators" />
   </ItemGroup>
 
 </Project>

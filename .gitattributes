@@ -38,6 +38,12 @@ codeowners text
 *.yaml text eol=lf
 *.yml  text eol=lf
 
+# Verify snapshot files
+*.verified.txt text  eol=lf
+*.verified.cs  text  eol=lf
+*.received.txt text  eol=lf
+*.received.cs  text  eol=lf
+
 # Exclude files form exporting
 
 .gitattributes export-ignore

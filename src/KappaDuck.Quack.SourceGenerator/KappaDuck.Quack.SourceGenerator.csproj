@@ -9,6 +9,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup Label="Make internals visible to test projects">
+    <InternalsVisibleTo Include="SourceGenerator.Tests" />
+  </ItemGroup>
+
   <ItemGroup Label="Packages">
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
