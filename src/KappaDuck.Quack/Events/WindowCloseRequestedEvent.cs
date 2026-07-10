@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the window manager requests that a window be closed.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowCloseRequested, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowCloseRequestedEvent : IEvent
 {
     internal WindowCloseRequestedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

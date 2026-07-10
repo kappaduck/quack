@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is maximized.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowMaximized, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowMaximizedEvent : IEvent
 {
     internal WindowMaximizedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

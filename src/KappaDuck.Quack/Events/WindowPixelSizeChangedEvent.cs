@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the pixel size of a window changes.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowPixelSizeChanged, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowPixelSizeChangedEvent : IEvent
 {
     internal WindowPixelSizeChangedEvent(SDL_WindowEvent e)

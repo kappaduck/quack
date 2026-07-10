@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a renderer's device has been lost and can't be recovered.
 /// </summary>
+[QuackEvent(SDL_EventType.RenderDeviceLost, NativeField = nameof(SDL_Event.Render))]
 public readonly struct RenderDeviceLostEvent : IEvent
 {
     internal RenderDeviceLostEvent(SDL_RenderEvent e) => WindowId = e.WindowId;

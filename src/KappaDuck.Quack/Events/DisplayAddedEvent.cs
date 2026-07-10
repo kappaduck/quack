@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a display is connected to the system.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayAdded, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayAddedEvent : IEvent
 {
     internal DisplayAddedEvent(SDL_DisplayEvent e) => DisplayId = e.DisplayId;

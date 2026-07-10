@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is about to be destroyed.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowDestroyed, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowDestroyedEvent : IEvent
 {
     internal WindowDestroyedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

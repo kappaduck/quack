@@ -12,6 +12,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a mouse button is released.
 /// </summary>
+[QuackEvent(SDL_EventType.MouseButtonUp, NativeField = nameof(SDL_Event.Button))]
 public readonly struct MouseButtonReleasedEvent : IEvent
 {
     internal MouseButtonReleasedEvent(SDL_MouseButtonEvent e)

@@ -20,19 +20,19 @@ public static class EventQueue
     /// <typeparam name="TEvent">The event type.</typeparam>
     /// <returns><see langword="true"/> if the event type is in the event queue otherwise <see langword="false"/></returns>
     public static bool Contains<TEvent>() where TEvent : IEvent
-        => SDL3.HasEvent(EventType.Of<TEvent>());
+        => SDL3.HasEvent(EventMapper.Of<TEvent>());
 
     /// <summary>
     /// Removes all queued <typeparamref name="TEvent"/>.
     /// </summary>
     /// <typeparam name="TEvent">The event type.</typeparam>
     public static void Flush<TEvent>() where TEvent : IEvent
-        => SDL3.FlushEvent(EventType.Of<TEvent>());
+        => SDL3.FlushEvent(EventMapper.Of<TEvent>());
 
     /// <summary>
     /// Removes all events from the queue.
     /// </summary>
-    public static void Flush() => SDL3.FlushEvents(EventType.None, EventType.End);
+    public static void Flush() => SDL3.FlushEvents(EventMapper.None, EventMapper.End);
 
     /// <summary>
     /// Peeks events in the event queue without removing them.
@@ -57,11 +57,11 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, EventType.None, EventType.End);
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, EventMapper.None, EventMapper.End);
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = EventType.Convert(in buffer[i]);
+            events[i] = EventMapper.Convert(in buffer[i]);
 
         return count;
     }
@@ -90,13 +90,13 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        SDL_EventType type = EventType.Of<TEvent>();
+        SDL_EventType type = EventMapper.Of<TEvent>();
 
         int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Peek, type, type);
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = (TEvent)EventType.Convert(in buffer[i]).Value!;
+            events[i] = (TEvent)EventMapper.Convert(in buffer[i]).Value!;
 
         return count;
     }
@@ -116,7 +116,7 @@ public static class EventQueue
             return false;
         }
 
-        e = EventType.Convert(in native);
+        e = EventMapper.Convert(in native);
         return true;
     }
 
@@ -151,7 +151,7 @@ public static class EventQueue
         {
             unsafe
             {
-                return match(EventType.Convert(in *e));
+                return match(EventMapper.Convert(in *e));
             }
         });
     }
@@ -179,11 +179,11 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, EventType.None, EventType.End);
+        int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, EventMapper.None, EventMapper.End);
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = EventType.Convert(in buffer[i]);
+            events[i] = EventMapper.Convert(in buffer[i]);
 
         return count;
     }
@@ -212,13 +212,13 @@ public static class EventQueue
             ? stackalloc SDL_Event[events.Length]
             : new SDL_Event[events.Length];
 
-        SDL_EventType type = EventType.Of<TEvent>();
+        SDL_EventType type = EventMapper.Of<TEvent>();
 
         int count = SDL3.PeepEvents(buffer, buffer.Length, SDL_EventAction.Get, type, type);
         SDLThrowHelper.ThrowIfNegative(count);
 
         for (int i = 0; i < count; i++)
-            events[i] = (TEvent)EventType.Convert(in buffer[i]).Value!;
+            events[i] = (TEvent)EventMapper.Convert(in buffer[i]).Value!;
 
         return count;
     }
@@ -241,13 +241,13 @@ public static class EventQueue
         if (!timeout.HasValue || timeout == Timeout.InfiniteTimeSpan)
         {
             SDL3.WaitEvent(out native);
-            e = EventType.Convert(in native);
+            e = EventMapper.Convert(in native);
 
             return e.HasValue;
         }
 
         SDL3.WaitEventTimeout(out native, (int)timeout.Value.TotalMilliseconds);
-        e = EventType.Convert(in native);
+        e = EventMapper.Convert(in native);
 
         return e.HasValue;
     }

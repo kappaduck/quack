@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the orientation of a display changes.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayOrientation, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayOrientationChangedEvent : IEvent
 {
     internal DisplayOrientationChangedEvent(SDL_DisplayEvent e)

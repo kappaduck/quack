@@ -10,6 +10,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is moved.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowMoved, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowMovedEvent : IEvent
 {
     internal WindowMovedEvent(SDL_WindowEvent e)

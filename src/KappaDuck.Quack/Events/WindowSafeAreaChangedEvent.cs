@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the safe area of a window changes.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowSafeAreaChanged, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowSafeAreaChangedEvent : IEvent
 {
     internal WindowSafeAreaChangedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

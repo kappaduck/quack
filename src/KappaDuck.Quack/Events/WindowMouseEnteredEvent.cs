@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the mouse enters a window.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowMouseEnter, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowMouseEnteredEvent : IEvent
 {
     internal WindowMouseEnteredEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

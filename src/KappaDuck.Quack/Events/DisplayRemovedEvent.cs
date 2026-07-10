@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a display is disconnected from the system.
 /// </summary>
+[QuackEvent(SDL_EventType.DisplayRemoved, NativeField = nameof(SDL_Event.Display))]
 public readonly struct DisplayRemovedEvent : IEvent
 {
     internal DisplayRemovedEvent(SDL_DisplayEvent e) => DisplayId = e.DisplayId;

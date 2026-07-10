@@ -13,6 +13,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the mouse wheel is scrolled.
 /// </summary>
+[QuackEvent(SDL_EventType.MouseWheel, NativeField = nameof(SDL_Event.Wheel))]
 public readonly struct MouseWheelEvent : IEvent
 {
     internal MouseWheelEvent(SDL_MouseWheelEvent e)

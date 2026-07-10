@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a window is occluded by another window.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowOccluded, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowOccludedEvent : IEvent
 {
     internal WindowOccludedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

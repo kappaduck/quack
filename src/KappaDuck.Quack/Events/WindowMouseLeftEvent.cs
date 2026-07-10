@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when the mouse leaves a window.
 /// </summary>
+[QuackEvent(SDL_EventType.WindowMouseLeave, NativeField = nameof(SDL_Event.Window))]
 public readonly struct WindowMouseLeftEvent : IEvent
 {
     internal WindowMouseLeftEvent(SDL_WindowEvent e) => WindowId = e.WindowId;

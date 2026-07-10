@@ -9,6 +9,7 @@ namespace KappaDuck.Quack.Events;
 /// <summary>
 /// Raised when a keyboard device was disconnected.
 /// </summary>
+[QuackEvent(SDL_EventType.KeyboardRemoved, NativeField = nameof(SDL_Event.KeyboardDevice))]
 public readonly struct KeyboardRemovedEvent : IEvent
 {
     internal KeyboardRemovedEvent(SDL_KeyboardDeviceEvent e) => Which = e.Which;
