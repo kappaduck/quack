@@ -11,7 +11,7 @@ namespace KappaDuck.Quack.Graphics.Primitives;
 /// </summary>
 /// <param name="position">The position of the vertex, in render coordinates.</param>
 /// <param name="color">The color of the vertex.</param>
-/// <param name="textureCoordinate">The normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture. Ignored when drawing untextured geometry.</param>
+/// <param name="textureCoordinate">The normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture. Ignored when drawing a geometry without a texture.</param>
 [StructLayout(LayoutKind.Sequential)]
 public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : IEquatable<Vertex>
 {
@@ -22,7 +22,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// <param name="color">The color of the vertex, converted to floating-point channels.</param>
     /// <param name="textureCoordinate">
     /// The normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture.
-    /// Ignored when drawing untextured geometry.
+    /// Ignored when drawing a geometry without a texture.
     /// </param>
     public Vertex(PointF position, Color color, PointF textureCoordinate) : this(position, color.ToColorF(), textureCoordinate)
     {
@@ -75,7 +75,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// <summary>
     /// Gets or sets the normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture.
     /// </summary>
-    /// <remarks>Ignored when drawing untextured geometry.</remarks>
+    /// <remarks>Ignored when drawing a geometry without a texture.</remarks>
     public PointF TextureCoordinate { get; set; } = textureCoordinate;
 
     /// <summary>

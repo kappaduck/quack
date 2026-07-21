@@ -44,7 +44,7 @@ public readonly record struct RenderState
     public BlendMode BlendMode { get; init; }
 
     /// <summary>
-    /// Gets the texture the vertices are drawn with, or <see langword="null"/> to draw untextured geometry.
+    /// Gets the texture the vertices are drawn with, or <see langword="null"/> to draw geometry without a texture.
     /// </summary>
     public Texture? Texture { get; init; }
 }

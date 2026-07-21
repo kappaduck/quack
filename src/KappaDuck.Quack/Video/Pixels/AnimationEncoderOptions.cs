@@ -21,13 +21,13 @@ public sealed record AnimationEncoderOptions
     /// <summary>
     /// Gets or sets the numerator of the fraction used to convert a frame's duration to seconds. Defaults to 1.
     /// </summary>
-    public int? TimebaseNumerator { get; init; }
+    public int? TimeBaseNumerator { get; set; }
 
     /// <summary>
     /// Gets or sets the denominator of the fraction used to convert a frame's duration to seconds. Defaults to 1000,
     /// meaning durations passed to <see cref="AnimationEncoder.AddFrame"/> are interpreted as milliseconds.
     /// </summary>
-    public int? TimebaseDenominator { get; init; }
+    public int? TimeBaseDenominator { get; set; }
 
     /// <summary>
     /// Gets or sets whether GIF encoding reuses a single shared color table across every frame instead of computing
@@ -36,9 +36,9 @@ public sealed record AnimationEncoderOptions
     public bool? GifUseLookupTable { get; init; }
 
     /// <summary>
-    /// Gets or sets how often AVIF encoding inserts a keyframe.
+    /// Gets or sets how often AVIF encoding inserts a key frame.
     /// </summary>
-    public int? AvifKeyframeInterval { get; init; }
+    public int? AvifKeyFrameInterval { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum number of threads used for AVIF encoding.

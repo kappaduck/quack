@@ -63,7 +63,7 @@ public sealed class VertexArray : IDrawable, IEnumerable<Vertex>
     }
 
     /// <summary>
-    /// Gets or sets the texture applied to the whole batch, or <see langword="null"/> to draw untextured, colored geometry.
+    /// Gets or sets the texture applied to the whole batch, or <see langword="null"/> to draw colored geometry without a texture.
     /// </summary>
     public Texture? Texture { get; set; }
 

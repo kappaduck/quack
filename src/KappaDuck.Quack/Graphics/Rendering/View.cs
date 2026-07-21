@@ -16,7 +16,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// target.
 /// </para>
 /// <para>
-/// Combine multiple views to build split-screens, minimaps, or picture-in-picture panels: draw the scene once per
+/// Combine multiple views to build split-screens, mini-maps, or picture-in-picture panels: draw the scene once per
 /// view, each with its own <see cref="Viewport"/>. Obtain a <see cref="ViewScope"/> from
 /// <see cref="Renderer.WithView(View)"/> to draw through a view.
 /// </para>
@@ -65,7 +65,7 @@ public sealed class View
     /// </para>
     /// <para>
     /// Along an axis where <see cref="Size"/> is larger than <see cref="Bounds"/>. For example while zoomed out,
-    /// or on a minimap. The axis is centered on <see cref="Bounds"/> instead of clamped, since no position keeps
+    /// or on a mini-map. The axis is centered on <see cref="Bounds"/> instead of clamped, since no position keeps
     /// the view entirely inside it.
     /// </para>
     /// <para>
@@ -115,7 +115,7 @@ public sealed class View
     /// <remarks>
     /// Expressed in the 0–1 range so it stays correct across different target sizes. (0, 0, 1, 1), the default,
     /// covers the whole target. Use a quarter of the target for split-screen (e.g. (0, 0, 0.5, 0.5) for the
-    /// top-left player) or a small corner rectangle for a minimap (e.g. (0.75, 0.75, 0.2, 0.2)).
+    /// top-left player) or a small corner rectangle for a mini-map (e.g. (0.75, 0.75, 0.2, 0.2)).
     /// </remarks>
     public Rect Viewport { get; set; } = new(0f, 0f, 1f, 1f);
 

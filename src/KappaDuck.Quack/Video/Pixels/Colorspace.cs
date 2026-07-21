@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.Video.Pixels;
 
 /// <summary>
-/// A representative set of colorspaces describing how color values should be interpreted.
+/// A representative set of colorspace describing how color values should be interpreted.
 /// </summary>
 public enum Colorspace : uint
 {

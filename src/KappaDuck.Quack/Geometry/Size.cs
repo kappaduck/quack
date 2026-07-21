@@ -75,7 +75,7 @@ public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators
     /// Converts the size to a <see cref="SizeF"/>.
     /// </summary>
     /// <returns>The converted size.</returns>
-    public readonly SizeF ToSizef() => new(Width, Height);
+    public readonly SizeF ToSizeF() => new(Width, Height);
 
     /// <inheritdoc/>
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)

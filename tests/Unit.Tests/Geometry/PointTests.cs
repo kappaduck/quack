@@ -151,7 +151,7 @@ internal sealed class PointTests
     }
 
     [Test]
-    public async Task EqualsWithAnyTypeExceptPointfShouldReturnFalse()
+    public async Task EqualsWithAnyTypeExceptPointFShouldReturnFalse()
     {
         Point left = new(3, 4);
         const float right = 3f;
@@ -179,11 +179,11 @@ internal sealed class PointTests
     }
 
     [Test]
-    public async Task ToVector2ShouldConvertPointToPointf()
+    public async Task ToVector2ShouldConvertPointToPointF()
     {
         Point point = new(3, 4);
 
-        PointF converted = point.ToPointf();
+        PointF converted = point.ToPointF();
 
         await converted.X.Should().BeEqualTo(point.X);
         await converted.Y.Should().BeEqualTo(point.Y);
@@ -236,7 +236,7 @@ internal sealed class PointTests
     }
 
     [Test]
-    public async Task OperatorSubstractShouldTranslateAPointBackwardsByDisplacementVector2i()
+    public async Task OperatorSubtractShouldTranslateAPointBackwardsByDisplacementVector2i()
     {
         Point left = new(5, 7);
         Vector2I right = new(3, 4);
@@ -248,7 +248,7 @@ internal sealed class PointTests
     }
 
     [Test]
-    public async Task OperatorSubstractShouldTranslateAPointBackwardsByDisplacementVector2()
+    public async Task OperatorSubtractShouldTranslateAPointBackwardsByDisplacementVector2()
     {
         Point left = new(5, 7);
         Vector2 right = new(3f, 4f);
@@ -260,7 +260,7 @@ internal sealed class PointTests
     }
 
     [Test]
-    public async Task OperatorSubstractShouldCopmputeTheDisplacementBetweenTwoPoints()
+    public async Task OperatorSubtractShouldComputeTheDisplacementBetweenTwoPoints()
     {
         Point left = new(5, 7);
         Point right = new(3, 4);

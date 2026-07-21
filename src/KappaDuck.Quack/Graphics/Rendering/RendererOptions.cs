@@ -16,7 +16,7 @@ public sealed record RendererOptions
     /// </summary>
     /// <remarks>
     /// If you want a specific renderer, you can find from the available renderers using <see cref="RenderDrivers.All"/>.
-    /// You can use a comma-seperated list e.g. vulkan,opengl which the engine will try each name, in the order listed, until one succeeds or all of them fail.
+    /// You can use a comma-separated list e.g. vulkan, opengl which the engine will try each name, in the order listed, until one succeeds or all of them fail.
     /// </remarks>
     public string? Driver { get; init; }
 

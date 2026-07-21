@@ -10,7 +10,7 @@ using System.Runtime.Versioning;
 namespace KappaDuck.Quack.Events;
 
 /// <summary>
-/// Manage event hooks for differents platforms so features can observe them through a single SDL hook.
+/// Manage event hooks for different platforms so features can observe them through a single SDL hook.
 /// </summary>
 /// <remarks>
 /// <para>

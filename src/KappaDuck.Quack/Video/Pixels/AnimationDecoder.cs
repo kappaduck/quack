@@ -201,7 +201,7 @@ public sealed class AnimationDecoder : IDisposable
     /// </summary>
     /// <remarks>
     /// Unlike <see cref="TryReadFrame"/>, which reports how long each frame is shown, this reports the timestamp at
-    /// which the frame should be presented, measured from the start of the animation — convenient for synchronising
+    /// which the frame should be presented, measured from the start of the animation — convenient for synchronizing
     /// playback to a clock.
     /// </remarks>
     /// <param name="frame">

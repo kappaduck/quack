@@ -130,17 +130,17 @@ public sealed class AnimationEncoder : IDisposable
         if (options.Quality.HasValue)
             properties.Set("SDL_image.animation_encoder.create.quality", options.Quality.Value);
 
-        if (options.TimebaseNumerator.HasValue)
-            properties.Set("SDL_image.animation_encoder.create.timebase.numerator", options.TimebaseNumerator.Value);
+        if (options.TimeBaseNumerator.HasValue)
+            properties.Set("SDL_image.animation_encoder.create.timebase.numerator", options.TimeBaseNumerator.Value);
 
-        if (options.TimebaseDenominator.HasValue)
-            properties.Set("SDL_image.animation_encoder.create.timebase.denominator", options.TimebaseDenominator.Value);
+        if (options.TimeBaseDenominator.HasValue)
+            properties.Set("SDL_image.animation_encoder.create.timebase.denominator", options.TimeBaseDenominator.Value);
 
         if (options.GifUseLookupTable.HasValue)
             properties.Set("SDL_image.animation_encoder.create.gif.use_lut", options.GifUseLookupTable.Value);
 
-        if (options.AvifKeyframeInterval.HasValue)
-            properties.Set("SDL_image.animation_encoder.create.avif.keyframe_interval", options.AvifKeyframeInterval.HasValue);
+        if (options.AvifKeyFrameInterval.HasValue)
+            properties.Set("SDL_image.animation_encoder.create.avif.keyframe_interval", options.AvifKeyFrameInterval.HasValue);
 
         if (options.AvifMaxThreads.HasValue)
             properties.Set("SDL_image.animation_encoder.create.avif.max_threads", options.AvifMaxThreads.Value);

@@ -178,7 +178,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Rgba8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Abgr8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Rgba32 => BitConverter.IsLittleEndian ? PixelFormat.Abgr8888 : PixelFormat.Rgba8888;
+        public static PixelFormat RGBA32 => BitConverter.IsLittleEndian ? PixelFormat.Abgr8888 : PixelFormat.Rgba8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are alpha, red, green then blue, on the current platform.
@@ -187,7 +187,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Argb8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Bgra8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Argb32 => BitConverter.IsLittleEndian ? PixelFormat.Bgra8888 : PixelFormat.Argb8888;
+        public static PixelFormat ARGB32 => BitConverter.IsLittleEndian ? PixelFormat.Bgra8888 : PixelFormat.Argb8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are blue, green, red then alpha, on the current platform.
@@ -196,7 +196,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Bgra8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Argb8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Bgra32 => BitConverter.IsLittleEndian ? PixelFormat.Argb8888 : PixelFormat.Bgra8888;
+        public static PixelFormat BGRA32 => BitConverter.IsLittleEndian ? PixelFormat.Argb8888 : PixelFormat.Bgra8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are alpha, blue, green then red, on the current platform.
@@ -205,7 +205,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Abgr8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Rgba8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Abgr32 => BitConverter.IsLittleEndian ? PixelFormat.Rgba8888 : PixelFormat.Abgr8888;
+        public static PixelFormat ABGR32 => BitConverter.IsLittleEndian ? PixelFormat.Rgba8888 : PixelFormat.Abgr8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are red, green, blue then an unused byte, on the current platform.
@@ -214,7 +214,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Rgbx8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Xbgr8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Rgbx32 => BitConverter.IsLittleEndian ? PixelFormat.Xbgr8888 : PixelFormat.Rgbx8888;
+        public static PixelFormat RGBX32 => BitConverter.IsLittleEndian ? PixelFormat.Xbgr8888 : PixelFormat.Rgbx8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are an unused byte, red, green then blue, on the current platform.
@@ -223,7 +223,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Xrgb8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Bgrx8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Xrgb32 => BitConverter.IsLittleEndian ? PixelFormat.Bgrx8888 : PixelFormat.Xrgb8888;
+        public static PixelFormat XRGB32 => BitConverter.IsLittleEndian ? PixelFormat.Bgrx8888 : PixelFormat.Xrgb8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are blue, green, red then an unused byte, on the current platform.
@@ -232,7 +232,7 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Bgrx8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Xrgb8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Bgrx32 => BitConverter.IsLittleEndian ? PixelFormat.Xrgb8888 : PixelFormat.Bgrx8888;
+        public static PixelFormat BGRX32 => BitConverter.IsLittleEndian ? PixelFormat.Xrgb8888 : PixelFormat.Bgrx8888;
 
         /// <summary>
         /// Gets the 32-bit format whose four bytes in memory are an unused byte, blue, green then red, on the current platform.
@@ -241,6 +241,6 @@ public static class PixelFormatExtensions
         /// The byte order in memory is the same on every platform. It resolves to <see cref="PixelFormat.Xbgr8888"/>
         /// on big-endian platforms and <see cref="PixelFormat.Rgbx8888"/> on little-endian platforms.
         /// </remarks>
-        public static PixelFormat Xbgr32 => BitConverter.IsLittleEndian ? PixelFormat.Rgbx8888 : PixelFormat.Xbgr8888;
+        public static PixelFormat XBGR32 => BitConverter.IsLittleEndian ? PixelFormat.Rgbx8888 : PixelFormat.Xbgr8888;
     }
 }
