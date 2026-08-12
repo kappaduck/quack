@@ -6,6 +6,7 @@ using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Video.Pixels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Unit.Tests.Graphics.Primitives;
 
@@ -286,7 +287,7 @@ internal sealed class VertexArrayTests
 
         array.Draw(_target, RenderState.Default);
 
-        await _target.Indices!.Length.Should().BeEqualTo(6);
+        await _target.Indices.Length.Should().BeEqualTo(6);
         await _target.Indices[3].Should().BeEqualTo(1);
     }
 
@@ -301,7 +302,7 @@ internal sealed class VertexArrayTests
 
         array.Draw(_target, RenderState.Default);
 
-        await _target.Indices!.Length.Should().BeEqualTo(6);
+        await _target.Indices.Length.Should().BeEqualTo(6);
         await _target.Indices[3].Should().BeEqualTo(0);
     }
 
@@ -313,7 +314,7 @@ internal sealed class VertexArrayTests
 
         public Vertex[] Vertices { get; private set; } = [];
 
-        public int[]? Indices { get; private set; }
+        public int[] Indices { get; private set; } = [];
 
         public RenderState State { get; private set; }
 
@@ -325,10 +326,11 @@ internal sealed class VertexArrayTests
         {
             Drawn = true;
             Vertices = vertices.ToArray();
-            Indices = null;
+            Indices = [];
             State = state;
         }
 
+        [MemberNotNull(nameof(Indices))]
         public void Draw(ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices, RenderState state)
         {
             Drawn = true;
