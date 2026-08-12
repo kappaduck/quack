@@ -6,7 +6,7 @@ using KappaDuck.Quack.Interop.SDL.Primitives;
 
 namespace KappaDuck.Quack.Interop.SDL;
 
-internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
+internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
 {
     public SDL_IOStream* Handle { get; private set; } = stream;
 
@@ -86,7 +86,7 @@ internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe nuint ReadCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
+    private static nuint ReadCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
     {
         try
         {
@@ -106,7 +106,7 @@ internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe nuint WriteCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
+    private static nuint WriteCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
     {
         try
         {
@@ -123,7 +123,7 @@ internal sealed class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static unsafe byte FlushCallback(void* data, SDL_IOStatus* status)
+    private static byte FlushCallback(void* data, SDL_IOStatus* status)
     {
         try
         {

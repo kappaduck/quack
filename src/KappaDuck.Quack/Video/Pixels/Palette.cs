@@ -23,8 +23,11 @@ public sealed class Palette : IDisposable
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
 
-        Handle = SDL3.CreatePalette(count);
-        SDLThrowHelper.ThrowIfNull(Handle);
+        unsafe
+        {
+            Handle = SDL3.CreatePalette(count);
+            SDLThrowHelper.ThrowIfNull(Handle);
+        }
 
         _owned = true;
     }
@@ -39,7 +42,11 @@ public sealed class Palette : IDisposable
 
     internal Palette(SDL_Palette* palette)
     {
-        Handle = palette;
+        unsafe
+        {
+            Handle = palette;
+        }
+
         _owned = false;
     }
 
@@ -120,13 +127,16 @@ public sealed class Palette : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (Handle is null)
-            return;
+        unsafe
+        {
+            if (Handle is null)
+                return;
 
-        if (_owned)
-            SDL3.DestroyPalette(Handle);
+            if (_owned)
+                SDL3.DestroyPalette(Handle);
 
-        Handle = null;
+            Handle = null;
+        }
     }
 
     /// <summary>
@@ -150,5 +160,5 @@ public sealed class Palette : IDisposable
         }
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Palette));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (Handle is null), typeof(Palette));
 }

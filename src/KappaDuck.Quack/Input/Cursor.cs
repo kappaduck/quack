@@ -20,8 +20,13 @@ public sealed class Cursor : IDisposable
     /// Creates a cursor with a system cursor type.
     /// </summary>
     /// <param name="type">The system cursor type.</param>
-    public Cursor(CursorType type) : this(SDL3.CreateSystemCursor(type), true)
+    public Cursor(CursorType type)
     {
+        unsafe
+        {
+            InitializeCursor(SDL3.CreateSystemCursor(type));
+            _owned = true;
+        }
     }
 
     /// <summary>
@@ -37,8 +42,13 @@ public sealed class Cursor : IDisposable
     /// </remarks>
     /// <param name="surface">The image to use</param>
     /// <param name="hotspot">The cursor hotspot</param>
-    public Cursor(Surface surface, Point hotspot) : this(SDL3.CreateColorCursor(surface.Handle, hotspot.X, hotspot.Y), true)
+    public Cursor(Surface surface, Point hotspot)
     {
+        unsafe
+        {
+            InitializeCursor(SDL3.CreateColorCursor(surface.Handle, hotspot.X, hotspot.Y));
+            _owned = true;
+        }
     }
 
     /// <summary>
@@ -88,8 +98,13 @@ public sealed class Cursor : IDisposable
     /// exactly <paramref name="width"/> / 8 * <paramref name="height"/> bytes long.
     /// </exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot) : this(CreateMonochrome(data, mask, width, height, hotspot), true)
+    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot)
     {
+        unsafe
+        {
+            InitializeCursor(CreateMonochrome(data, mask, width, height, hotspot));
+            _owned = true;
+        }
     }
 
     /// <summary>
@@ -110,8 +125,13 @@ public sealed class Cursor : IDisposable
     /// <param name="hotspot">The cursor hotspot, shared by every frame.</param>
     /// <exception cref="ArgumentException"><paramref name="frames"/> is empty.</exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<CursorFrame> frames, Point hotspot) : this(CreateAnimated(frames, hotspot), true)
+    public Cursor(ReadOnlySpan<CursorFrame> frames, Point hotspot)
     {
+        unsafe
+        {
+            InitializeCursor(CreateAnimated(frames, hotspot));
+            _owned = true;
+        }
     }
 
     /// <summary>
@@ -129,29 +149,30 @@ public sealed class Cursor : IDisposable
     /// <param name="animation">The animation to cycle through.</param>
     /// <param name="hotspot">The cursor hotspot, shared by every frame.</param>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(Animation animation, Point hotspot) : this(SDL3_image.CreateAnimatedCursor(animation.Handle, hotspot.X, hotspot.Y), true)
+    public Cursor(Animation animation, Point hotspot)
     {
+        unsafe
+        {
+            InitializeCursor(SDL3_image.CreateAnimatedCursor(animation.Handle, hotspot.X, hotspot.Y));
+            _owned = true;
+        }
     }
 
-    private Cursor(SDL_Cursor* handle, bool owned)
+    private unsafe Cursor(SDL_Cursor* handle, bool owned)
     {
-        QuackEngine.EnsureInitialized(Subsystem.Video);
-
-        SDLThrowHelper.ThrowIfNull(handle);
-
-        Handle = handle;
+        InitializeCursor(handle);
         _owned = owned;
     }
 
     /// <summary>
     /// Gets the active cursor.
     /// </summary>
-    public static Cursor Current => new(SDL3.GetCursor(), false);
+    public static Cursor Current => unsafe (new(SDL3.GetCursor(), false));
 
     /// <summary>
     /// Gets the default cursor.
     /// </summary>
-    public static Cursor Default { get; } = new(SDL3.GetDefaultCursor(), false);
+    public static Cursor Default { get; } = unsafe (new(SDL3.GetDefaultCursor(), false));
 
     /// <summary>
     /// Gets or sets a value indicating whether the active cursor is visible.
@@ -175,11 +196,14 @@ public sealed class Cursor : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (Handle is null || !_owned)
-            return;
+        unsafe
+        {
+            if (Handle is null || !_owned)
+                return;
 
-        SDL3.DestroyCursor(Handle);
-        Handle = null;
+            SDL3.DestroyCursor(Handle);
+            Handle = null;
+        }
     }
 
     /// <summary>
@@ -224,7 +248,7 @@ public sealed class Cursor : IDisposable
         ArgumentOutOfRangeException.ThrowIfNotEqual(data.Length, expected);
         ArgumentOutOfRangeException.ThrowIfNotEqual(mask.Length, expected);
 
-        return SDL3.CreateCursor(data, mask, width, height, hotspot.X, hotspot.Y);
+        return unsafe (SDL3.CreateCursor(data, mask, width, height, hotspot.X, hotspot.Y));
     }
 
     private static SDL_Cursor* CreateAnimated(ReadOnlySpan<CursorFrame> frames, Point hotspot)
@@ -238,9 +262,17 @@ public sealed class Cursor : IDisposable
             CursorFrame frame = frames[i];
             uint duration = frame.Duration > TimeSpan.Zero ? (uint)frame.Duration.TotalMilliseconds : 0;
 
-            info[i] = new SDL_CursorFrameInfo(frame.Surface.Handle, duration);
+            info[i] = unsafe (new SDL_CursorFrameInfo(frame.Surface.Handle, duration));
         }
 
-        return SDL3.CreateAnimatedCursor(info, info.Length, hotspot.X, hotspot.Y);
+        return unsafe (SDL3.CreateAnimatedCursor(info, info.Length, hotspot.X, hotspot.Y));
+    }
+
+    private unsafe void InitializeCursor(SDL_Cursor* handle)
+    {
+        QuackEngine.EnsureInitialized(Subsystem.Video);
+
+        SDLThrowHelper.ThrowIfNull(handle);
+        Handle = handle;
     }
 }

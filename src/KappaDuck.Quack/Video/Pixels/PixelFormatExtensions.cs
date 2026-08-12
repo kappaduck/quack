@@ -70,7 +70,7 @@ public static class PixelFormatExtensions
                 int bpp;
                 uint red, green, blue, alpha;
 
-                SDLThrowHelper.ThrowIfFailed(SDL3.GetMasksForPixelFormat(format, &bpp, &red, &green, &blue, &alpha));
+                SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetMasksForPixelFormat(format, &bpp, &red, &green, &blue, &alpha)));
                 return new PixelFormatMask(bpp, red, green, blue, alpha);
             }
         }
@@ -85,7 +85,10 @@ public static class PixelFormatExtensions
         public Color GetRGB(uint pixel, Palette? palette = null)
         {
             byte r, g, b;
-            SDL3.GetRGB(pixel, format.Details, palette?.Handle, &r, &g, &b);
+            unsafe
+            {
+                SDL3.GetRGB(pixel, format.Details, palette?.Handle, &r, &g, &b);
+            }
 
             return new Color(r, g, b);
         }
@@ -100,7 +103,10 @@ public static class PixelFormatExtensions
         public Color GetRGBA(uint pixel, Palette? palette = null)
         {
             byte r, g, b, a;
-            SDL3.GetRGBA(pixel, format.Details, palette?.Handle, &r, &g, &b, &a);
+            unsafe
+            {
+                SDL3.GetRGBA(pixel, format.Details, palette?.Handle, &r, &g, &b, &a);
+            }
 
             return new Color(r, g, b, a);
         }
@@ -116,7 +122,7 @@ public static class PixelFormatExtensions
         /// <param name="palette">An optional palette for indexed formats.</param>
         /// <returns>The pixel value packed for the format.</returns>
         public uint MapRGB(Color color, Palette? palette = null)
-            => SDL3.MapRGB(format.Details, palette?.Handle, color.R, color.G, color.B);
+            => unsafe (SDL3.MapRGB(format.Details, palette?.Handle, color.R, color.G, color.B));
 
         /// <summary>
         /// Maps a color to an opaque pixel value for the format.
@@ -138,7 +144,7 @@ public static class PixelFormatExtensions
         /// <param name="palette">An optional palette for indexed formats.</param>
         /// <returns>The pixel value packed for the format.</returns>
         public uint MapRGBA(Color color, Palette? palette = null)
-            => SDL3.MapRGBA(format.Details, palette?.Handle, color.R, color.G, color.B, color.A);
+            => unsafe (SDL3.MapRGBA(format.Details, palette?.Handle, color.R, color.G, color.B, color.A));
 
         /// <summary>
         /// Maps a color, including its alpha channel, to a pixel value for the format.
@@ -150,7 +156,7 @@ public static class PixelFormatExtensions
         public uint MapRGBA(ColorF color, Palette? palette = null)
             => MapRGBA(format, color.ToColor(), palette);
 
-        internal SDL_PixelFormatDetails* Details => SDL3.GetPixelFormatDetails(format);
+        internal unsafe SDL_PixelFormatDetails* Details => SDL3.GetPixelFormatDetails(format);
 
         private bool IsFourCharacterCode => format != PixelFormat.Unknown && (((uint)format >> 28) & 0x0F) != 1;
     }

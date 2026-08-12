@@ -45,7 +45,7 @@ public static class KeyExtensions
         {
             Keymod modifier;
 
-            Scancode scancode = SDL3.GetScancodeFromKey(key, &modifier);
+            Scancode scancode = unsafe (SDL3.GetScancodeFromKey(key, &modifier));
             return (scancode, modifier);
         }
     }

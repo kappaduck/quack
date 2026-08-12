@@ -95,7 +95,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowAlwaysOnTop(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowAlwaysOnTop(NativeHandle, value)));
         }
     }
 
@@ -114,7 +114,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowAspectRatio(NativeHandle, field.Minimum, field.Maximum));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowAspectRatio(NativeHandle, field.Minimum, field.Maximum)));
         }
     }
 
@@ -132,7 +132,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowBordered(NativeHandle, !value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowBordered(NativeHandle, !value)));
         }
     }
 
@@ -147,20 +147,23 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen || Borderless)
                 return default;
 
-            SDL3.GetWindowBordersSize(NativeHandle, out int top, out int left, out int bottom, out int right);
-            return new(top, left, bottom, right);
+            unsafe
+            {
+                SDL3.GetWindowBordersSize(NativeHandle, out int top, out int left, out int bottom, out int right);
+                return new(top, left, bottom, right);
+            }
         }
     }
 
     /// <summary>
     /// Gets the display the window is currently on, or <see langword="null"/> if the window is not open.
     /// </summary>
-    public Display? Display => IsOpen ? new Display(SDL3.GetDisplayForWindow(NativeHandle)) : null;
+    public Display? Display => IsOpen ? new Display(unsafe (SDL3.GetDisplayForWindow(NativeHandle))) : null;
 
     /// <summary>
     /// Gets the content display scale relative to the window's pixel size, or <c>0</c> if the window is not open.
     /// </summary>
-    public float DisplayScale => IsOpen ? SDL3.GetWindowDisplayScale(NativeHandle) : 0.0f;
+    public float DisplayScale => IsOpen ? unsafe (SDL3.GetWindowDisplayScale(NativeHandle)) : 0.0f;
 
     /// <summary>
     /// Gets or sets a value indicating whether the window can receive input focus.
@@ -176,7 +179,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowFocusable(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowFocusable(NativeHandle, value)));
         }
     }
 
@@ -195,7 +198,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowFullscreen(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowFullscreen(NativeHandle, value)));
         }
     }
 
@@ -219,12 +222,12 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
             if (field is null)
             {
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowFullscreenMode(NativeHandle, null));
+                SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowFullscreenMode(NativeHandle, null)));
                 return;
             }
 
             SDL_DisplayMode native = field.Value.ToNative();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowFullscreenMode(NativeHandle, &native));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowFullscreenMode(NativeHandle, &native)));
         }
     }
 
@@ -237,7 +240,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     {
         get
         {
-            ObjectDisposedException.ThrowIf(NativeHandle is null, typeof(Window));
+            ThrowIfDisposed();
             return field;
         }
         private set;
@@ -282,7 +285,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowSize(NativeHandle, _width, _height));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSize(NativeHandle, _width, _height)));
         }
     }
 
@@ -310,12 +313,12 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets a value indicating whether the window is currently open.
     /// </summary>
-    public bool IsOpen => NativeHandle is not null;
+    public bool IsOpen => unsafe (NativeHandle is not null);
 
     /// <summary>
     /// Gets a value indicating whether the on-screen keyboard is visible for the window.
     /// </summary>
-    public bool IsScreenKeyboardVisible => IsOpen && SDL3.ScreenKeyboardShown(NativeHandle);
+    public bool IsScreenKeyboardVisible => IsOpen && unsafe (SDL3.ScreenKeyboardShown(NativeHandle));
 
     /// <summary>
     /// Gets or sets a value indicating whether the window has grabbed the keyboard input.
@@ -335,7 +338,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowKeyboardGrab(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowKeyboardGrab(NativeHandle, value)));
         }
     }
 
@@ -371,7 +374,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowMaximumSize(NativeHandle, field.Width, field.Height));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowMaximumSize(NativeHandle, field.Width, field.Height)));
         }
     }
 
@@ -407,7 +410,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowMinimumSize(NativeHandle, field.Width, field.Height));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowMinimumSize(NativeHandle, field.Width, field.Height)));
         }
     }
 
@@ -417,7 +420,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <remarks>
     /// For more information about mouse capture, see <see cref="Mouse.Capture(bool)"/>.
     /// </remarks>
-    public bool MouseCaptured => IsOpen && (SDL3.GetWindowFlags(NativeHandle) & State.MouseCapture) == State.MouseCapture;
+    public bool MouseCaptured => IsOpen && (unsafe (SDL3.GetWindowFlags(NativeHandle) & State.MouseCapture) == State.MouseCapture);
 
     /// <summary>
     /// Gets or sets the rectangle the mouse is confined to within the window, or <see langword="null"/> if unconfined.
@@ -436,12 +439,12 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
             if (field is null)
             {
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowMouseRect(NativeHandle, null));
+                SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowMouseRect(NativeHandle, null)));
                 return;
             }
 
             RectI rect = field.Value;
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowMouseRect(NativeHandle, &rect));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowMouseRect(NativeHandle, &rect)));
         }
     }
 
@@ -459,7 +462,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowMouseGrab(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowMouseGrab(NativeHandle, value)));
         }
     }
 
@@ -481,7 +484,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowRelativeMouseMode(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowRelativeMouseMode(NativeHandle, value)));
         }
     }
 
@@ -512,24 +515,24 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowOpacity(NativeHandle, _opacity.Value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowOpacity(NativeHandle, _opacity.Value)));
         }
     }
 
     /// <summary>
     /// Gets the parent of this window, or <see langword="null"/> if it has no parent or is not open.
     /// </summary>
-    public Window? Parent => IsOpen ? WindowManager.FromHandle(SDL3.GetWindowParent(NativeHandle)) : null;
+    public Window? Parent => IsOpen ? unsafe (WindowManager.FromHandle(SDL3.GetWindowParent(NativeHandle))) : null;
 
     /// <summary>
     /// Gets the pixel density of the window, the ratio of physical pixels to screen coordinates, or <c>0</c> if not open.
     /// </summary>
-    public float PixelDensity => IsOpen ? SDL3.GetWindowPixelDensity(NativeHandle) : 0.0f;
+    public float PixelDensity => IsOpen ? unsafe (SDL3.GetWindowPixelDensity(NativeHandle)) : 0.0f;
 
     /// <summary>
     /// Gets the pixel format of the window's back buffer, or <see cref="PixelFormat.Unknown"/> if the window is not open.
     /// </summary>
-    public PixelFormat PixelFormat => IsOpen ? SDL3.GetWindowPixelFormat(NativeHandle) : PixelFormat.Unknown;
+    public PixelFormat PixelFormat => IsOpen ? unsafe (SDL3.GetWindowPixelFormat(NativeHandle)) : PixelFormat.Unknown;
 
     /// <summary>
     /// Gets or sets the position of the top-left corner of the window on the screen.
@@ -542,7 +545,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         {
             if (!_position.HasValue && IsOpen)
             {
-                SDLThrowHelper.ThrowIfFailed(SDL3.GetWindowPosition(NativeHandle, out int x, out int y));
+                SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowPosition(NativeHandle, out int x, out int y)));
                 _position = new Point(x, y);
             }
 
@@ -558,7 +561,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowPosition(NativeHandle, value.X, value.Y));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowPosition(NativeHandle, value.X, value.Y)));
         }
     }
 
@@ -581,7 +584,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowResizable(NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowResizable(NativeHandle, value)));
         }
     }
 
@@ -597,7 +600,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return default;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetWindowSafeArea(NativeHandle, out RectI area));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowSafeArea(NativeHandle, out RectI area)));
             return area;
         }
     }
@@ -625,7 +628,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowSize(NativeHandle, _width, _height));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSize(NativeHandle, _width, _height)));
         }
     }
 
@@ -653,7 +656,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowTitle(NativeHandle, field));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowTitle(NativeHandle, field)));
         }
     }
 
@@ -698,7 +701,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
             if (!IsOpen)
                 return;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowSize(NativeHandle, _width, _height));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSize(NativeHandle, _width, _height)));
         }
     }
 
@@ -723,7 +726,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.ClearComposition(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ClearComposition(NativeHandle)));
     }
 
     /// <summary>
@@ -762,14 +765,17 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (NativeHandle is null)
-            return;
+        unsafe
+        {
+            if (NativeHandle is null)
+                return;
 
-        _icon?.Dispose();
-        _icon = null;
+            _icon?.Dispose();
+            _icon = null;
 
-        SDL3.DestroyWindow(NativeHandle);
-        NativeHandle = null;
+            SDL3.DestroyWindow(NativeHandle);
+            NativeHandle = null;
+        }
     }
 
     /// <summary>
@@ -782,7 +788,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.FlashWindow(NativeHandle, operation));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.FlashWindow(NativeHandle, operation)));
     }
 
     /// <summary>
@@ -794,7 +800,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen || Hidden)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.HideWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.HideWindow(NativeHandle)));
         SetState(State.Hidden);
     }
 
@@ -808,7 +814,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen || Maximized || !Resizable)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.MaximizeWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.MaximizeWindow(NativeHandle)));
 
         SetState(State.Maximized);
         RemoveState(State.Minimized);
@@ -824,7 +830,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen || Minimized || Fullscreen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.MinimizeWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.MinimizeWindow(NativeHandle)));
 
         SetState(State.Minimized);
         RemoveState(State.Maximized);
@@ -864,7 +870,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RaiseWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RaiseWindow(NativeHandle)));
         HasKeyboardFocus = true;
     }
 
@@ -878,7 +884,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.RestoreWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RestoreWindow(NativeHandle)));
         RemoveState(State.Maximized | State.Minimized);
     }
 
@@ -937,8 +943,8 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="ObjectDisposedException">The window is not open.</exception>
     public void SetShape(Surface? shape)
     {
-        ObjectDisposedException.ThrowIf(NativeHandle is null, typeof(Window));
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowShape(NativeHandle, shape?.Handle));
+        ThrowIfDisposed();
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowShape(NativeHandle, shape?.Handle)));
     }
 
     /// <summary>
@@ -951,7 +957,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen || !Hidden)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.ShowWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ShowWindow(NativeHandle)));
         RemoveState(State.Hidden);
     }
 
@@ -965,7 +971,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.ShowWindowSystemMenu(NativeHandle, position.X, position.Y));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ShowWindowSystemMenu(NativeHandle, position.X, position.Y)));
     }
 
     /// <summary>
@@ -978,7 +984,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SyncWindow(NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SyncWindow(NativeHandle)));
     }
 
     /// <summary>
@@ -997,7 +1003,10 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        SDL3.WarpMouseInWindow(NativeHandle, x, y);
+        unsafe
+        {
+            SDL3.WarpMouseInWindow(NativeHandle, x, y);
+        }
     }
 
     /// <inheritdoc/>
@@ -1052,7 +1061,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         WindowSurface = null;
     }
 
-    private void ApplyDeferredSettings()
+    private unsafe void ApplyDeferredSettings()
     {
         if (AspectRatio.Minimum > 0.0f || AspectRatio.Maximum > 0.0f)
             SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowAspectRatio(NativeHandle, AspectRatio.Minimum, AspectRatio.Maximum));
@@ -1141,7 +1150,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         return new Win32Handle(hwnd);
     }
 
-    private void Initialize(int width, int height)
+    private unsafe void Initialize(int width, int height)
     {
         QuackEngine.EnsureInitialized(Subsystem.Video);
 
@@ -1282,12 +1291,14 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     private void SetState(State state, bool apply = true) => _state = apply ? _state | state : _state & ~state;
 
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (NativeHandle is null), typeof(Window));
+
     private void UpdateIcon(Surface icon)
     {
         _icon?.Dispose();
         _icon = icon;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowIcon(NativeHandle, _icon.Handle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowIcon(NativeHandle, _icon.Handle)));
     }
 
     [Flags]

@@ -17,10 +17,10 @@ public readonly ref struct SurfaceLock
     internal SurfaceLock(Surface surface)
     {
         _surface = surface;
-        SDL3.LockSurface(_surface.Handle);
 
         unsafe
         {
+            SDL3.LockSurface(_surface.Handle);
             Pixels = new Span<byte>(_surface.Handle->Pixels, _surface.Pitch * _surface.Height);
         }
     }
@@ -35,9 +35,12 @@ public readonly ref struct SurfaceLock
     /// </summary>
     public void Dispose()
     {
-        if (_surface.Handle is null)
-            return;
+        unsafe
+        {
+            if (_surface.Handle is null)
+                return;
 
-        SDL3.UnlockSurface(_surface.Handle);
+            SDL3.UnlockSurface(_surface.Handle);
+        }
     }
 }

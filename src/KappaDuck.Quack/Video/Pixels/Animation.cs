@@ -20,13 +20,13 @@ public sealed class Animation : IDisposable
 {
     private Animation(IMG_Animation* handle, Surface[] frames, TimeSpan[] delays, int loopCount)
     {
-        Handle = handle;
         Frames = frames;
         Delays = delays;
         LoopCount = loopCount;
 
         unsafe
         {
+            Handle = handle;
             Width = Handle->Width;
             Height = Handle->Height;
         }
@@ -68,11 +68,14 @@ public sealed class Animation : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (Handle is null)
-            return;
+        unsafe
+        {
+            if (Handle is null)
+                return;
 
-        SDL3_image.FreeAnimation(Handle);
-        Handle = null;
+            SDL3_image.FreeAnimation(Handle);
+            Handle = null;
+        }
     }
 
     /// <summary>
@@ -87,10 +90,13 @@ public sealed class Animation : IDisposable
         if (!File.Exists(path))
             ThrowHelper.ThrowFileNotFound("The file path does not exist.", path);
 
-        IMG_Animation* handle = SDL3_image.LoadAnimation(path);
-        SDLThrowHelper.ThrowIfNull(handle);
+        unsafe
+        {
+            IMG_Animation* handle = SDL3_image.LoadAnimation(path);
+            SDLThrowHelper.ThrowIfNull(handle);
 
-        return Create(handle);
+            return Create(handle);
+        }
     }
 
     /// <summary>
@@ -103,10 +109,13 @@ public sealed class Animation : IDisposable
     {
         using IOStream source = IOStream.FromStream(stream);
 
-        IMG_Animation* handle = SDL3_image.LoadAnimation(source.Handle, false);
-        SDLThrowHelper.ThrowIfNull(handle);
+        unsafe
+        {
+            IMG_Animation* handle = SDL3_image.LoadAnimation(source.Handle, false);
+            SDLThrowHelper.ThrowIfNull(handle);
 
-        return Create(handle);
+            return Create(handle);
+        }
     }
 
     /// <summary>
@@ -118,7 +127,7 @@ public sealed class Animation : IDisposable
     public void Save(string path)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAnimation(Handle, path));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveAnimation(Handle, path)));
     }
 
     /// <summary>
@@ -133,7 +142,7 @@ public sealed class Animation : IDisposable
         ThrowIfDisposed();
 
         using IOStream destination = IOStream.FromStream(stream);
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAnimation(Handle, destination.Handle, false, format.Type));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveAnimation(Handle, destination.Handle, false, format.Type)));
     }
 
     private static unsafe Animation Create(IMG_Animation* handle)
@@ -153,5 +162,5 @@ public sealed class Animation : IDisposable
         return new Animation(handle, frames, delays, loopCount);
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Animation));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (Handle is null), typeof(Animation));
 }

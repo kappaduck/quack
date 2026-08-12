@@ -18,7 +18,10 @@ internal static partial class SDL3
         if (memory is null)
             return;
 
-        SDL_free(memory);
+        unsafe
+        {
+            SDL_free(memory);
+        }
     }
 
     /// <summary>
@@ -34,7 +37,10 @@ internal static partial class SDL3
         if (memory is null)
             return;
 
-        SDL_free(memory);
+        unsafe
+        {
+            SDL_free(memory);
+        }
     }
 
     [LibraryImport(nameof(SDL3))]

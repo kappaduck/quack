@@ -34,8 +34,11 @@ internal static class EventHook
             X11.EventCallback[] callbacks = [.. _x11Callbacks, callback];
             _x11Callbacks = callbacks;
 
-            if (callbacks.Length == 1)
-                SDL3.SetX11EventHook(&OnX11Event, null);
+            unsafe
+            {
+                if (callbacks.Length == 1)
+                    SDL3.SetX11EventHook(&OnX11Event, null);
+            }
         }
     }
 
@@ -47,8 +50,11 @@ internal static class EventHook
             X11.EventCallback[] callbacks = [.. _x11Callbacks.Where(c => !c.Equals(callback))];
             _x11Callbacks = callbacks;
 
-            if (callbacks.Length == 0)
-                SDL3.SetX11EventHook(null, null);
+            unsafe
+            {
+                if (callbacks.Length == 0)
+                    SDL3.SetX11EventHook(null, null);
+            }
         }
     }
 
@@ -60,8 +66,11 @@ internal static class EventHook
             Win32.MessageCallback[] callbacks = [.. _win32Callbacks, callback];
             _win32Callbacks = callbacks;
 
-            if (callbacks.Length == 1)
-                SDL3.SetWindowsMessageHook(&OnWindowsMessage, null);
+            unsafe
+            {
+                if (callbacks.Length == 1)
+                    SDL3.SetWindowsMessageHook(&OnWindowsMessage, null);
+            }
         }
     }
 
@@ -73,8 +82,11 @@ internal static class EventHook
             Win32.MessageCallback[] callbacks = [.. _win32Callbacks.Where(c => !c.Equals(callback))];
             _win32Callbacks = callbacks;
 
-            if (callbacks.Length == 0)
-                SDL3.SetWindowsMessageHook(null, null);
+            unsafe
+            {
+                if (callbacks.Length == 0)
+                    SDL3.SetWindowsMessageHook(null, null);
+            }
         }
     }
 

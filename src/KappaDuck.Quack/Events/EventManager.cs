@@ -21,7 +21,11 @@ public static class EventManager
     public static void ClearGlobalFilter()
     {
         _filter = null;
-        SDL3.SetEventFilter(null, null);
+
+        unsafe
+        {
+            SDL3.SetEventFilter(null, null);
+        }
     }
 
     /// <summary>
@@ -70,7 +74,11 @@ public static class EventManager
     public static void SetGlobalFilter(Predicate<Event> filter)
     {
         _filter = filter;
-        SDL3.SetEventFilter(&OnFilter);
+
+        unsafe
+        {
+            SDL3.SetEventFilter(&OnFilter);
+        }
     }
 
     /// <summary>

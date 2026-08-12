@@ -72,13 +72,13 @@ public sealed class WindowSurface : IDisposable
         {
             ThrowIfDisposed();
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetWindowSurfaceVSync(_window.NativeHandle, out int vsync));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowSurfaceVSync(_window.NativeHandle, out int vsync)));
             return vsync;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowSurfaceVSync(_window.NativeHandle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSurfaceVSync(_window.NativeHandle, value)));
         }
     }
 
@@ -107,7 +107,11 @@ public sealed class WindowSurface : IDisposable
         _surface.Dispose();
         _surface = null;
 
-        SDL3.DestroyWindowSurface(_window.NativeHandle);
+        unsafe
+        {
+            SDL3.DestroyWindowSurface(_window.NativeHandle);
+        }
+
         _window.Unbind(this);
     }
 
@@ -119,7 +123,7 @@ public sealed class WindowSurface : IDisposable
     public void Update()
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.UpdateWindowSurface(_window.NativeHandle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateWindowSurface(_window.NativeHandle)));
     }
 
     /// <summary>
@@ -132,10 +136,10 @@ public sealed class WindowSurface : IDisposable
     public void Update(ReadOnlySpan<RectI> rects)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.UpdateWindowSurfaceRects(_window.NativeHandle, rects, rects.Length));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateWindowSurfaceRects(_window.NativeHandle, rects, rects.Length)));
     }
 
-    private static Surface Acquire(Window window)
+    private static unsafe Surface Acquire(Window window)
     {
         SDL_Surface* surface = SDL3.GetWindowSurface(window.NativeHandle);
         SDLThrowHelper.ThrowIfNull(surface);

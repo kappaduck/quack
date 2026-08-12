@@ -15,10 +15,16 @@ public readonly ref struct RenderTargetScope : IDisposable
 {
     private readonly SDL_Renderer* _renderer;
 
-    internal RenderTargetScope(SDL_Renderer* renderer) => _renderer = renderer;
+    internal unsafe RenderTargetScope(SDL_Renderer* renderer) => _renderer = renderer;
 
     /// <summary>
     /// Restores the render target that was active before this scope began.
     /// </summary>
-    public void Dispose() => SDL3.SetRenderTarget(_renderer, null);
+    public void Dispose()
+    {
+        unsafe
+        {
+            SDL3.SetRenderTarget(_renderer, null);
+        }
+    }
 }
