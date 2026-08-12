@@ -262,7 +262,7 @@ internal sealed class VertexArrayTests
         array.Draw(_target, RenderState.Default);
 
         await _target.Drawn.Should().BeTrue();
-        await _target.Indices.Should().BeNull();
+        await _target.Indices.Should().BeEmpty();
         await _target.Vertices.Length.Should().BeEqualTo(3);
     }
 
