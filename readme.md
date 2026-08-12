@@ -1,4 +1,4 @@
-# Quack! 🦆 ![Static Badge](https://img.shields.io/badge/.NET-10.0,%2011.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/v/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
+# Quack! 🦆 ![Static Badge](https://img.shields.io/badge/.NET-11.0-512BD4) [![NuGet Version](https://img.shields.io/nuget/v/KappaDuck.Quack?style=flat&label=NuGet)][NuGet]
 
 A modern .NET multimedia framework for building games and interactive apps, built on SDL3
 
@@ -7,7 +7,7 @@ A modern .NET multimedia framework for building games and interactive apps, buil
 ## Overview
 
 Quack! is a modern, simple and fast multimedia framework for building games and interactive applications, built on top of SDL3 and its extensions ([SDL_image], [SDL_mixer], [SDL_ttf]).
-It targets .NET 10+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.
+It targets .NET 11+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.
 
 ## Features
 
@@ -111,7 +111,6 @@ You can build Quack! from source and experiment quickly using the included sandb
 
 ### Prerequisites
 
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET 11.0 SDK](https://dotnet.microsoft.com/download/dotnet/11.0)
 
 ### Setup
