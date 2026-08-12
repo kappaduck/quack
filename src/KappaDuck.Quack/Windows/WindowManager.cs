@@ -21,17 +21,17 @@ public static class WindowManager
     /// <summary>
     /// Gets the window that currently has input grabbed, or <see langword="null"/> if none.
     /// </summary>
-    public static Window? Grabbed => FromHandle(SDL3.GetGrabbedWindow());
+    public static Window? Grabbed => unsafe (FromHandle(SDL3.GetGrabbedWindow()));
 
     /// <summary>
     /// Gets the window currently holding keyboard focus, or <see langword="null"/> if none.
     /// </summary>
-    public static Window? KeyboardFocus => FromHandle(SDL3.GetKeyboardFocus());
+    public static Window? KeyboardFocus => unsafe (FromHandle(SDL3.GetKeyboardFocus()));
 
     /// <summary>
     /// Gets the window currently holding mouse focus, or <see langword="null"/> if none.
     /// </summary>
-    public static Window? MouseFocus => FromHandle(SDL3.GetMouseFocus());
+    public static Window? MouseFocus => unsafe (FromHandle(SDL3.GetMouseFocus()));
 
     /// <summary>
     /// Gets a snapshot of all currently open windows.
@@ -43,12 +43,12 @@ public static class WindowManager
     /// </summary>
     /// <param name="id">The window id.</param>
     /// <returns>The matching window, or <see langword="null"/>.</returns>
-    public static Window? FromId(uint id) => FromHandle(SDL3.GetWindowFromID(id));
+    public static Window? FromId(uint id) => unsafe (FromHandle(SDL3.GetWindowFromID(id)));
 
     internal static Window? FromHandle(SDL_Window* handle)
         => handle is not null && _windows.TryGetValue((nint)handle, out Window? window) ? window : null;
 
-    internal static void Register(Window window) => _windows[(nint)window.NativeHandle] = window;
+    internal static void Register(Window window) => _windows[unsafe ((nint)window.NativeHandle)] = window;
 
-    internal static void Unregister(Window window) => _windows.TryRemove((nint)window.NativeHandle, out _);
+    internal static void Unregister(Window window) => _windows.TryRemove(unsafe ((nint)window.NativeHandle), out _);
 }

@@ -21,7 +21,11 @@ public sealed class AnimationEncoder : IDisposable
 
     private AnimationEncoder(IMG_AnimationEncoder* encoder, IOStream? stream)
     {
-        _encoder = encoder;
+        unsafe
+        {
+            _encoder = encoder;
+        }
+
         _stream = stream;
     }
 
@@ -34,8 +38,11 @@ public sealed class AnimationEncoder : IDisposable
     /// <exception cref="ObjectDisposedException">The encoder is disposed.</exception>
     public void AddFrame(Surface frame, TimeSpan duration)
     {
-        ObjectDisposedException.ThrowIf(_encoder is null, typeof(AnimationEncoder));
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.AddAnimationEncoderFrame(_encoder, frame.Handle, (ulong)duration.TotalMilliseconds));
+        unsafe
+        {
+            ObjectDisposedException.ThrowIf(_encoder is null, typeof(AnimationEncoder));
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.AddAnimationEncoderFrame(_encoder, frame.Handle, (ulong)duration.TotalMilliseconds));
+        }
     }
 
     /// <summary>
@@ -50,10 +57,13 @@ public sealed class AnimationEncoder : IDisposable
         using Properties properties = BuildProperties(options);
         properties.Set("SDL_image.animation_encoder.create.filename", path);
 
-        IMG_AnimationEncoder* encoder = SDL3_image.CreateAnimationEncoderWithProperties(properties);
-        SDLThrowHelper.ThrowIfNull(encoder);
+        unsafe
+        {
+            IMG_AnimationEncoder* encoder = SDL3_image.CreateAnimationEncoderWithProperties(properties);
+            SDLThrowHelper.ThrowIfNull(encoder);
 
-        return new AnimationEncoder(encoder, null);
+            return new AnimationEncoder(encoder, null);
+        }
     }
 
     /// <summary>
@@ -69,22 +79,26 @@ public sealed class AnimationEncoder : IDisposable
         IOStream destination = IOStream.FromStream(stream);
 
         using Properties properties = BuildProperties(options);
-        properties.Set("SDL_image.animation_encoder.create.iostream", destination.Handle);
-        properties.Set("SDL_image.animation_encoder.create.type", format.Type);
 
-        IMG_AnimationEncoder* encoder;
-        try
+        unsafe
         {
-            encoder = SDL3_image.CreateAnimationEncoderWithProperties(properties);
-            SDLThrowHelper.ThrowIfNull(encoder);
-        }
-        catch
-        {
-            destination.Dispose();
-            throw;
-        }
+            properties.Set("SDL_image.animation_encoder.create.iostream", destination.Handle);
+            properties.Set("SDL_image.animation_encoder.create.type", format.Type);
 
-        return new(encoder, destination);
+            IMG_AnimationEncoder* encoder;
+            try
+            {
+                encoder = SDL3_image.CreateAnimationEncoderWithProperties(properties);
+                SDLThrowHelper.ThrowIfNull(encoder);
+            }
+            catch
+            {
+                destination.Dispose();
+                throw;
+            }
+
+            return new(encoder, destination);
+        }
     }
 
     /// <summary>
@@ -93,11 +107,14 @@ public sealed class AnimationEncoder : IDisposable
     /// <exception cref="QuackInteropException">The animation could not be finalized.</exception>
     public void Dispose()
     {
-        if (_encoder is null)
-            _encoder = null;
+        unsafe
+        {
+            if (_encoder is null)
+                return;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.CloseAnimationEncoder(_encoder));
-        _encoder = null;
+            SDLThrowHelper.ThrowIfFailed(SDL3_image.CloseAnimationEncoder(_encoder));
+            _encoder = null;
+        }
 
         _stream?.Dispose();
         _stream = null;

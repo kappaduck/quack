@@ -57,7 +57,7 @@ internal sealed class Properties : IDisposable
     }
 
     internal void Set<T>(string name, T* value) where T : unmanaged
-        => SDLThrowHelper.ThrowIfFailed(SDL3.SetPointerProperty(_id, name, value));
+        => SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetPointerProperty(_id, name, value)));
 
     internal void Set(string name, string value) => Set(_id, name, value);
 

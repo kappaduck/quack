@@ -14,7 +14,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// </summary>
 public sealed class Texture : IDisposable
 {
-    internal Texture(SDL_Texture* handle)
+    internal unsafe Texture(SDL_Texture* handle)
     {
         SDLThrowHelper.ThrowIfNull(handle);
 
@@ -23,11 +23,8 @@ public sealed class Texture : IDisposable
         uint properties = SDL3.GetTextureProperties(Handle);
         Format = Properties.Get(properties, "SDL.texture.format", PixelFormat.Unknown);
 
-        unsafe
-        {
-            Height = Handle->Height;
-            Width = Handle->Width;
-        }
+        Height = Handle->Height;
+        Width = Handle->Width;
     }
 
     /// <summary>
@@ -47,14 +44,14 @@ public sealed class Texture : IDisposable
             ThrowIfDisposed();
 
             byte alpha;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetTextureAlphaMod(Handle, &alpha));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetTextureAlphaMod(Handle, &alpha)));
 
             return alpha;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetTextureAlphaMod(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetTextureAlphaMod(Handle, value)));
         }
     }
 
@@ -70,14 +67,14 @@ public sealed class Texture : IDisposable
             ThrowIfDisposed();
 
             BlendMode mode;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetTextureBlendMode(Handle, &mode));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetTextureBlendMode(Handle, &mode)));
 
             return mode;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetTextureBlendMode(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetTextureBlendMode(Handle, value)));
         }
     }
 
@@ -98,14 +95,14 @@ public sealed class Texture : IDisposable
             ThrowIfDisposed();
 
             byte r, g, b;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetTextureColorMod(Handle, &r, &g, &b));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetTextureColorMod(Handle, &r, &g, &b)));
 
             return new Color(r, g, b);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetTextureColorMod(Handle, value.R, value.G, value.B));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetTextureColorMod(Handle, value.R, value.G, value.B)));
         }
     }
 
@@ -135,15 +132,21 @@ public sealed class Texture : IDisposable
         {
             ThrowIfDisposed();
 
-            SDL_Palette* palette = SDL3.GetTexturePalette(Handle);
-            return palette is null ? null : new Palette(palette);
+            unsafe
+            {
+                SDL_Palette* palette = SDL3.GetTexturePalette(Handle);
+                return palette is null ? null : new Palette(palette);
+            }
         }
         set
         {
             ThrowIfDisposed();
 
-            SDL_Palette* palette = value is null ? null : value.Handle;
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetTexturePalette(Handle, palette));
+            unsafe
+            {
+                SDL_Palette* palette = value is null ? null : value.Handle;
+                SDLThrowHelper.ThrowIfFailed(SDL3.SetTexturePalette(Handle, palette));
+            }
         }
     }
 
@@ -159,14 +162,14 @@ public sealed class Texture : IDisposable
             ThrowIfDisposed();
 
             ScaleMode mode;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetTextureScaleMode(Handle, &mode));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetTextureScaleMode(Handle, &mode)));
 
             return mode;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetTextureScaleMode(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetTextureScaleMode(Handle, value)));
         }
     }
 
@@ -180,11 +183,14 @@ public sealed class Texture : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (Handle is null)
-            return;
+        unsafe
+        {
+            if (Handle is null)
+                return;
 
-        SDL3.DestroyTexture(Handle);
-        Handle = null;
+            SDL3.DestroyTexture(Handle);
+            Handle = null;
+        }
     }
 
     /// <summary>
@@ -202,7 +208,11 @@ public sealed class Texture : IDisposable
     public TextureLock Lock(RectI? region = null)
     {
         ThrowIfDisposed();
-        return new TextureLock(Handle, region);
+
+        unsafe
+        {
+            return new TextureLock(Handle, region);
+        }
     }
 
     /// <summary>
@@ -223,9 +233,9 @@ public sealed class Texture : IDisposable
         ThrowIfDisposed();
 
         if (region is { } area)
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateTexture(Handle, &area, pixels, pitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateTexture(Handle, &area, pixels, pitch)));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateTexture(Handle, null, pixels, pitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateTexture(Handle, null, pixels, pitch)));
     }
 
     /// <summary>
@@ -250,9 +260,9 @@ public sealed class Texture : IDisposable
         ThrowIfDisposed();
 
         if (region is RectI area)
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateYUVTexture(Handle, &area, y, yPitch, u, uPitch, v, vPitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateYUVTexture(Handle, &area, y, yPitch, u, uPitch, v, vPitch)));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateYUVTexture(Handle, null, y, yPitch, u, uPitch, v, vPitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateYUVTexture(Handle, null, y, yPitch, u, uPitch, v, vPitch)));
     }
 
     /// <summary>
@@ -275,9 +285,9 @@ public sealed class Texture : IDisposable
         ThrowIfDisposed();
 
         if (region is RectI area)
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateNVTexture(Handle, &area, y, yPitch, uv, uvPitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateNVTexture(Handle, &area, y, yPitch, uv, uvPitch)));
         else
-            SDLThrowHelper.ThrowIfFailed(SDL3.UpdateNVTexture(Handle, null, y, yPitch, uv, uvPitch));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.UpdateNVTexture(Handle, null, y, yPitch, uv, uvPitch)));
     }
 
     /// <summary>
@@ -294,8 +304,11 @@ public sealed class Texture : IDisposable
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);
 
-        SDL_Texture* texture = SDL3.CreateTexture(renderer.Handle, format, access, size.Width, size.Height);
-        return new(texture);
+        unsafe
+        {
+            SDL_Texture* texture = SDL3.CreateTexture(renderer.Handle, format, access, size.Width, size.Height);
+            return new(texture);
+        }
     }
 
     /// <summary>
@@ -311,8 +324,11 @@ public sealed class Texture : IDisposable
         if (!File.Exists(path))
             ThrowHelper.ThrowFileNotFound("The file path does not exist.", path);
 
-        SDL_Texture* handle = SDL3_image.FromFile(renderer.Handle, path);
-        return new Texture(handle);
+        unsafe
+        {
+            SDL_Texture* handle = SDL3_image.FromFile(renderer.Handle, path);
+            return new Texture(handle);
+        }
     }
 
     /// <summary>
@@ -326,8 +342,11 @@ public sealed class Texture : IDisposable
     {
         using IOStream source = IOStream.FromStream(stream);
 
-        SDL_Texture* texture = SDL3_image.FromStream(renderer.Handle, source.Handle, false);
-        return new Texture(texture);
+        unsafe
+        {
+            SDL_Texture* texture = SDL3_image.FromStream(renderer.Handle, source.Handle, false);
+            return new Texture(texture);
+        }
     }
 
     /// <summary>
@@ -339,9 +358,12 @@ public sealed class Texture : IDisposable
     /// <exception cref="QuackInteropException">The texture could not be created.</exception>
     public static Texture FromSurface(Renderer renderer, Surface surface)
     {
-        SDL_Texture* texture = SDL3.CreateTextureFromSurface(renderer.Handle, surface.Handle);
-        return new(texture);
+        unsafe
+        {
+            SDL_Texture* texture = SDL3.CreateTextureFromSurface(renderer.Handle, surface.Handle);
+            return new(texture);
+        }
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Texture));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (Handle is null), typeof(Texture));
 }

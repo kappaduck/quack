@@ -6,7 +6,6 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.UI.Progress.Reporters;
 
 namespace KappaDuck.Quack.UI.Progress;
-#pragma warning disable SYSLIB5007, CA2252
 
 /// <summary>
 /// Base class for a progress bar backend, e.g. a window's taskbar icon, an on-screen control or a console bar.
@@ -305,4 +304,3 @@ public abstract class ProgressBar : IProgressOperation
         SetState(ProgressState.Error);
     }
 }
-#pragma warning restore SYSLIB5007, CA2252

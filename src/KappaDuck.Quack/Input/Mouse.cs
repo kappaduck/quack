@@ -144,7 +144,13 @@ public static class Mouse
     /// Changes the active cursor.
     /// </summary>
     /// <param name="cursor">The new active cursor to set</param>
-    public static void SetCursor(Cursor cursor) => SDL3.SetCursor(cursor.Handle);
+    public static void SetCursor(Cursor cursor)
+    {
+        unsafe
+        {
+            SDL3.SetCursor(cursor.Handle);
+        }
+    }
 
     /// <summary>
     /// Installs a transform applied to all relative mouse motion, replacing any previous transform.
@@ -164,11 +170,11 @@ public static class Mouse
 
         if (transform is null)
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetRelativeMouseTransform(null, null));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetRelativeMouseTransform(null, null)));
             return;
         }
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.SetRelativeMouseTransform(&OnTransform, null));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetRelativeMouseTransform(&OnTransform, null)));
     }
 
     /// <summary>

@@ -20,7 +20,7 @@ public readonly ref struct TextureLock : IDisposable
 {
     private readonly SDL_Texture* _texture;
 
-    internal TextureLock(SDL_Texture* texture, RectI? region)
+    internal unsafe TextureLock(SDL_Texture* texture, RectI? region)
     {
         _texture = texture;
         SDL_Surface* surface;
@@ -47,10 +47,14 @@ public readonly ref struct TextureLock : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if (_texture is null)
+        if (unsafe (_texture is null))
             return;
 
         Surface.Dispose();
-        SDL3.UnlockTexture(_texture);
+
+        unsafe
+        {
+            SDL3.UnlockTexture(_texture);
+        }
     }
 }

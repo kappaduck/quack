@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Label="Configuration">
-    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <IsAotCompatible>true</IsAotCompatible>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -51,7 +50,7 @@
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
-    <Description>Quack! is a modern, simple and fast multimedia framework for building games and interactive applications, built on top of SDL3 and its extensions (SDL_image, SDL_mixer, SDL_ttf). It targets .NET 10+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.</Description>
+    <Description>Quack! is a modern, simple and fast multimedia framework for building games and interactive applications, built on top of SDL3 and its extensions (SDL_image, SDL_mixer, SDL_ttf). It targets .NET 11+ desktop and web apps, providing a clean and flexible API that hides the complexity of SDL.</Description>
     <PackageTags>NET;SDL;SDL3;GameEngine;Engine;CSharp;Game;Multimedia;GameFramework;MultimediaFramework</PackageTags>
   </PropertyGroup>
 

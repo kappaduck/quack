@@ -23,7 +23,7 @@ public sealed class TaskbarProgressBar : ProgressBar
 
     /// <inheritdoc/>
     protected override void SetState(ProgressState state)
-        => MainThreadDispatcher.Invoke(() => SDLThrowHelper.ThrowIfFailed(SDL3.SetWindowProgressState(_window.NativeHandle, Map(state))));
+        => MainThreadDispatcher.Invoke(() => SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowProgressState(_window.NativeHandle, Map(state)))));
 
     /// <inheritdoc/>
     protected override void SetValue(float value)
@@ -37,7 +37,10 @@ public sealed class TaskbarProgressBar : ProgressBar
 
             _lastAppliedMilliseconds = now;
 
-            SDL3.SetWindowProgressValue(_window.NativeHandle, value);
+            unsafe
+            {
+                SDL3.SetWindowProgressValue(_window.NativeHandle, value);
+            }
         });
     }
 

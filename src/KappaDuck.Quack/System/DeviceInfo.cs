@@ -30,17 +30,17 @@ public static class DeviceInfo
     {
         get
         {
-            SDL_Locale** locales = SDL3.GetPreferredLocales(out int count);
-
-            if (locales is null || count == 0)
-                return [];
-
-            try
+            unsafe
             {
-                List<CultureInfo> cultures = [with(count)];
+                SDL_Locale** locales = SDL3.GetPreferredLocales(out int count);
 
-                unsafe
+                if (locales is null || count == 0)
+                    return [];
+
+                try
                 {
+                    List<CultureInfo> cultures = [with(count)];
+
                     for (int i = 0; i < count; i++)
                     {
                         SDL_Locale* locale = locales[i];
@@ -51,13 +51,13 @@ public static class DeviceInfo
                         if (TryGetCulture(language, country, out CultureInfo? culture))
                             cultures.Add(culture);
                     }
-                }
 
-                return [.. cultures];
-            }
-            finally
-            {
-                SDL3.Free(locales);
+                    return [.. cultures];
+                }
+                finally
+                {
+                    SDL3.Free(locales);
+                }
             }
         }
     }

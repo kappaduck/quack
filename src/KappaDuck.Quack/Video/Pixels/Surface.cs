@@ -43,24 +43,25 @@ public sealed class Surface : IDisposable
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
-        Handle = SDL3.CreateSurface(width, height, format);
-        SDLThrowHelper.ThrowIfNull(Handle);
+        unsafe
+        {
+            Handle = SDL3.CreateSurface(width, height, format);
+            SDLThrowHelper.ThrowIfNull(Handle);
+
+            _properties = SDL3.GetSurfaceProperties(Handle);
+
+            Pitch = Handle->Pitch;
+            MustLock = (Handle->State & SDL_SurfaceState.LockNeeded) != SDL_SurfaceState.None;
+        }
 
         Width = width;
         Height = height;
         Format = format;
 
-        _properties = SDL3.GetSurfaceProperties(Handle);
         _owned = true;
-
-        unsafe
-        {
-            Pitch = Handle->Pitch;
-            MustLock = (Handle->State & SDL_SurfaceState.LockNeeded) != SDL_SurfaceState.None;
-        }
     }
 
-    internal Surface(SDL_Surface* surface, bool owned = true)
+    internal unsafe Surface(SDL_Surface* surface, bool owned = true)
     {
         SDLThrowHelper.ThrowIfNull(surface);
 
@@ -70,7 +71,7 @@ public sealed class Surface : IDisposable
         _properties = SDL3.GetSurfaceProperties(Handle);
     }
 
-    private Surface(SDL_Surface* surface, MemoryHandle handle)
+    private unsafe Surface(SDL_Surface* surface, MemoryHandle handle)
     {
         Handle = surface;
         _owned = true;
@@ -91,7 +92,7 @@ public sealed class Surface : IDisposable
             ThrowIfDisposed();
 
             byte alpha;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetSurfaceAlphaMod(Handle, &alpha));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetSurfaceAlphaMod(Handle, &alpha)));
 
             return alpha;
         }
@@ -99,7 +100,7 @@ public sealed class Surface : IDisposable
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceAlphaMod(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceAlphaMod(Handle, value)));
         }
     }
 
@@ -115,14 +116,14 @@ public sealed class Surface : IDisposable
             ThrowIfDisposed();
 
             BlendMode mode;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetSurfaceBlendMode(Handle, &mode));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetSurfaceBlendMode(Handle, &mode)));
 
             return mode;
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceBlendMode(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceBlendMode(Handle, value)));
         }
     }
 
@@ -148,7 +149,7 @@ public sealed class Surface : IDisposable
             if (value.HasValue)
                 rect = &clip;
 
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceClipRect(Handle, rect));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceClipRect(Handle, rect)));
             field = value;
         }
     }
@@ -169,14 +170,17 @@ public sealed class Surface : IDisposable
         {
             ThrowIfDisposed();
 
-            if (value.HasValue)
+            unsafe
             {
-                uint key = SDL3.MapSurfaceRGB(Handle, value.Value.R, value.Value.G, value.Value.B);
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorKey(Handle, true, key));
-            }
-            else
-            {
-                SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorKey(Handle, false, 0));
+                if (value.HasValue)
+                {
+                    uint key = SDL3.MapSurfaceRGB(Handle, value.Value.R, value.Value.G, value.Value.B);
+                    SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorKey(Handle, true, key));
+                }
+                else
+                {
+                    SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorKey(Handle, false, 0));
+                }
             }
 
             field = value;
@@ -198,14 +202,14 @@ public sealed class Surface : IDisposable
             ThrowIfDisposed();
 
             byte r, g, b;
-            SDLThrowHelper.ThrowIfFailed(SDL3.GetSurfaceColorMod(Handle, &r, &g, &b));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetSurfaceColorMod(Handle, &r, &g, &b)));
 
             return new Color(r, g, b);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorMod(Handle, value.R, value.G, value.B));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceColorMod(Handle, value.R, value.G, value.B)));
         }
     }
 
@@ -220,12 +224,12 @@ public sealed class Surface : IDisposable
         get
         {
             ThrowIfDisposed();
-            return SDL3.GetSurfaceColorspace(Handle);
+            return unsafe (SDL3.GetSurfaceColorspace(Handle));
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceColorspace(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceColorspace(Handle, value)));
         }
     }
 
@@ -285,25 +289,25 @@ public sealed class Surface : IDisposable
         {
             ThrowIfDisposed();
 
-            int count;
-            SDL_Surface** images = SDL3.GetSurfaceImages(Handle, &count);
-            SDLThrowHelper.ThrowIfNull(images);
-
-            try
+            unsafe
             {
-                Surface[] result = new Surface[count];
+                int count;
+                SDL_Surface** images = SDL3.GetSurfaceImages(Handle, &count);
+                SDLThrowHelper.ThrowIfNull(images);
 
-                unsafe
+                try
                 {
+                    Surface[] result = new Surface[count];
+
                     for (int i = 0; i < count; i++)
                         result[i] = new Surface(images[i], owned: false);
-                }
 
-                return result;
-            }
-            finally
-            {
-                SDL3.Free(images);
+                    return result;
+                }
+                finally
+                {
+                    SDL3.Free(images);
+                }
             }
         }
     }
@@ -328,15 +332,21 @@ public sealed class Surface : IDisposable
         {
             ThrowIfDisposed();
 
-            SDL_Palette* palette = SDL3.GetSurfacePalette(Handle);
-            return palette is null ? null : new Palette(palette);
+            unsafe
+            {
+                SDL_Palette* palette = SDL3.GetSurfacePalette(Handle);
+                return palette is null ? null : new Palette(palette);
+            }
         }
         set
         {
             ThrowIfDisposed();
 
-            SDL_Palette* palette = value is null ? null : value.Handle;
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfacePalette(Handle, palette));
+            unsafe
+            {
+                SDL_Palette* palette = value is null ? null : value.Handle;
+                SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfacePalette(Handle, palette));
+            }
         }
     }
 
@@ -394,12 +404,12 @@ public sealed class Surface : IDisposable
         get
         {
             ThrowIfDisposed();
-            return SDL3.SurfaceHasRLE(Handle);
+            return unsafe (SDL3.SurfaceHasRLE(Handle));
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(SDL3.SetSurfaceRLE(Handle, value));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetSurfaceRLE(Handle, value)));
         }
     }
 
@@ -421,7 +431,7 @@ public sealed class Surface : IDisposable
         ThrowIfDisposed();
         image.ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.AddSurfaceAlternateImage(Handle, image.Handle));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.AddSurfaceAlternateImage(Handle, image.Handle)));
     }
 
     /// <summary>
@@ -453,7 +463,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurface(source.Handle, sourceRect, Handle, destinationRect));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurface(source.Handle, sourceRect, Handle, destinationRect)));
     }
 
     /// <summary>
@@ -482,7 +492,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurfaceScaled(source.Handle, sourceRect, Handle, destinationRect, scaleMode));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurfaceScaled(source.Handle, sourceRect, Handle, destinationRect, scaleMode)));
     }
 
     /// <summary>
@@ -510,7 +520,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurfaceTiled(source.Handle, sourceRect, Handle, destinationRect));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurfaceTiled(source.Handle, sourceRect, Handle, destinationRect)));
     }
 
     /// <summary>
@@ -540,7 +550,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurfaceTiledWithScale(source.Handle, sourceRect, scale, scaleMode, Handle, destinationRect));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurfaceTiledWithScale(source.Handle, sourceRect, scale, scaleMode, Handle, destinationRect)));
     }
 
     /// <summary>
@@ -578,7 +588,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurface9Grid(source.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, scaleMode, Handle, destinationRect));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurface9Grid(source.Handle, sourceRect, leftWidth, rightWidth, topHeight, bottomHeight, scale, scaleMode, Handle, destinationRect)));
     }
 
     /// <summary>
@@ -599,7 +609,7 @@ public sealed class Surface : IDisposable
         ThrowIfDisposed();
         source.ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurfaceUnchecked(source.Handle, &region, Handle, &destination));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurfaceUnchecked(source.Handle, &region, Handle, &destination)));
     }
 
     /// <summary>
@@ -621,7 +631,7 @@ public sealed class Surface : IDisposable
         ThrowIfDisposed();
         source.ThrowIfDisposed();
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.BlitSurfaceUncheckedScaled(source.Handle, &region, Handle, &destination, scaleMode));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.BlitSurfaceUncheckedScaled(source.Handle, &region, Handle, &destination, scaleMode)));
     }
 
     /// <summary>
@@ -633,7 +643,7 @@ public sealed class Surface : IDisposable
     public void Clear(ColorF color)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.ClearSurface(Handle, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ClearSurface(Handle, color.R, color.G, color.B, color.A)));
     }
 
     /// <summary>
@@ -646,7 +656,11 @@ public sealed class Surface : IDisposable
     public Surface Convert(PixelFormat format)
     {
         ThrowIfDisposed();
-        return new(SDL3.ConvertSurface(Handle, format));
+
+        unsafe
+        {
+            return new(SDL3.ConvertSurface(Handle, format));
+        }
     }
 
     /// <summary>
@@ -662,8 +676,11 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SDL_Surface* handle = SDL3.ConvertSurfaceAndColorspace(Handle, format, palette?.Handle, colorspace, _properties);
-        return new(handle);
+        unsafe
+        {
+            SDL_Surface* handle = SDL3.ConvertSurfaceAndColorspace(Handle, format, palette?.Handle, colorspace, _properties);
+            return new(handle);
+        }
     }
 
     /// <summary>
@@ -712,19 +729,22 @@ public sealed class Surface : IDisposable
 
         MemoryHandle handle = pixels.Pin();
 
-        SDL_Surface* surface;
-        try
+        unsafe
         {
-            surface = SDL3.CreateSurfaceFrom(width, height, format, handle.Pointer, actualPitch);
-            SDLThrowHelper.ThrowIfNull(surface);
-        }
-        catch
-        {
-            handle.Dispose();
-            throw;
-        }
+            SDL_Surface* surface;
+            try
+            {
+                surface = SDL3.CreateSurfaceFrom(width, height, format, handle.Pointer, actualPitch);
+                SDLThrowHelper.ThrowIfNull(surface);
+            }
+            catch
+            {
+                handle.Dispose();
+                throw;
+            }
 
-        return new Surface(surface, handle);
+            return new Surface(surface, handle);
+        }
     }
 
     /// <summary>
@@ -800,22 +820,29 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        SDL_Palette* palette = SDL3.CreateSurfacePalette(Handle);
-        SDLThrowHelper.ThrowIfNull(palette);
+        unsafe
+        {
+            SDL_Palette* palette = SDL3.CreateSurfacePalette(Handle);
+            SDLThrowHelper.ThrowIfNull(palette);
 
-        return new Palette(palette);
+            return new Palette(palette);
+        }
     }
 
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (Handle is null)
-            return;
+        unsafe
+        {
+            if (Handle is null)
+                return;
 
-        if (_owned)
-            SDL3.DestroySurface(Handle);
+            if (_owned)
+                SDL3.DestroySurface(Handle);
 
-        Handle = null;
+            Handle = null;
+        }
+
         _pixels.Dispose();
     }
 
@@ -828,7 +855,11 @@ public sealed class Surface : IDisposable
     public Surface Duplicate()
     {
         ThrowIfDisposed();
-        return new Surface(SDL3.DuplicateSurface(Handle));
+
+        unsafe
+        {
+            return new Surface(SDL3.DuplicateSurface(Handle));
+        }
     }
 
     /// <summary>
@@ -841,8 +872,11 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
-        SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRect(Handle, null, pixel));
+        unsafe
+        {
+            uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
+            SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRect(Handle, null, pixel));
+        }
     }
 
     /// <summary>
@@ -856,8 +890,11 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
-        SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRect(Handle, &area, pixel));
+        unsafe
+        {
+            uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
+            SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRect(Handle, &area, pixel));
+        }
     }
 
     /// <summary>
@@ -871,8 +908,11 @@ public sealed class Surface : IDisposable
     {
         ThrowIfDisposed();
 
-        uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
-        SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRects(Handle, areas, areas.Length, pixel));
+        unsafe
+        {
+            uint pixel = SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
+            SDLThrowHelper.ThrowIfFailed(SDL3.FillSurfaceRects(Handle, areas, areas.Length, pixel));
+        }
     }
 
     /// <summary>
@@ -883,7 +923,7 @@ public sealed class Surface : IDisposable
     public void Flip(FlipMode flip)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.FlipSurface(Handle, flip));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.FlipSurface(Handle, flip)));
     }
 
     /// <summary>
@@ -898,8 +938,11 @@ public sealed class Surface : IDisposable
         if (!File.Exists(path))
             ThrowHelper.ThrowFileNotFound("The file path does not exist.", path);
 
-        SDL_Surface* handle = SDL3_image.FromFile(path);
-        return new Surface(handle, true);
+        unsafe
+        {
+            SDL_Surface* handle = SDL3_image.FromFile(path);
+            return new Surface(handle, true);
+        }
     }
 
     /// <summary>
@@ -912,8 +955,11 @@ public sealed class Surface : IDisposable
     {
         using IOStream source = IOStream.FromStream(stream);
 
-        SDL_Surface* handle = SDL3_image.FromStream(source.Handle, false);
-        return new Surface(handle, true);
+        unsafe
+        {
+            SDL_Surface* handle = SDL3_image.FromStream(source.Handle, false);
+            return new Surface(handle, true);
+        }
     }
 
     /// <summary>
@@ -941,7 +987,11 @@ public sealed class Surface : IDisposable
     public uint MapRgb(Color color)
     {
         ThrowIfDisposed();
-        return SDL3.MapSurfaceRGB(Handle, color.R, color.G, color.B);
+
+        unsafe
+        {
+            return SDL3.MapSurfaceRGB(Handle, color.R, color.G, color.B);
+        }
     }
 
     /// <summary>
@@ -953,7 +1003,11 @@ public sealed class Surface : IDisposable
     public uint MapRgba(Color color)
     {
         ThrowIfDisposed();
-        return SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
+
+        unsafe
+        {
+            return SDL3.MapSurfaceRGBA(Handle, color.R, color.G, color.B, color.A);
+        }
     }
 
     /// <summary>
@@ -966,7 +1020,7 @@ public sealed class Surface : IDisposable
     public void PremultiplyAlpha(bool linear = false)
     {
         ThrowIfDisposed();
-        SDLThrowHelper.ThrowIfFailed(SDL3.PremultiplySurfaceAlpha(Handle, linear));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.PremultiplySurfaceAlpha(Handle, linear)));
     }
 
     /// <summary>
@@ -985,7 +1039,7 @@ public sealed class Surface : IDisposable
         ThrowIfInvalid(x, y);
 
         byte r, g, b, a;
-        SDLThrowHelper.ThrowIfFailed(SDL3.ReadSurfacePixel(Handle, x, y, &r, &g, &b, &a));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ReadSurfacePixel(Handle, x, y, &r, &g, &b, &a)));
 
         return new Color(r, g, b, a);
     }
@@ -1006,7 +1060,7 @@ public sealed class Surface : IDisposable
         ThrowIfInvalid(x, y);
 
         float r, g, b, a;
-        SDLThrowHelper.ThrowIfFailed(SDL3.ReadSurfacePixelFloat(Handle, x, y, &r, &g, &b, &a));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ReadSurfacePixelFloat(Handle, x, y, &r, &g, &b, &a)));
 
         return new ColorF(r, g, b, a);
     }
@@ -1018,7 +1072,11 @@ public sealed class Surface : IDisposable
     public void RemoveAlternateImages()
     {
         ThrowIfDisposed();
-        SDL3.RemoveSurfaceAlternateImages(Handle);
+
+        unsafe
+        {
+            SDL3.RemoveSurfaceAlternateImages(Handle);
+        }
     }
 
     /// <summary>
@@ -1035,7 +1093,11 @@ public sealed class Surface : IDisposable
     public Surface Rotate(Angle angle)
     {
         ThrowIfDisposed();
-        return new Surface(SDL3.RotateSurface(Handle, angle.Degrees));
+
+        unsafe
+        {
+            return new Surface(SDL3.RotateSurface(Handle, angle.Degrees));
+        }
     }
 
     /// <summary>
@@ -1088,23 +1150,23 @@ public sealed class Surface : IDisposable
 
         if (ext.Contains("avif", StringComparison.OrdinalIgnoreCase))
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, path, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveAVIF(surface.Handle, path, quality)));
             return;
         }
 
         if (ext.Contains("jpg", StringComparison.OrdinalIgnoreCase) || ext.Contains("jpeg", StringComparison.OrdinalIgnoreCase))
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, path, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveAVIF(surface.Handle, path, quality)));
             return;
         }
 
         if (ext.Contains("webp", StringComparison.OrdinalIgnoreCase))
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveWEBP(surface.Handle, path, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveWEBP(surface.Handle, path, quality)));
             return;
         }
 
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.Save(surface.Handle, path));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.Save(surface.Handle, path)));
     }
 
     /// <summary>
@@ -1128,23 +1190,23 @@ public sealed class Surface : IDisposable
 
         if (format is ImageFormat.AVIF)
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveAVIF(surface.Handle, source.Handle, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveAVIF(surface.Handle, source.Handle, quality)));
             return;
         }
 
         if (format is ImageFormat.JPG)
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveJPG(surface.Handle, source.Handle, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveJPG(surface.Handle, source.Handle, quality)));
             return;
         }
 
         if (format is ImageFormat.WEBP)
         {
-            SDLThrowHelper.ThrowIfFailed(SDL3_image.SaveWEBP(surface.Handle, source.Handle, quality));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.SaveWEBP(surface.Handle, source.Handle, quality)));
             return;
         }
 
-        SDLThrowHelper.ThrowIfFailed(SDL3_image.Save(surface.Handle, source.Handle, GetFormatName(format)));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.Save(surface.Handle, source.Handle, GetFormatName(format))));
 
         static string GetFormatName(ImageFormat format) => format switch
         {
@@ -1176,7 +1238,10 @@ public sealed class Surface : IDisposable
         ArgumentOutOfRangeException.ThrowIfNegative(width);
         ArgumentOutOfRangeException.ThrowIfNegative(height);
 
-        return new Surface(SDL3.ScaleSurface(Handle, width, height, scaleMode));
+        unsafe
+        {
+            return new Surface(SDL3.ScaleSurface(Handle, width, height, scaleMode));
+        }
     }
 
     /// <summary>
@@ -1204,7 +1269,7 @@ public sealed class Surface : IDisposable
         if (destination.HasValue)
             destinationRect = &dst;
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.StretchSurface(source.Handle, sourceRect, Handle, destinationRect, scaleMode));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.StretchSurface(source.Handle, sourceRect, Handle, destinationRect, scaleMode)));
     }
 
     /// <summary>
@@ -1222,7 +1287,7 @@ public sealed class Surface : IDisposable
         ThrowIfDisposed();
         ThrowIfInvalid(x, y);
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.WriteSurfacePixel(Handle, x, y, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.WriteSurfacePixel(Handle, x, y, color.R, color.G, color.B, color.A)));
     }
 
     /// <summary>
@@ -1240,10 +1305,10 @@ public sealed class Surface : IDisposable
         ThrowIfDisposed();
         ThrowIfInvalid(x, y);
 
-        SDLThrowHelper.ThrowIfFailed(SDL3.WriteSurfacePixelFloat(Handle, x, y, color.R, color.G, color.B, color.A));
+        SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.WriteSurfacePixelFloat(Handle, x, y, color.R, color.G, color.B, color.A)));
     }
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(Handle is null, typeof(Surface));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (Handle is null), typeof(Surface));
 
     private void ThrowIfInvalid(int x, int y)
     {

@@ -21,7 +21,7 @@ public sealed class AnimationDecoder : IDisposable
     private IMG_AnimationDecoder* _decoder;
     private IOStream? _stream;
 
-    private AnimationDecoder(IMG_AnimationDecoder* decoder, IOStream? stream)
+    private unsafe AnimationDecoder(IMG_AnimationDecoder* decoder, IOStream? stream)
     {
         _decoder = decoder;
         _stream = stream;
@@ -46,10 +46,13 @@ public sealed class AnimationDecoder : IDisposable
     /// <exception cref="QuackInteropException">The file could not be opened for decoding.</exception>
     public static AnimationDecoder Open(string path)
     {
-        IMG_AnimationDecoder* decoder = SDL3_image.CreateAnimationDecoder(path);
-        SDLThrowHelper.ThrowIfNull(decoder);
+        unsafe
+        {
+            IMG_AnimationDecoder* decoder = SDL3_image.CreateAnimationDecoder(path);
+            SDLThrowHelper.ThrowIfNull(decoder);
 
-        return new AnimationDecoder(decoder, null);
+            return new AnimationDecoder(decoder, null);
+        }
     }
 
     /// <summary>
@@ -64,25 +67,28 @@ public sealed class AnimationDecoder : IDisposable
     {
         IOStream source = IOStream.FromStream(stream);
 
-        IMG_AnimationDecoder* decoder;
-        try
+        unsafe
         {
-            decoder = SDL3_image.CreateAnimationDecoder(source.Handle, false, format.Type);
-            SDLThrowHelper.ThrowIfNull(decoder);
-        }
-        catch
-        {
-            source.Dispose();
-            throw;
-        }
+            IMG_AnimationDecoder* decoder;
+            try
+            {
+                decoder = SDL3_image.CreateAnimationDecoder(source.Handle, false, format.Type);
+                SDLThrowHelper.ThrowIfNull(decoder);
+            }
+            catch
+            {
+                source.Dispose();
+                throw;
+            }
 
-        return new AnimationDecoder(decoder, source);
+            return new AnimationDecoder(decoder, source);
+        }
     }
 
     /// <summary>
     /// Gets the current state of the decoder.
     /// </summary>
-    public AnimationDecoderStatus Status => SDL3_image.GetAnimationDecoderStatus(_decoder);
+    public AnimationDecoderStatus Status => unsafe (SDL3_image.GetAnimationDecoderStatus(_decoder));
 
     /// <summary>
     /// Gets the number of frames in the animation, or 0 if the format does not report it.
@@ -122,11 +128,14 @@ public sealed class AnimationDecoder : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_decoder is null)
+        if (unsafe (_decoder is null))
             return;
 
-        SDL3_image.CloseAnimationDecoder(_decoder);
-        _decoder = null;
+        unsafe
+        {
+            SDL3_image.CloseAnimationDecoder(_decoder);
+            _decoder = null;
+        }
 
         _stream?.Dispose();
         _stream = null;
@@ -136,7 +145,7 @@ public sealed class AnimationDecoder : IDisposable
     /// Rewinds the decoder to the first frame.
     /// </summary>
     /// <exception cref="QuackInteropException">The decoder could not be reset.</exception>
-    public void Reset() => SDLThrowHelper.ThrowIfFailed(SDL3_image.ResetAnimationDecoder(_decoder));
+    public void Reset() => SDLThrowHelper.ThrowIfFailed(unsafe (SDL3_image.ResetAnimationDecoder(_decoder)));
 
     /// <summary>
     /// Reads the next frame of the animation.
@@ -158,12 +167,15 @@ public sealed class AnimationDecoder : IDisposable
         SDL_Surface* surface;
         ulong milliseconds;
 
-        if (SDL3_image.GetAnimationDecoderFrame(_decoder, &surface, &milliseconds))
+        unsafe
         {
-            frame = new Surface(surface, true);
-            duration = TimeSpan.FromMilliseconds(milliseconds);
+            if (SDL3_image.GetAnimationDecoderFrame(_decoder, &surface, &milliseconds))
+            {
+                frame = new Surface(surface, true);
+                duration = TimeSpan.FromMilliseconds(milliseconds);
 
-            return true;
+                return true;
+            }
         }
 
         frame = null;
@@ -198,14 +210,17 @@ public sealed class AnimationDecoder : IDisposable
         SDL_Surface* surface;
         long pts;
 
-        if (SDL3_image.GetNextAnimationDecoderFrame(_decoder, &surface, &pts))
+        unsafe
         {
-            frame = new Surface(surface, owned: true);
+            if (SDL3_image.GetNextAnimationDecoderFrame(_decoder, &surface, &pts))
+            {
+                frame = new Surface(surface, owned: true);
 
-            int milliseconds = SDL3_image.GetAnimationDecoderPresentationTimestampMS(_decoder, pts);
-            presentationTimestamp = TimeSpan.FromMilliseconds(milliseconds);
+                int milliseconds = SDL3_image.GetAnimationDecoderPresentationTimestampMS(_decoder, pts);
+                presentationTimestamp = TimeSpan.FromMilliseconds(milliseconds);
 
-            return true;
+                return true;
+            }
         }
 
         frame = null;
