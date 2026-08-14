@@ -43,5 +43,11 @@ jobs:
       - name: Package
         run: dotnet pack ${{ env.project }} --no-build --no-restore --output . -p:PackageVersion=${{ steps.resolved.outputs.Version }}
 
+      - name: Generate key
+        id: nuget
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.USER }}
+
       - name: Publish to NuGet
-        run: dotnet nuget push KappaDuck.Quack*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+        run: dotnet nuget push KappaDuck.Quack*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget.outputs.NUGET_API_KEY }} --skip-duplicate
