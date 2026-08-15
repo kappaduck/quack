@@ -5,7 +5,7 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Primitives;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Video.Pixels;
 
@@ -66,19 +66,19 @@ public sealed class WindowSurface : IDisposable
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to get or set the vertical synchronization interval.</exception>
     /// <exception cref="ObjectDisposedException">The surface is disposed.</exception>
-    public int VSync
+    public VSync VSync
     {
         get
         {
             ThrowIfDisposed();
 
             SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowSurfaceVSync(_window.NativeHandle, out int vsync)));
-            return vsync;
+            return new VSync(vsync);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSurfaceVSync(_window.NativeHandle, value)));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowSurfaceVSync(_window.NativeHandle, value.Refresh)));
         }
     }
 

@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
@@ -84,6 +85,16 @@ public sealed class AnimationDecoder : IDisposable
             return new AnimationDecoder(decoder, source);
         }
     }
+
+    /// <summary>
+    /// Opens an animated image from raw file bytes for decoding.
+    /// </summary>
+    /// <remarks>The bytes are read on demand as frames are decoded, so they must not be modified until the decoder is disposed.</remarks>
+    /// <param name="bytes">The raw bytes of the animated image file.</param>
+    /// <param name="format">The animation format to decode as.</param>
+    /// <returns>A decoder positioned before the first frame.</returns>
+    /// <exception cref="QuackInteropException">The bytes could not be opened for decoding.</exception>
+    public static AnimationDecoder Open(ReadOnlyMemory<byte> bytes, AnimationFormat format) => Open(bytes.AsStream(), format);
 
     /// <summary>
     /// Gets the current state of the decoder.

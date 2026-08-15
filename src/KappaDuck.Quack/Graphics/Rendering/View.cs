@@ -18,7 +18,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// <para>
 /// Combine multiple views to build split-screens, minimaps, or picture-in-picture panels: draw the scene once per
 /// view, each with its own <see cref="Viewport"/>. Obtain a <see cref="ViewScope"/> from
-/// <see cref="Renderer.View(View)"/> to draw through a view.
+/// <see cref="Renderer.WithView(View)"/> to draw through a view.
 /// </para>
 /// </remarks>
 public sealed class View
@@ -233,7 +233,7 @@ public sealed class View
 }
 
 /// <summary>
-/// A scope obtained from <see cref="Renderer.View(View)"/> that carries the render state to draw through a view,
+/// A scope obtained from <see cref="Renderer.WithView(View)"/> that carries the render state to draw through a view,
 /// and restores the renderer's full-target viewport when disposed.
 /// </summary>
 /// <remarks>

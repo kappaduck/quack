@@ -9,7 +9,7 @@ namespace KappaDuck.Quack.Graphics.Rendering;
 /// A scope that redirects a <see cref="Renderer"/> to draw into a texture and restores the previous target when disposed.
 /// </summary>
 /// <remarks>
-/// Obtained from <see cref="Renderer.Target(Texture)"/>. Drawing performed while the scope is alive renders into the texture.
+/// Obtained from <see cref="Renderer.WithTarget(Texture)"/>. Drawing performed while the scope is alive renders into the texture.
 /// </remarks>
 public readonly ref struct RenderTargetScope : IDisposable
 {

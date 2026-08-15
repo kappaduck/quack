@@ -5,7 +5,7 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL.Primitives;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Input;
 
@@ -219,7 +219,7 @@ public static class Mouse
             float dx = *x;
             float dy = *y;
 
-            transform(WindowManager.FromHandle(window), mouseId, ref dx, ref dy);
+            transform(Windows.FromHandle(window), mouseId, ref dx, ref dy);
 
             *x = dx;
             *y = dy;

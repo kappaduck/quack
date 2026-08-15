@@ -6,7 +6,7 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.UI.Progress;
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.Windowing;
 
 /// <summary>
 /// Controls the progress indicator shown on a window's taskbar icon.

@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
@@ -309,6 +310,19 @@ public sealed class Texture : IDisposable
             SDL_Texture* texture = SDL3.CreateTexture(renderer.Handle, format, access, size.Width, size.Height);
             return new(texture);
         }
+    }
+
+    /// <summary>
+    /// Loads an image from a raw file bytes into a texture.
+    /// </summary>
+    /// <param name="renderer">The renderer to use to create the texture</param>
+    /// <param name="bytes">The raw bytes of the image file.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">Thrown when failed to load the image.</exception>
+    public static Texture FromBytes(Renderer renderer, ReadOnlyMemory<byte> bytes)
+    {
+        using Stream stream = bytes.AsStream();
+        return FromStream(renderer, stream);
     }
 
     /// <summary>

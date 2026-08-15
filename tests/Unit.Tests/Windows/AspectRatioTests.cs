@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace Unit.Tests.Windows;
 

@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.Windowing;
 
 /// <summary>
 /// Represents the permitted range of aspect ratios for a resizable window, expressed as width divided by height.

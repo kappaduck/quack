@@ -4,12 +4,12 @@
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using System.Collections.Concurrent;
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.Windowing;
 
 /// <summary>
 /// Provides access to all open windows.
 /// </summary>
-public static class WindowManager
+public static class Windows
 {
     private static readonly ConcurrentDictionary<nint, Window> _windows = [];
 
@@ -36,7 +36,7 @@ public static class WindowManager
     /// <summary>
     /// Gets a snapshot of all currently open windows.
     /// </summary>
-    public static IReadOnlyList<Window> Windows => [.. _windows.Values];
+    public static IReadOnlyList<Window> All => [.. _windows.Values];
 
     /// <summary>
     /// Gets the window with the given id, or <see langword="null"/> if no open window matches it.

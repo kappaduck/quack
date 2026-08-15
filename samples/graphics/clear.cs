@@ -11,7 +11,7 @@ using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Video.Pixels;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 using System.Diagnostics;
 
 // Initialize the engine with metadata and the Video Subsystem

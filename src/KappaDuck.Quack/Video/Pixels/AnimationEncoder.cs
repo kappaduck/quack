@@ -46,13 +46,13 @@ public sealed class AnimationEncoder : IDisposable
     }
 
     /// <summary>
-    /// Creates an encoder that writes to a file. The format is chosen from the file extension.
+    /// Opens an encoder that writes to a file. The format is chosen from the file extension.
     /// </summary>
     /// <param name="path">The path to write the animated image to.</param>
     /// <param name="options">Additional encoding options, or <see langword="null"/> for the format's defaults.</param>
     /// <returns>An encoder ready to accept frames.</returns>
     /// <exception cref="QuackInteropException">The file could not be opened for encoding.</exception>
-    public static AnimationEncoder Create(string path, AnimationEncoderOptions? options = null)
+    public static AnimationEncoder Open(string path, AnimationEncoderOptions? options = null)
     {
         using Properties properties = BuildProperties(options);
         properties.Set("SDL_image.animation_encoder.create.filename", path);
@@ -67,14 +67,14 @@ public sealed class AnimationEncoder : IDisposable
     }
 
     /// <summary>
-    /// Creates an encoder that writes to a stream.
+    /// Opens an encoder that writes to a stream.
     /// </summary>
     /// <param name="stream">The stream to write the animated image to.</param>
     /// <param name="format">The animation format to encode as.</param>
     /// <param name="options">Additional encoding options, or <see langword="null"/> for the format's defaults.</param>
     /// <returns>An encoder ready to accept frames.</returns>
     /// <exception cref="QuackInteropException">The stream could not be opened for encoding.</exception>
-    public static AnimationEncoder Create(Stream stream, AnimationFormat format, AnimationEncoderOptions? options = null)
+    public static AnimationEncoder Open(Stream stream, AnimationFormat format, AnimationEncoderOptions? options = null)
     {
         IOStream destination = IOStream.FromStream(stream);
 

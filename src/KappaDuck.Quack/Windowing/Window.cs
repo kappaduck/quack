@@ -10,10 +10,10 @@ using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
 using KappaDuck.Quack.Video.Pixels;
-using KappaDuck.Quack.Windows.Handles;
+using KappaDuck.Quack.Windowing.Handles;
 using System.Text.Unicode;
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.Windowing;
 
 /// <summary>
 /// Represents an operating-system window.
@@ -80,6 +80,53 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
     public Window(string title, Size size, Point position) : this(title, size.Width, size.Height)
         => Position = position;
+
+    /// <summary>
+    /// Creates a window with the given title, size, and options.
+    /// </summary>
+    /// <param name="title">The title of the window.</param>
+    /// <param name="width">The width of the window.</param>
+    /// <param name="height">The height of the window.</param>
+    /// <param name="options">The options that configure how the window is created.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> or <paramref name="height"/> is negative or zero.</exception>
+    /// <exception cref="QuackInteropException">Failed to create the window.</exception>
+    public Window(string title, int width, int height, WindowOptions options)
+    {
+        Title = title;
+
+        if (options.Position is { } position)
+            Position = position;
+
+        AspectRatio = options.AspectRatio;
+        MinimumSize = options.MinimumSize;
+        MaximumSize = options.MaximumSize;
+        FullscreenMode = options.FullscreenMode;
+
+        AlwaysOnTop = options.AlwaysOnTop;
+        Borderless = options.Borderless;
+        Focusable = options.Focusable;
+        Fullscreen = options.Fullscreen;
+        Hidden = options.Hidden;
+        Maximized = options.Maximized;
+        Minimized = options.Minimized;
+        Opacity = options.Opacity;
+        Resizable = options.Resizable;
+        UseHighPixelDensity = options.UseHighPixelDensity;
+        UseTransparentBuffer = options.UseTransparentBuffer;
+
+        Initialize(width, height);
+    }
+
+    /// <summary>
+    /// Creates a window with the given title, size, and options.
+    /// </summary>
+    /// <param name="title">The title of the window.</param>
+    /// <param name="size">The size of the window.</param>
+    /// <param name="options">The options that configure how the window is created.</param>
+    /// <exception cref="QuackInteropException">Failed to create the window.</exception>
+    public Window(string title, Size size, WindowOptions options) : this(title, size.Width, size.Height, options)
+    {
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether the window is always on top of other windows.
@@ -234,7 +281,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets a safe, non-owning handle to the native platform window (HWND on Windows, the X11 or Wayland handle on Linux).
     /// </summary>
-    /// <remarks>Disposing this handle does not close the window; use <see cref="Close"/> for that.</remarks>
+    /// <remarks>Disposing the window will make the handle invalid and can't be used anymore.</remarks>
     /// <exception cref="ObjectDisposedException">The window is disposed.</exception>
     public WindowHandle Handle
     {
@@ -522,7 +569,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets the parent of this window, or <see langword="null"/> if it has no parent or is not open.
     /// </summary>
-    public Window? Parent => IsOpen ? unsafe (WindowManager.FromHandle(SDL3.GetWindowParent(NativeHandle))) : null;
+    public Window? Parent => IsOpen ? unsafe (Windows.FromHandle(SDL3.GetWindowParent(NativeHandle))) : null;
 
     /// <summary>
     /// Gets the pixel density of the window, the ratio of physical pixels to screen coordinates, or <c>0</c> if not open.
@@ -738,7 +785,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        WindowManager.Unregister(this);
+        Windows.Unregister(this);
 
         Id = 0;
         _state = State.None;
@@ -1170,7 +1217,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         SDLThrowHelper.ThrowIfZero(Id);
 
         Handle = GetWindowHandle(SDL3.GetWindowProperties(NativeHandle));
-        WindowManager.Register(this);
+        Windows.Register(this);
 
         SDL3.GetWindowSizeInPixels(NativeHandle, out int widthInPixels, out int heightInPixels);
         WidthInPixels = widthInPixels;

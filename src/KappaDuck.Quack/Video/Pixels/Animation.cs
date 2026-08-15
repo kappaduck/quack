@@ -1,6 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
@@ -117,6 +118,14 @@ public sealed class Animation : IDisposable
             return Create(handle);
         }
     }
+
+    /// <summary>
+    /// Loads every frame of an animated image from raw file bytes into memory.
+    /// </summary>
+    /// <param name="bytes">The raw bytes of the animated image file.</param>
+    /// <returns>The loaded animation.</returns>
+    /// <exception cref="QuackInteropException">The animation could not be loaded.</exception>
+    public static Animation Load(ReadOnlyMemory<byte> bytes) => Load(bytes.AsStream());
 
     /// <summary>
     /// Saves the animation to a file. The format is chosen from the file extension.

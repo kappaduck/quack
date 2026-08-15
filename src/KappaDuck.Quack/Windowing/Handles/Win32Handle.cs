@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Windows.Handles;
+namespace KappaDuck.Quack.Windowing.Handles;
 
 /// <summary>
 /// Represents a Win32 handle
