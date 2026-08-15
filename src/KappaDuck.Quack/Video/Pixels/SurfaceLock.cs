@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Video.Pixels;
 /// Obtained from <see cref="Surface.Lock"/>. Dispose it to unlock the surface. The <see cref="Pixels"/> buffer
 /// is only valid for the lifetime of this scope; do not let it escape the <see langword="using"/> block.
 /// </remarks>
-public readonly ref struct SurfaceLock
+public readonly ref struct SurfaceLock : IDisposable
 {
     private readonly Surface _surface;
 

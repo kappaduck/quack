@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Windows;
+namespace KappaDuck.Quack.Windowing;
 
 /// <summary>
 /// Represents the thickness, in screen coordinates, of a window's decorations on each side.

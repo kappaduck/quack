@@ -5,7 +5,7 @@ using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Primitives;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Video.Pixels;
 

@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Pixels;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Interop.SDL;
 

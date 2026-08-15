@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Input.Devices;
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Events;
 
@@ -56,5 +56,5 @@ public readonly struct KeyReleasedEvent : IEvent
     /// <summary>
     /// Gets the window the event is for, or <see langword="null"/> if it cannot be resolved.
     /// </summary>
-    public Window? Window => WindowManager.FromId(WindowId);
+    public Window? Window => Windows.FromId(WindowId);
 }

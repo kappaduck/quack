@@ -15,15 +15,15 @@ This document provides an overview of how to run and explore the Quack! game eng
 
 Run the example directly in your terminal:
 
-#### Window
+#### Windowing
 ```bash
-dotnet ./examples/windows/window.cs
+dotnet ./samples/windowing/window.cs
 ```
 
 #### Linux
 ```bash
-chmod +x ./examples/windows/window.cs # only needed once
-./examples/windows/window.cs
+chmod +x ./samples/Windowing/window.cs # only needed once
+./samples/windows/window.cs
 ```
 
 Alternatively, you can open the example in VS Code for editing and exploring the code, but

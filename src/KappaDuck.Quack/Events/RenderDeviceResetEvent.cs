@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 namespace KappaDuck.Quack.Events;
 
@@ -22,5 +22,5 @@ public readonly struct RenderDeviceResetEvent : IEvent
     /// <summary>
     /// Gets the window containing the renderer the event is for, or <see langword="null"/> if it cannot be resolved.
     /// </summary>
-    public Window? Window => WindowManager.FromId(WindowId);
+    public Window? Window => Windows.FromId(WindowId);
 }

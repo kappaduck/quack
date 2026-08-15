@@ -26,7 +26,7 @@ using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Video.Pixels;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 using EngineScope _ = QuackEngine.Init(Subsystem.Video);
 
@@ -103,7 +103,7 @@ During active development, `KappaDuck.Quack` references the **pre-release** vers
 
 |  Quack!  |    Runtimes    |   SDL3   | SDL_image | SDL_ttf | SDL_mixer |
 | :------: | :------------: | :------: | :-------: | :-----: | :-------: |
-| `source` | `0.1.0-beta.4` | `3.4.12` |  `3.4.4`  | `3.2.2` |  `3.2.4`  |
+| `source` | `0.1.0-beta.6` | `3.4.14` |  `3.4.4`  | `3.2.2` |  `3.2.4`  |
 
 ## Development & Sandbox
 
@@ -130,7 +130,7 @@ The sandbox project requires at least one `.cs` file to compile. All `.cs` files
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Input;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 
 using EngineScope _ = QuackEngine.Init(Subsystem.Video);
 

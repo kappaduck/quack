@@ -8,7 +8,7 @@ using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
 using KappaDuck.Quack.Video.Pixels;
-using KappaDuck.Quack.Windows;
+using KappaDuck.Quack.Windowing;
 using System.ComponentModel;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
@@ -996,7 +996,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <returns>A scope that restores the previous render target when disposed.</returns>
     /// <exception cref="QuackInteropException">Failed to set the render target.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public RenderTargetScope Target(Texture texture)
+    public RenderTargetScope WithTarget(Texture texture)
     {
         unsafe
         {
@@ -1022,7 +1022,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <returns>A scope carrying the view's render state that restores the full-target viewport when disposed.</returns>
     /// <exception cref="QuackInteropException">Failed to set the viewport.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public ViewScope View(View view)
+    public ViewScope WithView(View view)
     {
         ThrowIfDisposed();
 
