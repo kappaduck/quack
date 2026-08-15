@@ -27,7 +27,7 @@ public sealed record RendererOptions
     /// <see cref="VSync.Disabled"/> to disables synchronization, 1 synchronizes with every vertical refresh, and larger values synchronize
     /// with every Nth refresh. <see cref="VSync.Adaptive"/>, where supported, to enables adaptive synchronization. The default is <see cref="VSync.Disabled"/>.
     /// </remarks>
-    public int VSync { get; init; } = Rendering.VSync.Disabled;
+    public VSync VSync { get; init; } = VSync.Disabled;
 
     /// <summary>
     /// Gets the colorspace used for output to the display.

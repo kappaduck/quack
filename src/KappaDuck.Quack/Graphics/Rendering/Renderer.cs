@@ -81,7 +81,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
                     properties.Set("SDL.renderer.create.name", options.Driver);
 
                 properties.Set("SDL.renderer.create.window", window.NativeHandle);
-                properties.Set("SDL.renderer.create.present_vsync", options.VSync);
+                properties.Set("SDL.renderer.create.present_vsync", options.VSync.Refresh);
                 properties.Set("SDL.renderer.create.output_colorspace", options.Colorspace);
 
                 Handle = SDL3.CreateRendererWithProperties(properties);
@@ -507,7 +507,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to get or set the vertical synchronization mode.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public int VSync
+    public VSync VSync
     {
         get
         {
@@ -516,12 +516,12 @@ public sealed class Renderer : IRenderTarget, IDisposable
             int vsync;
             SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetRenderVSync(Handle, &vsync)));
 
-            return vsync;
+            return new VSync(vsync);
         }
         set
         {
             ThrowIfDisposed();
-            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetRenderVSync(Handle, value)));
+            SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetRenderVSync(Handle, value.Refresh)));
         }
     }
 
@@ -598,6 +598,17 @@ public sealed class Renderer : IRenderTarget, IDisposable
             SDLThrowHelper.ThrowIfFailed(SDL3.RenderClear(Handle));
         }
     }
+
+    /// <summary>
+    /// Creates an empty texture owned by this renderer.
+    /// </summary>
+    /// <param name="size">The size of the texture in pixels.</param>
+    /// <param name="format">The pixel format of the texture.</param>
+    /// <param name="access">How the texture's pixels may be accessed after creation.</param>
+    /// <returns>The created texture.</returns>
+    /// <exception cref="QuackInteropException">The texture could not be created.</exception>
+    public Texture CreateTexture(Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
+        => Texture.Create(this, size, format, access);
 
     /// <inheritdoc/>
     public void Dispose()
@@ -880,6 +891,31 @@ public sealed class Renderer : IRenderTarget, IDisposable
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.FlushRenderer(Handle)));
     }
+
+    /// <summary>
+    /// Loads an image file into a texture owned by this renderer.
+    /// </summary>
+    /// <param name="path">The path to the image file.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="FileNotFoundException">The file does not exist.</exception>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public Texture LoadTexture(string path) => Texture.FromFile(this, path);
+
+    /// <summary>
+    /// Loads an image from a stream into a texture owned by this renderer.
+    /// </summary>
+    /// <param name="stream">The stream to read the image from.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public Texture LoadTexture(Stream stream) => Texture.FromStream(this, stream);
+
+    /// <summary>
+    /// Loads an image from raw file bytes into a texture owned by this renderer.
+    /// </summary>
+    /// <param name="bytes">The raw bytes of the image file.</param>
+    /// <returns>The loaded texture.</returns>
+    /// <exception cref="QuackInteropException">The image could not be loaded.</exception>
+    public Texture LoadTexture(ReadOnlyMemory<byte> bytes) => Texture.FromBytes(this, bytes);
 
     /// <summary>
     /// Converts a point from window coordinates to render coordinates.

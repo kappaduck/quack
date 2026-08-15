@@ -281,7 +281,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets a safe, non-owning handle to the native platform window (HWND on Windows, the X11 or Wayland handle on Linux).
     /// </summary>
-    /// <remarks>Disposing this handle does not close the window; use <see cref="Close"/> for that.</remarks>
+    /// <remarks>Disposing the window will make the handle invalid and can't be used anymore.</remarks>
     /// <exception cref="ObjectDisposedException">The window is disposed.</exception>
     public WindowHandle Handle
     {

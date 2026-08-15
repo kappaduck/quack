@@ -38,14 +38,14 @@ internal readonly struct EquatableArray<T>(ImmutableArray<T> array) : IEquatable
         {
             int hash = 17;
 
-            foreach (T item in AsImmutableArray())
+            foreach (T item in AsImmutableArray().AsSpan())
                 hash = (hash * 31) + (item?.GetHashCode() ?? 0);
 
             return hash;
         }
     }
 
-    public ImmutableArray<T>.Enumerator GetEnumerator() => AsImmutableArray().GetEnumerator();
+    public ReadOnlySpan<T>.Enumerator GetEnumerator() => AsImmutableArray().AsSpan().GetEnumerator();
 
     private ImmutableArray<T> AsImmutableArray() => array.IsDefault ? [] : array;
 }
