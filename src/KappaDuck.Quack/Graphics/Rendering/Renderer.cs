@@ -33,7 +33,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// </summary>
     /// <remarks>
     /// If you want a specific renderer, you can find from the available renderers using <see cref="RenderDrivers.All"/>.
-    /// You can use a comma-seperated list e.g. vulkan,opengl which the engine will try each name, in the order listed, until one succeeds or all of them fail.
+    /// You can use a comma-separated list e.g. vulkan,opengl which the engine will try each name, in the order listed, until one succeeds or all of them fail.
     /// </remarks>
     /// <param name="window">The window to present to.</param>
     /// <param name="driver">The name of the rendering driver to use, or <see langword="null"/> to let the engine choose the most suitable one.</param>
@@ -379,7 +379,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <remarks>
     /// Some devices have portions of the screen which are partially obscured or not interactive,
     /// possibly due to on-screen controls, curved edges, camera notches, TV overscan, etc.
-    /// This provides the area of the current viewport which is safe to have interactible content.
+    /// This provides the area of the current viewport which is safe to have interactable content.
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to get the safe area.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
@@ -405,7 +405,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// This allows resolution independent drawing with a single coordinate system.
     /// </para>
     /// <para>
-    /// If this results in scaling or subpixel drawing by the rendering backend,
+    /// If this results in scaling or sub-pixel drawing by the rendering backend,
     /// it will be handled using the appropriate quality hints.
     /// For best results use integer scaling factors.
     /// </para>

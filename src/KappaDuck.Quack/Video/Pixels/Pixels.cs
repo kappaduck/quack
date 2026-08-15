@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Exceptions;
-using System.Drawing;
+using KappaDuck.Quack.Geometry;
 
 namespace KappaDuck.Quack.Video.Pixels;
 

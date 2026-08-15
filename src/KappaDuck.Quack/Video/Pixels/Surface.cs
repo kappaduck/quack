@@ -380,12 +380,12 @@ public sealed class Surface : IDisposable
     /// Gets or sets the tone mapping operator used when compressing from high dynamic range to a lower range.
     /// </summary>
     /// <remarks>
-    /// Supports <see cref="Tonemap.Chrome"/> (the default),
-    /// <see cref="Tonemap.LinearSpaceScaleFactor(float)"/> (<c>"*=N"</c>) where N is a linear-space scale factor,
-    /// and <see cref="Tonemap.None"/> to disable tone mapping.
+    /// Supports <see cref="ToneMap.Chrome"/> (the default),
+    /// <see cref="ToneMap.LinearSpaceScaleFactor(float)"/> (<c>"*=N"</c>) where N is a linear-space scale factor,
+    /// and <see cref="ToneMap.None"/> to disable tone mapping.
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to get or set the tone mapping.</exception>
-    public string TonemapOperator
+    public string ToneMapOperator
     {
         get => Properties.Get(_properties, "SDL.surface.tonemap", "chrome");
         set => Properties.Set(_properties, "SDL.surface.tonemap", value);
@@ -984,7 +984,7 @@ public sealed class Surface : IDisposable
     /// <param name="color">The color to map.</param>
     /// <returns>The pixel value packed for the surface format.</returns>
     /// <exception cref="ObjectDisposedException">The surface is disposed.</exception>
-    public uint MapRgb(Color color)
+    public uint MapRGB(Color color)
     {
         ThrowIfDisposed();
 
@@ -1000,7 +1000,7 @@ public sealed class Surface : IDisposable
     /// <param name="color">The color to map.</param>
     /// <returns>The pixel value packed for the surface format.</returns>
     /// <exception cref="ObjectDisposedException">The surface is disposed.</exception>
-    public uint MapRgba(Color color)
+    public uint MapRGBA(Color color)
     {
         ThrowIfDisposed();
 

@@ -72,11 +72,11 @@ internal sealed class SizeTests
     }
 
     [Test]
-    public async Task ToSizefShouldConvertToSizef()
+    public async Task ToSizeFShouldConvertToSizeF()
     {
         Size size = new(1920, 1080);
 
-        SizeF result = size.ToSizef();
+        SizeF result = size.ToSizeF();
 
         await result.Width.Should().BeEqualTo(size.Width);
         await result.Height.Should().BeEqualTo(size.Height);

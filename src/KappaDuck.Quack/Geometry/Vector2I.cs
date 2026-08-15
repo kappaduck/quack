@@ -67,7 +67,7 @@ public struct Vector2I(int x, int y) :
     /// Gets the normalized vector as a <see cref="Vector2"/>.
     /// </summary>
     /// <remarks>
-    /// Integer normalization is always lossy, so this returns a <see cref="Vector2"/> (float).
+    /// Integer normalization is always loss, so this returns a <see cref="Vector2"/> (float).
     /// </remarks>
     public readonly Vector2 Normalized => ToVector2().Normalized;
 

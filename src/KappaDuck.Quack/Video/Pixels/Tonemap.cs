@@ -4,9 +4,9 @@
 namespace KappaDuck.Quack.Video.Pixels;
 
 /// <summary>
-/// Provides operators to set the tone mapping for <see cref="Surface.TonemapOperator"/>
+/// Provides operators to set the tone mapping for <see cref="Surface.ToneMapOperator"/>
 /// </summary>
-public static class Tonemap
+public static class ToneMap
 {
     /// <summary>
     /// Disables the tone mapping.

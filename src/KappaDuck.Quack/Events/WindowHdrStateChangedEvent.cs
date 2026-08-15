@@ -10,9 +10,9 @@ namespace KappaDuck.Quack.Events;
 /// Raised when the HDR state of a window's display changes.
 /// </summary>
 [QuackEvent(SDL_EventType.WindowHdrStateChanged, NativeField = nameof(SDL_Event.Window))]
-public readonly struct WindowHdrStateChangedEvent : IEvent
+public readonly struct WindowHDRStateChangedEvent : IEvent
 {
-    internal WindowHdrStateChangedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;
+    internal WindowHDRStateChangedEvent(SDL_WindowEvent e) => WindowId = e.WindowId;
 
     /// <summary>
     /// Gets the id of the window the event is for.

@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// Represents a surface that can be drawn onto, such as a <see cref="Renderer"/>.
 /// </summary>
 /// <remarks>
-/// Drawables are rendered with <see cref="Draw(IDrawable)"/>; they in turn lower themselves to the vertex overloads,
+/// Drawable are rendered with <see cref="Draw(IDrawable)"/>; they in turn lower themselves to the vertex overloads,
 /// which apply the render state's transform, blend mode and texture.
 /// </remarks>
 public interface IRenderTarget

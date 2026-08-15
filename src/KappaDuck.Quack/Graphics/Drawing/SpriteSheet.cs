@@ -144,7 +144,7 @@ public sealed class SpriteSheet
         int atlasHeight = rows * frameHeight;
 
         if (atlasWidth > maxAtlasWidth || atlasHeight > maxAtlasWidth)
-            ThrowHelper.ThrowInvalidOperation($"This animation has {count} frames of {frameWidth}x{frameHeight}; packed as a grid it needs a {atlasWidth}x{atlasHeight} texture, which exceeds the {maxAtlasWidth} maximum atlas dimension. Raise maxAtlasWidth if the target hardware supports a larger texture, or decode this animation frame-by-frame with AnimationDecoder instead of atlasing it.");
+            ThrowHelper.ThrowInvalidOperation($"This animation has {count} frames of {frameWidth}x{frameHeight}; packed as a grid it needs a {atlasWidth}x{atlasHeight} texture, which exceeds the {maxAtlasWidth} maximum atlas dimension. Raise maxAtlasWidth if the target hardware supports a larger texture, or decode this animation frame-by-frame with AnimationDecoder instead of using the atlas.");
 
         using Surface atlas = new(atlasWidth, atlasHeight, animation.Frames[0].Format);
 

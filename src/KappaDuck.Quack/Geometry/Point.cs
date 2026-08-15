@@ -112,7 +112,7 @@ public struct Point(int x, int y) :
     /// Converts the point to a <see cref="PointF"/>.
     /// </summary>
     /// <returns>The converted point.</returns>
-    public readonly PointF ToPointf() => new(X, Y);
+    public readonly PointF ToPointF() => new(X, Y);
 
     /// <summary>
     /// Converts the point to a <see cref="Vector2"/>.

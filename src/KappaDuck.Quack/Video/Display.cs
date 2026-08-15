@@ -135,7 +135,7 @@ public readonly struct Display : IEquatable<Display>
     /// This is informational only; not all platforms report HDR capability at the display level.
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to retrieve the display properties.</exception>
-    public bool IsHdrEnabled
+    public bool IsHDREnabled
     {
         get
         {

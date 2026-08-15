@@ -12,7 +12,7 @@ namespace KappaDuck.Quack.UI.Progress;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Owns the reporting lifecycle, value normalization, completion detection and events. A concrete backend
+/// Owns the reporting life cycle, value normalization, completion detection and events. A concrete backend
 /// only translates a <see cref="ProgressState"/> and a normalized value into its own representation by
 /// implementing <see cref="SetState(ProgressState)"/> and <see cref="SetValue(float)"/>.
 /// </para>

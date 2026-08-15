@@ -1,12 +1,11 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Input.Devices;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
 using KappaDuck.Quack.Windowing;
-using System.Drawing;
-using System.Numerics;
 
 namespace KappaDuck.Quack.Events;
 
