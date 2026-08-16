@@ -5,7 +5,7 @@ using KappaDuck.Quack.Geometry;
 using System.Numerics;
 using System.Text.Unicode;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// Represents an RGBA color with floating-point channels, normally in the range 0-1.

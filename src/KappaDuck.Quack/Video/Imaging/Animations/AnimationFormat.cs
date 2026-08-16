@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Video;
+namespace KappaDuck.Quack.Video.Imaging.Animations;
 
 /// <summary>
 /// Represents an animated image format.

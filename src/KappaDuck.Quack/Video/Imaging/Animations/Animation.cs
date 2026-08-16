@@ -5,7 +5,7 @@ using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging.Animations;
 
 /// <summary>
 /// A fully decoded animated image (such as a GIF, APNG, animated WebP, AVIF sequence, or Windows ANI cursor),

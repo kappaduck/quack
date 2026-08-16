@@ -1,9 +1,9 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 
-namespace Integration.Tests.Video.Pixels;
+namespace Integration.Tests.Video.Imaging;
 
 internal sealed class PaletteTests
 {

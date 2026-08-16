@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging.Animations;
 
 /// <summary>
 /// Encodes frames into an animated image (such as a GIF, APNG, WebP, or AVIF sequence) one frame at a time.

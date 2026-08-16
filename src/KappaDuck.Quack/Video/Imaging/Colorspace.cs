@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// A representative set of colorspace describing how color values should be interpreted.

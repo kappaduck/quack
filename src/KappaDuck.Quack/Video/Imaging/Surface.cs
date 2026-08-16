@@ -8,7 +8,7 @@ using KappaDuck.Quack.Interop.SDL.Primitives;
 using System.Buffers;
 using System.ComponentModel;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// A collection of pixels held in regular memory, used for software image manipulation and blitting.

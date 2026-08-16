@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// Low-level operations on raw pixel buffers.

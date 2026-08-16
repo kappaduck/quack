@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// Provides additional <see cref="PixelFormat"/> members.

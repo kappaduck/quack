@@ -8,7 +8,7 @@ using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Interop.SDL.Primitives.Events;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 
 namespace KappaDuck.Quack.Interop.SDL;
 

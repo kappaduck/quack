@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging.Animations;
 
 /// <summary>
 /// Describes the current state of an <see cref="AnimationDecoder"/>.

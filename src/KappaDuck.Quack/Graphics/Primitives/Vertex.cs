@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 
 namespace KappaDuck.Quack.Graphics.Primitives;
 

@@ -7,7 +7,7 @@ using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Windowing;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// The CPU-accessible pixel surface backing a <see cref="Window"/>, for drawing without a GPU.

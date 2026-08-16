@@ -4,7 +4,7 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging;
 
 /// <summary>
 /// A set of indexed colors used by indexed pixel formats such as <see cref="PixelFormat.Index8"/>.

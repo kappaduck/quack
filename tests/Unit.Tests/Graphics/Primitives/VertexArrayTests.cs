@@ -5,7 +5,7 @@ using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Unit.Tests.Graphics.Primitives;

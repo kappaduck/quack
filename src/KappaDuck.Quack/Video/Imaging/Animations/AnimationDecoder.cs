@@ -5,7 +5,7 @@ using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 
-namespace KappaDuck.Quack.Video.Pixels;
+namespace KappaDuck.Quack.Video.Imaging.Animations;
 
 /// <summary>
 /// Decodes an animated image (such as a GIF, WebP, APNG, or AVIF) one frame at a time.

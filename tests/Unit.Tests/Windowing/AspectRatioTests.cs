@@ -3,7 +3,7 @@
 
 using KappaDuck.Quack.Windowing;
 
-namespace Unit.Tests.Windows;
+namespace Unit.Tests.Windowing;
 
 internal sealed class AspectRatioTests
 {
