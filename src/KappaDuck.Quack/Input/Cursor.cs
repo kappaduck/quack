@@ -5,7 +5,8 @@ using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL.Primitives;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
+using KappaDuck.Quack.Video.Imaging.Animations;
 
 namespace KappaDuck.Quack.Input;
 

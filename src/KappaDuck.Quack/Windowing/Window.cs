@@ -9,7 +9,7 @@ using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Input;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 using KappaDuck.Quack.Windowing.Handles;
 using System.Text.Unicode;
 

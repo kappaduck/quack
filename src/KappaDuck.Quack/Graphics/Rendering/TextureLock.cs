@@ -4,16 +4,16 @@
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
 using KappaDuck.Quack.Interop.SDL.Primitives;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
-/// A scope that keeps a <see cref="Texture"/> locked for direct write access to its pixel buffer as <see cref="Video.Pixels.Surface"/>.
+/// A scope that keeps a <see cref="Texture"/> locked for direct write access to its pixel buffer as <see cref="Video.Imaging.Surface"/>.
 /// </summary>
 /// <remarks>
 /// Obtained from <see cref="Texture.Lock"/>. Dispose it to upload the changes and unlock the texture.
-/// The <see cref="Video.Pixels.Surface"/> is write-only and only valid for the lifetime of this scope; do not
+/// The <see cref="Video.Imaging.Surface"/> is write-only and only valid for the lifetime of this scope; do not
 /// let it escape the <see langword="using"/> block.
 /// </remarks>
 public readonly ref struct TextureLock : IDisposable

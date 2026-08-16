@@ -10,7 +10,7 @@
 using KappaDuck.Quack.Core;
 using KappaDuck.Quack.Events;
 using KappaDuck.Quack.Graphics.Rendering;
-using KappaDuck.Quack.Video.Pixels;
+using KappaDuck.Quack.Video.Imaging;
 using KappaDuck.Quack.Windowing;
 using System.Diagnostics;
 
