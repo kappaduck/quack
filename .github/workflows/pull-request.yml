@@ -20,7 +20,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      quack: ./src/KappaDuck.Quack/KappaDuck.Quack.csproj
+      quack: ./quack.slnf
 
     steps:
       - name: Checkout repository

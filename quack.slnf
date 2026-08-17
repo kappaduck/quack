@@ -1,0 +1,12 @@
+{
+  "solution": {
+    "path": "quack.slnx",
+    "projects": [
+      "src\\KappaDuck.Quack.SourceGenerator\\KappaDuck.Quack.SourceGenerator.csproj",
+      "src\\KappaDuck.Quack\\KappaDuck.Quack.csproj",
+      "tests\\Integration.Tests\\Integration.Tests.csproj",
+      "tests\\SourceGenerator.Tests\\SourceGenerator.Tests.csproj",
+      "tests\\Unit.Tests\\Unit.Tests.csproj"
+    ]
+  }
+}
