@@ -93,8 +93,14 @@ public abstract class ProgressBarBase : IProgressOperation
     /// Starts a synchronous determinate progress operation.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Any unhandled exception thrown within <paramref name="action"/> is caught, reported to
     /// <see cref="ErrorOccurred"/> and switches the backend to <see cref="ProgressState.Error"/>.
+    /// </para>
+    /// <para>
+    /// The operation completes when <paramref name="action"/> returns, or earlier if reported progress reaches
+    /// 100%. Either way <see cref="Completed"/> is raised and the bar is reset.
+    /// </para>
     /// </remarks>
     /// <param name="action">The action that performs the progress operation.</param>
     /// <param name="total">The value representing 100% of the progress.</param>
@@ -111,6 +117,9 @@ public abstract class ProgressBarBase : IProgressOperation
         {
             ProgressReporter reporter = new(this, total);
             action(reporter);
+
+            if (_isReporting)
+                Complete();
         }
         catch (Exception exception)
         {
@@ -137,6 +146,9 @@ public abstract class ProgressBarBase : IProgressOperation
         {
             using AsyncProgressReporter reporter = new(this, total);
             await action(reporter).ConfigureAwait(false);
+
+            if (_isReporting)
+                Complete();
         }
         catch (OperationCanceledException)
         {
@@ -151,10 +163,20 @@ public abstract class ProgressBarBase : IProgressOperation
     /// <summary>
     /// Starts a synchronous indeterminate progress operation.
     /// </summary>
-    /// <inheritdoc cref="Start(Action{ProgressReporter}, int)" path="/remarks"/>
+    /// <remarks>
+    /// <para>
+    /// Any unhandled exception thrown within <paramref name="action"/> is caught, reported to
+    /// <see cref="ErrorOccurred"/> and switches the backend to <see cref="ProgressState.Error"/>.
+    /// </para>
+    /// <para>
+    /// The operation completes when <paramref name="action"/> returns. To cancel it, return early or throw an
+    /// <see cref="OperationCanceledException"/> from within <paramref name="action"/>; the bar is then reset and
+    /// <see cref="Cancelled"/> is raised.
+    /// </para>
+    /// </remarks>
     /// <param name="action">The action that performs the progress operation.</param>
     /// <exception cref="QuackException">A progress report is already in progress.</exception>
-    public void StartIndeterminate(Action<IndeterminateProgressReporter> action)
+    public void StartIndeterminate(Action action)
     {
         ThrowHelper.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
 
@@ -162,10 +184,10 @@ public abstract class ProgressBarBase : IProgressOperation
 
         try
         {
-            IndeterminateProgressReporter progress = new();
-            action(progress);
+            action();
 
-            Complete();
+            if (_isReporting)
+                Complete();
         }
         catch (OperationCanceledException)
         {
@@ -181,11 +203,22 @@ public abstract class ProgressBarBase : IProgressOperation
     /// <summary>
     /// Starts an asynchronous indeterminate progress operation.
     /// </summary>
-    /// <inheritdoc cref="Start(Action{ProgressReporter}, int)" path="/remarks"/>
-    /// <param name="action">The action that performs the progress operation.</param>
+    /// <remarks>
+    /// <para>
+    /// Any unhandled exception thrown within <paramref name="action"/> is caught, reported to
+    /// <see cref="ErrorOccurred"/> and switches the backend to <see cref="ProgressState.Error"/>.
+    /// </para>
+    /// <para>
+    /// The operation completes when the task returned by <paramref name="action"/> completes. Cancel it through
+    /// <paramref name="cancellationToken"/>; the resulting <see cref="OperationCanceledException"/> resets the
+    /// bar and raises <see cref="Cancelled"/>.
+    /// </para>
+    /// </remarks>
+    /// <param name="action">The action that performs the progress operation, observing the supplied token.</param>
+    /// <param name="cancellationToken">A token used to cancel the operation.</param>
     /// <returns>The task representing the asynchronous operation.</returns>
     /// <exception cref="QuackException">A progress report is already in progress.</exception>
-    public async Task StartIndeterminateAsync(Func<AsyncIndeterminateProgressReporter, Task> action)
+    public async Task StartIndeterminateAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
     {
         ThrowHelper.ThrowIf(_isReporting, "Cannot begin a new progress report while another is in progress.");
 
@@ -193,10 +226,10 @@ public abstract class ProgressBarBase : IProgressOperation
 
         try
         {
-            using AsyncIndeterminateProgressReporter progress = new();
-            await action(progress).ConfigureAwait(false);
+            await action(cancellationToken).ConfigureAwait(false);
 
-            Complete();
+            if (_isReporting)
+                Complete();
         }
         catch (OperationCanceledException)
         {
