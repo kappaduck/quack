@@ -26,6 +26,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     private int _height;
     private float? _opacity;
     private Surface? _icon;
+    private bool _disposed;
 
     /// <summary>
     /// Creates an empty window.
@@ -287,7 +288,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     {
         get
         {
-            ThrowIfDisposed();
+            ThrowIfNotOpen();
             return field;
         }
         private set;
@@ -785,10 +786,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        Windows.Unregister(this);
-
-        Id = 0;
-        _state = State.None;
+        Destroy();
     }
 
     /// <summary>
@@ -802,6 +800,8 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
     public void Create(string title, int width, int height)
     {
+        ThrowIfDisposed();
+
         if (IsOpen)
             return;
 
@@ -812,17 +812,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <inheritdoc/>
     public void Dispose()
     {
-        unsafe
-        {
-            if (NativeHandle is null)
-                return;
+        if (_disposed)
+            return;
 
-            _icon?.Dispose();
-            _icon = null;
-
-            SDL3.DestroyWindow(NativeHandle);
-            NativeHandle = null;
-        }
+        _disposed = true;
+        Destroy();
     }
 
     /// <summary>
@@ -990,7 +984,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="ObjectDisposedException">The window is not open.</exception>
     public void SetShape(Surface? shape)
     {
-        ThrowIfDisposed();
+        ThrowIfNotOpen();
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowShape(NativeHandle, shape?.Handle)));
     }
 
@@ -1170,6 +1164,26 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         return properties;
     }
 
+    private void Destroy()
+    {
+        unsafe
+        {
+            if (NativeHandle is null)
+                return;
+
+            Windows.Unregister(this);
+
+            _icon?.Dispose();
+            _icon = null;
+
+            SDL3.DestroyWindow(NativeHandle);
+            NativeHandle = null;
+        }
+
+        Id = 0;
+        _state = State.None;
+    }
+
     private static WindowHandle GetWindowHandle(uint properties)
     {
         if (OperatingSystem.IsLinux())
@@ -1338,7 +1352,9 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     private void SetState(State state, bool apply = true) => _state = apply ? _state | state : _state & ~state;
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (NativeHandle is null), typeof(Window));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, typeof(Window));
+
+    private void ThrowIfNotOpen() => ObjectDisposedException.ThrowIf(unsafe (NativeHandle is null), typeof(Window));
 
     private void UpdateIcon(Surface icon)
     {
