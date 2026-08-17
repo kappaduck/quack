@@ -5,12 +5,12 @@ using KappaDuck.Quack.Geometry;
 
 namespace Unit.Tests.Geometry;
 
-internal sealed class SizeFTests
+internal sealed class SizeTests
 {
     [Test]
     public async Task AreaShouldCalculateTheArea()
     {
-        SizeF size = new(1920f, 1080f);
+        Size size = new(1920f, 1080f);
 
         float area = size.Area;
         await area.Should().BeEqualTo(2073600f);
@@ -19,35 +19,35 @@ internal sealed class SizeFTests
     [Test]
     public async Task IsEmptyShouldReturnTrueWhenSizefIsEmpty()
     {
-        SizeF size = new();
+        Size size = new();
         await size.IsEmpty.Should().BeTrue();
     }
 
     [Test]
     public async Task IsEmptyShouldReturnFalseWhenSizeIsNotEmpty()
     {
-        SizeF size = new(1920f, 1080f);
+        Size size = new(1920f, 1080f);
         await size.IsEmpty.Should().BeFalse();
     }
 
     [Test]
     public async Task IsEmptyShouldReturnTrueWhenWidthIsZero()
     {
-        SizeF size = new(0f, 1080f);
+        Size size = new(0f, 1080f);
         await size.IsEmpty.Should().BeTrue();
     }
 
     [Test]
     public async Task IsEmptyShouldReturnTrueWhenHeightIsZero()
     {
-        SizeF size = new(1920f, 0f);
+        Size size = new(1920f, 0f);
         await size.IsEmpty.Should().BeTrue();
     }
 
     [Test]
     public async Task ZeroShouldReturnAnEmptySize()
     {
-        SizeF zero = SizeF.Zero;
+        Size zero = Size.Zero;
 
         await zero.Width.Should().BeZero();
         await zero.Height.Should().BeZero();
@@ -56,7 +56,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task ShouldDeconstructSizeIntoItsComponents()
     {
-        (float x, float y) = new SizeF(1920f, 1080f);
+        (float x, float y) = new Size(1920f, 1080f);
 
         await x.Should().BeEqualTo(1920f);
         await y.Should().BeEqualTo(1080f);
@@ -65,7 +65,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task ToStringShouldReturnTheCorrectFormat()
     {
-        SizeF size = new(1920f, 1080f);
+        Size size = new(1920f, 1080f);
 
         string result = size.ToString();
         await result.Should().BeEqualTo("(1920, 1080)");
@@ -74,7 +74,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task FloorShouldConvertSizeByFlooringEachComponent()
     {
-        SizeF size = new(7.64f, -7.6f);
+        Size size = new(7.64f, -7.6f);
 
         SizeI result = size.Floor();
 
@@ -85,7 +85,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task RoundShouldConvertSizeByRoundingEachComponent()
     {
-        SizeF size = new(7.64f, -7.6f);
+        Size size = new(7.64f, -7.6f);
 
         SizeI result = size.Round();
 
@@ -96,7 +96,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task TruncateShouldConvertVector2ByTruncatingEachComponent()
     {
-        SizeF size = new(7.64f, -7.6f);
+        Size size = new(7.64f, -7.6f);
 
         SizeI result = size.Truncate();
 
@@ -107,8 +107,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsShouldReturnTrueWhenSizesAreEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(1920f, 1080f);
+        Size left = new(1920f, 1080f);
+        Size right = new(1920f, 1080f);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -117,8 +117,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsShouldReturnFalseWhenSizesAreNotEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(3440f, 1440f);
+        Size left = new(1920f, 1080f);
+        Size right = new(3440f, 1440f);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -127,8 +127,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsWithObjectShouldReturnTrueWhenSizesAreEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        object right = new SizeF(1920f, 1080f);
+        Size left = new(1920f, 1080f);
+        object right = new Size(1920f, 1080f);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -137,8 +137,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsWithObjectShouldReturnFalseWhenSizesAreNotEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        object right = new SizeF(3440f, 1440f);
+        Size left = new(1920f, 1080f);
+        object right = new Size(3440f, 1440f);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -147,7 +147,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsWithAnyTypeExceptSizeShouldReturnFalse()
     {
-        SizeF left = new(1920f, 1080f);
+        Size left = new(1920f, 1080f);
         const float right = 3f;
 
         bool result = left.Equals(right);
@@ -157,7 +157,7 @@ internal sealed class SizeFTests
     [Test]
     public async Task EqualsWithNullShouldReturnFalse()
     {
-        SizeF left = new(1920f, 1080f);
+        Size left = new(1920f, 1080f);
 
         bool result = left.Equals(null);
         await result.Should().BeFalse();
@@ -166,8 +166,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task OperatorEqualsShouldReturnTrueWhenSizesAreEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(1920f, 1080f);
+        Size left = new(1920f, 1080f);
+        Size right = new(1920f, 1080f);
 
         bool result = left == right;
         await result.Should().BeTrue();
@@ -176,8 +176,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task OperatorEqualsShouldReturnFalseWhenSizesAreNotEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(3440f, 1440f);
+        Size left = new(1920f, 1080f);
+        Size right = new(3440f, 1440f);
 
         bool result = left == right;
         await result.Should().BeFalse();
@@ -186,8 +186,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnTrueWhenSizesAreNotEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(3440f, 1440f);
+        Size left = new(1920f, 1080f);
+        Size right = new(3440f, 1440f);
 
         bool result = left != right;
         await result.Should().BeTrue();
@@ -196,8 +196,8 @@ internal sealed class SizeFTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnFalseWhenSizesAreEquals()
     {
-        SizeF left = new(1920f, 1080f);
-        SizeF right = new(1920f, 1080f);
+        Size left = new(1920f, 1080f);
+        Size right = new(1920f, 1080f);
 
         bool result = left != right;
         await result.Should().BeFalse();

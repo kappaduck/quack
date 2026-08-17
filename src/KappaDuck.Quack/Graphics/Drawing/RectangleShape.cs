@@ -10,13 +10,13 @@ namespace KappaDuck.Quack.Graphics.Drawing;
 /// </summary>
 public sealed class RectangleShape : Shape
 {
-    private SizeF _size;
+    private Size _size;
 
     /// <summary>
     /// Creates a rectangle of the given size.
     /// </summary>
     /// <param name="size">The width and height of the rectangle, in local units.</param>
-    public RectangleShape(SizeF size)
+    public RectangleShape(Size size)
     {
         _size = size;
         Update();
@@ -27,7 +27,7 @@ public sealed class RectangleShape : Shape
     /// </summary>
     /// <param name="position">The position of the rectangle, in local units.</param>
     /// <param name="size">The width and height of the rectangle, in local units.</param>
-    public RectangleShape(Point position, SizeF size) : this(size)
+    public RectangleShape(Point position, Size size) : this(size)
         => Position = position;
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed class RectangleShape : Shape
     /// <summary>
     /// Gets or sets the width and height of the rectangle, in local units.
     /// </summary>
-    public SizeF Size
+    public Size Size
     {
         get => _size;
         set

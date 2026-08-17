@@ -72,10 +72,10 @@ public struct SizeI(int width, int height) : IEquatable<SizeI>, IEqualityOperato
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <summary>
-    /// Converts the size to a <see cref="SizeF"/>.
+    /// Converts the size to a <see cref="Size"/>.
     /// </summary>
     /// <returns>The converted size.</returns>
-    public readonly SizeF ToSizeF() => new(Width, Height);
+    public readonly Size ToSizeF() => new(Width, Height);
 
     /// <inheritdoc/>
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)

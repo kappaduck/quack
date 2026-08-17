@@ -27,7 +27,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>
-    public Rect(Point position, SizeF size) : this(position.X, position.Y, size.Width, size.Height)
+    public Rect(Point position, Size size) : this(position.X, position.Y, size.Width, size.Height)
     {
     }
 
@@ -84,7 +84,7 @@ public struct Rect(float x, float y, float width, float height) : IEquatable<Rec
     /// <summary>
     /// Gets or sets the size of the rectangle.
     /// </summary>
-    public SizeF Size
+    public Size Size
     {
         readonly get => new(Width, Height);
         set

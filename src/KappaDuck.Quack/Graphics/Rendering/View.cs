@@ -28,7 +28,7 @@ public sealed class View
     /// </summary>
     /// <param name="size">The width and height of the visible scene, in world units.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> has a negative or zero width or height.</exception>
-    public View(SizeF size) : this(Point.Origin, size)
+    public View(Size size) : this(Point.Origin, size)
     {
     }
 
@@ -38,7 +38,7 @@ public sealed class View
     /// <param name="center">The point of the scene that appears at the center of the viewport.</param>
     /// <param name="size">The width and height of the visible scene, in world units.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> has a negative or zero width or height.</exception>
-    public View(Point center, SizeF size)
+    public View(Point center, Size size)
     {
         Center = center;
         Size = size;
@@ -97,7 +97,7 @@ public sealed class View
     /// mismatch stretches the scene. Match them (or letterbox) if you need it undistorted.
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative or zero.</exception>
-    public SizeF Size
+    public Size Size
     {
         get;
         set
@@ -209,7 +209,7 @@ public sealed class View
     public void Zoom(float factor)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(factor);
-        Size = new SizeF(Size.Width * factor, Size.Height * factor);
+        Size = new Size(Size.Width * factor, Size.Height * factor);
     }
 
     private Point GetConfinedCenter()
