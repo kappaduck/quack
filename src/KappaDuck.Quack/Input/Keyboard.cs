@@ -23,7 +23,7 @@ public static class Keyboard
     /// Modifying the modifier state allows you to impose modifier keys on your application.
     /// This does not affect the keyboard state, only the modifier state.
     /// </remarks>
-    public static Keymod Modifiers
+    public static KeyModifiers Modifiers
     {
         get => SDL3.GetModState();
         set => SDL3.SetModState(value);

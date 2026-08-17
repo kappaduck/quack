@@ -4,10 +4,10 @@
 namespace KappaDuck.Quack.Input;
 
 /// <summary>
-/// A set of keyboard modifier keys held down, such as Shift, Ctrl or Alt.
+/// A set of modifier keys held down, such as Shift, Ctrl or Alt.
 /// </summary>
 [Flags]
-public enum Keymod : ushort
+public enum KeyModifiers : ushort
 {
     /// <summary>
     /// No modifier is applicable.

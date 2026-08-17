@@ -20,7 +20,7 @@ public readonly struct KeyReleasedEvent : IEvent
         Which = e.Which;
         Code = e.Scancode;
         Key = e.Key;
-        Modifier = e.Mod;
+        Modifiers = e.Mod;
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public readonly struct KeyReleasedEvent : IEvent
     /// <summary>
     /// Gets the current modifiers.
     /// </summary>
-    public Keymod Modifier { get; init; }
+    public KeyModifiers Modifiers { get; init; }
 
     /// <summary>
     /// Gets the keyboard device which the key is released.

@@ -38,15 +38,15 @@ public static class KeyExtensions
         public string Name => SDL3.GetKeyName(key);
 
         /// <summary>
-        /// Converts a <see cref="Key"/> to its corresponding <see cref="Scancode"/> and optional <see cref="Keymod"/> according to the current keyboard layout.
+        /// Converts a <see cref="Key"/> to its corresponding <see cref="Scancode"/> and optional <see cref="KeyModifiers"/> according to the current keyboard layout.
         /// </summary>
         /// <returns>The corresponding code and modifier or <see cref="Scancode.Unknown"/> and <see langword="null"/> if the key does not have a corresponding code.</returns>
-        public (Scancode Code, Keymod? Modifier) ToScancode()
+        public (Scancode Code, KeyModifiers? Modifiers) ToScancode()
         {
-            Keymod modifier;
+            KeyModifiers modifiers;
 
-            Scancode scancode = unsafe (SDL3.GetScancodeFromKey(key, &modifier));
-            return (scancode, modifier);
+            Scancode scancode = unsafe (SDL3.GetScancodeFromKey(key, &modifiers));
+            return (scancode, modifiers);
         }
     }
 }

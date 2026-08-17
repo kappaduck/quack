@@ -53,7 +53,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetKeyFromScancode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial Key GetKeyFromScancode(Scancode code, Keymod mod, [MarshalAs(UnmanagedType.I1)] bool keyEvents);
+    internal static partial Key GetKeyFromScancode(Scancode code, KeyModifiers mod, [MarshalAs(UnmanagedType.I1)] bool keyEvents);
 
     [LibraryImport(nameof(SDL3), StringMarshalling = StringMarshalling.Utf8, EntryPoint = "SDL_GetKeyFromName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -86,7 +86,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetModState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial Keymod GetModState();
+    internal static partial KeyModifiers GetModState();
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetMouseNameForID")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -103,7 +103,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromKey")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial Scancode GetScancodeFromKey(Key key, Keymod* mod);
+    internal static partial Scancode GetScancodeFromKey(Key key, KeyModifiers* mod);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetScancodeFromName", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -145,7 +145,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_SetModState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetModState(Keymod modifier);
+    internal static partial void SetModState(KeyModifiers modifier);
 
     /// <summary>
     /// The string is not copied, so it must be valid for the lifetime of the application.

@@ -20,7 +20,7 @@ public readonly struct KeyPressedEvent : IEvent
         Which = e.Which;
         Code = e.Scancode;
         Key = e.Key;
-        Modifier = e.Mod;
+        Modifiers = e.Mod;
         Repeat = e.Repeat != 0;
     }
 
@@ -47,7 +47,7 @@ public readonly struct KeyPressedEvent : IEvent
     /// <summary>
     /// Gets the current modifiers.
     /// </summary>
-    public Keymod Modifier { get; init; }
+    public KeyModifiers Modifiers { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether is a key repeat.
