@@ -3,7 +3,6 @@
 
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.UI.Progress.Reporters;
 
 namespace KappaDuck.Quack.UI.Progress;
 

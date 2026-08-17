@@ -1,9 +1,9 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.UI.Progress.Reporters;
+using KappaDuck.Quack.UI.Progress;
 
-namespace Unit.Tests.UI.Progress.Reporters;
+namespace Unit.Tests.UI.Progress;
 
 internal sealed class IndeterminateProgressReporterTests
 {

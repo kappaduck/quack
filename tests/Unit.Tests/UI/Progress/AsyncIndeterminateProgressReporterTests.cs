@@ -1,10 +1,10 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.UI.Progress.Reporters;
+using KappaDuck.Quack.UI.Progress;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Unit.Tests.UI.Progress.Reporters;
+namespace Unit.Tests.UI.Progress;
 
 internal sealed class AsyncIndeterminateProgressReporterTests : IDisposable
 {
