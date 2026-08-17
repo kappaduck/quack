@@ -43,7 +43,7 @@ internal sealed class PointFTests
     {
         PointF point = new(7.64f, -7.6f);
 
-        Point result = point.Floor();
+        PointI result = point.Floor();
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-8);
     }
@@ -53,7 +53,7 @@ internal sealed class PointFTests
     {
         PointF point = new(7.64f, -7.6f);
 
-        Point result = point.Round();
+        PointI result = point.Round();
         await result.X.Should().BeEqualTo(8);
         await result.Y.Should().BeEqualTo(-8);
     }
@@ -63,7 +63,7 @@ internal sealed class PointFTests
     {
         PointF point = new(7.64f, -7.6f);
 
-        Point result = point.Truncate();
+        PointI result = point.Truncate();
         await result.X.Should().BeEqualTo(7);
         await result.Y.Should().BeEqualTo(-7);
     }

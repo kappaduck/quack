@@ -75,7 +75,7 @@ public sealed record WindowOptions
     /// <summary>
     /// Gets the position of the top-left corner on the screen, or <see langword="null"/> to let the system place the window.
     /// </summary>
-    public Point? Position { get; init; }
+    public PointI? Position { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the window can be resized by the user.

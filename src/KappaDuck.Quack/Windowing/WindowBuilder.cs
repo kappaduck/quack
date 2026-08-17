@@ -239,7 +239,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// </summary>
     /// <param name="position">The position.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder Position(Point position)
+    public WindowBuilder Position(PointI position)
     {
         Options = Options with { Position = position };
         return this;
@@ -251,7 +251,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// <param name="x">The x coordinate.</param>
     /// <param name="y">The y coordinate.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder Position(int x, int y) => Position(new Point(x, y));
+    public WindowBuilder Position(int x, int y) => Position(new PointI(x, y));
 
     /// <summary>
     /// Allows the user to resize the window.

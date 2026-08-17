@@ -21,7 +21,7 @@ namespace KappaDuck.Quack.Windowing;
 public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 {
     private State _state;
-    private Point? _position;
+    private PointI? _position;
     private int _width;
     private int _height;
     private float? _opacity;
@@ -78,7 +78,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="size">The size of the window.</param>
     /// <param name="position">The position of the window on the screen.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size, Point position) : this(title, size.Width, size.Height)
+    public Window(string title, Size size, PointI position) : this(title, size.Width, size.Height)
         => Position = position;
 
     /// <summary>
@@ -586,14 +586,14 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <remarks>Setting the position is ignored while the window is in fullscreen or maximized state.</remarks>
     /// <exception cref="QuackInteropException">Failed to set the window position.</exception>
-    public Point Position
+    public PointI Position
     {
         get
         {
             if (!_position.HasValue && IsOpen)
             {
                 SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowPosition(NativeHandle, out int x, out int y)));
-                _position = new Point(x, y);
+                _position = new PointI(x, y);
             }
 
             return _position ?? default;
@@ -1013,7 +1013,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <param name="position">The position of the menu, relative to the window.</param>
     /// <exception cref="QuackInteropException">Failed to show the system menu.</exception>
-    public void ShowSystemMenu(Point position)
+    public void ShowSystemMenu(PointI position)
     {
         if (!IsOpen)
             return;

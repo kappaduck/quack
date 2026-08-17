@@ -58,19 +58,19 @@ public struct PointF(float x, float y) :
     public readonly float Distance(PointF to) => Distance(this, to);
 
     /// <summary>
-    /// Returns the largest <see cref="Point"/> whose coordinates are less than or equal to those of this point.
+    /// Returns the largest <see cref="PointI"/> whose coordinates are less than or equal to those of this point.
     /// </summary>
-    public readonly Point Floor() => new((int)MathF.Floor(X), (int)MathF.Floor(Y));
+    public readonly PointI Floor() => new((int)MathF.Floor(X), (int)MathF.Floor(Y));
 
     /// <summary>
-    /// Returns the <see cref="Point"/> whose coordinates are the nearest integer to those of this point.
+    /// Returns the <see cref="PointI"/> whose coordinates are the nearest integer to those of this point.
     /// </summary>
-    public readonly Point Round() => new((int)MathF.Round(X), (int)MathF.Round(Y));
+    public readonly PointI Round() => new((int)MathF.Round(X), (int)MathF.Round(Y));
 
     /// <summary>
-    /// Returns the <see cref="Point"/> whose coordinates are truncated toward zero from those of this point.
+    /// Returns the <see cref="PointI"/> whose coordinates are truncated toward zero from those of this point.
     /// </summary>
-    public readonly Point Truncate() => new((int)X, (int)Y);
+    public readonly PointI Truncate() => new((int)X, (int)Y);
 
     /// <summary>
     /// Computes the distance between two points.

@@ -64,7 +64,7 @@ public static class Displays
     /// <returns>The display containing the point.</returns>
     /// <exception cref="QuackException">The video subsystem is not initialized.</exception>
     /// <exception cref="QuackInteropException">Failed to retrieve the display</exception>
-    public static Display GetForPoint(Point point)
+    public static Display GetForPoint(PointI point)
     {
         QuackEngine.EnsureInitialized(Subsystem.Video);
 

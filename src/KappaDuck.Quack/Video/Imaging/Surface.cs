@@ -258,14 +258,14 @@ public sealed class Surface : IDisposable
     /// Gets or sets the hotspot offset to use when the surface is used as a cursor.
     /// </summary>
     /// <exception cref="QuackInteropException">Failed to get or set the hotspot.</exception>
-    public Point Hotspot
+    public PointI Hotspot
     {
         get
         {
             int x = Properties.Get(_properties, "SDL.surface.hotspot.x", 0);
             int y = Properties.Get(_properties, "SDL.surface.hotspot.y", 0);
 
-            return new Point(x, y);
+            return new PointI(x, y);
         }
         set
         {

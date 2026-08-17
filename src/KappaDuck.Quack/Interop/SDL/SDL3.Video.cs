@@ -43,7 +43,7 @@ internal static partial class SDL3
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetDisplayForPoint")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial uint GetDisplayForPoint(in Point point);
+    internal static partial uint GetDisplayForPoint(in PointI point);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_GetDisplayForRect")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
