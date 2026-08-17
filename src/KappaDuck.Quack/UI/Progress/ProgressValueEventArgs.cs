@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.UI.Progress;
 
 /// <summary>
-/// Provides data for the <see cref="ProgressBar.ProgressChanged"/> event.
+/// Provides data for the <see cref="ProgressBarBase.ProgressChanged"/> event.
 /// </summary>
 /// <param name="value">The normalized progress value between <c>0</c> and <c>1</c>.</param>
 public sealed class ProgressValueEventArgs(float value) : EventArgs

@@ -5,7 +5,7 @@ namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Asynchronous determinate progress reporter handed to
-/// <see cref="ProgressBar.StartAsync(Func{AsyncProgressReporter, Task}, int)"/>.
+/// <see cref="ProgressBarBase.StartAsync(Func{AsyncProgressReporter, Task}, int)"/>.
 /// </summary>
 public sealed class AsyncProgressReporter : IDisposable
 {
@@ -41,7 +41,7 @@ public sealed class AsyncProgressReporter : IDisposable
     /// <remarks>
     /// The next call to <see cref="Increment(int)"/> or <see cref="Report(int)"/> throws
     /// <see cref="OperationCanceledException"/>, which the base catches to trigger
-    /// <see cref="ProgressBar.Cancelled"/> and reset the bar.
+    /// <see cref="ProgressBarBase.Cancelled"/> and reset the bar.
     /// </remarks>
     public void Cancel()
     {
@@ -106,7 +106,7 @@ public sealed class AsyncProgressReporter : IDisposable
     /// Reports the absolute current progress.
     /// </summary>
     /// <remarks>
-    /// The total provided to <see cref="ProgressBar.StartAsync(Func{AsyncProgressReporter, Task}, int)"/> is
+    /// The total provided to <see cref="ProgressBarBase.StartAsync(Func{AsyncProgressReporter, Task}, int)"/> is
     /// used as the maximum limit if <paramref name="current"/> is greater than the total.
     /// </remarks>
     /// <param name="current">The current progress.</param>

@@ -5,7 +5,7 @@ namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Asynchronous indeterminate progress reporter handed to
-/// <see cref="ProgressBar.StartIndeterminateAsync(Func{AsyncIndeterminateProgressReporter, Task})"/>.
+/// <see cref="ProgressBarBase.StartIndeterminateAsync(Func{AsyncIndeterminateProgressReporter, Task})"/>.
 /// </summary>
 public sealed class AsyncIndeterminateProgressReporter : IDisposable
 {
@@ -24,7 +24,7 @@ public sealed class AsyncIndeterminateProgressReporter : IDisposable
     /// Requests cancellation of the progress operation.
     /// </summary>
     /// <remarks>
-    /// Stops any further reporting, triggers <see cref="ProgressBar.Cancelled"/> and resets the bar.
+    /// Stops any further reporting, triggers <see cref="ProgressBarBase.Cancelled"/> and resets the bar.
     /// </remarks>
     public void Cancel()
     {

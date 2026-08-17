@@ -7,7 +7,7 @@ namespace KappaDuck.Quack.UI.Progress.Reporters;
 
 /// <summary>
 /// Synchronous indeterminate progress reporter handed to
-/// <see cref="ProgressBar.StartIndeterminate(Action{IndeterminateProgressReporter})"/>.
+/// <see cref="ProgressBarBase.StartIndeterminate(Action{IndeterminateProgressReporter})"/>.
 /// </summary>
 public sealed class IndeterminateProgressReporter
 {
@@ -20,7 +20,7 @@ public sealed class IndeterminateProgressReporter
     /// </summary>
     /// <remarks>
     /// Throws <see cref="OperationCanceledException"/>, which the base catches to trigger
-    /// <see cref="ProgressBar.Cancelled"/> and reset the bar.
+    /// <see cref="ProgressBarBase.Cancelled"/> and reset the bar.
     /// </remarks>
     /// <exception cref="OperationCanceledException">Always thrown.</exception>
     [DoesNotReturn]

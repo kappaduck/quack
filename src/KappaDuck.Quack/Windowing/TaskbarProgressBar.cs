@@ -11,7 +11,7 @@ namespace KappaDuck.Quack.Windowing;
 /// <summary>
 /// Controls the progress indicator shown on a window's taskbar icon.
 /// </summary>
-public sealed class TaskbarProgressBar : ProgressBar
+public sealed class TaskbarProgressBar : ProgressBarBase
 {
     private const int ThrottleInMilliseconds = 35;
 

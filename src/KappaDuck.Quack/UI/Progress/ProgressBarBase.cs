@@ -22,7 +22,7 @@ namespace KappaDuck.Quack.UI.Progress;
 /// overrides. See <see cref="OnProgressChanged(ProgressValueEventArgs)"/> and friends for the event hooks.
 /// </para>
 /// </remarks>
-public abstract class ProgressBar : IProgressOperation
+public abstract class ProgressBarBase : IProgressOperation
 {
     private float _lastValue = -1f;
     private bool _isReporting;

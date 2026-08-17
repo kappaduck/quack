@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.UI.Progress;
 
 /// <summary>
-/// Provides data for the <see cref="ProgressBar.ErrorOccurred"/> event.
+/// Provides data for the <see cref="ProgressBarBase.ErrorOccurred"/> event.
 /// </summary>
 /// <param name="exception">The exception that was caught during reporting.</param>
 public sealed class ProgressErrorEventArgs(Exception exception) : EventArgs
