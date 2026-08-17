@@ -1,7 +1,6 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.Video;
 using KappaDuck.Quack.Video.Imaging;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
