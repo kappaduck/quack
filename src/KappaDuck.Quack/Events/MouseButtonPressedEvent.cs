@@ -20,7 +20,7 @@ public readonly struct MouseButtonPressedEvent : IEvent
         WindowId = e.WindowId;
         Which = e.Which;
         Button = e.Button;
-        Position = new PointF(e.X, e.Y);
+        Position = new Point(e.X, e.Y);
         Clicks = e.Clicks;
     }
 
@@ -42,7 +42,7 @@ public readonly struct MouseButtonPressedEvent : IEvent
     /// <summary>
     /// Gets the cursor position, relative to the top-left of the window, when the button was pressed.
     /// </summary>
-    public PointF Position { get; }
+    public Point Position { get; }
 
     /// <summary>
     /// Gets the consecutive click count: 1 for a single click, 2 for a double click, and so on.

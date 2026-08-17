@@ -30,10 +30,10 @@ public static class ScancodeExtensions
         /// <summary>
         /// Converts a <see cref="Key"/> to its corresponding <see cref="Scancode"/> according to the current keyboard layout.
         /// </summary>
-        /// <param name="modifier">The modifier to apply when translating the code to a key.</param>
+        /// <param name="modifiers">The modifiers to apply when translating the code to a key.</param>
         /// <returns>The corresponding <see cref="Key"/> from the given code or <see cref="Key.Unknown"/> if the code does not have a corresponding key.</returns>
-        public Key ToKey(Keymod modifier = Keymod.None)
-            => SDL3.GetKeyFromScancode(code, modifier, keyEvents: false);
+        public Key ToKey(KeyModifiers modifiers = KeyModifiers.None)
+            => SDL3.GetKeyFromScancode(code, modifiers, keyEvents: false);
     }
 
     extension(Scancode)

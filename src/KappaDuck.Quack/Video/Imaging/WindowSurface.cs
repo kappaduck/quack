@@ -29,7 +29,7 @@ public sealed class WindowSurface : IDisposable
 {
     private readonly Window _window;
     private Surface? _surface;
-    private Size _size;
+    private SizeI _size;
 
     /// <summary>
     /// Acquires the pixel surface of <paramref name="window"/>.

@@ -52,7 +52,7 @@ public sealed class CircleShape : Shape
     }
 
     /// <inheritdoc/>
-    public override PointF GetPoint(int index)
+    public override Point GetPoint(int index)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(index);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _pointCount);
@@ -62,6 +62,6 @@ public sealed class CircleShape : Shape
         float x = _radius + (_radius * angle.Cos);
         float y = _radius + (_radius * angle.Sin);
 
-        return new PointF(x, y);
+        return new Point(x, y);
     }
 }

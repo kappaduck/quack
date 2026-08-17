@@ -55,7 +55,7 @@ public sealed record WindowOptions
     /// <summary>
     /// Gets the maximum size of the window's client area, where zero means no limit.
     /// </summary>
-    public Size MaximumSize { get; init; }
+    public SizeI MaximumSize { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the window starts minimized.
@@ -65,7 +65,7 @@ public sealed record WindowOptions
     /// <summary>
     /// Gets the minimum size of the window's client area, where zero means no limit.
     /// </summary>
-    public Size MinimumSize { get; init; }
+    public SizeI MinimumSize { get; init; }
 
     /// <summary>
     /// Gets the opacity of the window, from 0 (transparent) to 1 (opaque). Defaults to <c>1f</c>.
@@ -75,7 +75,7 @@ public sealed record WindowOptions
     /// <summary>
     /// Gets the position of the top-left corner on the screen, or <see langword="null"/> to let the system place the window.
     /// </summary>
-    public Point? Position { get; init; }
+    public PointI? Position { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the window can be resized by the user.

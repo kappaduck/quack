@@ -16,7 +16,7 @@ public readonly struct WindowPixelSizeChangedEvent : IEvent
     internal WindowPixelSizeChangedEvent(SDL_WindowEvent e)
     {
         WindowId = e.WindowId;
-        Size = new Size(e.Data1, e.Data2);
+        Size = new SizeI(e.Data1, e.Data2);
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public readonly struct WindowPixelSizeChangedEvent : IEvent
     /// <summary>
     /// Gets the new size of the window in screen coordinates.
     /// </summary>
-    public Size Size { get; }
+    public SizeI Size { get; }
 
     /// <summary>
     /// Gets the window the event is for, or <see langword="null"/> if it cannot be resolved.

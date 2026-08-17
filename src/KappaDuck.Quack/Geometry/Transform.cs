@@ -59,7 +59,7 @@ public readonly struct Transform : IEquatable<Transform>
     /// <param name="rotation">The rotation, clockwise on screen.</param>
     /// <param name="center">The point that stays fixed during the rotation.</param>
     /// <returns>A rotation transform about <paramref name="center"/>.</returns>
-    public static Transform Rotation(Angle rotation, PointF center)
+    public static Transform Rotation(Angle rotation, Point center)
         => new(Matrix3x2.CreateRotation(rotation.Radians, ToNumerics(center)));
 
     /// <summary>
@@ -71,7 +71,7 @@ public readonly struct Transform : IEquatable<Transform>
     /// <param name="scale">The horizontal and vertical scale factors.</param>
     /// <param name="origin">The pivot point in the object's local space — the point that lands exactly on <paramref name="position"/>. Defaults to the local origin <c>(0, 0)</c>.</param>
     /// <returns>The combined transform placing the object in the target space.</returns>
-    public static Transform Create(PointF position, Angle rotation, Vector2 scale, PointF origin = default)
+    public static Transform Create(Point position, Angle rotation, Vector2 scale, Point origin = default)
         => new(Matrix3x2.CreateTranslation(-ToNumerics(origin))
              * Matrix3x2.CreateScale(ToNumerics(scale))
              * Matrix3x2.CreateRotation(rotation.Radians)
@@ -80,7 +80,7 @@ public readonly struct Transform : IEquatable<Transform>
     /// <summary>Applies this transform to a point.</summary>
     /// <param name="point">The point to transform.</param>
     /// <returns>The transformed point.</returns>
-    public PointF TransformPoint(PointF point) => ToGeometry(Numerics.Vector2.Transform(ToNumerics(point), _matrix));
+    public Point TransformPoint(Point point) => ToGeometry(Numerics.Vector2.Transform(ToNumerics(point), _matrix));
 
     /// <summary>
     /// Computes the smallest axis-aligned rectangle that contains <paramref name="rect"/>
@@ -93,10 +93,10 @@ public readonly struct Transform : IEquatable<Transform>
     /// </returns>
     public Rect TransformRect(Rect rect)
     {
-        PointF a = TransformPoint(new(rect.X, rect.Y));
-        PointF b = TransformPoint(new(rect.X + rect.Width, rect.Y));
-        PointF c = TransformPoint(new(rect.X, rect.Y + rect.Height));
-        PointF d = TransformPoint(new(rect.X + rect.Width, rect.Y + rect.Height));
+        Point a = TransformPoint(new(rect.X, rect.Y));
+        Point b = TransformPoint(new(rect.X + rect.Width, rect.Y));
+        Point c = TransformPoint(new(rect.X, rect.Y + rect.Height));
+        Point d = TransformPoint(new(rect.X + rect.Width, rect.Y + rect.Height));
 
         float minX = MathF.Min(MathF.Min(a.X, b.X), MathF.Min(c.X, d.X));
         float minY = MathF.Min(MathF.Min(a.Y, b.Y), MathF.Min(c.Y, d.Y));
@@ -119,7 +119,7 @@ public readonly struct Transform : IEquatable<Transform>
     /// <param name="rotation">When this method returns <see langword="true"/>, receives the rotation in angle, clockwise on screen; otherwise <c>0</c>.</param>
     /// <param name="scale">When this method returns <see langword="true"/>, receives the scale component; otherwise <see cref="Vector2.One"/>. A negative Y value means the transform includes a reflection, which can be applied as a vertical flip.</param>
     /// <returns><see langword="true"/> if this transform is a pure translation, rotation, and scale; <see langword="false"/> if it contains shear and therefore has no such decomposition.</returns>
-    public bool TryDecompose(out PointF translation, out Angle rotation, out Vector2 scale)
+    public bool TryDecompose(out Point translation, out Angle rotation, out Vector2 scale)
     {
         Matrix3x2 m = _matrix;
         translation = ToGeometry(m.Translation);
@@ -178,9 +178,9 @@ public readonly struct Transform : IEquatable<Transform>
     /// <returns><see langword="true"/> if the transforms differ; otherwise <see langword="false"/>.</returns>
     public static bool operator !=(Transform left, Transform right) => !(left == right);
 
-    private static Numerics.Vector2 ToNumerics(PointF point) => new(point.X, point.Y);
+    private static Numerics.Vector2 ToNumerics(Point point) => new(point.X, point.Y);
 
     private static Numerics.Vector2 ToNumerics(Vector2 vector) => new(vector.X, vector.Y);
 
-    private static PointF ToGeometry(Numerics.Vector2 vector) => new(vector.X, vector.Y);
+    private static Point ToGeometry(Numerics.Vector2 vector) => new(vector.X, vector.Y);
 }

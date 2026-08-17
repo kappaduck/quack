@@ -7,76 +7,60 @@ using System.Text.Unicode;
 namespace KappaDuck.Quack.Geometry;
 
 /// <summary>
-/// Represents a floating point size defined by a width and height.
+/// Represents an integer size defined by a width and height.
 /// </summary>
 /// <param name="width">The width component of the size.</param>
 /// <param name="height">The height component of the size.</param>
-public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOperators<SizeF, SizeF, bool>, ISpanFormattable, IUtf8SpanFormattable
+public struct SizeI(int width, int height) : IEquatable<SizeI>, IEqualityOperators<SizeI, SizeI, bool>, ISpanFormattable, IUtf8SpanFormattable
 {
     /// <summary>
     /// Creates a zero size (0, 0).
     /// </summary>
-    public SizeF() : this(0f, 0f)
+    public SizeI() : this(0, 0)
     {
     }
 
     /// <summary>
     /// Gets or sets the width component.
     /// </summary>
-    public float Width { get; set; } = width;
+    public int Width { get; set; } = width;
 
     /// <summary>
     /// Gets or sets the height component.
     /// </summary>
-    public float Height { get; set; } = height;
+    public int Height { get; set; } = height;
 
     /// <summary>
     /// Gets the area represented by this size.
     /// </summary>
-    public readonly float Area => Width * Height;
+    public readonly int Area => Width * Height;
 
     /// <summary>
-    /// Gets a value indicating whether the size is empty (either dimension is approximately zero).
+    /// Gets a value indicating whether the size is empty (either dimension is zero).
     /// </summary>
-    public readonly bool IsEmpty => MathF.ApproximatelyZero(Width) || MathF.ApproximatelyZero(Height);
+    public readonly bool IsEmpty => Width == 0 || Height == 0;
 
     /// <summary>
     /// Gets a size with all components set to zero.
     /// </summary>
-    public static SizeF Zero { get; } = new(0f, 0f);
-
-    /// <summary>
-    /// Returns the largest <see cref="Size"/> whose components are less than or equal to those of this size.
-    /// </summary>
-    public readonly Size Floor() => new((int)MathF.Floor(Width), (int)MathF.Floor(Height));
-
-    /// <summary>
-    /// Returns the <see cref="Size"/> whose components are the nearest integer to those of this size.
-    /// </summary>
-    public readonly Size Round() => new((int)MathF.Round(Width), (int)MathF.Round(Height));
-
-    /// <summary>
-    /// Returns the <see cref="Size"/> whose components are truncated toward zero from those of this size.
-    /// </summary>
-    public readonly Size Truncate() => new((int)Width, (int)Height);
+    public static SizeI Zero { get; } = new(0, 0);
 
     /// <summary>
     /// Deconstructs the size into its width and height components.
     /// </summary>
     /// <param name="width">The width component.</param>
     /// <param name="height">The height component.</param>
-    public readonly void Deconstruct(out float width, out float height) => (width, height) = (Width, Height);
+    public readonly void Deconstruct(out int width, out int height) => (width, height) = (Width, Height);
 
     /// <summary>
     /// Determines whether this size is equal to another size.
     /// </summary>
     /// <param name="other">The size to compare with the current size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(SizeF other)
-        => MathF.ApproximatelyEquals(Width, other.Width) && MathF.ApproximatelyEquals(Height, other.Height);
+    public readonly bool Equals(SizeI other) => Width == other.Width && Height == other.Height;
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is SizeF other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is SizeI other && Equals(other);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(Width, Height);
@@ -87,6 +71,12 @@ public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOpe
     /// <inheritdoc/>
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
+    /// <summary>
+    /// Converts the size to a <see cref="Size"/>.
+    /// </summary>
+    /// <returns>The converted size.</returns>
+    public readonly Size ToSizeF() => new(Width, Height);
+
     /// <inheritdoc/>
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => destination.TryWrite($"({Width}, {Height})", out charsWritten);
@@ -96,21 +86,12 @@ public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOpe
         => Utf8.TryWrite(utf8Destination, provider, $"({Width}, {Height})", out bytesWritten);
 
     /// <summary>
-    /// Explicitly converts a <see cref="SizeF"/> to a <see cref="Size"/> by truncating components.
-    /// </summary>
-    /// <remarks>
-    /// Use <see cref="Floor"/>, <see cref="Round"/>, or <see cref="Truncate"/> for explicit rounding control.
-    /// </remarks>
-    /// <param name="value">The size to convert.</param>
-    public static explicit operator Size(SizeF value) => value.Truncate();
-
-    /// <summary>
     /// Determines whether two sizes are equal.
     /// </summary>
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(SizeF left, SizeF right) => left.Equals(right);
+    public static bool operator ==(SizeI left, SizeI right) => left.Equals(right);
 
     /// <summary>
     /// Determines whether two sizes are not equal.
@@ -118,5 +99,5 @@ public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOpe
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(SizeF left, SizeF right) => !(left == right);
+    public static bool operator !=(SizeI left, SizeI right) => !(left == right);
 }

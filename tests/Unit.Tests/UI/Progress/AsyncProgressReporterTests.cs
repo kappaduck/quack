@@ -2,10 +2,9 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.UI.Progress;
-using KappaDuck.Quack.UI.Progress.Reporters;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Unit.Tests.UI.Progress.Reporters;
+namespace Unit.Tests.UI.Progress;
 
 internal sealed class AsyncProgressReporterTests : IDisposable
 {

@@ -4,7 +4,6 @@
 using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Imaging;
 
@@ -298,9 +297,9 @@ public sealed class Texture : IDisposable
     /// <param name="size">The size of the texture in pixels.</param>
     /// <param name="format">The pixel format of the texture.</param>
     /// <param name="access">How the texture's pixels may be accessed after creation.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="SizeI.Width"/> or <see cref="SizeI.Height"/> is negative or zero.</exception>
     /// <exception cref="QuackInteropException">The texture could not be created.</exception>
-    public static Texture Create(Renderer renderer, Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
+    public static Texture Create(Renderer renderer, SizeI size, PixelFormat format, TextureAccess access = TextureAccess.Static)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size.Height);

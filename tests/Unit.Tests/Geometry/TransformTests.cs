@@ -10,7 +10,7 @@ internal sealed class TransformTests
     [Test]
     public async Task IdentityShouldLeaveAPointUnchanged()
     {
-        PointF point = Transform.Identity.TransformPoint(new PointF(3f, -7f));
+        Point point = Transform.Identity.TransformPoint(new Point(3f, -7f));
 
         await point.X.Should().BeEqualTo(3f);
         await point.Y.Should().BeEqualTo(-7f);
@@ -19,10 +19,10 @@ internal sealed class TransformTests
     [Test]
     public async Task IdentityShouldBeNeutralWhenComposedWithAnotherTransform()
     {
-        Transform transform = Transform.Create(new PointF(12f, 34f), Angle.FromDegrees(45f), new Vector2(2f, 2f));
-        PointF direct = transform.TransformPoint(new PointF(1f, 1f));
+        Transform transform = Transform.Create(new Point(12f, 34f), Angle.FromDegrees(45f), new Vector2(2f, 2f));
+        Point direct = transform.TransformPoint(new Point(1f, 1f));
 
-        PointF point = (Transform.Identity * transform).TransformPoint(new PointF(1f, 1f));
+        Point point = (Transform.Identity * transform).TransformPoint(new Point(1f, 1f));
 
         await point.X.Should().BeEqualTo(direct.X);
         await point.Y.Should().BeEqualTo(direct.Y);
@@ -31,7 +31,7 @@ internal sealed class TransformTests
     [Test]
     public async Task TranslationShouldOffsetAPoint()
     {
-        PointF point = Transform.Translation(10f, 20f).TransformPoint(new PointF(1f, 2f));
+        Point point = Transform.Translation(10f, 20f).TransformPoint(new Point(1f, 2f));
 
         await point.X.Should().BeEqualTo(11f);
         await point.Y.Should().BeEqualTo(22f);
@@ -40,7 +40,7 @@ internal sealed class TransformTests
     [Test]
     public async Task ScalingShouldMultiplyEachAxis()
     {
-        PointF point = Transform.Scaling(2, 3).TransformPoint(new PointF(4f, 5f));
+        Point point = Transform.Scaling(2, 3).TransformPoint(new Point(4f, 5f));
 
         await point.X.Should().BeEqualTo(8f);
         await point.Y.Should().BeEqualTo(15f);
@@ -49,7 +49,7 @@ internal sealed class TransformTests
     [Test]
     public async Task RotationShouldTurnClockwiseOnScreen()
     {
-        PointF point = Transform.Rotation(Angle.FromDegrees(90f)).TransformPoint(new PointF(1f, 0f));
+        Point point = Transform.Rotation(Angle.FromDegrees(90f)).TransformPoint(new Point(1f, 0f));
 
         await point.X.Should().BeEqualTo(0f);
         await point.Y.Should().BeEqualTo(1f);
@@ -58,8 +58,8 @@ internal sealed class TransformTests
     [Test]
     public async Task RotationShouldKeepTheRotationCenterFixed()
     {
-        PointF center = new(5f, 5f);
-        PointF point = Transform.Rotation(Angle.FromDegrees(37f), center).TransformPoint(center);
+        Point center = new(5f, 5f);
+        Point point = Transform.Rotation(Angle.FromDegrees(37f), center).TransformPoint(center);
 
         await point.X.Should().BeEqualTo(5f);
         await point.Y.Should().BeEqualTo(5f);
@@ -68,8 +68,8 @@ internal sealed class TransformTests
     [Test]
     public async Task RotationShouldSwingAPointAroundTheGivenCenter()
     {
-        PointF center = new(2f, 2f);
-        PointF point = Transform.Rotation(Angle.FromDegrees(90f), center).TransformPoint(new PointF(3f, 2f));
+        Point center = new(2f, 2f);
+        Point point = Transform.Rotation(Angle.FromDegrees(90f), center).TransformPoint(new Point(3f, 2f));
 
         await point.X.Should().BeEqualTo(2f);
         await point.Y.Should().BeEqualTo(3f);
@@ -82,7 +82,7 @@ internal sealed class TransformTests
     [Arguments(270f, 0f, -1f)]
     public async Task RotationShouldMapTheUnitXAxisToTheExpectedDirection(float degrees, float expectedX, float expectedY)
     {
-        PointF point = Transform.Rotation(Angle.FromDegrees(degrees)).TransformPoint(new PointF(1f, 0f));
+        Point point = Transform.Rotation(Angle.FromDegrees(degrees)).TransformPoint(new Point(1f, 0f));
 
         await point.X.Should().BeEqualTo(expectedX);
         await point.Y.Should().BeEqualTo(expectedY);
@@ -92,7 +92,7 @@ internal sealed class TransformTests
     public async Task OperatorMultiplicationShouldApplyTheRightOperandFirst()
     {
         Transform transform = Transform.Rotation(Angle.FromDegrees(90f)) * Transform.Translation(100f, 0f);
-        PointF point = transform.TransformPoint(new PointF(1f, 0f));
+        Point point = transform.TransformPoint(new Point(1f, 0f));
 
         await point.X.Should().BeEqualTo(0f);
         await point.Y.Should().BeEqualTo(101f);
@@ -104,8 +104,8 @@ internal sealed class TransformTests
         Transform left = Transform.Rotation(Angle.FromDegrees(90f)) * Transform.Translation(100f, 0f);
         Transform right = Transform.Translation(100f, 0f) * Transform.Rotation(Angle.FromDegrees(90f));
 
-        PointF leftPoint = left.TransformPoint(new PointF(1f, 0f));
-        PointF rightPoint = right.TransformPoint(new PointF(1f, 0f));
+        Point leftPoint = left.TransformPoint(new Point(1f, 0f));
+        Point rightPoint = right.TransformPoint(new Point(1f, 0f));
 
         await leftPoint.X.Should().BeEqualTo(0f);
         await leftPoint.Y.Should().BeEqualTo(101f);
@@ -117,9 +117,9 @@ internal sealed class TransformTests
     [Test]
     public async Task CreateShouldPlaceTheOriginExactlyAtPosition()
     {
-        Transform transform = Transform.Create(new PointF(100f, 50f), Angle.FromDegrees(30f), new Vector2(2f, 2f), new PointF(8f, 8f));
+        Transform transform = Transform.Create(new Point(100f, 50f), Angle.FromDegrees(30f), new Vector2(2f, 2f), new Point(8f, 8f));
 
-        PointF point = transform.TransformPoint(new PointF(8f, 8f));
+        Point point = transform.TransformPoint(new Point(8f, 8f));
 
         await point.X.Should().BeEqualTo(100f);
         await point.Y.Should().BeEqualTo(50f);
@@ -128,9 +128,9 @@ internal sealed class TransformTests
     [Test]
     public async Task CreateShouldScaleThenTranslateWhenThereIsNoRotation()
     {
-        Transform transform = Transform.Create(new PointF(10f, 10f), Angle.Zero, new Vector2(3f, 4f));
+        Transform transform = Transform.Create(new Point(10f, 10f), Angle.Zero, new Vector2(3f, 4f));
 
-        PointF point = transform.TransformPoint(new PointF(2f, 1f));
+        Point point = transform.TransformPoint(new Point(2f, 1f));
 
         await point.X.Should().BeEqualTo(16f);
         await point.Y.Should().BeEqualTo(14f);
@@ -139,10 +139,10 @@ internal sealed class TransformTests
     [Test]
     public async Task InvertedShouldUndoTheTransform()
     {
-        Transform transform = Transform.Create(new PointF(40f, -15f), Angle.FromDegrees(63f), new Vector2(1.5f, 0.5f));
+        Transform transform = Transform.Create(new Point(40f, -15f), Angle.FromDegrees(63f), new Vector2(1.5f, 0.5f));
 
-        PointF start = new(7f, 9f);
-        PointF point = transform.Inverted.TransformPoint(transform.TransformPoint(start));
+        Point start = new(7f, 9f);
+        Point point = transform.Inverted.TransformPoint(transform.TransformPoint(start));
 
         await point.X.Should().BeCloseTo(7f, 1e-3f);
         await point.Y.Should().BeCloseTo(9f, 1e-3f);
@@ -182,9 +182,9 @@ internal sealed class TransformTests
     [Test]
     public async Task TryDecomposeShouldRecoverTranslationRotationAndScale()
     {
-        Transform transform = Transform.Create(new PointF(120f, -40f), Angle.FromDegrees(33f), new Vector2(2f, 3f));
+        Transform transform = Transform.Create(new Point(120f, -40f), Angle.FromDegrees(33f), new Vector2(2f, 3f));
 
-        bool result = transform.TryDecompose(out PointF translation, out Angle rotation, out Vector2 scale);
+        bool result = transform.TryDecompose(out Point translation, out Angle rotation, out Vector2 scale);
 
         await result.Should().BeTrue();
 
@@ -198,14 +198,14 @@ internal sealed class TransformTests
     [Test]
     public async Task TryDecomposeShouldRoundTripBackToTheSameMapping()
     {
-        Transform original = Transform.Create(new PointF(5f, 6f), Angle.FromDegrees(80f), new Vector2(1.25f, 2.5f));
+        Transform original = Transform.Create(new Point(5f, 6f), Angle.FromDegrees(80f), new Vector2(1.25f, 2.5f));
 
-        original.TryDecompose(out PointF translation, out Angle rotation, out Vector2 scale);
+        original.TryDecompose(out Point translation, out Angle rotation, out Vector2 scale);
 
         Transform rebuilt = Transform.Create(translation, rotation, scale);
 
-        PointF left = original.TransformPoint(new PointF(3f, 4f));
-        PointF right = rebuilt.TransformPoint(new PointF(3f, 4f));
+        Point left = original.TransformPoint(new Point(3f, 4f));
+        Point right = rebuilt.TransformPoint(new Point(3f, 4f));
 
         await right.X.Should().BeEqualTo(left.X);
         await right.Y.Should().BeEqualTo(left.Y);

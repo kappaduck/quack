@@ -28,7 +28,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>
-    public RectI(Point position, Size size) : this(position.X, position.Y, size.Width, size.Height)
+    public RectI(PointI position, SizeI size) : this(position.X, position.Y, size.Width, size.Height)
     {
     }
 
@@ -72,7 +72,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// <summary>
     /// Gets or sets the position of the top-left corner.
     /// </summary>
-    public Point Position
+    public PointI Position
     {
         readonly get => new(X, Y);
         set
@@ -85,7 +85,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// <summary>
     /// Gets or sets the size of the rectangle.
     /// </summary>
-    public Size Size
+    public SizeI Size
     {
         readonly get => new(Width, Height);
         set
@@ -121,29 +121,29 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// Gets the center point of the rectangle.
     /// </summary>
     /// <remarks>
-    /// Returns a <see cref="PointF"/> because the true center of an integer rectangle is not always integer-valued.
+    /// Returns a <see cref="Point"/> because the true center of an integer rectangle is not always integer-valued.
     /// </remarks>
-    public readonly PointF Center => new(X + (Width / 2f), Y + (Height / 2f));
+    public readonly Point Center => new(X + (Width / 2f), Y + (Height / 2f));
 
     /// <summary>
     /// Gets the top-left corner of the rectangle.
     /// </summary>
-    public readonly Point TopLeft => new(Left, Top);
+    public readonly PointI TopLeft => new(Left, Top);
 
     /// <summary>
     /// Gets the top-right corner of the rectangle.
     /// </summary>
-    public readonly Point TopRight => new(Right, Top);
+    public readonly PointI TopRight => new(Right, Top);
 
     /// <summary>
     /// Gets the bottom-left corner of the rectangle.
     /// </summary>
-    public readonly Point BottomLeft => new(Left, Bottom);
+    public readonly PointI BottomLeft => new(Left, Bottom);
 
     /// <summary>
     /// Gets the bottom-right corner of the rectangle.
     /// </summary>
-    public readonly Point BottomRight => new(Right, Bottom);
+    public readonly PointI BottomRight => new(Right, Bottom);
 
     /// <summary>
     /// Gets a value indicating whether the rectangle is empty (either dimension is zero).
@@ -160,7 +160,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="point">The point to check.</param>
     /// <returns><see langword="true"/> if the point is within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Contains(Point point)
+    public readonly bool Contains(PointI point)
         => !IsEmpty && point.X >= X && point.X <= Right && point.Y >= Y && point.Y <= Bottom;
 
     /// <summary>
@@ -176,12 +176,12 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="points">The points to check.</param>
     /// <returns><see langword="true"/> if all points are within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool ContainsAll(ReadOnlySpan<Point> points)
+    public readonly bool ContainsAll(ReadOnlySpan<PointI> points)
     {
         if (IsEmpty || points.IsEmpty)
             return false;
 
-        foreach (Point point in points)
+        foreach (PointI point in points)
         {
             if (!Contains(point))
                 return false;
@@ -195,15 +195,15 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="points">The points to check.</param>
     /// <returns><see langword="true"/> if all points are within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool ContainsAll(IEnumerable<Point> points)
+    public readonly bool ContainsAll(IEnumerable<PointI> points)
     {
         if (IsEmpty)
             return false;
 
         return points switch
         {
-            Point[] array => ContainsAll(array),
-            List<Point> list => ContainsAll(CollectionsMarshal.AsSpan(list)),
+            PointI[] array => ContainsAll(array),
+            List<PointI> list => ContainsAll(CollectionsMarshal.AsSpan(list)),
             _ => points.All(Contains)
         };
     }
@@ -213,12 +213,12 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="points">The points to check.</param>
     /// <returns><see langword="true"/> if any point is within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool ContainsAny(ReadOnlySpan<Point> points)
+    public readonly bool ContainsAny(ReadOnlySpan<PointI> points)
     {
         if (IsEmpty || points.IsEmpty)
             return false;
 
-        foreach (Point point in points)
+        foreach (PointI point in points)
         {
             if (Contains(point))
                 return true;
@@ -232,15 +232,15 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="points">The points to check.</param>
     /// <returns><see langword="true"/> if any point is within the rectangle; otherwise, <see langword="false"/>.</returns>
-    public readonly bool ContainsAny(IEnumerable<Point> points)
+    public readonly bool ContainsAny(IEnumerable<PointI> points)
     {
         if (IsEmpty)
             return false;
 
         return points switch
         {
-            Point[] array => ContainsAny(array),
-            List<Point> list => ContainsAny(CollectionsMarshal.AsSpan(list)),
+            PointI[] array => ContainsAny(array),
+            List<PointI> list => ContainsAny(CollectionsMarshal.AsSpan(list)),
             _ => points.Any(Contains)
         };
     }
@@ -267,7 +267,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// If the rectangle already contains the point, no changes are made.
     /// </remarks>
     /// <param name="point">The point to encapsulate.</param>
-    public void Encapsulate(Point point)
+    public void Encapsulate(PointI point)
     {
         if (Contains(point))
             return;
@@ -348,12 +348,12 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// An empty rectangle will enumerate no points.
     /// </remarks>
     /// <returns>An array of all integer points within the rectangle.</returns>
-    public readonly Point[] ToPoints()
+    public readonly PointI[] ToPoints()
     {
         if (IsEmpty)
             return [];
 
-        Point[] points = new Point[Area];
+        PointI[] points = new PointI[Area];
         int index = 0;
 
         PointEnumerator enumerator = new(this);
@@ -469,7 +469,7 @@ file struct PointEnumerator
     private readonly int _endX;
     private readonly int _endY;
 
-    private Point _current;
+    private PointI _current;
 
     internal PointEnumerator(RectI rect)
     {
@@ -480,7 +480,7 @@ file struct PointEnumerator
         _current = new(_startX - 1, rect.Y);
     }
 
-    public readonly Point Current => _current;
+    public readonly PointI Current => _current;
 
     public bool MoveNext()
     {

@@ -13,7 +13,7 @@ namespace KappaDuck.Quack.Graphics.Primitives;
 /// <param name="color">The color of the vertex.</param>
 /// <param name="textureCoordinate">The normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture. Ignored when drawing a geometry without a texture.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : IEquatable<Vertex>
+public struct Vertex(Point position, ColorF color, Point textureCoordinate) : IEquatable<Vertex>
 {
     /// <summary>
     /// Creates a vertex from a position, an 8-bit-per-channel color and a texture coordinate.
@@ -24,7 +24,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// The normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture.
     /// Ignored when drawing a geometry without a texture.
     /// </param>
-    public Vertex(PointF position, Color color, PointF textureCoordinate) : this(position, color.ToColorF(), textureCoordinate)
+    public Vertex(Point position, Color color, Point textureCoordinate) : this(position, color.ToColorF(), textureCoordinate)
     {
     }
 
@@ -33,7 +33,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// </summary>
     /// <param name="position">The position of the vertex, in render coordinates.</param>
     /// <param name="color">The color of the vertex.</param>
-    public Vertex(PointF position, ColorF color) : this(position, color, default)
+    public Vertex(Point position, ColorF color) : this(position, color, default)
     {
     }
 
@@ -42,7 +42,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// </summary>
     /// <param name="position">The position of the vertex, in render coordinates.</param>
     /// <param name="color">The color of the vertex, converted to floating-point channels.</param>
-    public Vertex(PointF position, Color color) : this(position, color.ToColorF(), default)
+    public Vertex(Point position, Color color) : this(position, color.ToColorF(), default)
     {
     }
 
@@ -50,7 +50,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// Creates a vertex with a color, at the origin and a zeroed texture coordinate.
     /// </summary>
     /// <param name="color">The color of the vertex.</param>
-    public Vertex(ColorF color) : this(PointF.Origin, color, default)
+    public Vertex(ColorF color) : this(Point.Origin, color, default)
     {
     }
 
@@ -58,14 +58,14 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// Creates a vertex with a color, at the origin and a zeroed texture coordinate.
     /// </summary>
     /// <param name="color">The color of the vertex, converted to floating-point channels.</param>
-    public Vertex(Color color) : this(PointF.Origin, color.ToColorF(), default)
+    public Vertex(Color color) : this(Point.Origin, color.ToColorF(), default)
     {
     }
 
     /// <summary>
     /// Gets or sets the position of the vertex, in render coordinates.
     /// </summary>
-    public PointF Position { get; set; } = position;
+    public Point Position { get; set; } = position;
 
     /// <summary>
     /// Gets or sets the color of the vertex.
@@ -76,7 +76,7 @@ public struct Vertex(PointF position, ColorF color, PointF textureCoordinate) : 
     /// Gets or sets the normalized texture coordinate, where (0, 0) is the top-left and (1, 1) is the bottom-right of the texture.
     /// </summary>
     /// <remarks>Ignored when drawing a geometry without a texture.</remarks>
-    public PointF TextureCoordinate { get; set; } = textureCoordinate;
+    public Point TextureCoordinate { get; set; } = textureCoordinate;
 
     /// <summary>
     /// Determines whether this vertex is equal to another vertex.

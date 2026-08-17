@@ -5,7 +5,7 @@ namespace KappaDuck.Quack.Core;
 
 /// <summary>
 /// Identifies the engine subsystems and extensions that can be brought up through
-/// <see cref="QuackEngine.Init(Subsystem)"/>.
+/// <see cref="QuackEngine.Init(Subsystem, ApplicationMetadata?)"/>.
 /// </summary>
 /// <remarks>
 /// Combine values with a bitwise OR to initialize several at once. Some subsystems implicitly

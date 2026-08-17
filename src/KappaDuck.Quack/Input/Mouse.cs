@@ -33,14 +33,14 @@ public static class Mouse
         get
         {
             MouseButtonState buttons = SDL3.GetGlobalMouseState(out float x, out float y);
-            return new MouseState(buttons, new PointF(x, y));
+            return new MouseState(buttons, new Point(x, y));
         }
     }
 
     /// <summary>
     /// Gets the window-relative position of the cursor, from <see cref="State"/>.
     /// </summary>
-    public static PointF Position => State.Position;
+    public static Point Position => State.Position;
 
     /// <summary>
     /// Gets the mouse movement accumulated since the previous call.
@@ -86,7 +86,7 @@ public static class Mouse
         get
         {
             MouseButtonState buttons = SDL3.GetMouseState(out float x, out float y);
-            return new MouseState(buttons, new PointF(x, y));
+            return new MouseState(buttons, new Point(x, y));
         }
     }
 
@@ -204,7 +204,7 @@ public static class Mouse
     /// </remarks>
     /// <param name="position">The position in global screen space.</param>
     /// <exception cref="QuackInteropException">Thrown when failed to warp the mouse.</exception>
-    public static void Warp(PointF position) => Warp(position.X, position.Y);
+    public static void Warp(Point position) => Warp(position.X, position.Y);
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
     private static void OnTransform(void* data, ulong timestamp, SDL_Window* window, uint mouseId, float* x, float* y)

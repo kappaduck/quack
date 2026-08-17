@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Marshalling;
@@ -190,7 +189,7 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderLines")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool RenderLines(SDL_Renderer* renderer, ReadOnlySpan<PointF> points, int count);
+    internal static partial bool RenderLines(SDL_Renderer* renderer, ReadOnlySpan<Point> points, int count);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderPoint")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -200,7 +199,7 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderPoints")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool RenderPoints(SDL_Renderer* renderer, ReadOnlySpan<PointF> points, int count);
+    internal static partial bool RenderPoints(SDL_Renderer* renderer, ReadOnlySpan<Point> points, int count);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderPresent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

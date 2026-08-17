@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
 
 namespace KappaDuck.Quack.Graphics.Rendering;
 

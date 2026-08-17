@@ -28,7 +28,7 @@ public sealed class View
     /// </summary>
     /// <param name="size">The width and height of the visible scene, in world units.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> has a negative or zero width or height.</exception>
-    public View(SizeF size) : this(PointF.Origin, size)
+    public View(Size size) : this(Point.Origin, size)
     {
     }
 
@@ -38,7 +38,7 @@ public sealed class View
     /// <param name="center">The point of the scene that appears at the center of the viewport.</param>
     /// <param name="size">The width and height of the visible scene, in world units.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> has a negative or zero width or height.</exception>
-    public View(PointF center, SizeF size)
+    public View(Point center, Size size)
     {
         Center = center;
         Size = size;
@@ -82,7 +82,7 @@ public sealed class View
     /// Kept exactly as set, even outside <see cref="Bounds"/>. Only the rendered content is confined. Reading it
     /// back (for example to check how far a followed target has wandered) never reflects clamping.
     /// </remarks>
-    public PointF Center { get; set; }
+    public Point Center { get; set; }
 
     /// <summary>
     /// Gets or sets the rotation of the view, clockwise on screen. Defaults to no rotation.
@@ -97,7 +97,7 @@ public sealed class View
     /// mismatch stretches the scene. Match them (or letterbox) if you need it undistorted.
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative or zero.</exception>
-    public SizeF Size
+    public Size Size
     {
         get;
         set
@@ -128,7 +128,7 @@ public sealed class View
     /// <see cref="Renderer.CurrentOutputSize"/>, not <see cref="Renderer.OutputSize"/>.
     /// </param>
     /// <returns>The viewport, in pixels, clamped to at least 1x1.</returns>
-    public RectI ComputeViewport(Size targetSize)
+    public RectI ComputeViewport(SizeI targetSize)
     {
         int x = (int)MathF.Round(Viewport.X * targetSize.Width);
         int y = (int)MathF.Round(Viewport.Y * targetSize.Height);
@@ -147,10 +147,10 @@ public sealed class View
     /// </remarks>
     /// <param name="viewportSize">The pixel size of this view's viewport.</param>
     /// <returns>A transform mapping scene coordinates to viewport-local render coordinates.</returns>
-    public Transform GetTransform(Size viewportSize)
+    public Transform GetTransform(SizeI viewportSize)
     {
         Vector2 scale = new(viewportSize.Width / Size.Width, viewportSize.Height / Size.Height);
-        PointF center = new(viewportSize.Width / 2f, viewportSize.Height / 2f);
+        Point center = new(viewportSize.Width / 2f, viewportSize.Height / 2f);
 
         // Rotation is negated: rotating the camera clockwise makes the scene appear to turn counter-clockwise.
         return Transform.Create(center, -Rotation, scale, GetConfinedCenter());
@@ -169,7 +169,7 @@ public sealed class View
     /// <remarks>Call every frame with the point you want to follow (e.g. a player's position) for a smooth chase camera.</remarks>
     /// <param name="target">The point to move towards.</param>
     /// <param name="maxDistance">The maximum distance to move this step. Should be non-negative.</param>
-    public void MoveTowards(PointF target, float maxDistance)
+    public void MoveTowards(Point target, float maxDistance)
     {
         Vector2 displacement = target - Center;
         float distance = displacement.Magnitude;
@@ -209,10 +209,10 @@ public sealed class View
     public void Zoom(float factor)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(factor);
-        Size = new SizeF(Size.Width * factor, Size.Height * factor);
+        Size = new Size(Size.Width * factor, Size.Height * factor);
     }
 
-    private PointF GetConfinedCenter()
+    private Point GetConfinedCenter()
     {
         if (Bounds is not { } bounds)
             return Center;
@@ -228,7 +228,7 @@ public sealed class View
             ? bounds.Center.Y
             : Math.Clamp(Center.Y, bounds.Top + halfHeight, bounds.Bottom - halfHeight);
 
-        return new PointF(x, y);
+        return new Point(x, y);
     }
 }
 

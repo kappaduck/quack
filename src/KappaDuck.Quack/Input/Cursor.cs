@@ -43,7 +43,7 @@ public sealed class Cursor : IDisposable
     /// </remarks>
     /// <param name="surface">The image to use</param>
     /// <param name="hotspot">The cursor hotspot</param>
-    public Cursor(Surface surface, Point hotspot)
+    public Cursor(Surface surface, PointI hotspot)
     {
         unsafe
         {
@@ -61,19 +61,19 @@ public sealed class Cursor : IDisposable
     /// significant bit first. For each bit, in order: a data bit of 1 with a mask bit of 1 draws black, a data bit of
     /// 0 with a mask bit of 1 draws white, and a mask bit of 0 leaves the pixel transparent regardless of the data bit.
     /// </para>
-    /// <para>For a full color cursor, use <see cref="Cursor(Surface, Point)"/> instead.</para>
+    /// <para>For a full color cursor, use <see cref="Cursor(Surface, PointI)"/> instead.</para>
     /// </remarks>
     /// <param name="data">The bitmap data, packed one bit per pixel, most significant bit first.</param>
     /// <param name="mask">The bitmap mask, packed one bit per pixel, most significant bit first.</param>
-    /// <param name="size">The cursor size in pixels. <see cref="Size.Width"/> must be a multiple of 8.</param>
+    /// <param name="size">The cursor size in pixels. <see cref="SizeI.Width"/> must be a multiple of 8.</param>
     /// <param name="hotspot">The cursor hotspot.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="SizeI.Width"/> or <see cref="SizeI.Height"/> is negative or zero.</exception>
     /// <exception cref="ArgumentException">
-    /// <see cref="Size.Width"/> is not a multiple of 8, or <paramref name="data"/> or <paramref name="mask"/> is not
-    /// exactly <see cref="Size.Width"/> / 8 * <see cref="Size.Height"/> bytes long.
+    /// <see cref="SizeI.Width"/> is not a multiple of 8, or <paramref name="data"/> or <paramref name="mask"/> is not
+    /// exactly <see cref="SizeI.Width"/> / 8 * <see cref="SizeI.Height"/> bytes long.
     /// </exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, Size size, Point hotspot) : this(data, mask, size.Width, size.Height, hotspot)
+    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, SizeI size, PointI hotspot) : this(data, mask, size.Width, size.Height, hotspot)
     {
     }
 
@@ -86,7 +86,7 @@ public sealed class Cursor : IDisposable
     /// significant bit first. For each bit, in order: a data bit of 1 with a mask bit of 1 draws black, a data bit of
     /// 0 with a mask bit of 1 draws white, and a mask bit of 0 leaves the pixel transparent regardless of the data bit.
     /// </para>
-    /// <para>For a full color cursor, use <see cref="Cursor(Surface, Point)"/> instead.</para>
+    /// <para>For a full color cursor, use <see cref="Cursor(Surface, PointI)"/> instead.</para>
     /// </remarks>
     /// <param name="data">The bitmap data, packed one bit per pixel, most significant bit first.</param>
     /// <param name="mask">The bitmap mask, packed one bit per pixel, most significant bit first.</param>
@@ -99,7 +99,7 @@ public sealed class Cursor : IDisposable
     /// exactly <paramref name="width"/> / 8 * <paramref name="height"/> bytes long.
     /// </exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot)
+    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, PointI hotspot)
     {
         unsafe
         {
@@ -118,7 +118,7 @@ public sealed class Cursor : IDisposable
     /// </para>
     /// <para>
     /// If a frame's image contains alternate images added with <see cref="Surface.AddAlternateImage(Surface)"/>,
-    /// they are interpreted the same way as with <see cref="Cursor(Surface, Point)"/>.
+    /// they are interpreted the same way as with <see cref="Cursor(Surface, PointI)"/>.
     /// </para>
     /// <para>To create a one-shot animation that stops on the last frame, set that frame's duration to <see cref="TimeSpan.Zero"/>.</para>
     /// </remarks>
@@ -126,7 +126,7 @@ public sealed class Cursor : IDisposable
     /// <param name="hotspot">The cursor hotspot, shared by every frame.</param>
     /// <exception cref="ArgumentException"><paramref name="frames"/> is empty.</exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<CursorFrame> frames, Point hotspot)
+    public Cursor(ReadOnlySpan<CursorFrame> frames, PointI hotspot)
     {
         unsafe
         {
@@ -144,13 +144,13 @@ public sealed class Cursor : IDisposable
     /// </para>
     /// <para>
     /// Useful when the frames come from a file like a GIF, APNG, or Windows .ani cursor loaded with <see cref="Animation.Load(string)"/>.
-    /// For building one from scratch out of individual frames, <see cref="Cursor(ReadOnlySpan{CursorFrame}, Point)"/> is more direct.
+    /// For building one from scratch out of individual frames, <see cref="Cursor(ReadOnlySpan{CursorFrame}, PointI)"/> is more direct.
     /// </para>
     /// </remarks>
     /// <param name="animation">The animation to cycle through.</param>
     /// <param name="hotspot">The cursor hotspot, shared by every frame.</param>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(Animation animation, Point hotspot)
+    public Cursor(Animation animation, PointI hotspot)
     {
         unsafe
         {
@@ -216,7 +216,7 @@ public sealed class Cursor : IDisposable
     /// <returns>The newly created cursor.</returns>
     /// <exception cref="FileNotFoundException">The file does not exist.</exception>
     /// <exception cref="QuackInteropException">Failed to load the image or create the cursor.</exception>
-    public static Cursor FromFile(string path, Point hotspot)
+    public static Cursor FromFile(string path, PointI hotspot)
     {
         using Surface surface = Surface.FromFile(path);
         return new Cursor(surface, hotspot);
@@ -230,13 +230,13 @@ public sealed class Cursor : IDisposable
     /// <param name="hotspot">The cursor hotspot.</param>
     /// <returns>The newly created cursor.</returns>
     /// <exception cref="QuackInteropException">Failed to load the image or create the cursor.</exception>
-    public static Cursor FromStream(Stream stream, Point hotspot)
+    public static Cursor FromStream(Stream stream, PointI hotspot)
     {
         using Surface surface = Surface.FromStream(stream);
         return new Cursor(surface, hotspot);
     }
 
-    private static SDL_Cursor* CreateMonochrome(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, Point hotspot)
+    private static SDL_Cursor* CreateMonochrome(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, int width, int height, PointI hotspot)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
@@ -252,7 +252,7 @@ public sealed class Cursor : IDisposable
         return unsafe (SDL3.CreateCursor(data, mask, width, height, hotspot.X, hotspot.Y));
     }
 
-    private static SDL_Cursor* CreateAnimated(ReadOnlySpan<CursorFrame> frames, Point hotspot)
+    private static SDL_Cursor* CreateAnimated(ReadOnlySpan<CursorFrame> frames, PointI hotspot)
     {
         ArgumentOutOfRangeException.ThrowIfZero(frames.Length);
 

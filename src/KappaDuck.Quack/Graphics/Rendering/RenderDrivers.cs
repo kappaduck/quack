@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 
-namespace KappaDuck.Quack.Video;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// A collection of available rendering drivers.

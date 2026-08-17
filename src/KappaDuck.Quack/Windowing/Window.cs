@@ -21,11 +21,12 @@ namespace KappaDuck.Quack.Windowing;
 public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 {
     private State _state;
-    private Point? _position;
+    private PointI? _position;
     private int _width;
     private int _height;
     private float? _opacity;
     private Surface? _icon;
+    private bool _disposed;
 
     /// <summary>
     /// Creates an empty window.
@@ -67,7 +68,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="title">The title of the window.</param>
     /// <param name="size">The size of the window.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size) : this(title, size.Width, size.Height)
+    public Window(string title, SizeI size) : this(title, size.Width, size.Height)
     {
     }
 
@@ -78,7 +79,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="size">The size of the window.</param>
     /// <param name="position">The position of the window on the screen.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size, Point position) : this(title, size.Width, size.Height)
+    public Window(string title, SizeI size, PointI position) : this(title, size.Width, size.Height)
         => Position = position;
 
     /// <summary>
@@ -124,7 +125,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="size">The size of the window.</param>
     /// <param name="options">The options that configure how the window is created.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size, WindowOptions options) : this(title, size.Width, size.Height, options)
+    public Window(string title, SizeI size, WindowOptions options) : this(title, size.Width, size.Height, options)
     {
     }
 
@@ -287,7 +288,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     {
         get
         {
-            ThrowIfDisposed();
+            ThrowIfNotOpen();
             return field;
         }
         private set;
@@ -408,7 +409,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
     /// <exception cref="QuackInteropException">Failed to set the maximum size.</exception>
-    public Size MaximumSize
+    public SizeI MaximumSize
     {
         get;
         set
@@ -444,7 +445,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
     /// <exception cref="QuackInteropException">Failed to set the minimum size.</exception>
-    public Size MinimumSize
+    public SizeI MinimumSize
     {
         get;
         set
@@ -586,14 +587,14 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <remarks>Setting the position is ignored while the window is in fullscreen or maximized state.</remarks>
     /// <exception cref="QuackInteropException">Failed to set the window position.</exception>
-    public Point Position
+    public PointI Position
     {
         get
         {
             if (!_position.HasValue && IsOpen)
             {
                 SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetWindowPosition(NativeHandle, out int x, out int y)));
-                _position = new Point(x, y);
+                _position = new PointI(x, y);
             }
 
             return _position ?? default;
@@ -658,7 +659,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <remarks>Setting the size is ignored while the window is in fullscreen or maximized state.</remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is less than or equal to zero.</exception>
     /// <exception cref="QuackInteropException">Failed to set the window size.</exception>
-    public Size Size
+    public SizeI Size
     {
         get => new(_width, _height);
         set
@@ -682,7 +683,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets the size of the window's client area in physical pixels.
     /// </summary>
-    public Size SizeInPixels => new(WidthInPixels, HeightInPixels);
+    public SizeI SizeInPixels => new(WidthInPixels, HeightInPixels);
 
     /// <summary>
     /// Gets the controller for this window's taskbar progress indicator.
@@ -785,10 +786,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         if (!IsOpen)
             return;
 
-        Windows.Unregister(this);
-
-        Id = 0;
-        _state = State.None;
+        Destroy();
     }
 
     /// <summary>
@@ -802,6 +800,8 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
     public void Create(string title, int width, int height)
     {
+        ThrowIfDisposed();
+
         if (IsOpen)
             return;
 
@@ -812,17 +812,11 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <inheritdoc/>
     public void Dispose()
     {
-        unsafe
-        {
-            if (NativeHandle is null)
-                return;
+        if (_disposed)
+            return;
 
-            _icon?.Dispose();
-            _icon = null;
-
-            SDL3.DestroyWindow(NativeHandle);
-            NativeHandle = null;
-        }
+        _disposed = true;
+        Destroy();
     }
 
     /// <summary>
@@ -990,7 +984,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <exception cref="ObjectDisposedException">The window is not open.</exception>
     public void SetShape(Surface? shape)
     {
-        ThrowIfDisposed();
+        ThrowIfNotOpen();
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.SetWindowShape(NativeHandle, shape?.Handle)));
     }
 
@@ -1013,7 +1007,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <param name="position">The position of the menu, relative to the window.</param>
     /// <exception cref="QuackInteropException">Failed to show the system menu.</exception>
-    public void ShowSystemMenu(Point position)
+    public void ShowSystemMenu(PointI position)
     {
         if (!IsOpen)
             return;
@@ -1038,7 +1032,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// Moves the mouse cursor to the given position within the window's client area.
     /// </summary>
     /// <param name="position">The position within the window.</param>
-    public void WarpMouse(PointF position) => WarpMouse(position.X, position.Y);
+    public void WarpMouse(Point position) => WarpMouse(position.X, position.Y);
 
     /// <summary>
     /// Moves the mouse cursor to the given position within the window's client area.
@@ -1168,6 +1162,26 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
         }
 
         return properties;
+    }
+
+    private void Destroy()
+    {
+        unsafe
+        {
+            if (NativeHandle is null)
+                return;
+
+            Windows.Unregister(this);
+
+            _icon?.Dispose();
+            _icon = null;
+
+            SDL3.DestroyWindow(NativeHandle);
+            NativeHandle = null;
+        }
+
+        Id = 0;
+        _state = State.None;
     }
 
     private static WindowHandle GetWindowHandle(uint properties)
@@ -1338,7 +1352,9 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     private void SetState(State state, bool apply = true) => _state = apply ? _state | state : _state & ~state;
 
-    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(unsafe (NativeHandle is null), typeof(Window));
+    private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, typeof(Window));
+
+    private void ThrowIfNotOpen() => ObjectDisposedException.ThrowIf(unsafe (NativeHandle is null), typeof(Window));
 
     private void UpdateIcon(Surface icon)
     {

@@ -60,10 +60,10 @@ public static class EventExtensions
         /// Determines whether the given key was pressed with exactly the given modifiers held.
         /// </summary>
         /// <param name="key">The key to check.</param>
-        /// <param name="modifier">The modifiers that must be held. A combined value such as
-        /// <see cref="Keymod.Control"/> matches either the left or right key.</param>
+        /// <param name="modifiers">The modifiers that must be held. A combined value such as
+        /// <see cref="KeyModifiers.Control"/> matches either the left or right key.</param>
         /// <returns><see langword="true"/> if the key was pressed with exactly those modifiers; otherwise <see langword="false"/>.</returns>
-        public bool KeyPressed(Key key, Keymod modifier) => e is KeyPressedEvent pressed && pressed.Key == key && HasModifiers(pressed.Modifier, modifier);
+        public bool KeyPressed(Key key, KeyModifiers modifiers) => e is KeyPressedEvent pressed && pressed.Key == key && HasModifiers(pressed.Modifiers, modifiers);
 
         /// <summary>
         /// Determines whether the given physical key was pressed.
@@ -80,10 +80,10 @@ public static class EventExtensions
         /// Determines whether the given physical key was pressed with exactly the given modifiers held.
         /// </summary>
         /// <param name="code">The physical key to check.</param>
-        /// <param name="modifier">The modifiers that must be held. A combined value such as
-        /// <see cref="Keymod.Control"/> matches either the left or right key.</param>
+        /// <param name="modifiers">The modifiers that must be held. A combined value such as
+        /// <see cref="KeyModifiers.Control"/> matches either the left or right key.</param>
         /// <returns><see langword="true"/> if the key was pressed with exactly those modifiers; otherwise <see langword="false"/>.</returns>
-        public bool KeyPressed(Scancode code, Keymod modifier) => e is KeyPressedEvent pressed && pressed.Code == code && HasModifiers(pressed.Modifier, modifier);
+        public bool KeyPressed(Scancode code, KeyModifiers modifiers) => e is KeyPressedEvent pressed && pressed.Code == code && HasModifiers(pressed.Modifiers, modifiers);
 
         /// <summary>
         /// Determines whether the given key was released.
@@ -107,7 +107,7 @@ public static class EventExtensions
         /// when this method returns <see langword="true"/>.</param>
         /// <param name="delta">The distance moved since the previous position when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved with the button held; otherwise <see langword="false"/>.</returns>
-        public bool MouseDragged(MouseButton button, out PointF position, out Vector2 delta)
+        public bool MouseDragged(MouseButton button, out Point position, out Vector2 delta)
         {
             if (e is MouseMovedEvent { Buttons: MouseButtonState buttons } moved && buttons.IsDown(button))
             {
@@ -129,9 +129,9 @@ public static class EventExtensions
         /// <param name="position">The cursor position, relative to the top-left of the window,
         /// when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved; otherwise <see langword="false"/>.</returns>
-        public bool MouseMoved(out PointF position)
+        public bool MouseMoved(out Point position)
         {
-            if (e is MouseMovedEvent { Position: PointF moved })
+            if (e is MouseMovedEvent { Position: Point moved })
             {
                 position = moved;
                 return true;
@@ -148,7 +148,7 @@ public static class EventExtensions
         /// when this method returns <see langword="true"/>.</param>
         /// <param name="buttons">The buttons held during the move when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved; otherwise <see langword="false"/>.</returns>
-        public bool MouseMoved(out PointF position, out MouseButtonState buttons)
+        public bool MouseMoved(out Point position, out MouseButtonState buttons)
         {
             if (e.TryGetValue(out MouseMovedEvent moved))
             {
@@ -196,31 +196,31 @@ public static class EventExtensions
         }
     }
 
-    private static bool HasModifiers(Keymod current, Keymod requested)
+    private static bool HasModifiers(KeyModifiers current, KeyModifiers requested)
     {
-        const Keymod locks = Keymod.NumLock | Keymod.CapsLock | Keymod.ScrollLock;
+        const KeyModifiers locks = KeyModifiers.NumLock | KeyModifiers.CapsLock | KeyModifiers.ScrollLock;
         current &= ~(locks & ~requested);
 
-        if (!GroupMatches(current, requested, Keymod.Shift)
-            || !GroupMatches(current, requested, Keymod.Control)
-            || !GroupMatches(current, requested, Keymod.Alt)
-            || !GroupMatches(current, requested, Keymod.Gui))
+        if (!GroupMatches(current, requested, KeyModifiers.Shift)
+            || !GroupMatches(current, requested, KeyModifiers.Control)
+            || !GroupMatches(current, requested, KeyModifiers.Alt)
+            || !GroupMatches(current, requested, KeyModifiers.Gui))
         {
             return false;
         }
 
-        const Keymod groups = Keymod.Shift | Keymod.Control | Keymod.Alt | Keymod.Gui;
+        const KeyModifiers groups = KeyModifiers.Shift | KeyModifiers.Control | KeyModifiers.Alt | KeyModifiers.Gui;
         return (current & ~groups) == (requested & ~groups);
 
-        static bool GroupMatches(Keymod current, Keymod requested, Keymod group)
+        static bool GroupMatches(KeyModifiers current, KeyModifiers requested, KeyModifiers group)
         {
-            Keymod wanted = requested & group;
-            Keymod held = current & group;
+            KeyModifiers wanted = requested & group;
+            KeyModifiers held = current & group;
 
-            if (wanted == Keymod.None)
-                return held == Keymod.None;
+            if (wanted == KeyModifiers.None)
+                return held == KeyModifiers.None;
 
-            return wanted == group ? held != Keymod.None : held == wanted;
+            return wanted == group ? held != KeyModifiers.None : held == wanted;
         }
     }
 }

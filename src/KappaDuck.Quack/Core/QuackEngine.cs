@@ -54,11 +54,15 @@ public static class QuackEngine
     /// </para>
     /// </remarks>
     /// <param name="subsystem">The subsystems to initialize.</param>
+    /// <param name="metadata">The application metadata.</param>
     /// <returns>A scope that shuts the engine down when disposed.</returns>
     /// <exception cref="QuackException">The engine is already initialized.</exception>
     /// <exception cref="QuackInteropException">Failed to initialize a subsystem.</exception>
-    public static EngineScope Init(Subsystem subsystem)
+    public static EngineScope Init(Subsystem subsystem, ApplicationMetadata? metadata = null)
     {
+        if (metadata is not null)
+            SetMetadata(metadata);
+
         lock (_lock)
         {
             ThrowHelper.ThrowIf(IsInitialized, "The engine is already initialized.");
@@ -87,7 +91,7 @@ public static class QuackEngine
     /// </summary>
     /// <param name="metadata">The application metadata.</param>
     /// <remarks>
-    /// You can set it only once and must do so before <see cref="Init(Subsystem)"/>; every subsequent
+    /// You can set it only once and must do so before <see cref="Init(Subsystem, ApplicationMetadata?)"/>; every subsequent
     /// call is ignored.
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to set an application metadata property.</exception>

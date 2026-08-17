@@ -1,10 +1,10 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
+using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
-using KappaDuck.Quack.Graphics.Rendering;
 
-namespace KappaDuck.Quack.Graphics.Drawing;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// Represents a surface that can be drawn onto, such as a <see cref="Renderer"/>.

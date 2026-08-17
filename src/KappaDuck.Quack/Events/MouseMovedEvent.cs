@@ -19,7 +19,7 @@ public readonly struct MouseMovedEvent : IEvent
     {
         WindowId = e.WindowId;
         Which = e.Which;
-        Position = new PointF(e.X, e.Y);
+        Position = new Point(e.X, e.Y);
         Delta = new Vector2(e.Xrel, e.Yrel);
         Buttons = e.State;
     }
@@ -37,7 +37,7 @@ public readonly struct MouseMovedEvent : IEvent
     /// <summary>
     /// Gets the cursor position, relative to the top-left of the window.
     /// </summary>
-    public PointF Position { get; }
+    public Point Position { get; }
 
     /// <summary>
     /// Gets the motion since the previous event.

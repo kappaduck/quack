@@ -4,7 +4,7 @@
 namespace KappaDuck.Quack.UI.Progress;
 
 /// <summary>
-/// Represents the state of a <see cref="ProgressBar"/>.
+/// Represents the state of a <see cref="ProgressBarBase"/>.
 /// </summary>
 public enum ProgressState
 {

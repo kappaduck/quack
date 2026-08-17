@@ -1,9 +1,9 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-using KappaDuck.Quack.Graphics.Drawing;
+using KappaDuck.Quack.Graphics.Rendering;
 
-namespace Unit.Tests.Graphics.Drawing;
+namespace Unit.Tests.Graphics.Rendering;
 
 internal sealed class BlendModeTests
 {

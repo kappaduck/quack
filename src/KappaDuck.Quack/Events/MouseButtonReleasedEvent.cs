@@ -20,7 +20,7 @@ public readonly struct MouseButtonReleasedEvent : IEvent
         WindowId = e.WindowId;
         Which = e.Which;
         Button = e.Button;
-        Position = new PointF(e.X, e.Y);
+        Position = new Point(e.X, e.Y);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public readonly struct MouseButtonReleasedEvent : IEvent
     /// <summary>
     /// Gets the cursor position, relative to the top-left of the window, when the button was released.
     /// </summary>
-    public PointF Position { get; }
+    public Point Position { get; }
 
     /// <summary>
     /// Gets the mouse device which the button was released.
