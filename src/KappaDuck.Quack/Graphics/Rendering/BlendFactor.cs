@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Graphics.Drawing;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// The normalized factor that a pixel component is multiplied by before a <see cref="BlendOperation"/> is applied.

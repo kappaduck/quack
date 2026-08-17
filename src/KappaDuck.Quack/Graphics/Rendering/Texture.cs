@@ -4,7 +4,6 @@
 using CommunityToolkit.HighPerformance;
 using KappaDuck.Quack.Exceptions;
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Interop.SDL.Primitives;
 using KappaDuck.Quack.Video.Imaging;
 

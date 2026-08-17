@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using KappaDuck.Quack.Geometry;
-using KappaDuck.Quack.Graphics.Drawing;
 using KappaDuck.Quack.Graphics.Primitives;
 using KappaDuck.Quack.Graphics.Rendering;
 using KappaDuck.Quack.Interop.SDL.Marshalling;

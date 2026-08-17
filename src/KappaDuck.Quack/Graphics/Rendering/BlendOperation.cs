@@ -1,7 +1,7 @@
 // Copyright (c) KappaDuck.
 // Licensed under the MIT license.
 
-namespace KappaDuck.Quack.Graphics.Drawing;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// The operation used to combine the weighted source and destination pixel components.

@@ -3,7 +3,7 @@
 
 using System.Numerics;
 
-namespace KappaDuck.Quack.Graphics.Drawing;
+namespace KappaDuck.Quack.Graphics.Rendering;
 
 /// <summary>
 /// Controls how the pixels from a drawing operation (the source) are combined with the pixels already in the
