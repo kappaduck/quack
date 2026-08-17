@@ -12,19 +12,19 @@ namespace KappaDuck.Quack.Geometry;
 /// <param name="x">The x-coordinate of the point.</param>
 /// <param name="y">The y-coordinate of the point.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct PointF(float x, float y) :
-    IAdditionOperators<PointF, Vector2, PointF>,
-    ISubtractionOperators<PointF, Vector2, PointF>,
-    ISubtractionOperators<PointF, PointF, Vector2>,
-    IEqualityOperators<PointF, PointF, bool>,
-    IEquatable<PointF>,
+public struct Point(float x, float y) :
+    IAdditionOperators<Point, Vector2, Point>,
+    ISubtractionOperators<Point, Vector2, Point>,
+    ISubtractionOperators<Point, Point, Vector2>,
+    IEqualityOperators<Point, Point, bool>,
+    IEquatable<Point>,
     ISpanFormattable,
     IUtf8SpanFormattable
 {
     /// <summary>
     /// Creates a point at the origin (0, 0).
     /// </summary>
-    public PointF() : this(0f, 0f)
+    public Point() : this(0f, 0f)
     {
     }
 
@@ -41,21 +41,21 @@ public struct PointF(float x, float y) :
     /// <summary>
     /// Gets the origin point (0, 0).
     /// </summary>
-    public static PointF Origin { get; } = new(0f, 0f);
+    public static Point Origin { get; } = new(0f, 0f);
 
     /// <summary>
     /// Computes the displacement vector from this point to another point.
     /// </summary>
     /// <param name="target">The target point.</param>
     /// <returns>The displacement vector.</returns>
-    public readonly Vector2 To(PointF target) => target - this;
+    public readonly Vector2 To(Point target) => target - this;
 
     /// <summary>
     /// Computes the distance between this point and another point.
     /// </summary>
     /// <param name="to">The other point.</param>
     /// <returns>The distance between the two points.</returns>
-    public readonly float Distance(PointF to) => Distance(this, to);
+    public readonly float Distance(Point to) => Distance(this, to);
 
     /// <summary>
     /// Returns the largest <see cref="PointI"/> whose coordinates are less than or equal to those of this point.
@@ -78,7 +78,7 @@ public struct PointF(float x, float y) :
     /// <param name="from">The point to measure from.</param>
     /// <param name="to">The point to measure to.</param>
     /// <returns>The distance between the two points.</returns>
-    public static float Distance(PointF from, PointF to) => from.To(to).Magnitude;
+    public static float Distance(Point from, Point to) => from.To(to).Magnitude;
 
     /// <summary>
     /// Computes the linear interpolation between two points with a clamped interpolation factor.
@@ -87,14 +87,14 @@ public struct PointF(float x, float y) :
     /// <param name="to">The ending point.</param>
     /// <param name="interpolationFactor">The interpolation factor between 0 and 1.</param>
     /// <returns>The interpolated point.</returns>
-    public static PointF Lerp(PointF from, PointF to, float interpolationFactor)
+    public static Point Lerp(Point from, Point to, float interpolationFactor)
     {
         interpolationFactor = Math.Clamp(interpolationFactor, 0f, 1f);
 
         float x = (to.X - from.X) * interpolationFactor;
         float y = (to.Y - from.Y) * interpolationFactor;
 
-        return new PointF(from.X + x, from.Y + y);
+        return new Point(from.X + x, from.Y + y);
     }
 
     /// <summary>
@@ -104,12 +104,12 @@ public struct PointF(float x, float y) :
     /// <param name="to">The ending point.</param>
     /// <param name="interpolationFactor">The interpolation factor.</param>
     /// <returns>The interpolated point.</returns>
-    public static PointF LerpUnclamped(PointF from, PointF to, float interpolationFactor)
+    public static Point LerpUnclamped(Point from, Point to, float interpolationFactor)
     {
         float x = (to.X - from.X) * interpolationFactor;
         float y = (to.Y - from.Y) * interpolationFactor;
 
-        return new PointF(from.X + x, from.Y + y);
+        return new Point(from.X + x, from.Y + y);
     }
 
     /// <summary>
@@ -124,11 +124,11 @@ public struct PointF(float x, float y) :
     /// </summary>
     /// <param name="other">The point to compare with the current point.</param>
     /// <returns><see langword="true"/> if the points are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(PointF other)
+    public readonly bool Equals(Point other)
         => MathF.ApproximatelyEquals(X, other.X) && MathF.ApproximatelyEquals(Y, other.Y);
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is PointF other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Point other && Equals(other);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(X, Y);
@@ -159,10 +159,10 @@ public struct PointF(float x, float y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator +(PointF left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
+    public static Point operator +(Point left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
-    /// Translates a point by an integer displacement vector, yielding a <see cref="PointF"/>.
+    /// Translates a point by an integer displacement vector, yielding a <see cref="Point"/>.
     /// </summary>
     /// <remarks>
     /// Mixed-type operation: float location nudged by an integer displacement always produces a float result.
@@ -170,7 +170,7 @@ public struct PointF(float x, float y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The integer displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator +(PointF left, Vector2I right) => new(left.X + right.X, left.Y + right.Y);
+    public static Point operator +(Point left, Vector2I right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Translates a point backwards by a displacement vector.
@@ -178,10 +178,10 @@ public struct PointF(float x, float y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator -(PointF left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
+    public static Point operator -(Point left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
-    /// Translates a point backwards by an integer displacement vector, yielding a <see cref="PointF"/>.
+    /// Translates a point backwards by an integer displacement vector, yielding a <see cref="Point"/>.
     /// </summary>
     /// <remarks>
     /// Mixed-type operation: float location nudged by an integer displacement always produces a float result.
@@ -189,7 +189,7 @@ public struct PointF(float x, float y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The integer displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator -(PointF left, Vector2I right) => new(left.X - right.X, left.Y - right.Y);
+    public static Point operator -(Point left, Vector2I right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Computes the displacement between two points.
@@ -197,7 +197,7 @@ public struct PointF(float x, float y) :
     /// <param name="left">The end point.</param>
     /// <param name="right">The start point.</param>
     /// <returns>The displacement vector.</returns>
-    public static Vector2 operator -(PointF left, PointF right) => new(left.X - right.X, left.Y - right.Y);
+    public static Vector2 operator -(Point left, Point right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Determines whether two points are equal.
@@ -205,7 +205,7 @@ public struct PointF(float x, float y) :
     /// <param name="left">The left point.</param>
     /// <param name="right">The right point.</param>
     /// <returns><see langword="true"/> if the points are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(PointF left, PointF right) => left.Equals(right);
+    public static bool operator ==(Point left, Point right) => left.Equals(right);
 
     /// <summary>
     /// Determines whether two points are not equal.
@@ -213,5 +213,5 @@ public struct PointF(float x, float y) :
     /// <param name="left">The left point.</param>
     /// <param name="right">The right point.</param>
     /// <returns><see langword="true"/> if the points are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(PointF left, PointF right) => !(left == right);
+    public static bool operator !=(Point left, Point right) => !(left == right);
 }

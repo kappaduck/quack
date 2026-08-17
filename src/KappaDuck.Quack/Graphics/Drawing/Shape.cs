@@ -121,7 +121,7 @@ public abstract class Shape : Transformable, IDrawable
     /// </summary>
     /// <param name="index">The index of the point, from 0 to <see cref="PointCount"/> minus one.</param>
     /// <returns>The point at <paramref name="index"/>.</returns>
-    public abstract PointF GetPoint(int index);
+    public abstract Point GetPoint(int index);
 
     /// <inheritdoc/>
     public void Draw(IRenderTarget target, RenderState state)
@@ -159,7 +159,7 @@ public abstract class Shape : Transformable, IDrawable
             _shape[i + 1].Position = GetPoint(i);
 
         _insideBounds = ComputeBounds(_shape, start: 1, PointCount);
-        _shape[0].Position = new PointF(_insideBounds.X + (_insideBounds.Width / 2f), _insideBounds.Y + (_insideBounds.Height / 2f));
+        _shape[0].Position = new Point(_insideBounds.X + (_insideBounds.Width / 2f), _insideBounds.Y + (_insideBounds.Height / 2f));
 
         _indices = new int[PointCount * 3];
 
@@ -201,7 +201,7 @@ public abstract class Shape : Transformable, IDrawable
             float u = (_region.X + (_region.Width * ratioX)) / textureWidth;
             float v = (_region.Y + (_region.Height * ratioY)) / textureHeight;
 
-            _shape[i].TextureCoordinate = new PointF(u, v);
+            _shape[i].TextureCoordinate = new Point(u, v);
         }
     }
 
@@ -216,15 +216,15 @@ public abstract class Shape : Transformable, IDrawable
         }
 
         int count = PointCount;
-        PointF center = _shape[0].Position;
+        Point center = _shape[0].Position;
 
         _outline = new Vertex[(count + 1) * 2];
 
         for (int i = 0; i < count; i++)
         {
-            PointF p1 = _shape[i + 1].Position;
-            PointF p0 = _shape[((i - 1 + count) % count) + 1].Position;
-            PointF p2 = _shape[((i + 1) % count) + 1].Position;
+            Point p1 = _shape[i + 1].Position;
+            Point p0 = _shape[((i - 1 + count) % count) + 1].Position;
+            Point p2 = _shape[((i + 1) % count) + 1].Position;
 
             Vector2 n1 = Normal(p0, p1);
             Vector2 n2 = Normal(p1, p2);
@@ -265,7 +265,7 @@ public abstract class Shape : Transformable, IDrawable
             _outline[i].Color = color;
     }
 
-    private static Vector2 Normal(PointF from, PointF to)
+    private static Vector2 Normal(Point from, Point to)
     {
         Vector2 edge = to - from;
         Vector2 normal = new(-edge.Y, edge.X);
@@ -279,12 +279,12 @@ public abstract class Shape : Transformable, IDrawable
         if (count == 0)
             return default;
 
-        PointF first = vertices[start].Position;
+        Point first = vertices[start].Position;
         float minX = first.X, minY = first.Y, maxX = first.X, maxY = first.Y;
 
         for (int i = start + 1; i < start + count; i++)
         {
-            PointF point = vertices[i].Position;
+            Point point = vertices[i].Position;
 
             if (point.X < minX)
                 minX = point.X;

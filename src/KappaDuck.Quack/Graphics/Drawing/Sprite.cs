@@ -115,20 +115,20 @@ public class Sprite : Transformable, IDrawable
         float width = _region.Width;
         float height = _region.Height;
 
-        _vertices[0].Position = new PointF(0f, 0f);
-        _vertices[1].Position = new PointF(width, 0f);
-        _vertices[2].Position = new PointF(width, height);
-        _vertices[3].Position = new PointF(0f, height);
+        _vertices[0].Position = new Point(0f, 0f);
+        _vertices[1].Position = new Point(width, 0f);
+        _vertices[2].Position = new Point(width, height);
+        _vertices[3].Position = new Point(0f, height);
 
         float left = (float)_region.X / _texture.Width;
         float top = (float)_region.Y / _texture.Height;
         float right = (float)(_region.X + _region.Width) / _texture.Width;
         float bottom = (float)(_region.Y + _region.Height) / _texture.Height;
 
-        _vertices[0].TextureCoordinate = new PointF(left, top);
-        _vertices[1].TextureCoordinate = new PointF(right, top);
-        _vertices[2].TextureCoordinate = new PointF(right, bottom);
-        _vertices[3].TextureCoordinate = new PointF(left, bottom);
+        _vertices[0].TextureCoordinate = new Point(left, top);
+        _vertices[1].TextureCoordinate = new Point(right, top);
+        _vertices[2].TextureCoordinate = new Point(right, bottom);
+        _vertices[3].TextureCoordinate = new Point(left, bottom);
 
         UpdateColors();
     }

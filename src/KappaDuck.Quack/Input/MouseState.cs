@@ -10,7 +10,7 @@ namespace KappaDuck.Quack.Input;
 /// </summary>
 public readonly struct MouseState
 {
-    internal MouseState(MouseButtonState buttons, PointF position)
+    internal MouseState(MouseButtonState buttons, Point position)
     {
         Buttons = buttons;
         Position = position;
@@ -24,7 +24,7 @@ public readonly struct MouseState
     /// <summary>
     /// Gets the cursor position captured with this snapshot.
     /// </summary>
-    public PointF Position { get; }
+    public Point Position { get; }
 
     /// <summary>
     /// Determines whether the given button is held in this snapshot.

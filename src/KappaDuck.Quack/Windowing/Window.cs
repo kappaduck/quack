@@ -1038,7 +1038,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// Moves the mouse cursor to the given position within the window's client area.
     /// </summary>
     /// <param name="position">The position within the window.</param>
-    public void WarpMouse(PointF position) => WarpMouse(position.X, position.Y);
+    public void WarpMouse(Point position) => WarpMouse(position.X, position.Y);
 
     /// <summary>
     /// Moves the mouse cursor to the given position within the window's client area.

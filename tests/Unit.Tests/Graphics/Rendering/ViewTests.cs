@@ -29,7 +29,7 @@ internal sealed class ViewTests
     [Test]
     public async Task ConstructorWithCenterAndSizeShouldSetBoth()
     {
-        View view = new(new PointF(50f, 75f), new SizeF(200f, 100f));
+        View view = new(new Point(50f, 75f), new SizeF(200f, 100f));
 
         await view.Center.X.Should().BeEqualTo(50f);
         await view.Center.Y.Should().BeEqualTo(75f);
@@ -113,7 +113,7 @@ internal sealed class ViewTests
     [Test]
     public async Task MoveShouldOffsetCenterByTheGivenVector()
     {
-        View view = new(new PointF(10f, 20f), new SizeF(200f, 100f));
+        View view = new(new Point(10f, 20f), new SizeF(200f, 100f));
         view.Move(new Vector2(5f, -5f));
 
         await view.Center.X.Should().BeEqualTo(15f);
@@ -174,8 +174,8 @@ internal sealed class ViewTests
     [Test]
     public async Task MoveTowardsShouldMoveExactlyMaxDistanceWhenTargetIsFarther()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(200f, 100f));
-        view.MoveTowards(new PointF(100f, 0f), maxDistance: 30f);
+        View view = new(new Point(0f, 0f), new SizeF(200f, 100f));
+        view.MoveTowards(new Point(100f, 0f), maxDistance: 30f);
 
         await view.Center.X.Should().BeEqualTo(30f);
         await view.Center.Y.Should().BeEqualTo(0f);
@@ -184,8 +184,8 @@ internal sealed class ViewTests
     [Test]
     public async Task MoveTowardsShouldSnapToTargetWhenWithinMaxDistance()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(200f, 100f));
-        view.MoveTowards(new PointF(10f, 0f), maxDistance: 30f);
+        View view = new(new Point(0f, 0f), new SizeF(200f, 100f));
+        view.MoveTowards(new Point(10f, 0f), maxDistance: 30f);
 
         await view.Center.X.Should().BeEqualTo(10f);
         await view.Center.Y.Should().BeEqualTo(0f);
@@ -194,8 +194,8 @@ internal sealed class ViewTests
     [Test]
     public async Task MoveTowardsShouldSnapToTargetWhenExactlyAtMaxDistance()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(200f, 100f));
-        view.MoveTowards(new PointF(30f, 0f), maxDistance: 30f);
+        View view = new(new Point(0f, 0f), new SizeF(200f, 100f));
+        view.MoveTowards(new Point(30f, 0f), maxDistance: 30f);
 
         await view.Center.X.Should().BeEqualTo(30f);
         await view.Center.Y.Should().BeEqualTo(0f);
@@ -204,8 +204,8 @@ internal sealed class ViewTests
     [Test]
     public async Task MoveTowardsShouldLeaveCenterUnchangedWhenAlreadyAtTarget()
     {
-        View view = new(new PointF(50f, 50f), new SizeF(200f, 100f));
-        view.MoveTowards(new PointF(50f, 50f), maxDistance: 30f);
+        View view = new(new Point(50f, 50f), new SizeF(200f, 100f));
+        view.MoveTowards(new Point(50f, 50f), maxDistance: 30f);
 
         await view.Center.X.Should().BeEqualTo(50f);
         await view.Center.Y.Should().BeEqualTo(50f);
@@ -256,10 +256,10 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldMapCenterToTheMiddleOfTheViewport()
     {
-        View view = new(new PointF(500f, 300f), new SizeF(200f, 100f));
+        View view = new(new Point(500f, 300f), new SizeF(200f, 100f));
         Transform transform = view.GetTransform(new Size(200, 100));
 
-        PointF result = transform.TransformPoint(new PointF(500f, 300f));
+        Point result = transform.TransformPoint(new Point(500f, 300f));
 
         await result.X.Should().BeEqualTo(100f);
         await result.Y.Should().BeEqualTo(50f);
@@ -268,10 +268,10 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldMapTheSceneEdgeToTheViewportEdgeWhenSizeMatchesTheViewport()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(200f, 100f));
+        View view = new(new Point(0f, 0f), new SizeF(200f, 100f));
         Transform transform = view.GetTransform(new Size(200, 100));
 
-        PointF result = transform.TransformPoint(new PointF(100f, 50f));
+        Point result = transform.TransformPoint(new Point(100f, 50f));
 
         await result.X.Should().BeEqualTo(200f);
         await result.Y.Should().BeEqualTo(100f);
@@ -280,10 +280,10 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldScaleWhenSizeDiffersFromTheViewport()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(400f, 400f));
+        View view = new(new Point(0f, 0f), new SizeF(400f, 400f));
         Transform transform = view.GetTransform(new Size(200, 200));
 
-        PointF result = transform.TransformPoint(new PointF(200f, 0f));
+        Point result = transform.TransformPoint(new Point(200f, 0f));
 
         await result.X.Should().BeEqualTo(200f);
         await result.Y.Should().BeEqualTo(100f);
@@ -292,13 +292,13 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldRotateTheSceneOppositeToTheViewsRotation()
     {
-        View view = new(new PointF(0f, 0f), new SizeF(200f, 200f))
+        View view = new(new Point(0f, 0f), new SizeF(200f, 200f))
         {
             Rotation = Angle.FromDegrees(90f)
         };
 
         Transform transform = view.GetTransform(new Size(200, 200));
-        PointF result = transform.TransformPoint(new PointF(100f, 0f));
+        Point result = transform.TransformPoint(new Point(100f, 0f));
 
         await result.X.Should().BeCloseTo(100f, 1e-3f);
         await result.Y.Should().BeCloseTo(0f, 1e-3f);
@@ -307,13 +307,13 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldClampTheEffectiveCenterToBoundsWithoutMutatingCenter()
     {
-        View view = new(new PointF(5000f, 5000f), new SizeF(200f, 100f))
+        View view = new(new Point(5000f, 5000f), new SizeF(200f, 100f))
         {
             Bounds = new Rect(0f, 0f, 1000f, 600f)
         };
 
         Transform transform = view.GetTransform(new Size(200, 100));
-        PointF viewportCenter = transform.TransformPoint(new PointF(900f, 550f));
+        Point viewportCenter = transform.TransformPoint(new Point(900f, 550f));
 
         await viewportCenter.X.Should().BeEqualTo(100f);
         await viewportCenter.Y.Should().BeEqualTo(50f);
@@ -325,13 +325,13 @@ internal sealed class ViewTests
     [Test]
     public async Task GetTransformShouldCenterOnBoundsWhenTheViewIsLargerThanBoundsOnBothAxes()
     {
-        View view = new(new PointF(9999f, 9999f), new SizeF(500f, 500f))
+        View view = new(new Point(9999f, 9999f), new SizeF(500f, 500f))
         {
             Bounds = new Rect(0f, 0f, 100f, 100f)
         };
 
         Transform transform = view.GetTransform(new Size(500, 500));
-        PointF viewportCenter = transform.TransformPoint(new PointF(50f, 50f));
+        Point viewportCenter = transform.TransformPoint(new Point(50f, 50f));
 
         await viewportCenter.X.Should().BeEqualTo(250f);
         await viewportCenter.Y.Should().BeEqualTo(250f);

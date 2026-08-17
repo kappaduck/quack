@@ -57,7 +57,7 @@ internal sealed class VertexArrayTests
         VertexArray array = [];
         array.Add(Vertex(3f, 4f));
 
-        await array[0].Position.Should().BeEqualTo(new PointF(3f, 4f));
+        await array[0].Position.Should().BeEqualTo(new Point(3f, 4f));
     }
 
     [Test]
@@ -80,7 +80,7 @@ internal sealed class VertexArrayTests
         };
 
         await array.Count.Should().BeEqualTo(3);
-        await array[2].Position.Should().BeEqualTo(new PointF(2f, 2f));
+        await array[2].Position.Should().BeEqualTo(new Point(2f, 2f));
     }
 
     [Test]
@@ -98,12 +98,12 @@ internal sealed class VertexArrayTests
         VertexArray array = [];
         array.AddQuad(new Rect(5f, 10f, 20f, 30f), Colors.White);
 
-        await array[0].Position.Should().BeEqualTo(new PointF(5f, 10f));
-        await array[1].Position.Should().BeEqualTo(new PointF(25f, 10f));
-        await array[2].Position.Should().BeEqualTo(new PointF(25f, 40f));
-        await array[3].Position.Should().BeEqualTo(new PointF(5f, 10f));
-        await array[4].Position.Should().BeEqualTo(new PointF(25f, 40f));
-        await array[5].Position.Should().BeEqualTo(new PointF(5f, 40f));
+        await array[0].Position.Should().BeEqualTo(new Point(5f, 10f));
+        await array[1].Position.Should().BeEqualTo(new Point(25f, 10f));
+        await array[2].Position.Should().BeEqualTo(new Point(25f, 40f));
+        await array[3].Position.Should().BeEqualTo(new Point(5f, 10f));
+        await array[4].Position.Should().BeEqualTo(new Point(25f, 40f));
+        await array[5].Position.Should().BeEqualTo(new Point(5f, 40f));
     }
 
     [Test]
@@ -112,8 +112,8 @@ internal sealed class VertexArrayTests
         VertexArray array = [];
         array.AddQuad(new Rect(0f, 0f, 10f, 10f), Colors.White);
 
-        await array[0].TextureCoordinate.Should().BeEqualTo(new PointF(0f, 0f));
-        await array[2].TextureCoordinate.Should().BeEqualTo(new PointF(1f, 1f));
+        await array[0].TextureCoordinate.Should().BeEqualTo(new Point(0f, 0f));
+        await array[2].TextureCoordinate.Should().BeEqualTo(new Point(1f, 1f));
     }
 
     [Test]
@@ -122,8 +122,8 @@ internal sealed class VertexArrayTests
         VertexArray array = [];
         array.AddQuad(new Rect(0f, 0f, 10f, 10f), new Rect(0.25f, 0.5f, 0.25f, 0.25f), Colors.White);
 
-        await array[0].TextureCoordinate.Should().BeEqualTo(new PointF(0.25f, 0.5f));
-        await array[2].TextureCoordinate.Should().BeEqualTo(new PointF(0.5f, 0.75f));
+        await array[0].TextureCoordinate.Should().BeEqualTo(new Point(0.25f, 0.5f));
+        await array[2].TextureCoordinate.Should().BeEqualTo(new Point(0.5f, 0.75f));
     }
 
     [Test]
@@ -146,9 +146,9 @@ internal sealed class VertexArrayTests
         VertexArray array = [];
         array.Add(Vertex(0f, 0f));
 
-        array[0].Position = new PointF(42f, 24f);
+        array[0].Position = new Point(42f, 24f);
 
-        await array[0].Position.Should().BeEqualTo(new PointF(42f, 24f));
+        await array[0].Position.Should().BeEqualTo(new Point(42f, 24f));
     }
 
     [Test]
@@ -170,7 +170,7 @@ internal sealed class VertexArrayTests
         array.Resize(3);
 
         await array.Count.Should().BeEqualTo(3);
-        await array[2].Position.Should().BeEqualTo(new PointF(0f, 0f));
+        await array[2].Position.Should().BeEqualTo(new Point(0f, 0f));
     }
 
     [Test]
@@ -181,8 +181,8 @@ internal sealed class VertexArrayTests
         array.Clear();
         array.Resize(2);
 
-        await array[0].Position.Should().BeEqualTo(new PointF(0f, 0f));
-        await array[1].Position.Should().BeEqualTo(new PointF(0f, 0f));
+        await array[0].Position.Should().BeEqualTo(new Point(0f, 0f));
+        await array[1].Position.Should().BeEqualTo(new Point(0f, 0f));
     }
 
     [Test]
@@ -306,7 +306,7 @@ internal sealed class VertexArrayTests
         await _target.Indices[3].Should().BeEqualTo(0);
     }
 
-    private static Vertex Vertex(float x, float y) => new(new PointF(x, y), Colors.White);
+    private static Vertex Vertex(float x, float y) => new(new Point(x, y), Colors.White);
 
     private sealed class CapturingTarget : IRenderTarget
     {

@@ -72,14 +72,14 @@ public struct PointI(int x, int y) :
     /// <param name="to">The ending point.</param>
     /// <param name="interpolationFactor">The interpolation factor between 0 and 1.</param>
     /// <returns>The interpolated point.</returns>
-    public static PointF Lerp(PointI from, PointI to, float interpolationFactor)
+    public static Point Lerp(PointI from, PointI to, float interpolationFactor)
     {
         interpolationFactor = Math.Clamp(interpolationFactor, 0f, 1f);
 
         float x = (to.X - from.X) * interpolationFactor;
         float y = (to.Y - from.Y) * interpolationFactor;
 
-        return new PointF(from.X + x, from.Y + y);
+        return new Point(from.X + x, from.Y + y);
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public struct PointI(int x, int y) :
     public readonly string ToString(string? format, IFormatProvider? formatProvider) => ToString();
 
     /// <summary>
-    /// Converts the point to a <see cref="PointF"/>.
+    /// Converts the point to a <see cref="Point"/>.
     /// </summary>
     /// <returns>The converted point.</returns>
-    public readonly PointF ToPointF() => new(X, Y);
+    public readonly Point ToPointF() => new(X, Y);
 
     /// <summary>
     /// Converts the point to a <see cref="Vector2"/>.
@@ -148,7 +148,7 @@ public struct PointI(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The float displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator +(PointI left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
+    public static Point operator +(PointI left, Vector2 right) => new(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Translates a point backwards by a displacement vector.
@@ -164,7 +164,7 @@ public struct PointI(int x, int y) :
     /// <param name="left">The point.</param>
     /// <param name="right">The float displacement.</param>
     /// <returns>The translated point.</returns>
-    public static PointF operator -(PointI left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
+    public static Point operator -(PointI left, Vector2 right) => new(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Computes the displacement between two points.

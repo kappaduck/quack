@@ -19,7 +19,7 @@ public abstract class Transformable
     /// <summary>
     /// Gets or sets the position of the object's <see cref="Origin"/> in its parent's space. Defaults to (0, 0).
     /// </summary>
-    public PointF Position
+    public Point Position
     {
         get;
         set
@@ -33,7 +33,7 @@ public abstract class Transformable
     /// Gets or sets the local point that <see cref="Position"/> refers to and that rotation and scaling pivot around.
     /// </summary>
     /// <remarks>Defaults to (0, 0), the top-left corner. Set it to the object's center to rotate and scale about the middle.</remarks>
-    public PointF Origin
+    public Point Origin
     {
         get;
         set
@@ -98,7 +98,7 @@ public abstract class Transformable
     /// </summary>
     /// <param name="target">The position to move towards.</param>
     /// <param name="maxDistance">The maximum distance to move this step. Should be non-negative.</param>
-    public void MoveTowards(PointF target, float maxDistance)
+    public void MoveTowards(Point target, float maxDistance)
     {
         Vector2 displacement = target - Position;
         float distance = displacement.Magnitude;

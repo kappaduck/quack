@@ -63,7 +63,7 @@ public sealed class RegularPolygon : Shape
     public override int PointCount => _sideCount;
 
     /// <inheritdoc/>
-    public override PointF GetPoint(int index)
+    public override Point GetPoint(int index)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(index);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _sideCount);
@@ -73,6 +73,6 @@ public sealed class RegularPolygon : Shape
         float x = _radius + (_radius * angle.Cos);
         float y = _radius + (_radius * angle.Sin);
 
-        return new PointF(x, y);
+        return new Point(x, y);
     }
 }

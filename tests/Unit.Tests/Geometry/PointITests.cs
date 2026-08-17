@@ -55,7 +55,7 @@ internal sealed class PointITests
         PointI from = new(1, 2);
         PointI to = new(3, 4);
 
-        PointF result = PointI.Lerp(from, to, t);
+        Point result = PointI.Lerp(from, to, t);
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -183,7 +183,7 @@ internal sealed class PointITests
     {
         PointI point = new(3, 4);
 
-        PointF converted = point.ToPointF();
+        Point converted = point.ToPointF();
 
         await converted.X.Should().BeEqualTo(point.X);
         await converted.Y.Should().BeEqualTo(point.Y);
@@ -229,7 +229,7 @@ internal sealed class PointITests
         PointI left = new(1, 2);
         Vector2 right = new(3f, 4f);
 
-        PointF result = left + right;
+        Point result = left + right;
 
         await result.X.Should().BeEqualTo(4f);
         await result.Y.Should().BeEqualTo(6f);
@@ -253,7 +253,7 @@ internal sealed class PointITests
         PointI left = new(5, 7);
         Vector2 right = new(3f, 4f);
 
-        PointF result = left - right;
+        Point result = left - right;
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);

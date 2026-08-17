@@ -107,7 +107,7 @@ public static class EventExtensions
         /// when this method returns <see langword="true"/>.</param>
         /// <param name="delta">The distance moved since the previous position when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved with the button held; otherwise <see langword="false"/>.</returns>
-        public bool MouseDragged(MouseButton button, out PointF position, out Vector2 delta)
+        public bool MouseDragged(MouseButton button, out Point position, out Vector2 delta)
         {
             if (e is MouseMovedEvent { Buttons: MouseButtonState buttons } moved && buttons.IsDown(button))
             {
@@ -129,9 +129,9 @@ public static class EventExtensions
         /// <param name="position">The cursor position, relative to the top-left of the window,
         /// when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved; otherwise <see langword="false"/>.</returns>
-        public bool MouseMoved(out PointF position)
+        public bool MouseMoved(out Point position)
         {
-            if (e is MouseMovedEvent { Position: PointF moved })
+            if (e is MouseMovedEvent { Position: Point moved })
             {
                 position = moved;
                 return true;
@@ -148,7 +148,7 @@ public static class EventExtensions
         /// when this method returns <see langword="true"/>.</param>
         /// <param name="buttons">The buttons held during the move when this method returns <see langword="true"/>.</param>
         /// <returns><see langword="true"/> if the mouse moved; otherwise <see langword="false"/>.</returns>
-        public bool MouseMoved(out PointF position, out MouseButtonState buttons)
+        public bool MouseMoved(out Point position, out MouseButtonState buttons)
         {
             if (e.TryGetValue(out MouseMovedEvent moved))
             {

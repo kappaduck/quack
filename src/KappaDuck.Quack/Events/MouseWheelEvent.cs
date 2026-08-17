@@ -22,7 +22,7 @@ public readonly struct MouseWheelEvent : IEvent
         WindowId = e.WindowId;
         Which = e.Which;
         Delta = new Vector2(e.X * sign, e.Y * sign);
-        Position = new PointF(e.MouseX, e.MouseY);
+        Position = new Point(e.MouseX, e.MouseY);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public readonly struct MouseWheelEvent : IEvent
     /// <summary>
     /// Gets the cursor position, relative to the top-left of the window, when the wheel was scrolled.
     /// </summary>
-    public PointF Position { get; }
+    public Point Position { get; }
 
     /// <summary>
     /// Gets the mouse device which scrolled.

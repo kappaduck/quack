@@ -79,7 +79,7 @@ internal sealed class RectITests
     {
         RectI rect = new(10, 20, 30, 40);
 
-        PointF center = rect.Center;
+        Point center = rect.Center;
 
         await center.X.Should().BeEqualTo(25f);
         await center.Y.Should().BeEqualTo(40f);

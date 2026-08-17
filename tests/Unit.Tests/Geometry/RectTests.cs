@@ -19,7 +19,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF position = rect.Position;
+        Point position = rect.Position;
 
         await position.X.Should().BeEqualTo(10f);
         await position.Y.Should().BeEqualTo(20f);
@@ -30,7 +30,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f)
         {
-            Position = new PointF(50, 60)
+            Position = new Point(50, 60)
         };
 
         await rect.X.Should().BeEqualTo(50f);
@@ -79,7 +79,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF center = rect.Center;
+        Point center = rect.Center;
 
         await center.X.Should().BeEqualTo(25f);
         await center.Y.Should().BeEqualTo(40f);
@@ -90,7 +90,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF topLeft = rect.TopLeft;
+        Point topLeft = rect.TopLeft;
 
         await topLeft.X.Should().BeEqualTo(10f);
         await topLeft.Y.Should().BeEqualTo(20f);
@@ -101,7 +101,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF topRight = rect.TopRight;
+        Point topRight = rect.TopRight;
 
         await topRight.X.Should().BeEqualTo(40f);
         await topRight.Y.Should().BeEqualTo(20f);
@@ -112,7 +112,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF bottomLeft = rect.BottomLeft;
+        Point bottomLeft = rect.BottomLeft;
 
         await bottomLeft.X.Should().BeEqualTo(10f);
         await bottomLeft.Y.Should().BeEqualTo(60f);
@@ -123,7 +123,7 @@ internal sealed class RectTests
     {
         Rect rect = new(10f, 20f, 30f, 40f);
 
-        PointF bottomRight = rect.BottomRight;
+        Point bottomRight = rect.BottomRight;
 
         await bottomRight.X.Should().BeEqualTo(40f);
         await bottomRight.Y.Should().BeEqualTo(60f);
@@ -172,7 +172,7 @@ internal sealed class RectTests
     public async Task ContainsShouldReturnTrueWhenPointIsInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF point = new(20f, 20f);
+        Point point = new(20f, 20f);
 
         await rect.Contains(point).Should().BeTrue();
     }
@@ -181,7 +181,7 @@ internal sealed class RectTests
     public async Task ContainsShouldReturnTrueWhenPointIsOnEdgeOfRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF point = new(10f, 20f);
+        Point point = new(10f, 20f);
 
         await rect.Contains(point).Should().BeTrue();
     }
@@ -190,7 +190,7 @@ internal sealed class RectTests
     public async Task ContainsShouldReturnFalseWhenPointIsOutsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF point = new(50f, 50f);
+        Point point = new(50f, 50f);
 
         await rect.Contains(point).Should().BeFalse();
     }
@@ -199,7 +199,7 @@ internal sealed class RectTests
     public async Task ContainsShouldReturnFalseWhenRectIsEmpty()
     {
         Rect rect = new(10f, 10f, 0f, 30f);
-        PointF point = new(10f, 20f);
+        Point point = new(10f, 20f);
 
         await rect.Contains(point).Should().BeFalse();
     }
@@ -253,7 +253,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnTrueWhenAllPointIsInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(15f, 15f), new(20f, 20f), new(30f, 30f)];
+        Point[] points = [new(15f, 15f), new(20f, 20f), new(30f, 30f)];
 
         await rect.ContainsAll(points).Should().BeTrue();
     }
@@ -262,7 +262,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnFalseWhenNoPointsAreInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        Point[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAll(points).Should().BeFalse();
     }
@@ -271,7 +271,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnFalseWhenRectIsEmpty()
     {
         Rect rect = new(10f, 10f, 0f, 30f);
-        PointF[] points = [new(10f, 20f), new(15f, 25f)];
+        Point[] points = [new(10f, 20f), new(15f, 25f)];
 
         await rect.ContainsAll(points).Should().BeFalse();
     }
@@ -287,7 +287,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnTrueWhenPointsIsArrayAndContainsAllPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(10f, 10f), new(20f, 20f), new(30f, 30f)];
+        Point[] points = [new(10f, 10f), new(20f, 20f), new(30f, 30f)];
 
         await rect.ContainsAll(points.AsEnumerable()).Should().BeTrue();
     }
@@ -296,7 +296,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnTrueWhenPointsIsListAndContainsAllPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        List<PointF> points = [new(10f, 15f), new(20f, 20f), new(30f, 30f)];
+        List<Point> points = [new(10f, 15f), new(20f, 20f), new(30f, 30f)];
 
         await rect.ContainsAll(points).Should().BeTrue();
     }
@@ -305,15 +305,15 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnTrueWhenPointsIsEnumerableAndContainsAllPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        IEnumerable<PointF> points = PointsAsEnumerable();
+        IEnumerable<Point> points = PointsAsEnumerable();
 
         await rect.ContainsAll(points).Should().BeTrue();
 
-        static IEnumerable<PointF> PointsAsEnumerable()
+        static IEnumerable<Point> PointsAsEnumerable()
         {
-            yield return new PointF(10f, 10f);
-            yield return new PointF(20f, 20f);
-            yield return new PointF(30f, 30f);
+            yield return new Point(10f, 10f);
+            yield return new Point(20f, 20f);
+            yield return new Point(30f, 30f);
         }
     }
 
@@ -321,7 +321,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnFalseWhenPointsIsArrayAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        Point[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAll(points.AsEnumerable()).Should().BeFalse();
     }
@@ -330,7 +330,7 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnFalseWhenPointsIsListAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        List<PointF> points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        List<Point> points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAll(points).Should().BeFalse();
     }
@@ -339,15 +339,15 @@ internal sealed class RectTests
     public async Task ContainsAllShouldReturnFalseWhenPointsIsEnumerableAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        IEnumerable<PointF> points = PointsAsEnumerable();
+        IEnumerable<Point> points = PointsAsEnumerable();
 
         await rect.ContainsAll(points).Should().BeFalse();
 
-        static IEnumerable<PointF> PointsAsEnumerable()
+        static IEnumerable<Point> PointsAsEnumerable()
         {
-            yield return new PointF(5f, 5f);
-            yield return new PointF(50f, 50f);
-            yield return new PointF(100f, 100f);
+            yield return new Point(5f, 5f);
+            yield return new Point(50f, 50f);
+            yield return new Point(100f, 100f);
         }
     }
 
@@ -355,7 +355,7 @@ internal sealed class RectTests
     public async Task ContainsAllEnumerableShouldReturnFalseWhenRectIsEmpty()
     {
         Rect rect = new(10f, 10f, 30f, 0f);
-        PointF[] points = [];
+        Point[] points = [];
 
         await rect.ContainsAll(points.AsEnumerable()).Should().BeFalse();
     }
@@ -364,7 +364,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnTrueWhenAnyPointIsInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
+        Point[] points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
 
         await rect.ContainsAny(points).Should().BeTrue();
     }
@@ -373,7 +373,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnFalseWhenNoPointsAreInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        Point[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAny(points).Should().BeFalse();
     }
@@ -382,7 +382,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnFalseWhenRectIsEmpty()
     {
         Rect rect = new(10f, 10f, 0f, 30f);
-        PointF[] points = [new(10f, 20f), new(15f, 25f)];
+        Point[] points = [new(10f, 20f), new(15f, 25f)];
 
         await rect.ContainsAny(points).Should().BeFalse();
     }
@@ -398,7 +398,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnTrueWhenPointsIsArrayAndContainsPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
+        Point[] points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
 
         await rect.ContainsAny(points.AsEnumerable()).Should().BeTrue();
     }
@@ -407,7 +407,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnTrueWhenPointsIsListAndContainsPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        List<PointF> points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
+        List<Point> points = [new(5f, 5f), new(20f, 20f), new(50f, 50f)];
 
         await rect.ContainsAny(points).Should().BeTrue();
     }
@@ -416,15 +416,15 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnTrueWhenPointsIsEnumerableAndContainsPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        IEnumerable<PointF> points = PointsAsEnumerable();
+        IEnumerable<Point> points = PointsAsEnumerable();
 
         await rect.ContainsAny(points).Should().BeTrue();
 
-        static IEnumerable<PointF> PointsAsEnumerable()
+        static IEnumerable<Point> PointsAsEnumerable()
         {
-            yield return new PointF(5f, 5f);
-            yield return new PointF(20f, 20f);
-            yield return new PointF(50f, 50f);
+            yield return new Point(5f, 5f);
+            yield return new Point(20f, 20f);
+            yield return new Point(50f, 50f);
         }
     }
 
@@ -432,7 +432,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnFalseWhenPointsIsArrayAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        Point[] points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAny(points.AsEnumerable()).Should().BeFalse();
     }
@@ -441,7 +441,7 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnFalseWhenPointsIsListAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        List<PointF> points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
+        List<Point> points = [new(5f, 5f), new(50f, 50f), new(100f, 100f)];
 
         await rect.ContainsAny(points).Should().BeFalse();
     }
@@ -450,15 +450,15 @@ internal sealed class RectTests
     public async Task ContainsAnyShouldReturnFalseWhenPointsIsEnumerableAndContainsNoPointInsideRect()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        IEnumerable<PointF> points = PointsAsEnumerable();
+        IEnumerable<Point> points = PointsAsEnumerable();
 
         await rect.ContainsAny(points).Should().BeFalse();
 
-        static IEnumerable<PointF> PointsAsEnumerable()
+        static IEnumerable<Point> PointsAsEnumerable()
         {
-            yield return new PointF(5f, 5f);
-            yield return new PointF(50f, 50f);
-            yield return new PointF(100f, 100f);
+            yield return new Point(5f, 5f);
+            yield return new Point(50f, 50f);
+            yield return new Point(100f, 100f);
         }
     }
 
@@ -466,7 +466,7 @@ internal sealed class RectTests
     public async Task ContainsAnyEnumerableShouldReturnFalseWhenRectIsEmpty()
     {
         Rect rect = new(10f, 10f, 30f, 0f);
-        PointF[] points = [];
+        Point[] points = [];
 
         await rect.ContainsAny(points.AsEnumerable()).Should().BeFalse();
     }
@@ -486,7 +486,7 @@ internal sealed class RectTests
     public async Task EncapsulateShouldNotGrowsRectWhenAlreadyContainsThePoint()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF point = new(20f, 20f);
+        Point point = new(20f, 20f);
 
         rect.Encapsulate(point);
         await rect.Should().BeEqualTo(rect);
@@ -496,7 +496,7 @@ internal sealed class RectTests
     public async Task EncapsulateShouldGrowsRectToIncludePoint()
     {
         Rect rect = new(10f, 10f, 30f, 30f);
-        PointF point = new(50f, 50f);
+        Point point = new(50f, 50f);
 
         rect.Encapsulate(point);
 
@@ -508,7 +508,7 @@ internal sealed class RectTests
     public async Task EncapsulateShouldGrowsRectWhenIsEmpty()
     {
         Rect rect = new(10f, 10f, 0f, 0f);
-        PointF point = new(20f, 20f);
+        Point point = new(20f, 20f);
 
         rect.Encapsulate(point);
 

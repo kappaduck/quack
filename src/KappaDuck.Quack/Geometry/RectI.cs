@@ -121,9 +121,9 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// Gets the center point of the rectangle.
     /// </summary>
     /// <remarks>
-    /// Returns a <see cref="PointF"/> because the true center of an integer rectangle is not always integer-valued.
+    /// Returns a <see cref="Point"/> because the true center of an integer rectangle is not always integer-valued.
     /// </remarks>
-    public readonly PointF Center => new(X + (Width / 2f), Y + (Height / 2f));
+    public readonly Point Center => new(X + (Width / 2f), Y + (Height / 2f));
 
     /// <summary>
     /// Gets the top-left corner of the rectangle.

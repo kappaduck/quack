@@ -324,7 +324,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// it is safe to toggle logical presentation during the rendering of a frame: perhaps most of the rendering is done to specific dimensions
     /// but to make fonts look sharp, the app turns off logical presentation while drawing text.
     /// Letterboxing will only happen if logical presentation is enabled during <see cref="Present"/>; be sure to re-enable it first if you were using it.
-    /// You can convert coordinates in an event into rendering coordinates using <see cref="MapCoordinatesFromWindow(PointF)"/>.
+    /// You can convert coordinates in an event into rendering coordinates using <see cref="MapCoordinatesFromWindow(Point)"/>.
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
     /// <exception cref="QuackInteropException">Thrown when failed to get or set the presentation.</exception>
@@ -651,7 +651,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <param name="point">The point to draw, in render coordinates.</param>
     /// <exception cref="QuackInteropException">Failed to draw the point.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public void Draw(PointF point)
+    public void Draw(Point point)
     {
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RenderPoint(Handle, point.X, point.Y)));
@@ -664,7 +664,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <param name="connected"><see langword="true"/> to connect all theses points otherwise <see langword="false"/>.</param>
     /// <exception cref="QuackInteropException">Failed to draw the points.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public void Draw(ReadOnlySpan<PointF> points, bool connected = false)
+    public void Draw(ReadOnlySpan<Point> points, bool connected = false)
     {
         ThrowIfDisposed();
 
@@ -681,7 +681,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <param name="to">The end point, in render coordinates.</param>
     /// <exception cref="QuackInteropException">Failed to draw the line.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public void Draw(PointF from, PointF to)
+    public void Draw(Point from, Point to)
     {
         ThrowIfDisposed();
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RenderLine(Handle, from.X, from.Y, to.X, to.Y)));
@@ -753,15 +753,15 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <param name="source">The region of the texture to draw, or <see langword="null"/> to draw the whole texture.</param>
     /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public void Draw(Texture texture, Rect destination, Angle angle, PointF? center = null, FlipMode flip = FlipMode.None, Rect? source = null)
+    public void Draw(Texture texture, Rect destination, Angle angle, Point? center = null, FlipMode flip = FlipMode.None, Rect? source = null)
     {
         ThrowIfDisposed();
 
         Rect src = source.GetValueOrDefault();
-        PointF pivot = center.GetValueOrDefault();
+        Point pivot = center.GetValueOrDefault();
 
         Rect* sourceRect = source.HasValue ? &src : null;
-        PointF* centerPoint = center.HasValue ? &pivot : null;
+        Point* centerPoint = center.HasValue ? &pivot : null;
 
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RenderTextureRotated(Handle, texture.Handle, sourceRect, &destination, angle.Degrees, centerPoint, flip)));
     }
@@ -796,7 +796,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <exception cref="QuackInteropException">Failed to draw the texture.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public void DrawAffine(Texture texture, PointF origin, PointF right, PointF down, Rect? source = null)
+    public void DrawAffine(Texture texture, Point origin, Point right, Point down, Rect? source = null)
     {
         ThrowIfDisposed();
 
@@ -868,7 +868,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <exception cref="QuackInteropException">Failed to draw the text.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public void DrawDebugText(PointF position, string text, Color color)
+    public void DrawDebugText(Point position, string text, Color color)
     {
         ThrowIfDisposed();
 
@@ -925,14 +925,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <returns>The equivalent point in render coordinates.</returns>
     /// <exception cref="QuackInteropException">Failed to convert the coordinates.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public PointF MapCoordinatesFromWindow(PointF point)
+    public Point MapCoordinatesFromWindow(Point point)
     {
         ThrowIfDisposed();
 
         float x, y;
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RenderCoordinatesFromWindow(Handle, point.X, point.Y, &x, &y)));
 
-        return new PointF(x, y);
+        return new Point(x, y);
     }
 
     /// <summary>
@@ -943,14 +943,14 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <returns>The equivalent point in window coordinates.</returns>
     /// <exception cref="QuackInteropException">Failed to convert the coordinates.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public PointF MapCoordinatesToWindow(PointF point)
+    public Point MapCoordinatesToWindow(Point point)
     {
         ThrowIfDisposed();
 
         float x, y;
         SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.RenderCoordinatesToWindow(Handle, point.X, point.Y, &x, &y)));
 
-        return new PointF(x, y);
+        return new Point(x, y);
     }
 
     /// <summary>

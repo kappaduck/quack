@@ -5,12 +5,12 @@ using KappaDuck.Quack.Geometry;
 
 namespace Unit.Tests.Geometry;
 
-internal sealed class PointFTests
+internal sealed class PointTests
 {
     [Test]
     public async Task OriginShouldReturnTheOriginPoint()
     {
-        PointF origin = PointF.Origin;
+        Point origin = Point.Origin;
 
         await origin.X.Should().BeZero();
         await origin.Y.Should().BeZero();
@@ -19,8 +19,8 @@ internal sealed class PointFTests
     [Test]
     public async Task ToShouldReturnTheDisplacementVector()
     {
-        PointF from = new(3, 4);
-        PointF target = new(5, 4);
+        Point from = new(3, 4);
+        Point target = new(5, 4);
 
         Vector2 displacement = from.To(target);
 
@@ -31,8 +31,8 @@ internal sealed class PointFTests
     [Test]
     public async Task DistanceShouldReturnTheDistanceBetweenTwoPoints()
     {
-        PointF left = new(1f, 2f);
-        PointF right = new(4f, 6f);
+        Point left = new(1f, 2f);
+        Point right = new(4f, 6f);
 
         float distance = left.Distance(right);
         await distance.Should().BeCloseTo(5f, 0.0001f);
@@ -41,7 +41,7 @@ internal sealed class PointFTests
     [Test]
     public async Task FloorShouldConvertPointByFlooringEachComponent()
     {
-        PointF point = new(7.64f, -7.6f);
+        Point point = new(7.64f, -7.6f);
 
         PointI result = point.Floor();
         await result.X.Should().BeEqualTo(7);
@@ -51,7 +51,7 @@ internal sealed class PointFTests
     [Test]
     public async Task RoundShouldConvertPointByRoundingEachComponent()
     {
-        PointF point = new(7.64f, -7.6f);
+        Point point = new(7.64f, -7.6f);
 
         PointI result = point.Round();
         await result.X.Should().BeEqualTo(8);
@@ -61,7 +61,7 @@ internal sealed class PointFTests
     [Test]
     public async Task TruncateShouldConvertPointByTruncatingEachComponent()
     {
-        PointF point = new(7.64f, -7.6f);
+        Point point = new(7.64f, -7.6f);
 
         PointI result = point.Truncate();
         await result.X.Should().BeEqualTo(7);
@@ -71,10 +71,10 @@ internal sealed class PointFTests
     [Test]
     public async Task StaticDistanceShouldReturnTheDistanceBetweenTwoPoints()
     {
-        PointF left = new(1f, 2f);
-        PointF right = new(4f, 6f);
+        Point left = new(1f, 2f);
+        Point right = new(4f, 6f);
 
-        float distance = PointF.Distance(left, right);
+        float distance = Point.Distance(left, right);
         await distance.Should().BeCloseTo(5f, 0.0001f);
     }
 
@@ -82,10 +82,10 @@ internal sealed class PointFTests
     public async Task LerpShouldInterpolateBetweenTwoPoints()
     {
         const float t = 0.5f;
-        PointF from = new(1f, 2f);
-        PointF to = new(3f, 4f);
+        Point from = new(1f, 2f);
+        Point to = new(3f, 4f);
 
-        PointF result = PointF.Lerp(from, to, t);
+        Point result = Point.Lerp(from, to, t);
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -95,10 +95,10 @@ internal sealed class PointFTests
     public async Task LerpUnclampedShouldInterpolateBetweenTwoPointsWithoutClamping()
     {
         const float t = 1.5f;
-        PointF from = new(1f, 2f);
-        PointF to = new(3f, 4f);
+        Point from = new(1f, 2f);
+        Point to = new(3f, 4f);
 
-        PointF result = PointF.LerpUnclamped(from, to, t);
+        Point result = Point.LerpUnclamped(from, to, t);
 
         await result.X.Should().BeEqualTo(4f);
         await result.Y.Should().BeEqualTo(5f);
@@ -107,7 +107,7 @@ internal sealed class PointFTests
     [Test]
     public async Task ShouldDeconstructPointIntoItsComponents()
     {
-        (float x, float y) = new PointF(3f, 4f);
+        (float x, float y) = new Point(3f, 4f);
 
         await x.Should().BeEqualTo(3f);
         await y.Should().BeEqualTo(4f);
@@ -116,8 +116,8 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorEqualsShouldReturnTrueWhenPointsAreEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(3f, 4f);
+        Point left = new(3f, 4f);
+        Point right = new(3f, 4f);
 
         bool result = left == right;
         await result.Should().BeTrue();
@@ -126,8 +126,8 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorEqualsShouldReturnFalseWhenPointsAreNotEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(3f, 5f);
+        Point left = new(3f, 4f);
+        Point right = new(3f, 5f);
 
         bool result = left == right;
         await result.Should().BeFalse();
@@ -136,8 +136,8 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnTrueWhenPointsAreNotEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(3f, 5f);
+        Point left = new(3f, 4f);
+        Point right = new(3f, 5f);
 
         bool result = left != right;
         await result.Should().BeTrue();
@@ -146,8 +146,8 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorNotEqualsShouldReturnFalseWhenPointsAreEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(3f, 4f);
+        Point left = new(3f, 4f);
+        Point right = new(3f, 4f);
 
         bool result = left != right;
         await result.Should().BeFalse();
@@ -156,8 +156,8 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsShouldReturnTrueWhenPointsAreEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(3f, 4f);
+        Point left = new(3f, 4f);
+        Point right = new(3f, 4f);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -166,8 +166,8 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsShouldReturnFalseWhenPointsAreNotEquals()
     {
-        PointF left = new(3f, 4f);
-        PointF right = new(4f, 4f);
+        Point left = new(3f, 4f);
+        Point right = new(4f, 4f);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -176,8 +176,8 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsWithObjectShouldReturnTrueWhenPointsAreEquals()
     {
-        PointF left = new(3f, 4f);
-        object right = new PointF(3f, 4f);
+        Point left = new(3f, 4f);
+        object right = new Point(3f, 4f);
 
         bool result = left.Equals(right);
         await result.Should().BeTrue();
@@ -186,8 +186,8 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsWithObjectShouldReturnFalseWhenPointsAreNotEquals()
     {
-        PointF left = new(3f, 4f);
-        object right = new PointF(4f, 4f);
+        Point left = new(3f, 4f);
+        object right = new Point(4f, 4f);
 
         bool result = left.Equals(right);
         await result.Should().BeFalse();
@@ -196,7 +196,7 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsWithAnyTypeExceptPointfShouldReturnFalse()
     {
-        PointF left = new(3f, 4f);
+        Point left = new(3f, 4f);
         const float right = 3f;
 
         bool result = left.Equals(right);
@@ -206,7 +206,7 @@ internal sealed class PointFTests
     [Test]
     public async Task EqualsWithNullShouldReturnFalse()
     {
-        PointF left = new(3f, 4f);
+        Point left = new(3f, 4f);
 
         bool result = left.Equals(null);
         await result.Should().BeFalse();
@@ -215,7 +215,7 @@ internal sealed class PointFTests
     [Test]
     public async Task ToStringShouldReturnTheCorrectFormat()
     {
-        PointF point = new(3f, 4f);
+        Point point = new(3f, 4f);
 
         string result = point.ToString();
         await result.Should().BeEqualTo("(3, 4)");
@@ -224,7 +224,7 @@ internal sealed class PointFTests
     [Test]
     public async Task ToVector2ShouldConvertPointToVector()
     {
-        PointF point = new(3f, 4f);
+        Point point = new(3f, 4f);
 
         Vector2 vector = point.ToVector2();
 
@@ -235,10 +235,10 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorAddShouldTranslateAPointByDisplacementVector2()
     {
-        PointF left = new(1f, 2f);
+        Point left = new(1f, 2f);
         Vector2 right = new(3f, 4f);
 
-        PointF result = left + right;
+        Point result = left + right;
 
         await result.X.Should().BeEqualTo(4f);
         await result.Y.Should().BeEqualTo(6f);
@@ -247,10 +247,10 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorAddShouldTranslateAPointByDisplacementVector2i()
     {
-        PointF left = new(1f, 2f);
+        Point left = new(1f, 2f);
         Vector2I right = new(3, 4);
 
-        PointF result = left + right;
+        Point result = left + right;
 
         await result.X.Should().BeEqualTo(4f);
         await result.Y.Should().BeEqualTo(6f);
@@ -259,10 +259,10 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorSubstractShouldTranslateAPointBackwardsByDisplacementVector2()
     {
-        PointF left = new(5f, 7f);
+        Point left = new(5f, 7f);
         Vector2 right = new(3f, 4f);
 
-        PointF result = left - right;
+        Point result = left - right;
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -271,10 +271,10 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorSubstractShouldTranslateAPointBackwardsByDisplacementVector2i()
     {
-        PointF left = new(5f, 7f);
+        Point left = new(5f, 7f);
         Vector2I right = new(3, 4);
 
-        PointF result = left - right;
+        Point result = left - right;
 
         await result.X.Should().BeEqualTo(2f);
         await result.Y.Should().BeEqualTo(3f);
@@ -283,8 +283,8 @@ internal sealed class PointFTests
     [Test]
     public async Task OperatorSubstractShouldCopmputeTheDisplacementBetweenTwoPoints()
     {
-        PointF left = new(5f, 7f);
-        PointF right = new(3f, 4f);
+        Point left = new(5f, 7f);
+        Point right = new(3f, 4f);
 
         Vector2 result = left - right;
 

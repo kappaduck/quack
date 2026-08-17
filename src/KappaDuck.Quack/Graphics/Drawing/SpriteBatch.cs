@@ -97,10 +97,10 @@ public sealed class SpriteBatch : IDrawable
         float right = (float)(region.X + region.Width) / texture.Width;
         float bottom = (float)(region.Y + region.Height) / texture.Height;
 
-        Vertex topLeft = new(transform.TransformPoint(new PointF(0f, 0f)), color, new PointF(left, top));
-        Vertex topRight = new(transform.TransformPoint(new PointF(width, 0f)), color, new PointF(right, top));
-        Vertex bottomRight = new(transform.TransformPoint(new PointF(width, height)), color, new PointF(right, bottom));
-        Vertex bottomLeft = new(transform.TransformPoint(new PointF(0f, height)), color, new PointF(left, bottom));
+        Vertex topLeft = new(transform.TransformPoint(new Point(0f, 0f)), color, new Point(left, top));
+        Vertex topRight = new(transform.TransformPoint(new Point(width, 0f)), color, new Point(right, top));
+        Vertex bottomRight = new(transform.TransformPoint(new Point(width, height)), color, new Point(right, bottom));
+        Vertex bottomLeft = new(transform.TransformPoint(new Point(0f, height)), color, new Point(left, bottom));
 
         if (_count + VerticesPerSprite > _vertices.Length)
             Array.Resize(ref _vertices, int.Max(_count + VerticesPerSprite, _vertices.Length == 0 ? 4 * VerticesPerSprite : _vertices.Length * 2));

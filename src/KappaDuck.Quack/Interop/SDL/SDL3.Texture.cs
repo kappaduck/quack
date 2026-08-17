@@ -74,12 +74,12 @@ internal static partial class SDL3
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderTextureAffine")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool RenderTextureAffine(SDL_Renderer* renderer, SDL_Texture* texture, Rect* source, PointF* origin, PointF* right, PointF* down);
+    internal static partial bool RenderTextureAffine(SDL_Renderer* renderer, SDL_Texture* texture, Rect* source, Point* origin, Point* right, Point* down);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderTextureRotated")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static partial bool RenderTextureRotated(SDL_Renderer* renderer, SDL_Texture* texture, Rect* source, Rect* destination, double angle, PointF* center, FlipMode flip);
+    internal static partial bool RenderTextureRotated(SDL_Renderer* renderer, SDL_Texture* texture, Rect* source, Rect* destination, double angle, Point* center, FlipMode flip);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_RenderTextureTiled")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
