@@ -20,7 +20,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      quack: ./quack.slnx
+      quack: ./quack.slnf
 
     steps:
       - name: Checkout repository
