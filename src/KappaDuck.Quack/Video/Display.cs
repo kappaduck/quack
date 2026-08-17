@@ -201,7 +201,7 @@ public readonly struct Display : IEquatable<Display>
     /// <see langword="true"/> to include high pixel density modes in the search; otherwise <see langword="false"/>.
     /// </param>
     /// <returns>The closest matching mode, or <see langword="null"/> if every available mode is too small.</returns>
-    public DisplayMode? GetClosestFullscreenMode(Size dimension, float refreshRate = 0f, bool includeHighDensityModes = false)
+    public DisplayMode? GetClosestFullscreenMode(SizeI dimension, float refreshRate = 0f, bool includeHighDensityModes = false)
         => GetClosestFullscreenMode(dimension.Width, dimension.Height, refreshRate, includeHighDensityModes);
 
     /// <summary>

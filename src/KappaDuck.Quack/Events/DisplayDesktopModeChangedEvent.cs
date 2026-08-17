@@ -16,7 +16,7 @@ public readonly struct DisplayDesktopModeChangedEvent : IEvent
     internal DisplayDesktopModeChangedEvent(SDL_DisplayEvent e)
     {
         DisplayId = e.DisplayId;
-        Size = new Size(e.Data1, e.Data2);
+        Size = new SizeI(e.Data1, e.Data2);
         Width = Size.Width;
         Height = Size.Height;
     }
@@ -29,7 +29,7 @@ public readonly struct DisplayDesktopModeChangedEvent : IEvent
     /// <summary>
     /// Gets the new desktop mode size.
     /// </summary>
-    public Size Size { get; }
+    public SizeI Size { get; }
 
     /// <summary>
     /// Gets the updated width.

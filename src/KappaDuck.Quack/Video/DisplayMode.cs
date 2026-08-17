@@ -16,7 +16,7 @@ public readonly struct DisplayMode
     {
         Display = new Display(mode.DisplayId);
         Format = mode.Format;
-        Size = new Size(mode.Width, mode.Height);
+        Size = new SizeI(mode.Width, mode.Height);
         PixelDensity = mode.PixelDensity;
         RefreshRate = mode.RefreshRate;
         RefreshRateNumerator = mode.RefreshRateNumerator;
@@ -39,7 +39,7 @@ public readonly struct DisplayMode
     /// <remarks>
     /// Multiply by <see cref="PixelDensity"/> to obtain the size in physical pixels.
     /// </remarks>
-    public Size Size { get; }
+    public SizeI Size { get; }
 
     /// <summary>
     /// Gets the width of the mode in screen coordinates.

@@ -46,19 +46,19 @@ public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOpe
     public static SizeF Zero { get; } = new(0f, 0f);
 
     /// <summary>
-    /// Returns the largest <see cref="Size"/> whose components are less than or equal to those of this size.
+    /// Returns the largest <see cref="SizeI"/> whose components are less than or equal to those of this size.
     /// </summary>
-    public readonly Size Floor() => new((int)MathF.Floor(Width), (int)MathF.Floor(Height));
+    public readonly SizeI Floor() => new((int)MathF.Floor(Width), (int)MathF.Floor(Height));
 
     /// <summary>
-    /// Returns the <see cref="Size"/> whose components are the nearest integer to those of this size.
+    /// Returns the <see cref="SizeI"/> whose components are the nearest integer to those of this size.
     /// </summary>
-    public readonly Size Round() => new((int)MathF.Round(Width), (int)MathF.Round(Height));
+    public readonly SizeI Round() => new((int)MathF.Round(Width), (int)MathF.Round(Height));
 
     /// <summary>
-    /// Returns the <see cref="Size"/> whose components are truncated toward zero from those of this size.
+    /// Returns the <see cref="SizeI"/> whose components are truncated toward zero from those of this size.
     /// </summary>
-    public readonly Size Truncate() => new((int)Width, (int)Height);
+    public readonly SizeI Truncate() => new((int)Width, (int)Height);
 
     /// <summary>
     /// Deconstructs the size into its width and height components.
@@ -96,13 +96,13 @@ public struct SizeF(float width, float height) : IEquatable<SizeF>, IEqualityOpe
         => Utf8.TryWrite(utf8Destination, provider, $"({Width}, {Height})", out bytesWritten);
 
     /// <summary>
-    /// Explicitly converts a <see cref="SizeF"/> to a <see cref="Size"/> by truncating components.
+    /// Explicitly converts a <see cref="SizeF"/> to a <see cref="SizeI"/> by truncating components.
     /// </summary>
     /// <remarks>
     /// Use <see cref="Floor"/>, <see cref="Round"/>, or <see cref="Truncate"/> for explicit rounding control.
     /// </remarks>
     /// <param name="value">The size to convert.</param>
-    public static explicit operator Size(SizeF value) => value.Truncate();
+    public static explicit operator SizeI(SizeF value) => value.Truncate();
 
     /// <summary>
     /// Determines whether two sizes are equal.

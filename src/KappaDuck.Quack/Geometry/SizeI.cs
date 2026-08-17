@@ -11,12 +11,12 @@ namespace KappaDuck.Quack.Geometry;
 /// </summary>
 /// <param name="width">The width component of the size.</param>
 /// <param name="height">The height component of the size.</param>
-public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators<Size, Size, bool>, ISpanFormattable, IUtf8SpanFormattable
+public struct SizeI(int width, int height) : IEquatable<SizeI>, IEqualityOperators<SizeI, SizeI, bool>, ISpanFormattable, IUtf8SpanFormattable
 {
     /// <summary>
     /// Creates a zero size (0, 0).
     /// </summary>
-    public Size() : this(0, 0)
+    public SizeI() : this(0, 0)
     {
     }
 
@@ -43,7 +43,7 @@ public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators
     /// <summary>
     /// Gets a size with all components set to zero.
     /// </summary>
-    public static Size Zero { get; } = new(0, 0);
+    public static SizeI Zero { get; } = new(0, 0);
 
     /// <summary>
     /// Deconstructs the size into its width and height components.
@@ -57,10 +57,10 @@ public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators
     /// </summary>
     /// <param name="other">The size to compare with the current size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public readonly bool Equals(Size other) => Width == other.Width && Height == other.Height;
+    public readonly bool Equals(SizeI other) => Width == other.Width && Height == other.Height;
 
     /// <inheritdoc/>
-    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is Size other && Equals(other);
+    public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is SizeI other && Equals(other);
 
     /// <inheritdoc/>
     public override readonly int GetHashCode() => HashCode.Combine(Width, Height);
@@ -91,7 +91,7 @@ public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(Size left, Size right) => left.Equals(right);
+    public static bool operator ==(SizeI left, SizeI right) => left.Equals(right);
 
     /// <summary>
     /// Determines whether two sizes are not equal.
@@ -99,5 +99,5 @@ public struct Size(int width, int height) : IEquatable<Size>, IEqualityOperators
     /// <param name="left">The left size.</param>
     /// <param name="right">The right size.</param>
     /// <returns><see langword="true"/> if the sizes are not equal; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(Size left, Size right) => !(left == right);
+    public static bool operator !=(SizeI left, SizeI right) => !(left == right);
 }

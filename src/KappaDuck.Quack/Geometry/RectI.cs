@@ -28,7 +28,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// </summary>
     /// <param name="position">The position of the top-left corner of the rectangle.</param>
     /// <param name="size">The size of the rectangle.</param>
-    public RectI(PointI position, Size size) : this(position.X, position.Y, size.Width, size.Height)
+    public RectI(PointI position, SizeI size) : this(position.X, position.Y, size.Width, size.Height)
     {
     }
 
@@ -85,7 +85,7 @@ public struct RectI(int x, int y, int width, int height) : IEquatable<RectI>, IE
     /// <summary>
     /// Gets or sets the size of the rectangle.
     /// </summary>
-    public Size Size
+    public SizeI Size
     {
         readonly get => new(Width, Height);
         set

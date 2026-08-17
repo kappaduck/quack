@@ -88,7 +88,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// <returns>The created window.</returns>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="size"/> is negative or zero.</exception>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window Build(string title, Size size) => new(title, size, Options);
+    public Window Build(string title, SizeI size) => new(title, size, Options);
 
     /// <summary>
     /// Builds the window with the given title and size.
@@ -173,7 +173,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// </summary>
     /// <param name="size">The maximum size.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder MaximumSize(Size size)
+    public WindowBuilder MaximumSize(SizeI size)
     {
         Options = Options with { MaximumSize = size };
         return this;
@@ -185,7 +185,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// <param name="width">The maximum width.</param>
     /// <param name="height">The maximum height.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder MaximumSize(int width, int height) => MaximumSize(new Size(width, height));
+    public WindowBuilder MaximumSize(int width, int height) => MaximumSize(new SizeI(width, height));
 
     /// <summary>
     /// Starts the window minimized, clearing the maximized and fullscreen states.
@@ -208,7 +208,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// </summary>
     /// <param name="size">The minimum size.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder MinimumSize(Size size)
+    public WindowBuilder MinimumSize(SizeI size)
     {
         Options = Options with { MinimumSize = size };
         return this;
@@ -220,7 +220,7 @@ public sealed class WindowBuilder(WindowOptions options)
     /// <param name="width">The minimum width.</param>
     /// <param name="height">The minimum height.</param>
     /// <returns>The same builder for chaining.</returns>
-    public WindowBuilder MinimumSize(int width, int height) => MinimumSize(new Size(width, height));
+    public WindowBuilder MinimumSize(int width, int height) => MinimumSize(new SizeI(width, height));
 
     /// <summary>
     /// Sets the opacity of the window, from 0 (transparent) to 1 (opaque).

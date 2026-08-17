@@ -24,9 +24,9 @@ public sealed class Surface : IDisposable
     /// </summary>
     /// <param name="size">The size in pixels</param>
     /// <param name="format">The pixel format</param>
-    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="SizeI.Width"/> or <see cref="SizeI.Height"/> is negative or zero.</exception>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
-    public Surface(Size size, PixelFormat format) : this(size.Width, size.Height, format)
+    public Surface(SizeI size, PixelFormat format) : this(size.Width, size.Height, format)
     {
     }
 
@@ -698,7 +698,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface that aliases the supplied memory.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface Create(Memory<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
+    public static Surface Create(Memory<byte> pixels, SizeI dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
 
     /// <summary>
     /// Creates a surface of an existing block of pixel memory without copying it.
@@ -761,7 +761,7 @@ public sealed class Surface : IDisposable
     /// <returns>A new surface containing a copy of the pixel data.</returns>
     /// <exception cref="QuackInteropException">Failed to create the surface.</exception>
     /// <exception cref="ArgumentOutOfRangeException">A dimension or pitch is invalid, or <paramref name="pixels"/> is too small.</exception>
-    public static Surface Create(ReadOnlySpan<byte> pixels, Size dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
+    public static Surface Create(ReadOnlySpan<byte> pixels, SizeI dimension, PixelFormat format, int pitch = 0) => Create(pixels, dimension.Width, dimension.Height, format, pitch);
 
     /// <summary>
     /// Creates a surface of the given size and format, copying the supplied pixel data into it.

@@ -42,7 +42,7 @@ internal sealed class RectITests
     {
         RectI rect = new(10, 20, 30, 40);
 
-        Size size = rect.Size;
+        SizeI size = rect.Size;
 
         await size.Width.Should().BeEqualTo(30);
         await size.Height.Should().BeEqualTo(40);
@@ -53,7 +53,7 @@ internal sealed class RectITests
     {
         RectI rect = new(10, 20, 30, 40)
         {
-            Size = new Size(50, 60)
+            Size = new SizeI(50, 60)
         };
 
         await rect.Width.Should().BeEqualTo(50);

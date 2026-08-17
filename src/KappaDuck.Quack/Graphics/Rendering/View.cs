@@ -128,7 +128,7 @@ public sealed class View
     /// <see cref="Renderer.CurrentOutputSize"/>, not <see cref="Renderer.OutputSize"/>.
     /// </param>
     /// <returns>The viewport, in pixels, clamped to at least 1x1.</returns>
-    public RectI ComputeViewport(Size targetSize)
+    public RectI ComputeViewport(SizeI targetSize)
     {
         int x = (int)MathF.Round(Viewport.X * targetSize.Width);
         int y = (int)MathF.Round(Viewport.Y * targetSize.Height);
@@ -147,7 +147,7 @@ public sealed class View
     /// </remarks>
     /// <param name="viewportSize">The pixel size of this view's viewport.</param>
     /// <returns>A transform mapping scene coordinates to viewport-local render coordinates.</returns>
-    public Transform GetTransform(Size viewportSize)
+    public Transform GetTransform(SizeI viewportSize)
     {
         Vector2 scale = new(viewportSize.Width / Size.Width, viewportSize.Height / Size.Height);
         Point center = new(viewportSize.Width / 2f, viewportSize.Height / 2f);

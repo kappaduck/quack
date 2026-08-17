@@ -65,15 +65,15 @@ public sealed class Cursor : IDisposable
     /// </remarks>
     /// <param name="data">The bitmap data, packed one bit per pixel, most significant bit first.</param>
     /// <param name="mask">The bitmap mask, packed one bit per pixel, most significant bit first.</param>
-    /// <param name="size">The cursor size in pixels. <see cref="Size.Width"/> must be a multiple of 8.</param>
+    /// <param name="size">The cursor size in pixels. <see cref="SizeI.Width"/> must be a multiple of 8.</param>
     /// <param name="hotspot">The cursor hotspot.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><see cref="Size.Width"/> or <see cref="Size.Height"/> is negative or zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><see cref="SizeI.Width"/> or <see cref="SizeI.Height"/> is negative or zero.</exception>
     /// <exception cref="ArgumentException">
-    /// <see cref="Size.Width"/> is not a multiple of 8, or <paramref name="data"/> or <paramref name="mask"/> is not
-    /// exactly <see cref="Size.Width"/> / 8 * <see cref="Size.Height"/> bytes long.
+    /// <see cref="SizeI.Width"/> is not a multiple of 8, or <paramref name="data"/> or <paramref name="mask"/> is not
+    /// exactly <see cref="SizeI.Width"/> / 8 * <see cref="SizeI.Height"/> bytes long.
     /// </exception>
     /// <exception cref="QuackInteropException">Failed to create the cursor.</exception>
-    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, Size size, PointI hotspot) : this(data, mask, size.Width, size.Height, hotspot)
+    public Cursor(ReadOnlySpan<byte> data, ReadOnlySpan<byte> mask, SizeI size, PointI hotspot) : this(data, mask, size.Width, size.Height, hotspot)
     {
     }
 

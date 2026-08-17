@@ -251,7 +251,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// </summary>
     /// <exception cref="QuackInteropException">Failed to get the output size.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public Size CurrentOutputSize
+    public SizeI CurrentOutputSize
     {
         get
         {
@@ -260,7 +260,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             int width, height;
             SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetCurrentRenderOutputSize(Handle, &width, &height)));
 
-            return new Size(width, height);
+            return new SizeI(width, height);
         }
     }
 
@@ -360,7 +360,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// </remarks>
     /// <exception cref="QuackInteropException">Failed to get the output size.</exception>
     /// <exception cref="ObjectDisposedException">The renderer is disposed.</exception>
-    public Size OutputSize
+    public SizeI OutputSize
     {
         get
         {
@@ -369,7 +369,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
             int width, height;
             SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.GetRenderOutputSize(Handle, &width, &height)));
 
-            return new Size(width, height);
+            return new SizeI(width, height);
         }
     }
 
@@ -607,7 +607,7 @@ public sealed class Renderer : IRenderTarget, IDisposable
     /// <param name="access">How the texture's pixels may be accessed after creation.</param>
     /// <returns>The created texture.</returns>
     /// <exception cref="QuackInteropException">The texture could not be created.</exception>
-    public Texture CreateTexture(Size size, PixelFormat format, TextureAccess access = TextureAccess.Static)
+    public Texture CreateTexture(SizeI size, PixelFormat format, TextureAccess access = TextureAccess.Static)
         => Texture.Create(this, size, format, access);
 
     /// <inheritdoc/>

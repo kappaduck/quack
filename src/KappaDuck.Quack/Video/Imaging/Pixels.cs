@@ -22,7 +22,7 @@ public static class Pixels
     /// <param name="destinationFormat">The format to convert to.</param>
     /// <param name="destinationPitch">The number of bytes per row in <paramref name="destination"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException">A dimension is negative, or a buffer is too small for its pitch and height.</exception>
-    public static void Convert(Size dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, int destinationPitch)
+    public static void Convert(SizeI dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, int destinationPitch)
         => Convert(dimension.Width, dimension.Height, source, sourceFormat, sourcePitch, destination, destinationFormat, destinationPitch);
 
     /// <summary>
@@ -60,7 +60,7 @@ public static class Pixels
     /// <param name="destinationColorspace">The colorspace of the destination data</param>
     /// <param name="destinationPitch">The number of bytes per row in <paramref name="destination"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException">A dimension is negative, or a buffer is too small for its pitch and height.</exception>
-    public static void Convert(Size dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, Colorspace sourceColorspace, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, Colorspace destinationColorspace, int destinationPitch)
+    public static void Convert(SizeI dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, Colorspace sourceColorspace, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, Colorspace destinationColorspace, int destinationPitch)
         => Convert(dimension.Width, dimension.Height, source, sourceFormat, sourceColorspace, sourcePitch, destination, destinationFormat, destinationColorspace, destinationPitch);
 
     /// <summary>
@@ -102,7 +102,7 @@ public static class Pixels
     /// </param>
     /// <exception cref="ArgumentOutOfRangeException">A dimension is negative, or a buffer is too small for its pitch and height.</exception>
     /// <exception cref="QuackInteropException">Failed to premultiplies the pixels</exception>
-    public static void PremultiplyAlpha(Size dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, int destinationPitch, bool linear = false)
+    public static void PremultiplyAlpha(SizeI dimension, ReadOnlySpan<byte> source, PixelFormat sourceFormat, int sourcePitch, Span<byte> destination, PixelFormat destinationFormat, int destinationPitch, bool linear = false)
         => PremultiplyAlpha(dimension.Width, dimension.Height, source, sourceFormat, sourcePitch, destination, destinationFormat, destinationPitch, linear);
 
     /// <summary>

@@ -76,7 +76,7 @@ internal sealed class SizeFTests
     {
         SizeF size = new(7.64f, -7.6f);
 
-        Size result = size.Floor();
+        SizeI result = size.Floor();
 
         await result.Width.Should().BeEqualTo(7);
         await result.Height.Should().BeEqualTo(-8);
@@ -87,7 +87,7 @@ internal sealed class SizeFTests
     {
         SizeF size = new(7.64f, -7.6f);
 
-        Size result = size.Round();
+        SizeI result = size.Round();
 
         await result.Width.Should().BeEqualTo(8);
         await result.Height.Should().BeEqualTo(-8);
@@ -98,7 +98,7 @@ internal sealed class SizeFTests
     {
         SizeF size = new(7.64f, -7.6f);
 
-        Size result = size.Truncate();
+        SizeI result = size.Truncate();
 
         await result.Width.Should().BeEqualTo(7);
         await result.Height.Should().BeEqualTo(-7);

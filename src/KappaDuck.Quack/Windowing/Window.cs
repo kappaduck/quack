@@ -67,7 +67,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="title">The title of the window.</param>
     /// <param name="size">The size of the window.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size) : this(title, size.Width, size.Height)
+    public Window(string title, SizeI size) : this(title, size.Width, size.Height)
     {
     }
 
@@ -78,7 +78,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="size">The size of the window.</param>
     /// <param name="position">The position of the window on the screen.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size, PointI position) : this(title, size.Width, size.Height)
+    public Window(string title, SizeI size, PointI position) : this(title, size.Width, size.Height)
         => Position = position;
 
     /// <summary>
@@ -124,7 +124,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <param name="size">The size of the window.</param>
     /// <param name="options">The options that configure how the window is created.</param>
     /// <exception cref="QuackInteropException">Failed to create the window.</exception>
-    public Window(string title, Size size, WindowOptions options) : this(title, size.Width, size.Height, options)
+    public Window(string title, SizeI size, WindowOptions options) : this(title, size.Width, size.Height, options)
     {
     }
 
@@ -408,7 +408,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
     /// <exception cref="QuackInteropException">Failed to set the maximum size.</exception>
-    public Size MaximumSize
+    public SizeI MaximumSize
     {
         get;
         set
@@ -444,7 +444,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is negative.</exception>
     /// <exception cref="QuackInteropException">Failed to set the minimum size.</exception>
-    public Size MinimumSize
+    public SizeI MinimumSize
     {
         get;
         set
@@ -658,7 +658,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <remarks>Setting the size is ignored while the window is in fullscreen or maximized state.</remarks>
     /// <exception cref="ArgumentOutOfRangeException">The width or height is less than or equal to zero.</exception>
     /// <exception cref="QuackInteropException">Failed to set the window size.</exception>
-    public Size Size
+    public SizeI Size
     {
         get => new(_width, _height);
         set
@@ -682,7 +682,7 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
     /// <summary>
     /// Gets the size of the window's client area in physical pixels.
     /// </summary>
-    public Size SizeInPixels => new(WidthInPixels, HeightInPixels);
+    public SizeI SizeInPixels => new(WidthInPixels, HeightInPixels);
 
     /// <summary>
     /// Gets the controller for this window's taskbar progress indicator.

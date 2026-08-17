@@ -215,7 +215,7 @@ internal sealed class ViewTests
     public async Task ComputeViewportShouldReturnTheFullTargetByDefault()
     {
         View view = new(new SizeF(200f, 100f));
-        RectI pixels = view.ComputeViewport(new Size(1920, 1080));
+        RectI pixels = view.ComputeViewport(new SizeI(1920, 1080));
 
         await pixels.X.Should().BeEqualTo(0);
         await pixels.Y.Should().BeEqualTo(0);
@@ -231,7 +231,7 @@ internal sealed class ViewTests
             Viewport = new Rect(0.5f, 0f, 0.5f, 1f)
         };
 
-        RectI pixels = view.ComputeViewport(new Size(1920, 1080));
+        RectI pixels = view.ComputeViewport(new SizeI(1920, 1080));
 
         await pixels.X.Should().BeEqualTo(960);
         await pixels.Y.Should().BeEqualTo(0);
@@ -247,7 +247,7 @@ internal sealed class ViewTests
             Viewport = new Rect(0f, 0f, 0.0001f, 0.0001f)
         };
 
-        RectI pixels = view.ComputeViewport(new Size(100, 100));
+        RectI pixels = view.ComputeViewport(new SizeI(100, 100));
 
         await pixels.Width.Should().BeEqualTo(1);
         await pixels.Height.Should().BeEqualTo(1);
@@ -257,7 +257,7 @@ internal sealed class ViewTests
     public async Task GetTransformShouldMapCenterToTheMiddleOfTheViewport()
     {
         View view = new(new Point(500f, 300f), new SizeF(200f, 100f));
-        Transform transform = view.GetTransform(new Size(200, 100));
+        Transform transform = view.GetTransform(new SizeI(200, 100));
 
         Point result = transform.TransformPoint(new Point(500f, 300f));
 
@@ -269,7 +269,7 @@ internal sealed class ViewTests
     public async Task GetTransformShouldMapTheSceneEdgeToTheViewportEdgeWhenSizeMatchesTheViewport()
     {
         View view = new(new Point(0f, 0f), new SizeF(200f, 100f));
-        Transform transform = view.GetTransform(new Size(200, 100));
+        Transform transform = view.GetTransform(new SizeI(200, 100));
 
         Point result = transform.TransformPoint(new Point(100f, 50f));
 
@@ -281,7 +281,7 @@ internal sealed class ViewTests
     public async Task GetTransformShouldScaleWhenSizeDiffersFromTheViewport()
     {
         View view = new(new Point(0f, 0f), new SizeF(400f, 400f));
-        Transform transform = view.GetTransform(new Size(200, 200));
+        Transform transform = view.GetTransform(new SizeI(200, 200));
 
         Point result = transform.TransformPoint(new Point(200f, 0f));
 
@@ -297,7 +297,7 @@ internal sealed class ViewTests
             Rotation = Angle.FromDegrees(90f)
         };
 
-        Transform transform = view.GetTransform(new Size(200, 200));
+        Transform transform = view.GetTransform(new SizeI(200, 200));
         Point result = transform.TransformPoint(new Point(100f, 0f));
 
         await result.X.Should().BeCloseTo(100f, 1e-3f);
@@ -312,7 +312,7 @@ internal sealed class ViewTests
             Bounds = new Rect(0f, 0f, 1000f, 600f)
         };
 
-        Transform transform = view.GetTransform(new Size(200, 100));
+        Transform transform = view.GetTransform(new SizeI(200, 100));
         Point viewportCenter = transform.TransformPoint(new Point(900f, 550f));
 
         await viewportCenter.X.Should().BeEqualTo(100f);
@@ -330,7 +330,7 @@ internal sealed class ViewTests
             Bounds = new Rect(0f, 0f, 100f, 100f)
         };
 
-        Transform transform = view.GetTransform(new Size(500, 500));
+        Transform transform = view.GetTransform(new SizeI(500, 500));
         Point viewportCenter = transform.TransformPoint(new Point(50f, 50f));
 
         await viewportCenter.X.Should().BeEqualTo(250f);
