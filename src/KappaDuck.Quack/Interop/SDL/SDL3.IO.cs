@@ -9,7 +9,7 @@ internal static partial class SDL3
 {
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_OpenIO")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SDL_IOStream* OpenIO(SDL_IOStreamInterface* callbacks, void* data);
+    internal static partial SDL_IOStream* OpenIO(SDL_IOStreamInterface* callbacks, nint data);
 
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_CloseIO")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

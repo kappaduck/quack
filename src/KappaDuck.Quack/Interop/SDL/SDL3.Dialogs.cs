@@ -7,6 +7,10 @@ namespace KappaDuck.Quack.Interop.SDL;
 
 internal static partial class SDL3
 {
+    [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ShowFileDialogWithProperties")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void ShowFileDialogWithProperties(SDL_FileDialogType type, delegate* unmanaged[Cdecl]<nint, byte**, int, void> callback, nint data, uint properties);
+
     [LibraryImport(nameof(SDL3), EntryPoint = "SDL_ShowMessageBox")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I1)]

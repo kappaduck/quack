@@ -10,15 +10,15 @@ internal readonly struct SDL_IOStreamInterface
 {
     internal uint Version { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, long> Size { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, long> Size { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, long, SDL_IOWhence, long> Seek { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, long, SDL_IOWhence, long> Seek { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, void*, nuint, SDL_IOStatus*, nuint> Read { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, void*, nuint, SDL_IOStatus*, nuint> Read { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, void*, nuint, SDL_IOStatus*, nuint> Write { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, void*, nuint, SDL_IOStatus*, nuint> Write { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, SDL_IOStatus*, byte> Flush { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, SDL_IOStatus*, byte> Flush { get; init; }
 
-    internal delegate* unmanaged[Cdecl]<void*, byte> Close { get; init; }
+    internal delegate* unmanaged[Cdecl]<nint, byte> Close { get; init; }
 }

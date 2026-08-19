@@ -28,13 +28,7 @@ public static class MessageBox
     /// <param name="parent">The window the message box is modal for, or <see langword="null"/> for no parent.</param>
     /// <exception cref="QuackInteropException">Failed to show the message box.</exception>
     public static void Show(string title, string message, MessageBoxSeverity severity = MessageBoxSeverity.Information, Window? parent = null)
-    {
-        unsafe
-        {
-            SDL_Window* window = parent?.NativeHandle;
-            SDLThrowHelper.ThrowIfFailed(SDL3.ShowSimpleMessageBox(ToFlags(severity), title, message, window));
-        }
-    }
+        => SDLThrowHelper.ThrowIfFailed(unsafe (SDL3.ShowSimpleMessageBox(ToFlags(severity), title, message, parent?.NativeHandle)));
 
     /// <summary>
     /// Displays a customizable message box and returns the button the user activated.
