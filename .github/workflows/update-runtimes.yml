@@ -38,7 +38,7 @@ jobs:
 
       - name: Create pull request
         if: steps.sdl.outputs.updated == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: dependency/sdl
           delete-branch: true
