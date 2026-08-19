@@ -6,7 +6,7 @@
     <PackageVersion Include="TUnit" Version="1.65.38" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
     <PackageVersion Include="TUnit.Mocks" Version="1.65.38" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
     <PackageVersion Include="TUnit.Mocks.Assertions" Version="1.65.38" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
-    <PackageVersion Include="TUnit.Assertions.Should" Version="1.65.0-beta" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
+    <PackageVersion Include="TUnit.Assertions.Should" Version="1.65.38-beta" IncludeAssets="$(IncludedAssets)" PrivateAssets="all" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
     <PackageVersion Include="Verify.TUnit" Version="31.28.0" />
   </ItemGroup>
