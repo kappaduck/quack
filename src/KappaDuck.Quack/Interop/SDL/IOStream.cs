@@ -38,7 +38,7 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
 
         try
         {
-            io = SDL3.OpenIO(&callbacks, (void*)GCHandle.ToIntPtr(handle));
+            io = SDL3.OpenIO(&callbacks, GCHandle.ToIntPtr(handle));
             SDLThrowHelper.ThrowIfNull(io);
         }
         catch
@@ -51,7 +51,7 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static long SizeCallback(void* data)
+    private static long SizeCallback(nint data)
     {
         try
         {
@@ -65,7 +65,7 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static long SeekCallback(void* data, long offset, SDL_IOWhence whence)
+    private static long SeekCallback(nint data, long offset, SDL_IOWhence whence)
     {
         try
         {
@@ -86,12 +86,12 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static nuint ReadCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
+    private static nuint ReadCallback(nint data, void* ptr, nuint size, SDL_IOStatus* status)
     {
         try
         {
             int count = (int)Math.Min(size, int.MaxValue);
-            int read = GetStream(data).Read(new Span<byte>(pointer, count));
+            int read = GetStream(data).Read(new Span<byte>(ptr, count));
 
             if (read == 0 && count > 0)
                 *status = SDL_IOStatus.EndOfFile;
@@ -106,12 +106,12 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static nuint WriteCallback(void* data, void* pointer, nuint size, SDL_IOStatus* status)
+    private static nuint WriteCallback(nint data, void* ptr, nuint size, SDL_IOStatus* status)
     {
         try
         {
             int count = (int)Math.Min(size, int.MaxValue);
-            GetStream(data).Write(new ReadOnlySpan<byte>(pointer, count));
+            GetStream(data).Write(new ReadOnlySpan<byte>(ptr, count));
 
             return (nuint)count;
         }
@@ -123,7 +123,7 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static byte FlushCallback(void* data, SDL_IOStatus* status)
+    private static byte FlushCallback(nint data, SDL_IOStatus* status)
     {
         try
         {
@@ -138,13 +138,13 @@ internal sealed unsafe class IOStream(SDL_IOStream* stream) : IDisposable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static byte CloseCallback(void* data)
+    private static byte CloseCallback(nint data)
     {
-        GCHandle handle = GCHandle.FromIntPtr((nint)data);
+        GCHandle handle = GCHandle.FromIntPtr(data);
         handle.Free();
 
         return 1;
     }
 
-    private static Stream GetStream(void* data) => (Stream)GCHandle.FromIntPtr((nint)data).Target!;
+    private static Stream GetStream(nint data) => (Stream)GCHandle.FromIntPtr(data).Target!;
 }

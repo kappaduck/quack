@@ -1242,12 +1242,6 @@ public sealed class Window : IDisposable, ISpanFormattable, IUtf8SpanFormattable
 
     private void Update(in Event e)
     {
-        if (e is WindowCloseRequestedEvent close && close.WindowId == Id)
-        {
-            Close();
-            return;
-        }
-
         if (e is WindowResizedEvent resized && resized.WindowId == Id)
         {
             _width = resized.Size.Width;
