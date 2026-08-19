@@ -46,18 +46,14 @@ public static class MessageBox
 
         unsafe
         {
-            int count = options.Buttons.Count;
-
             byte* title = Utf8StringMarshaller.ConvertToUnmanaged(options.Title);
             byte* message = Utf8StringMarshaller.ConvertToUnmanaged(options.Message);
-            SDL_MessageBoxButtonData* buttons = (SDL_MessageBoxButtonData*)NativeMemory.AllocZeroed((nuint)count, (nuint)sizeof(SDL_MessageBoxButtonData));
+            SDL_MessageBoxButtonData* buttons = (SDL_MessageBoxButtonData*)NativeMemory.AllocZeroed((nuint)options.Buttons.Count, (nuint)sizeof(SDL_MessageBoxButtonData));
 
             try
             {
-                for (int i = 0; i < count; i++)
+                foreach ((int i, MessageBoxButton button) in options.Buttons.Index())
                 {
-                    MessageBoxButton button = options.Buttons[i];
-
                     buttons[i] = new SDL_MessageBoxButtonData
                     {
                         State = ToFlags(button),
@@ -81,8 +77,8 @@ public static class MessageBox
                     Window = options.Parent?.NativeHandle,
                     Title = title,
                     Message = message,
-                    ButtonCount = count,
                     Buttons = buttons,
+                    Count = options.Buttons.Count,
                     ColorScheme = colorScheme
                 };
 
@@ -98,7 +94,7 @@ public static class MessageBox
             }
             finally
             {
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < options.Buttons.Count; i++)
                     Utf8StringMarshaller.Free(buttons[i].Text);
 
                 NativeMemory.Free(buttons);

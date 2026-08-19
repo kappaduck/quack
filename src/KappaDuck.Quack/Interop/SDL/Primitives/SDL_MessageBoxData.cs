@@ -14,7 +14,7 @@ internal readonly struct SDL_MessageBoxData
 
     internal byte* Message { get; init; }
 
-    internal int ButtonCount { get; init; }
+    internal int Count { get; init; }
 
     internal SDL_MessageBoxButtonData* Buttons { get; init; }
 
