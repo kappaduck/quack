@@ -8,8 +8,8 @@
   <ItemGroup Label="Global analyzers">
     <GlobalPackageReference Include="AsyncFixer" Version="2.1.0" />
     <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.7.23" />
-    <GlobalPackageReference Include="Roslynator.Analyzers" Version="4.16.1" />
-    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.32.0.713" />
+    <GlobalPackageReference Include="Roslynator.Analyzers" Version="5.0.0" />
+    <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.33.0.1635" />
   </ItemGroup>
 
   <ItemGroup Label="Source generator packages">
